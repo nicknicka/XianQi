@@ -6,8 +6,8 @@ import type { PageParams, PageResponse } from './statistics'
  */
 export interface ProductAuditQueryParams extends PageParams {
   keyword?: string // 商品标题
-  sellerId?: number // 卖家ID
-  categoryId?: number // 分类ID
+  sellerId?: string // 卖家ID
+  categoryId?: string // 分类ID
   auditStatus?: number // 审核状态：0-待审核，1-审核通过，2-审核拒绝
   startTime?: string
   endTime?: string
@@ -17,7 +17,7 @@ export interface ProductAuditQueryParams extends PageParams {
  * 商品审核VO
  */
 export interface ProductAuditVO {
-  productId: number
+  productId: string
   title: string
   description?: string
   price: string // 使用string避免JavaScript精度问题
@@ -28,9 +28,9 @@ export interface ProductAuditVO {
   imageCount?: number
   viewCount?: number
   favoriteCount?: number
-  categoryId?: number
+  categoryId?: string
   categoryName?: string
-  sellerId?: number
+  sellerId?: string
   sellerNickname?: string
   sellerPhone?: string
   location?: string // 位置
@@ -39,14 +39,14 @@ export interface ProductAuditVO {
   auditRemark?: string // 审核备注
   createTime: string
   auditTime?: string
-  auditorId?: number
+  auditorId?: string
 }
 
 /**
  * 商品审核参数
  */
 export interface ProductAuditParams {
-  productId: number
+  productId: string
   auditStatus: number // 1-审核通过，2-审核拒绝
   auditRemark?: string // 审核备注（拒绝原因）
 }
@@ -87,7 +87,7 @@ export function getPendingProductList(params: PageParams) {
 /**
  * 获取商品审核详情
  */
-export function getProductAuditDetail(productId: number) {
+export function getProductAuditDetail(productId: string) {
   return request<ProductAuditVO>({
     url: `/product-audit/${productId}`,
     method: 'get',

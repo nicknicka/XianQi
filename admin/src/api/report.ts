@@ -7,15 +7,15 @@ import type { PageParams, PageResponse } from './statistics'
  * 举报记录 VO
  */
 export interface ReportVO {
-  reportId: number
-  reporterId: number
+  reportId: string
+  reporterId: string
   reporterNickname?: string
   reporterPhone?: string
-  reportedUserId: number
+  reportedUserId: string
   reportedUserNickname?: string
   reportedUserPhone?: string
-  conversationId?: number
-  messageId?: number
+  conversationId?: string
+  messageId?: string
   reason: string
   description?: string
   evidenceImages?: string[]
@@ -29,8 +29,8 @@ export interface ReportVO {
  * 举报查询参数
  */
 export interface ReportQueryParams extends PageParams {
-  reporterId?: number
-  reportedUserId?: number
+  reporterId?: string
+  reportedUserId?: string
   status?: number
   reason?: string
   startTime?: string
@@ -41,7 +41,7 @@ export interface ReportQueryParams extends PageParams {
  * 举报处理参数
  */
 export interface ReportHandleParams {
-  reportId: number
+  reportId: string
   status: number // 1-已处理，2-已驳回
   adminNote?: string
 }
@@ -78,7 +78,7 @@ export function getReportList(params: ReportQueryParams) {
 /**
  * 获取举报详情
  */
-export function getReportDetail(reportId: number) {
+export function getReportDetail(reportId: string) {
   return request<ReportVO>({
     url: `/report/${reportId}`,
     method: 'get',
@@ -110,7 +110,7 @@ export async function getReportStatistics(): Promise<ReportStatistics> {
 /**
  * 批量处理举报
  */
-export function batchHandleReports(data: { reportIds: number[]; status: number; adminNote?: string }) {
+export function batchHandleReports(data: { reportIds: string[]; status: number; adminNote?: string }) {
   if (data.status === 2) {
     return Promise.reject(new Error('当前后端暂不支持批量驳回举报'))
   }
@@ -126,7 +126,7 @@ export function batchHandleReports(data: { reportIds: number[]; status: number; 
 /**
  * 删除举报记录
  */
-export function deleteReport(reportId: number) {
+export function deleteReport(reportId: string) {
   return request<boolean>({
     url: `/report/${reportId}`,
     method: 'delete',

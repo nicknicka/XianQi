@@ -370,7 +370,7 @@ const handleSaveTemplate = async () => {
 }
 
 // 切换模板状态
-const toggleTemplate = async (templateId: number) => {
+const toggleTemplate = async (templateId: string) => {
   try {
     await toggleFlashSaleTemplate(templateId)
     ElMessage.success('操作成功')

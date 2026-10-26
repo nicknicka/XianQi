@@ -152,7 +152,7 @@ const dialogMode = ref<'create' | 'edit' | 'addChild'>('create')
 const formRef = ref()
 
 // 表单数据
-const formData = ref<CategoryCreateParams>({
+const formData = ref<CategoryCreateParams & { categoryId?: string }>({
   name: '',
   code: '',
   parentId: undefined,
@@ -162,7 +162,7 @@ const formData = ref<CategoryCreateParams>({
   status: 1,
 })
 
-const parentIdValue = ref<number>()
+const parentIdValue = ref<string>()
 
 // 表单验证规则
 const formRules = {
@@ -180,7 +180,7 @@ const dialogTitle = computed(() => {
 
 // 用于选择的分类树（排除自己和子分类）
 const categoryTreeForSelect = computed(() => {
-  const buildTree = (categories: CategoryVO[], excludeId?: number): CategoryVO[] => {
+  const buildTree = (categories: CategoryVO[], excludeId?: string): CategoryVO[] => {
     return categories
       .filter((cat) => cat.categoryId !== excludeId)
       .map((cat) => ({
@@ -248,8 +248,8 @@ const openEditDialog = (row: CategoryVO) => {
     sortOrder: row.sortOrder,
     status: row.status,
   }
-  // 如果 parentId 是 0 或 null/undefined，则表示顶级分类，不显示父级
-  parentIdValue.value = (row.parentId && row.parentId !== 0) ? row.parentId : undefined
+  // 如果 parentId 是 null/undefined，则表示顶级分类，不显示父级
+  parentIdValue.value = row.parentId || undefined
   dialogVisible.value = true
 }
 
@@ -266,7 +266,7 @@ const handleSubmit = async () => {
       value === undefined ||
       (Array.isArray(value) && value.length === 0)
     ) {
-      formData.value.parentId = 0  // 使用 0 表示顶级分类
+      formData.value.parentId = null  // null 表示顶级分类
     } else {
       formData.value.parentId = value
     }

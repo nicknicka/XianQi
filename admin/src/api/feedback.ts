@@ -3,8 +3,8 @@ import type { PageParams, PageResponse } from './statistics'
 import { FeedbackType, FeedbackTypeText, FeedbackStatus, FeedbackStatusText } from '@/utils/enums'
 
 export interface UserFeedbackVO {
-  feedbackId: number
-  userId: number
+  feedbackId: string
+  userId: string
   userNickname?: string
   userPhone?: string
   type: FeedbackType // 1-功能建议，2-Bug反馈，3-投诉，4-其他
@@ -13,7 +13,7 @@ export interface UserFeedbackVO {
   contact?: string
   images?: string[] // 或改为string类型后JSON.parse
   status: FeedbackStatus // 0-待处理，1-处理中，2-已处理，3-已驳回
-  handlerId?: number // 处理人ID（管理员）
+  handlerId?: string // 处理人ID（管理员）
   handleNote?: string // 处理备注
   reply?: string
   createTime: string
@@ -50,14 +50,14 @@ export function getFeedbackList(params: FeedbackQueryParams) {
   })
 }
 
-export function getFeedbackDetail(feedbackId: number) {
+export function getFeedbackDetail(feedbackId: string) {
   return request<UserFeedbackVO>({
     url: `/feedback/${feedbackId}`,
     method: 'get',
   })
 }
 
-export function replyFeedback(feedbackId: number, reply: string) {
+export function replyFeedback(feedbackId: string, reply: string) {
   return request<boolean>({
     url: '/feedback/handle',
     method: 'put',
@@ -65,7 +65,7 @@ export function replyFeedback(feedbackId: number, reply: string) {
   })
 }
 
-export function deleteFeedback(feedbackId: number) {
+export function deleteFeedback(feedbackId: string) {
   return request<boolean>({
     url: `/feedback/${feedbackId}`,
     method: 'delete',

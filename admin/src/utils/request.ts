@@ -88,8 +88,8 @@ service.interceptors.response.use(
       return processedData
     }
 
-    // 没有 code 字段，直接返回响应数据
-    return res
+    // 没有 code 字段，也递归转换业务 ID，覆盖直接返回数组或分页对象的接口
+    return convertLongFields(res)
   },
   (error: AxiosError) => {
     // 添加错误日志
@@ -144,9 +144,11 @@ function convertLongFields(data: any): any {
     const converted: any = {}
     for (const key in data) {
       if (Object.prototype.hasOwnProperty.call(data, key)) {
-        // 将 ID 字段（如 sessionId, templateId, userId 等）转换为字符串
-        if ((key.endsWith('Id') || key.endsWith('id')) && typeof data[key] === 'number') {
+        // 将业务 ID 字段（如 sessionId、templateId、userIds 等）转换为字符串
+        if (isIdField(key) && typeof data[key] === 'number') {
           converted[key] = String(data[key])
+        } else if (isIdField(key) && Array.isArray(data[key])) {
+          converted[key] = data[key].map((id: unknown) => typeof id === 'number' ? String(id) : id)
         } else {
           converted[key] = convertLongFields(data[key])
         }
@@ -156,6 +158,11 @@ function convertLongFields(data: any): any {
   }
 
   return data
+}
+
+
+function isIdField(key: string): boolean {
+  return key === 'id' || key.endsWith('Id') || key.endsWith('Ids') || key.endsWith('_id') || key.endsWith('_ids')
 }
 
 export default service

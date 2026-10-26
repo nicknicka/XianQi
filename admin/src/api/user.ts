@@ -16,7 +16,7 @@ export interface UserQueryParams extends PageParams {
  * 用户管理VO
  */
 export interface UserManageVO {
-  userId: number
+  userId: string
   username: string
   nickname: string
   avatar?: string
@@ -39,7 +39,7 @@ export interface UserManageVO {
  * 用户状态更新参数
  */
 export interface UserStatusUpdateParams {
-  userId: number
+  userId: string
   status: number // 0-正常，1-已封禁
   reason?: string // 封禁原因
 }
@@ -70,7 +70,7 @@ export function getUserList(params: UserQueryParams) {
 /**
  * 获取用户详情
  */
-export function getUserDetail(userId: number) {
+export function getUserDetail(userId: string) {
   return request<UserManageVO>({
     url: `/user/${userId}`,
     method: 'get',

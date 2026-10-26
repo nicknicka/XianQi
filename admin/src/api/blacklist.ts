@@ -7,11 +7,11 @@ import type { PageParams, PageResponse } from './statistics'
  * 黑名单记录 VO
  */
 export interface BlacklistVO {
-  blacklistId: number
-  userId: number
+  blacklistId: string
+  userId: string
   userNickname?: string
   userPhone?: string
-  blockedUserId: number
+  blockedUserId: string
   blockedUserNickname?: string
   blockedUserPhone?: string
   reason?: string
@@ -22,8 +22,8 @@ export interface BlacklistVO {
  * 黑名单查询参数
  */
 export interface BlacklistQueryParams extends PageParams {
-  userId?: number
-  blockedUserId?: number
+  userId?: string
+  blockedUserId?: string
   keyword?: string // 搜索用户昵称或手机号
   startTime?: string
   endTime?: string
@@ -45,7 +45,7 @@ export function getBlacklistList(params: BlacklistQueryParams) {
 /**
  * 获取黑名单详情
  */
-export function getBlacklistDetail(blacklistId: number) {
+export function getBlacklistDetail(blacklistId: string) {
   return request<BlacklistVO>({
     url: `/blacklist/${blacklistId}`,
     method: 'get',
@@ -55,7 +55,7 @@ export function getBlacklistDetail(blacklistId: number) {
 /**
  * 删除黑名单记录（解除拉黑）
  */
-export function deleteBlacklist(blacklistId: number) {
+export function deleteBlacklist(blacklistId: string) {
   return request<boolean>({
     url: `/blacklist/${blacklistId}`,
     method: 'delete',
@@ -65,7 +65,7 @@ export function deleteBlacklist(blacklistId: number) {
 /**
  * 批量删除黑名单记录
  */
-export function batchDeleteBlacklist(blacklistIds: number[]) {
+export function batchDeleteBlacklist(blacklistIds: string[]) {
   return request<boolean>({
     url: '/blacklist/batch',
     method: 'delete',

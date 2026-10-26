@@ -285,7 +285,7 @@ const isEditMode = ref(false)
 const formRef = ref<FormInstance>()
 
 const formData = ref({
-  configId: 0,
+  configId: '',
   configKey: '',
   configValue: '',
   configType: 'string',
@@ -414,7 +414,7 @@ const getRowClassName = ({ row }: { row: SystemConfigWithEdit }) => {
 const handleCreate = () => {
   isEditMode.value = false
   formData.value = {
-    configId: 0,
+    configId: '',
     configKey: '',
     configValue: '',
     configType: 'string',
