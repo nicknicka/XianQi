@@ -146,7 +146,7 @@
       <view class="section animate-fade-in-up" style="animation-delay: 0.4s" v-if="orderLogs.length > 0">
         <view class="section-title">订单日志</view>
         <view class="timeline">
-          <view class="timeline-item" v-for="(log, index) in orderLogs" :key="log.id">
+          <view class="timeline-item" v-for="log in orderLogs" :key="log.id">
             <view class="timeline-dot"></view>
             <view class="timeline-content">
               <view class="timeline-header">

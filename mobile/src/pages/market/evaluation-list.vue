@@ -34,7 +34,7 @@
       </view>
 
       <view v-else class="evaluation-list">
-        <view v-for="(item, index) in evaluations" :key="item.id" class="evaluation-item">
+        <view v-for="item in evaluations" :key="item.id" class="evaluation-item">
           <!-- 用户信息 -->
           <view class="user-header">
             <UserAvatar class="user-avatar" :src="item.fromUserAvatar" size="md" shape="circle" />

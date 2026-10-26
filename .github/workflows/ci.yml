@@ -153,6 +153,11 @@ jobs:
           cd mobile
           npm ci
 
+      - name: Lint
+        run: |
+          cd mobile
+          npm run lint
+
       - name: Build H5
         run: |
           cd mobile

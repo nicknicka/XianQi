@@ -276,7 +276,7 @@ function handleWebSocketMessage(data: any) {
       }
       break
 
-    case 'ai_complete':
+    case 'ai_complete': {
       // AI 响应完成
       console.log('[AI Chat] AI 响应完成:', data.data)
       isLoading.value = false
@@ -297,8 +297,9 @@ function handleWebSocketMessage(data: any) {
         }
       }
       break
+    }
 
-    case 'error':
+    case 'error': {
       // 错误消息
       console.error('[AI Chat] 收到错误消息:', data.data)
       isLoading.value = false
@@ -323,6 +324,7 @@ function handleWebSocketMessage(data: any) {
         duration: 2000
       })
       break
+    }
 
     case 'connected':
       // 连接成功确认

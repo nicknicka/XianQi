@@ -2014,10 +2014,10 @@ function goTargetUserProfile() {
 }
 
 function goCurrentUserProfile() {
-  if (!currentUser.id) return
+  if (!currentUser.value.id) return
 
   uni.navigateTo({
-    url: `/pages/user/home?id=${currentUser.id}`
+    url: `/pages/user/home?id=${currentUser.value.id}`
   })
 }
 

@@ -96,7 +96,7 @@ function cleanParams(params: any): any {
 
   const cleaned: any = {}
   for (const key in params) {
-    if (params.hasOwnProperty(key)) {
+    if (Object.prototype.hasOwnProperty.call(params, key)) {
       const value = params[key]
       // 只保留非 undefined 和非 null 的值
       if (value !== undefined && value !== null) {
@@ -225,8 +225,6 @@ function request<T = any>(options: RequestOptions): Promise<RequestResponse<T>> 
       }
 
       return result
-    } catch (error) {
-      throw error // 重新抛出错误
     } finally {
       // 请求完成后移除队列
       pendingRequests.delete(finalCacheKey)
@@ -345,7 +343,7 @@ function executeRequest<T>(options: {
         // Handle HTTP error status codes (403, 404, 500, etc.)
         if (res.statusCode >= 400) {
           let errorMessage = '请求失败'
-          let errorCode = res.statusCode
+          const errorCode = res.statusCode
 
           // Try to parse error response if available
           if (res.data && typeof res.data === 'string') {

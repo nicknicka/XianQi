@@ -220,8 +220,8 @@ function confirmLocation() {
   const pages = getCurrentPages()
   const prevPage = pages[pages.length - 2] as any
 
-  if (prevPage && prevPage.$vm) {
-    prevPage.$vm.onLocationSelected && prevPage.$vm.onLocationSelected(selectedLocation.value)
+  if (prevPage && prevPage.$vm && typeof prevPage.$vm.onLocationSelected === 'function') {
+    prevPage.$vm.onLocationSelected(selectedLocation.value)
   }
 
   uni.navigateBack()

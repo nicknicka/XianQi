@@ -773,7 +773,6 @@ import type { Category } from '@/types'
 import { uploadImage, normalizeImageUrl } from '@/utils/image'
 import { useThemeColors, useThemePage, useThemeStyle } from '@/utils/theme'
 import { checkAuth } from '@/utils/auth'
-// @ts-ignore
 import FloatingBalls from '@/components/floating-balls/floating-balls.vue'
 
 const { primaryColor, dangerColor } = useThemeColors()
