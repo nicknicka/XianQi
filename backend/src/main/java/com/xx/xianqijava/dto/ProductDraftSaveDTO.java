@@ -27,7 +27,7 @@ public class ProductDraftSaveDTO {
     private String description;
 
     @Schema(description = "分类ID")
-    private Integer categoryId;
+    private Long categoryId;
 
     @Schema(description = "价格（元）")
     @DecimalMin(value = "0.01", message = "价格不能小于0.01元")
