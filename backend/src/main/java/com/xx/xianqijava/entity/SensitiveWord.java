@@ -27,7 +27,7 @@ public class SensitiveWord extends BaseEntity {
     @TableLogic
     private Integer deleted;
 
-    @TableId(type = IdType.AUTO)
+    @TableId(type = IdType.ASSIGN_ID)
     @Schema(description = "敏感词ID")
     @JsonSerialize(using = ToStringSerializer.class)
     private Long wordId;

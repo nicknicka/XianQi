@@ -27,7 +27,7 @@ public class CampusLocation extends BaseEntity {
     @TableLogic
     private Integer deleted;
 
-    @TableId(type = IdType.AUTO)
+    @TableId(type = IdType.ASSIGN_ID)
     @Schema(description = "位置ID")
     @JsonSerialize(using = ToStringSerializer.class)
     private Long locationId;

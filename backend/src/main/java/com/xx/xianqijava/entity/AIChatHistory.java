@@ -30,7 +30,7 @@ public class AIChatHistory extends BaseEntity {
     @TableLogic
     private Integer deleted;
 
-    @TableId(type = IdType.AUTO)
+    @TableId(type = IdType.ASSIGN_ID)
     @Schema(description = "主键ID")
     @JsonSerialize(using = ToStringSerializer.class)
     private Long id;

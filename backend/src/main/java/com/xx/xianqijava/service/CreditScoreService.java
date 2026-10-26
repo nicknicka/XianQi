@@ -378,13 +378,13 @@ public class CreditScoreService {
 
         // 记录变化
         CreditRecord record = new CreditRecord();
-        record.setUserId(userId);
+        record.setUserId(Long.parseLong(userId));
         record.setScoreBefore(scoreBefore);
         record.setScoreChange(scoreChange);
         record.setScoreAfter(scoreAfter);
         record.setReason(change.getReason());
         record.setReasonDetail(change.getReasonDetail());
-        record.setRelatedId(relatedId);
+        record.setRelatedId(relatedId != null ? Long.parseLong(relatedId) : null);
         record.setRelatedType(relatedType);
         record.setCreatedAt(LocalDateTime.now());
         creditRecordMapper.insert(record);
@@ -415,7 +415,7 @@ public class CreditScoreService {
 
         if (stat == null) {
             stat = new CreditDailyStat();
-            stat.setUserId(userId);
+            stat.setUserId(Long.parseLong(userId));
             stat.setStatDate(today);
             stat.setTransactionGain(BigDecimal.ZERO);
             stat.setTransactionCount(0);
@@ -443,7 +443,7 @@ public class CreditScoreService {
         );
         stat.setUpdatedAt(LocalDateTime.now());
 
-        if (stat.getId() == null) {
+        if (stat.getStatId() == null) {
             stat.setCreatedAt(LocalDateTime.now());
             creditDailyStatMapper.insert(stat);
         } else {

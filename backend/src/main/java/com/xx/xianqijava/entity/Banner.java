@@ -27,7 +27,7 @@ public class Banner extends BaseEntity {
     @TableLogic
     private Integer deleted;
 
-    @TableId(type = IdType.AUTO)
+    @TableId(type = IdType.ASSIGN_ID)
     @Schema(description = "轮播图ID")
     @JsonSerialize(using = ToStringSerializer.class)
     private Long bannerId;

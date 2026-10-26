@@ -27,7 +27,7 @@ public class FlashSaleSessionTemplate extends BaseEntity {
     @TableLogic
     private Integer deleted;
 
-    @TableId(type = IdType.AUTO)
+    @TableId(type = IdType.ASSIGN_ID)
     @Schema(description = "模板ID")
     @JsonSerialize(using = ToStringSerializer.class)
     private Long templateId;

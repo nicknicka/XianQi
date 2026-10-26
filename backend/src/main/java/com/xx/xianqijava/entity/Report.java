@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 @Schema(description = "举报记录")
 public class Report {
 
-    @TableId(type = IdType.AUTO)
+    @TableId(type = IdType.ASSIGN_ID)
     @Schema(description = "举报ID")
     @JsonSerialize(using = ToStringSerializer.class)
     private Long reportId;

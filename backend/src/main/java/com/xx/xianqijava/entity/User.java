@@ -88,4 +88,82 @@ public class User extends BaseEntity {
 
     @Schema(description = "最后登录时间")
     private java.time.LocalDateTime lastLoginTime;
+
+    @Schema(description = "主题：light-浅色，dark-深色，auto-跟随系统")
+    private String theme;
+
+    @Schema(description = "自动深色模式：0-关闭，1-开启")
+    private Integer autoDarkMode;
+
+    @Schema(description = "字体大小（px）")
+    private Integer fontSize;
+
+    @Schema(description = "设备类型")
+    private String deviceType;
+
+    @Schema(description = "语言")
+    private String language;
+
+    @Schema(description = "是否启用通知：0-关闭，1-开启")
+    private Integer notificationEnabled;
+
+    @Schema(description = "是否启用提示音：0-关闭，1-开启")
+    private Integer soundEnabled;
+
+    @Schema(description = "是否启用振动：0-关闭，1-开启")
+    private Integer vibrationEnabled;
+
+    @Schema(description = "性别：0-未知，1-男，2-女")
+    private Integer gender;
+
+    @Schema(description = "生日")
+    private java.time.LocalDate birthday;
+
+    @Schema(description = "个人简介")
+    private String bio;
+
+    @Schema(description = "位置展示（如：北京市海淀区）")
+    private String locationDisplay;
+
+    @Schema(description = "个人主页")
+    private String homepage;
+
+    @Schema(description = "个人标签（JSON数组）")
+    private String tags;
+
+    @Schema(description = "粉丝数")
+    private Integer followersCount;
+
+    @Schema(description = "关注数")
+    private Integer followingCount;
+
+    @Schema(description = "发布商品数")
+    private Integer productsCount;
+
+    @Schema(description = "收藏数")
+    private Integer favoritesCount;
+
+    @Schema(description = "信用等级")
+    private String creditLevel;
+
+    @Schema(description = "最后活跃时间")
+    private java.time.LocalDateTime lastActiveTime;
+
+    @Schema(description = "上次信用分衰减时间")
+    private java.time.LocalDateTime lastCreditDecayTime;
+
+    @Schema(description = "好评总数")
+    private Integer totalPositiveEvaluations;
+
+    @Schema(description = "中评总数")
+    private Integer totalNeutralEvaluations;
+
+    @Schema(description = "差评总数")
+    private Integer totalNegativeEvaluations;
+
+    @Schema(description = "芝麻信用分")
+    private Integer zhimaCreditScore;
+
+    @Schema(description = "芝麻信用授权时间")
+    private java.time.LocalDateTime zhimaAuthTime;
 }

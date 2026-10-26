@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 @Schema(description = "用户关注")
 public class UserFollow {
 
-    @TableId(type = IdType.AUTO)
+    @TableId(type = IdType.ASSIGN_ID)
     @Schema(description = "关注ID")
     @JsonSerialize(using = ToStringSerializer.class)
     private Long followId;

@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
 public class UserPreference {
 
     @Schema(description = "偏好设置ID")
-    @TableId(type = IdType.AUTO)
+    @TableId(type = IdType.ASSIGN_ID)
     @JsonSerialize(using = ToStringSerializer.class)
     private Long preferenceId;
 

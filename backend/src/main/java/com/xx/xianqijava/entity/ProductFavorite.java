@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 @Schema(description = "商品收藏")
 public class ProductFavorite {
 
-    @TableId(type = IdType.AUTO)
+    @TableId(type = IdType.ASSIGN_ID)
     @Schema(description = "收藏ID")
     @JsonSerialize(using = ToStringSerializer.class)
     private Long favoriteId;

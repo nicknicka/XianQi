@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 @Schema(description = "浏览历史")
 public class ProductViewHistory {
 
-    @TableId(type = IdType.AUTO)
+    @TableId(type = IdType.ASSIGN_ID)
     @Schema(description = "历史ID")
     @JsonSerialize(using = ToStringSerializer.class)
     private Long historyId;
