@@ -7,11 +7,11 @@ on:
     branches: [ main ]
 
 jobs:
-  # ---------- 后端构建 ----------
-  backend-build:
-    name: Backend Build
+  # ---------- 后端单元测试 ----------
+  backend-unit-test:
+    name: Backend Unit Tests
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout
         uses: actions/checkout@v7
@@ -24,12 +24,68 @@ jobs:
           cache: 'maven'
           cache-dependency-path: backend/pom.xml
 
-      - name: Build with Maven
+      - name: Run unit tests
         run: |
           cd backend
           chmod +x mvnw
-          ./mvnw -q -Dtest=AiPropertiesTest,BoundedChatMemoryProviderTest,AiChatServiceTest,AIChatControllerTest test --batch-mode
-          ./mvnw clean package -DskipTests --batch-mode
+          ./mvnw --batch-mode test
+
+  # ---------- 后端集成测试与打包 ----------
+  backend-integration-test:
+    name: Backend Integration Tests
+    runs-on: ubuntu-latest
+    needs: backend-unit-test
+
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: xianqi_test_root
+          MYSQL_DATABASE: xianqi_test
+          MYSQL_USER: xianqi
+          MYSQL_PASSWORD: xianqi_test
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd "mysqladmin ping -h 127.0.0.1 -u xianqi -pxianqi_test --silent"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 10
+
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    env:
+      MYSQL_URL: jdbc:mysql://127.0.0.1:3306/xianqi_test?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true&connectionCollation=utf8mb4_unicode_ci
+      MYSQL_USER: xianqi
+      MYSQL_PASSWORD: xianqi_test
+      REDIS_HOST: 127.0.0.1
+      REDIS_PORT: '6379'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v6
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: 'maven'
+          cache-dependency-path: backend/pom.xml
+
+      - name: Verify integration tests and package
+        run: |
+          cd backend
+          chmod +x mvnw
+          ./mvnw --batch-mode verify
 
       - name: Upload jar artifact
         uses: actions/upload-artifact@v7
