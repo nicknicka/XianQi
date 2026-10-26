@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * 快速验证ID生成功能
  */
 @SpringBootTest
-public class QuickIdGeneratorTest {
+public class QuickIdGeneratorIT {
 
     @Autowired
     private IdGeneratorService idGeneratorService;
