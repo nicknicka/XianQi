@@ -52,10 +52,5 @@ public class UserRealNameAuth extends BaseEntity {
     @Schema(description = "审核时间")
     private LocalDateTime auditedAt;
 
-    // 覆盖 BaseEntity 的字段映射，使用数据库的 created_at 和 updated_at
-    @TableField(value = "created_at", fill = FieldFill.INSERT)
-    private LocalDateTime createTime;
 
-    @TableField(value = "updated_at", fill = FieldFill.INSERT_UPDATE)
-    private LocalDateTime updateTime;
 }
