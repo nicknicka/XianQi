@@ -1,0 +1,29 @@
+server:
+  port: 0
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/Xianqi_test?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
+    username: root
+    password: test123456
+
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      password:
+      database: 1
+
+  ai:
+    enabled: false
+
+  sms:
+    enabled: false
+
+  oss:
+    enabled: false
+
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true

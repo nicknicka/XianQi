@@ -28,7 +28,7 @@ jobs:
         run: |
           cd backend
           chmod +x mvnw
-          ./mvnw -q -Dtest=AiPropertiesTest,BoundedChatMemoryProviderTest,AiChatServiceTest,AIChatControllerTest test --batch-mode
+          ./mvnw -q -Dtest=AiPropertiesTest,BoundedChatMemoryProviderTest,AiChatServiceTest,AIChatControllerTest,IdSerializationContractTest,SnowflakeIdGeneratorTest,SnowflakeIdBusinessFlowTest test --batch-mode
           ./mvnw clean package -DskipTests --batch-mode
 
       - name: Upload jar artifact
