@@ -50,4 +50,4 @@ Thumbs.db
 *.old
 
 # ========== 本地临时草稿 ==========
-.scratch/
+/.scratch/

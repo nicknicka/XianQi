@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict'
 import { execFile } from 'node:child_process'
-import { mkdtemp, readFile, rm, writeFile } from 'node:fs/promises'
+import { createHash } from 'node:crypto'
+import { mkdtemp, readdir, readFile, rm, stat, writeFile } from 'node:fs/promises'
 import path from 'node:path'
 import test from 'node:test'
 import { promisify } from 'node:util'
@@ -97,6 +98,53 @@ test('read-only lint fails on real violations in each supported file type', asyn
   } finally {
     await rm(probeDir, { recursive: true, force: true })
   }
+})
+
+async function snapshotProjectFiles() {
+  const ignoredDirectories = new Set(['node_modules', 'dist', 'unpackage'])
+  const entries = []
+
+  async function walk(directory, relativeDirectory = '') {
+    const names = await readdir(directory, { withFileTypes: true })
+    for (const entry of names) {
+      const relativePath = relativeDirectory ? path.join(relativeDirectory, entry.name) : entry.name
+      if (entry.isDirectory()) {
+        if (ignoredDirectories.has(entry.name)) continue
+        if (relativePath === path.join('static', 'fontclass')) continue
+        await walk(path.join(directory, entry.name), relativePath)
+      } else if (entry.isFile()) {
+        entries.push(relativePath)
+      }
+    }
+  }
+
+  await walk(mobileRoot)
+  entries.sort((left, right) => left.localeCompare(right))
+
+  const hash = createHash('sha256')
+  for (const relativePath of entries) {
+    const absolutePath = path.join(mobileRoot, relativePath)
+    const fileStatus = await stat(absolutePath)
+    const content = await readFile(absolutePath)
+    hash.update(relativePath)
+    hash.update(String(fileStatus.size))
+    hash.update(content)
+  }
+  return hash.digest('hex')
+}
+
+test('real npm run lint is read-only for project sources and config', async () => {
+  const before = await snapshotProjectFiles()
+  const npm = process.platform === 'win32' ? 'npm.cmd' : 'npm'
+
+  await execFileAsync(npm, ['run', 'lint'], {
+    cwd: mobileRoot,
+    encoding: 'utf8',
+    maxBuffer: 10 * 1024 * 1024
+  })
+
+  const after = await snapshotProjectFiles()
+  assert.equal(after, before)
 })
 
 test('mobile CI runs read-only lint before building H5', async () => {

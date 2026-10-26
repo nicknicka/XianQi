@@ -17,7 +17,7 @@ export enum TransitionType {
   POP_IN = 'pop-in',
   FADE_IN = 'fade-in',
 
-  // 高级过渡（当前运行时映射）
+  // 高级过渡 (修正后的值)
   ZOOM_FADE_IN = 'fade-in',
   SLIDE_ZOOM_IN = 'slide-in-right',
   FLIP_X = 'fade-in',

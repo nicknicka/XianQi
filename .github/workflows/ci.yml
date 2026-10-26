@@ -120,6 +120,11 @@ jobs:
           cd admin
           npm run lint
 
+      - name: Lint gate self-test
+        run: |
+          cd admin
+          bash scripts/test-lint-gate.sh
+
       - name: Build
         run: |
           cd admin
@@ -157,6 +162,11 @@ jobs:
         run: |
           cd mobile
           npm run lint
+
+      - name: Lint gate self-test
+        run: |
+          cd mobile
+          node --test test/lint-gate.test.mjs
 
       - name: Build H5
         run: |

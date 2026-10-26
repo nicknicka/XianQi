@@ -48,8 +48,6 @@ export default [
         'error',
         { allowWithName: '^ComponentCustomOptions$' }
       ],
-      // TransitionType 的高级效果是对运行时已有动画名的语义别名；改变值会改变页面行为。
-      '@typescript-eslint/no-duplicate-enum-values': 'off',
       'no-debugger': 'error',
       'no-unused-vars': 'off',
       'vue/multi-word-component-names': 'off',
@@ -71,6 +69,34 @@ export default [
         ecmaVersion: 2021,
         sourceType: 'module'
       }
+    }
+  },
+  {
+    // TransitionType 的高级效果是运行时既有动画名的语义别名，重复字符串值是有意设计。
+    files: ['src/utils/transition.ts'],
+    rules: {
+      '@typescript-eslint/no-duplicate-enum-values': 'off'
+    }
+  },
+  {
+    // 回退 issue #10 对条件编译微信全局对象的业务改动；保留原有 @ts-ignore 写法。
+    files: ['src/utils/system-info.ts'],
+    rules: {
+      '@typescript-eslint/ban-ts-comment': 'off'
+    }
+  },
+  {
+    // 回退 issue #10 对聊天页 ref 读取方式的业务改动；此处不以 lint 倒逼行为变化。
+    files: ['src/pages/message/chat.vue'],
+    rules: {
+      'vue/no-ref-as-operand': 'off'
+    }
+  },
+  {
+    // 回退 issue #10 对退款页历史模板块的改动；嵌套注释是旧模板中的既存状态。
+    files: ['src/pages/mine/refund.vue'],
+    rules: {
+      'vue/no-parsing-error': 'off'
     }
   },
   prettier

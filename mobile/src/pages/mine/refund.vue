@@ -128,6 +128,11 @@
           <text class="empty-text">暂无退款记录</text>
         </view>
 
+        <!-- 加载更多（刷新时不显示） -->
+        <!-- <view v-if="isLoadingMore && refundList.length > 0 && !refreshing" class="loading-more">
+          <uni-load-more status="loading" />
+        </view>
+
         <!-- 加载更多 -->
         <view v-if="isLoadingMore && refundList.length > 0" class="loading-more">
           <uni-load-more status="loading" />
