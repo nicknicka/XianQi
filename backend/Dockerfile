@@ -7,16 +7,14 @@ WORKDIR /app
 
 # 先拷贝 pom.xml，利用 Docker 缓存依赖
 COPY pom.xml ./
-COPY .mvn ./.mvn
-COPY mvnw ./
 
-# 下载依赖（不编译源码，只下载 pom 中的依赖）
-RUN chmod +x mvnw && ./mvnw dependency:go-offline -B
+# 使用基础镜像自带的 Maven，避免 Wrapper 额外下载 Maven 发行包
+RUN mvn -B dependency:go-offline
 
 # 再拷贝源码进行编译
 COPY src ./src
 
-RUN ./mvnw clean package -DskipTests -B
+RUN mvn -B clean package -DskipTests
 
 # ==========================================
 # 运行阶段：JRE 运行 jar
