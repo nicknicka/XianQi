@@ -19,14 +19,14 @@ export enum ReportReason {
 }
 
 export interface ReportCreateParams {
-  reportedUserId: number | string // 被举报用户ID
+  reportedUserId: string // 被举报用户ID
   targetType?: ReportType // 前端兼容字段，后端未使用
-  targetId?: number | string // 前端兼容字段，后端未使用
+  targetId?: string // 前端兼容字段，后端未使用
   reason: ReportReason | string // 举报原因
   description?: string // 详细描述
   images?: string[] // 证据图片
-  conversationId?: number | string
-  messageId?: number | string
+  conversationId?: string
+  messageId?: string
 }
 
 function normalizeReason(reason: ReportReason | string): string {

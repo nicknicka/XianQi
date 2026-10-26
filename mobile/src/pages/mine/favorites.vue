@@ -110,12 +110,11 @@ import { useThemePage, useThemeStyle, useThemeColors, addAlpha } from "@/utils/t
 import { getConditionLabel } from "@/types";
 import LazyImage from "@/components/lazy-image/lazy-image.vue";
 import { normalizeImageUrl } from "@/utils/image";
-import type { IdLike } from "@/utils/id";
 
 useServiceNavigation();
 
 interface Product {
-	id: IdLike;
+	id: string;
 	title: string;
 	coverImage: string;
 	price: number;
@@ -285,13 +284,13 @@ function onRefresh() {
 	loadProducts(true);
 }
 
-function goDetail(id: IdLike) {
+function goDetail(id: string) {
 	uni.navigateTo({
 		url: `/pages/market/detail?id=${id}`,
 	});
 }
 
-function cancelFavorite(id: IdLike) {
+function cancelFavorite(id: string) {
 	uni.showModal({
 		title: "提示",
 		content: "确定取消收藏吗？",

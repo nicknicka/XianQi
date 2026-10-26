@@ -4,7 +4,7 @@
 import { http } from '@/utils/request'
 
 export interface Coupon {
-  couponId: number
+  couponId: string
   name: string
   description: string
   type: number
@@ -29,8 +29,8 @@ export interface Coupon {
 }
 
 export interface UserCoupon {
-  userCouponId: number
-  couponId: number
+  userCouponId: string
+  couponId: string
   name: string
   description: string
   type: number
@@ -62,7 +62,7 @@ export const couponApi = {
   /**
    * 领取优惠券
    */
-  receiveCoupon(couponId: number) {
+  receiveCoupon(couponId: string) {
     return http.post(`/coupon/${couponId}/receive`, {}, { showLoading: true })
   },
 
@@ -79,7 +79,7 @@ export const couponApi = {
   /**
    * 获取优惠券详情
    */
-  getCouponDetail(couponId: number) {
+  getCouponDetail(couponId: string) {
     return http.get<Coupon>(`/coupon/${couponId}`)
   }
 }

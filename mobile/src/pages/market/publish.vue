@@ -866,7 +866,7 @@ const form = ref({
   flashPrice: '',
   flashSaleStock: '',
   limitPerUser: '1',
-  sessionId: '' as string | number,
+  sessionId: '' as string,
   repeatType: 1 as 0 | 1, // 0=仅一次, 1=每日重复
   saleDate: '' // 当 repeatType=0 时必填
 })
@@ -1848,7 +1848,7 @@ async function saveDraftToServer() {
       draftId: form.value.draftId,
       title: form.value.title,
       description: form.value.description,
-      categoryId: form.value.categoryId ? parseInt(form.value.categoryId) : undefined,
+      categoryId: form.value.categoryId || undefined,
       price: form.value.price ? parseFloat(form.value.price) : undefined,
       originalPrice: form.value.originalPrice ? parseFloat(form.value.originalPrice) : undefined,
       conditionLevel: conditionMap[form.value.condition] || 10,
@@ -2244,7 +2244,7 @@ async function handlePublish() {
         price: parseFloat(form.value.price),
         originalPrice: form.value.originalPrice ? parseFloat(form.value.originalPrice) : undefined,
         condition: form.value.condition,
-        categoryId: parseInt(form.value.categoryId),
+        categoryId: form.value.categoryId,
         location: form.value.location,
         latitude,
         longitude,
@@ -2258,7 +2258,7 @@ async function handlePublish() {
 
       // 如果开启秒杀，添加秒杀相关字段
       if (form.value.isFlashSale) {
-        data.sessionId = parseInt(form.value.sessionId as string)
+        data.sessionId = form.value.sessionId
         data.flashPrice = parseFloat(form.value.flashPrice)
         data.flashSaleStock = parseInt(form.value.flashSaleStock)
         data.limitPerUser = parseInt(form.value.limitPerUser) || 1
@@ -2321,7 +2321,7 @@ async function handlePublish() {
         price: parseFloat(form.value.price),
         originalPrice: form.value.originalPrice ? parseFloat(form.value.originalPrice) : undefined,
         condition: form.value.condition,
-        categoryId: parseInt(form.value.categoryId),
+        categoryId: form.value.categoryId,
         location: form.value.location,
         latitude: form.value.location ? parseFloat(form.value.location.split(',')[0]) : undefined,
         longitude: form.value.location ? parseFloat(form.value.location.split(',')[1]) : undefined,
@@ -2333,7 +2333,7 @@ async function handlePublish() {
 
       // 如果开启秒杀，添加秒杀相关字段
       if (form.value.isFlashSale) {
-        data.sessionId = parseInt(form.value.sessionId as string)
+        data.sessionId = form.value.sessionId
         data.flashPrice = parseFloat(form.value.flashPrice)
         data.flashSaleStock = parseInt(form.value.flashSaleStock)
         data.limitPerUser = parseInt(form.value.limitPerUser) || 1

@@ -11,7 +11,7 @@ export interface ShareItemDraftDto {
   draftId?: string                    // 更新时传入
   title?: string                      // 物品标题
   description?: string                // 描述
-  categoryId?: number                 // 分类ID
+  categoryId?: string                 // 分类ID
   deposit?: number                    // 押金
   dailyRent?: number                  // 日租金
   condition?: string                  // 成色字符串
@@ -26,7 +26,7 @@ export interface ShareItemDraftVo {
   shareId: string
   title: string
   description: string
-  categoryId: number
+  categoryId: string
   categoryName: string
   deposit: number
   dailyRent: number
@@ -68,7 +68,7 @@ interface ShareItemListParams {
   status?: number
   page?: number
   size?: number
-  categoryId?: number | string
+  categoryId?: string
   keyword?: string
 }
 
@@ -291,7 +291,7 @@ export const shareApi = {
     condition: string
     availableTime?: string
     availableTimes?: string
-    categoryId: number
+    categoryId: string
   }) {
     const imageUrls = data.images || data.imageUrls || []
     return http.post<ShareItem>('/share-item', {
@@ -329,7 +329,7 @@ export const shareApi = {
   /**
    * 更新共享物品状态
    */
-  updateShareItemStatus(id: string | number, status: number) {
+  updateShareItemStatus(id: string, status: number) {
     return http.put(`/share-item/${id}/status?status=${status}`, undefined, { showLoading: true })
   },
 
@@ -375,7 +375,7 @@ export const shareApi = {
   /**
    * 获取预约详情
    */
-  getBookingDetail(bookingId: number) {
+  getBookingDetail(bookingId: string) {
     return http.get(`/share-item-booking/${bookingId}`).then((res: any) => ({
       ...res,
       data: normalizeBooking(res.data)
@@ -412,7 +412,7 @@ export const shareApi = {
    * 审批预约（同意或拒绝）
    */
   approveBooking(data: {
-    bookingId: number
+    bookingId: string
     status: number  // 1-批准，2-拒绝
     approveRemark?: string
   }) {
@@ -423,7 +423,7 @@ export const shareApi = {
    * 拒绝预约
    */
   rejectBooking(data: {
-    bookingId: number
+    bookingId: string
     approveRemark?: string
   }) {
     return http.put('/share-item-booking/approve', {
@@ -436,7 +436,7 @@ export const shareApi = {
   /**
    * 取消预约
    */
-  cancelBooking(bookingId: number) {
+  cancelBooking(bookingId: string) {
     return http.put(`/share-item-booking/${bookingId}/cancel`, undefined, { showLoading: true })
   },
 
@@ -444,7 +444,7 @@ export const shareApi = {
    * 确认归还
    */
   confirmReturn(data: {
-    bookingId: number
+    bookingId: string
     returnRemark?: string
   }) {
     return http.put('/share-item-booking/return', data, { showLoading: true })
@@ -453,7 +453,7 @@ export const shareApi = {
   /**
    * 退还押金
    */
-  returnDeposit(bookingId: number) {
+  returnDeposit(bookingId: string) {
     return http.put(`/share-item-booking/${bookingId}/deposit-return`, undefined, { showLoading: true })
   },
 
@@ -488,7 +488,7 @@ export const shareApi = {
    */
   initiateTransfer(data: {
     shareId: string
-    toUserId: number | string
+    toUserId: string
     transferNote?: string
   }) {
     return http.post('/transfer', data, { showLoading: true })
@@ -497,21 +497,21 @@ export const shareApi = {
   /**
    * 接受转赠
    */
-  acceptTransfer(transferId: number) {
+  acceptTransfer(transferId: string) {
     return http.put('/transfer/respond', { transferId, status: 1 }, { showLoading: true })
   },
 
   /**
    * 拒绝转赠
    */
-  rejectTransfer(transferId: number) {
+  rejectTransfer(transferId: string) {
     return http.put('/transfer/respond', { transferId, status: 2 }, { showLoading: true })
   },
 
   /**
    * 取消转赠
    */
-  cancelTransfer(transferId: number) {
+  cancelTransfer(transferId: string) {
     return http.delete(`/transfer/${transferId}`, undefined, { showLoading: true })
   },
 
@@ -583,14 +583,14 @@ export const shareApi = {
   /**
    * 兼容旧逻辑：保留 pay-deposit 路径，但不建议继续作为主入口使用
    */
-  payDeposit(bookingId: number) {
+  payDeposit(bookingId: string) {
     return http.post(`/share-item-booking/${bookingId}/pay-deposit`, undefined, { showLoading: true })
   },
 
   /**
    * 支付共享预约总金额（租金+押金）
    */
-  payBooking(bookingId: number) {
+  payBooking(bookingId: string) {
     return http.post(`/share-item-booking/${bookingId}/pay`, undefined, { showLoading: true })
   }
 }

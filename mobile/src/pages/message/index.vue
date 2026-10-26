@@ -168,14 +168,13 @@ import NoticeItem from '@/components/notice-item/notice-item.vue'
 import UserAvatar from '@/components/user-avatar/user-avatar.vue'
 import { getScreenWidth } from '@/utils/system-info'
 import CustomTabBar from '@/custom-tab-bar/index.vue'
-import type { IdLike } from '@/utils/id'
 
 const { themeStyle } = useThemeStyle()
 const { primaryColor } = useThemeColors()
 
 interface Conversation {
-  conversationId: IdLike
-  otherUserId?: IdLike
+  conversationId: string
+  otherUserId?: string
   otherUserNickname?: string
   otherUserAvatar?: string
   lastMessageContent?: string
@@ -183,12 +182,12 @@ interface Conversation {
   lastMessageType?: string // 消息类型：text、image、product、order等
   unreadCount?: number
   isTop?: number // 0-未置顶，1-已置顶（注意：后端使用isTop字段，不是isPinned）
-  relatedProductId?: IdLike
-  relatedOrderId?: IdLike
+  relatedProductId?: string
+  relatedOrderId?: string
 }
 
 interface Notice {
-  id: IdLike
+  id: string
   type: string
   title: string
   summary: string
@@ -197,8 +196,8 @@ interface Notice {
   isRead: boolean
   linkType?: number
   linkUrl?: string
-  linkProductId?: IdLike
-  linkOrderId?: IdLike
+  linkProductId?: string
+  linkOrderId?: string
 }
 
 const tabs = ref([
@@ -614,7 +613,7 @@ onPullDownRefresh(async () => {
   }
 })
 
-function goChat(id: IdLike) {
+function goChat(id: string) {
   // 创建点击波纹效果
   uni.navigateTo({
     url: `/pages/message/chat?conversationId=${id}`,
@@ -629,7 +628,7 @@ function goAIChat() {
   })
 }
 
-function goUserProfile(userId?: IdLike) {
+function goUserProfile(userId?: string) {
   if (!userId) return
 
   uni.navigateTo({
@@ -659,7 +658,7 @@ function showConversationMenu(conversation: Conversation) {
   })
 }
 
-function pinConversation(id: IdLike) {
+function pinConversation(id: string) {
   messageApi.pinConversation(id).then(async () => {
     // 先更新本地状态，确保 UI 立即响应
     const conversation = conversations.value.find(c => c.conversationId === id)
@@ -674,7 +673,7 @@ function pinConversation(id: IdLike) {
   })
 }
 
-function unpinConversation(id: IdLike) {
+function unpinConversation(id: string) {
   messageApi.unpinConversation(id).then(async () => {
     // 先更新本地状态，确保 UI 立即响应
     const conversation = conversations.value.find(c => c.conversationId === id)
@@ -689,7 +688,7 @@ function unpinConversation(id: IdLike) {
   })
 }
 
-function deleteConversation(id: IdLike) {
+function deleteConversation(id: string) {
   uni.showModal({
     title: '确认删除',
     content: '删除后将清空该会话的聊天记录，是否确认删除？',

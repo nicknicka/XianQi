@@ -222,7 +222,7 @@ function payDeposit(record: any) {
   })
 }
 
-function goToShareDetail(shareItemId: number | undefined) {
+function goToShareDetail(shareItemId: string | undefined) {
   if (!shareItemId) {
     uni.showToast({
       title: '共享物品不存在',

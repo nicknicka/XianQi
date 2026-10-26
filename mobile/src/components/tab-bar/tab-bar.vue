@@ -37,7 +37,7 @@
 import { computed } from 'vue'
 
 interface TabItem {
-  id?: string | number
+  id?: string
   text?: string
   icon?: string
   activeIcon?: string

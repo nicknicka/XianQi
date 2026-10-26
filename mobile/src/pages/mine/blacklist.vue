@@ -89,7 +89,6 @@ import { useServiceNavigation } from '@/composables/useServiceNavigation'
 import { blacklistApi } from '@/api/blacklist'
 import UserAvatar from '@/components/user-avatar/user-avatar.vue'
 import { onShow } from '@dcloudio/uni-app'
-import type { IdLike } from '@/utils/id'
 
 // 启用服务页面导航（从服务页面进入时会自动处理返回逻辑）
 useServiceNavigation()
@@ -98,8 +97,8 @@ const { dangerColor } = useThemeColors()
 const { themeStyle } = useThemeStyle()
 
 interface BlacklistItem {
-  id: IdLike
-  userId: IdLike
+  id: string
+  userId: string
   username: string
   nickname: string
   avatar: string
@@ -110,7 +109,7 @@ const blacklist = ref<BlacklistItem[]>([])
 const loading = ref(false)
 const refreshing = ref(false)
 const searchKeyword = ref('')
-const selectedItems = ref<Array<string | number>>([])
+const selectedItems = ref<Array<string>>([])
 const isSelectMode = ref(false)
 
 // 过滤后的黑名单列表
@@ -193,7 +192,7 @@ function onRefresh() {
   loadBlacklist()
 }
 
-async function removeBlacklist(id: IdLike) {
+async function removeBlacklist(id: string) {
   uni.showModal({
     title: '提示',
     content: '确定要移出黑名单吗？',
@@ -231,7 +230,7 @@ function toggleSelectMode() {
 }
 
 // 切换选择项
-function toggleSelectItem(id: IdLike) {
+function toggleSelectItem(id: string) {
   const index = selectedItems.value.indexOf(id)
   if (index > -1) {
     selectedItems.value.splice(index, 1)
@@ -292,7 +291,7 @@ async function batchRemove() {
   })
 }
 
-function goUserHome(userId: IdLike) {
+function goUserHome(userId: string) {
   uni.navigateTo({
     url: `/pages/user/home?id=${userId}`
   })

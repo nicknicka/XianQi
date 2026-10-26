@@ -80,10 +80,9 @@ import { uploadImage as uploadImageFile } from '@/utils/image'
 import UserAvatar from '@/components/user-avatar/user-avatar.vue'
 import LazyImage from '@/components/lazy-image/lazy-image.vue'
 import { onShow } from '@dcloudio/uni-app'
-import type { IdLike } from '@/utils/id'
 
 interface UserInfo {
-  id: IdLike
+  id: string
   username: string
   nickname: string
   avatar: string

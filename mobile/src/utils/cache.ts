@@ -2,7 +2,6 @@
  * 请求缓存工具类
  * 用于缓存API请求结果，减少网络请求，提升性能
  */
-import type { IdLike } from './id'
 import { normalizeId } from './id'
 
 interface CacheItem<T> {
@@ -133,15 +132,15 @@ export const requestCache = new RequestCache()
 export const CacheKeys = {
   // 分类相关
   CATEGORIES: 'cache:categories',
-  CATEGORY_DETAIL: (id: IdLike) => `cache:category:${normalizeId(id)}`,
+  CATEGORY_DETAIL: (id: string) => `cache:category:${normalizeId(id)}`,
 
   // 商品相关
-  PRODUCT_DETAIL: (id: IdLike) => `cache:product:${normalizeId(id)}`,
+  PRODUCT_DETAIL: (id: string) => `cache:product:${normalizeId(id)}`,
   PRODUCT_LIST: (params: any) => `cache:products:${JSON.stringify(params)}`,
 
   // 用户相关
-  USER_INFO: (id: IdLike) => `cache:user:${normalizeId(id)}`,
-  USER_CREDIT: (id: IdLike) => `cache:user:${normalizeId(id)}:credit`,
+  USER_INFO: (id: string) => `cache:user:${normalizeId(id)}`,
+  USER_CREDIT: (id: string) => `cache:user:${normalizeId(id)}:credit`,
 
   // 系统配置
   SYSTEM_CONFIG: 'cache:system:config',
@@ -154,7 +153,7 @@ export const CacheKeys = {
   HOT_SEARCH: 'cache:hot:search',
 
   // 消息未读数
-  UNREAD_COUNT: (userId: IdLike) => `cache:user:${normalizeId(userId)}:unread`
+  UNREAD_COUNT: (userId: string) => `cache:user:${normalizeId(userId)}:unread`
 }
 
 /**

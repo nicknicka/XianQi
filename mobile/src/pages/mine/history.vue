@@ -148,7 +148,6 @@ import { usePageAnimation } from '@/composables/usePageAnimation'
 import { useServiceNavigation } from '@/composables/useServiceNavigation'
 import { onShow } from '@dcloudio/uni-app'
 import { normalizeImageUrl } from '@/utils/image'
-import type { IdLike } from '@/utils/id'
 
 useServiceNavigation()
 
@@ -156,8 +155,8 @@ const { themeStyle } = useThemeStyle()
 const { primaryColor } = useThemeColors()
 
 interface Product {
-  id: IdLike
-  productId: IdLike
+  id: string
+  productId: string
   title: string
   coverImage: string
   price: number
@@ -171,7 +170,7 @@ const noMore = ref(false)
 const page = ref(1)
 const pageSize = 20
 const isEditMode = ref(false)
-const selectedIds = ref<Array<string | number>>([])
+const selectedIds = ref<Array<string>>([])
 
 // 页面入场动画
 const {
@@ -292,7 +291,7 @@ function onRefresh() {
   loadProducts(true)
 }
 
-function goDetail(id: IdLike) {
+function goDetail(id: string) {
   uni.navigateTo({ url: `/pages/market/detail?id=${id}` })
 }
 
@@ -304,7 +303,7 @@ function handleCardClick(product: Product) {
   }
 }
 
-function deleteItem(historyId: IdLike) {
+function deleteItem(historyId: string) {
   uni.showModal({
     title: '删除记录',
     content: '确定删除这条浏览记录吗？',
@@ -351,7 +350,7 @@ function toggleEditMode() {
   }
 }
 
-function toggleSelect(id: IdLike) {
+function toggleSelect(id: string) {
   const idx = selectedIds.value.indexOf(id)
   if (idx > -1) {
     selectedIds.value = selectedIds.value.filter((i) => i !== id)

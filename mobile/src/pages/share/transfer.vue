@@ -243,8 +243,8 @@ const transferPopup = ref()
 const selectedShareId = ref<string>('')
 const selectedUser = ref<any>(null)
 const transferForm = ref({
-  shareId: '' as string | number,
-  toUserId: '' as string | number,
+  shareId: '' as string,
+  toUserId: '' as string,
   transferNote: ''
 })
 
@@ -448,7 +448,7 @@ function submitTransfer() {
   })
 }
 
-function acceptTransfer(transferId: number) {
+function acceptTransfer(transferId: string) {
   uni.showModal({
     title: '接受转赠',
     content: '接受后将获得该物品的所有权，是否确认？',
@@ -465,7 +465,7 @@ function acceptTransfer(transferId: number) {
   })
 }
 
-function rejectTransfer(transferId: number) {
+function rejectTransfer(transferId: string) {
   uni.showModal({
     title: '拒绝转赠',
     content: '确定要拒绝这个转赠吗？',
@@ -482,7 +482,7 @@ function rejectTransfer(transferId: number) {
   })
 }
 
-function cancelTransfer(transferId: number) {
+function cancelTransfer(transferId: string) {
   uni.showModal({
     title: '取消转赠',
     content: '对方还未接受，确定要取消吗？',
@@ -515,14 +515,14 @@ function viewDetail(item: any) {
   })
 }
 
-function goToShareDetail(shareItemId: number | string) {
+function goToShareDetail(shareItemId: string) {
   if (!shareItemId) return
   uni.navigateTo({
     url: `/pages/share/detail?id=${shareItemId}`
   })
 }
 
-function goToUserHome(userId: number | string) {
+function goToUserHome(userId: string) {
   if (!userId) return
   uni.navigateTo({
     url: `/pages/user/home?id=${userId}`

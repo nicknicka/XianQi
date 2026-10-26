@@ -54,7 +54,7 @@ export type GridMenuSize = 'small' | 'medium' | 'large'
 export type GridMenuColumns = 3 | 4 | 5
 
 export interface GridMenuItem {
-  id?: string | number
+  id?: string
   title: string
   description?: string
   icon: string

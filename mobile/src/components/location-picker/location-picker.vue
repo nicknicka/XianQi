@@ -140,7 +140,7 @@ import { ref, computed, watch } from 'vue'
 export type LocationType = 'home' | 'company' | 'school' | 'other'
 
 interface LocationInfo {
-  id?: string | number
+  id?: string
   name: string
   address: string
   latitude: number

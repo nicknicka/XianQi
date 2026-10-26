@@ -43,7 +43,7 @@ interface ResetPasswordParams {
 }
 
 export interface UserInfo {
-  id: string | number
+  id: string
   username: string
   nickname: string
   avatar: string
@@ -66,7 +66,7 @@ export interface UserInfo {
 }
 
 export interface UserCenterInfo {
-  id: string | number
+  id: string
   username: string
   nickname: string
   avatar: string

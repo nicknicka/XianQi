@@ -119,7 +119,7 @@ export const messageApi = {
    * 创建单聊会话
    */
   createOneToOneConversation(targetId: string) {
-    return http.post<string | number>(`/conversation/one-to-one?userId=${encodeURIComponent(targetId)}`)
+    return http.post<string>(`/conversation/one-to-one?userId=${encodeURIComponent(targetId)}`)
   },
 
   /**
@@ -189,7 +189,7 @@ export const messageApi = {
     conversationId: string
     content: string
     type: number // 1-文本，2-图片，3-商品卡片，4-订单卡片
-    quotedMessageId?: number
+    quotedMessageId?: string
   }) {
     console.log('[sendMessage] 发送消息参数:', data)
     return http.post<Message>('/conversation/message', {

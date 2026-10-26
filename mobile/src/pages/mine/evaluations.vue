@@ -158,7 +158,6 @@ import { useServiceNavigation } from "@/composables/useServiceNavigation";
 import { useUserStore } from "@/store/user";
 import LazyImage from "@/components/lazy-image/lazy-image.vue";
 import { onShow } from "@dcloudio/uni-app";
-import type { IdLike } from "@/utils/id";
 
 // 兼容 h5 base=./ 等部署场景
 const emptyImage = `${import.meta.env.BASE_URL}static/images/empty.png`;
@@ -210,14 +209,14 @@ function ensureArray(value: any): string[] {
 }
 
 interface Evaluation {
-	id: IdLike;
-	evaluationId?: IdLike;
-	productId: IdLike;
+	id: string;
+	evaluationId?: string;
+	productId: string;
 	productName: string;
 	productTitle?: string;
 	productImage: string;
 	productPrice?: number;
-	orderId: IdLike;
+	orderId: string;
 	orderNo?: string;
 	rating: number;
 	score?: number;
@@ -447,7 +446,7 @@ function onRefresh() {
 	loadEvaluations(true);
 }
 
-function goProduct(productId: IdLike) {
+function goProduct(productId: string) {
 	uni.navigateTo({ url: `/pages/market/detail?id=${productId}` });
 }
 

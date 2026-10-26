@@ -547,7 +547,7 @@ function contactUser() {
   })
 }
 
-function goUserHome(userId: string | number) {
+function goUserHome(userId: string) {
   if (!userId) return
 
   uni.navigateTo({
