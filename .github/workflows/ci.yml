@@ -103,3 +103,170 @@ jobs:
           name: mobile-h5-dist
           path: mobile/dist/build/h5
           retention-days: 7
+
+  # ---------- 数据库空库初始化 ----------
+  fresh-init:
+    name: Database Fresh Init
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Start empty MySQL container
+        run: |
+          VOLUME_NAME="xianqi_fresh_init_${GITHUB_RUN_ID}_${GITHUB_RUN_NUMBER}"
+          docker volume create "${VOLUME_NAME}"
+          docker run -d \
+            --name xianqi-fresh-mysql \
+            -e MYSQL_ROOT_PASSWORD=root_password \
+            -e MYSQL_DATABASE=Xianqi \
+            -e MYSQL_USER=xianqi \
+            -e MYSQL_PASSWORD=xianqi123 \
+            -e TZ=Asia/Shanghai \
+            -v "${VOLUME_NAME}:/var/lib/mysql" \
+            -v "${PWD}/sql/schema.sql:/docker-entrypoint-initdb.d/01_schema.sql:ro" \
+            -v "${PWD}/sql/data.sql:/docker-entrypoint-initdb.d/02_data.sql:ro" \
+            --health-cmd='mysqladmin ping -h 127.0.0.1 -uroot -proot_password --silent' \
+            --health-interval=5s \
+            --health-timeout=5s \
+            --health-retries=24 \
+            mysql:8.0 \
+            --character-set-server=utf8mb4 \
+            --collation-server=utf8mb4_unicode_ci
+
+      - name: Wait for MySQL health check
+        run: |
+          for i in {1..120}; do
+            status=$(docker inspect --format='{{.State.Health.Status}}' xianqi-fresh-mysql)
+            echo "MySQL health: ${status}"
+            if [ "${status}" = "healthy" ]; then
+              exit 0
+            fi
+            if ! docker ps --format '{{.Names}}' | grep -q '^xianqi-fresh-mysql$'; then
+              docker logs xianqi-fresh-mysql
+              echo 'MySQL container exited during fresh initialization.' >&2
+              exit 1
+            fi
+            sleep 2
+          done
+          docker logs xianqi-fresh-mysql
+          echo 'MySQL did not become healthy in time.' >&2
+          exit 1
+
+      - name: Wait for initialization completion
+        env:
+          MYSQL_PWD: root_password
+        run: |
+          for i in {1..120}; do
+            if docker logs xianqi-fresh-mysql 2>&1 | grep -q 'ready for connections.*port: 3306'; then
+              config_count=$(docker exec -i -e MYSQL_PWD="${MYSQL_PWD}" xianqi-fresh-mysql                 mysql -uroot -N -B Xianqi -sN -e 'SELECT COUNT(*) FROM system_config' 2>/dev/null || true)
+              if [ "${config_count}" = "8" ]; then
+                echo 'Fresh initialization complete.'
+                exit 0
+              fi
+            fi
+            if ! docker ps --format '{{.Names}}' | grep -q '^xianqi-fresh-mysql$'; then
+              docker logs xianqi-fresh-mysql
+              echo 'MySQL container exited during fresh initialization.' >&2
+              exit 1
+            fi
+            sleep 1
+          done
+          docker logs xianqi-fresh-mysql
+          echo 'Fresh initialization did not complete in time.' >&2
+          exit 1
+
+      - name: Verify initialization logs
+        run: |
+          if docker logs xianqi-fresh-mysql 2>&1 | grep -E '\[ERROR\]|ERROR [0-9]+'; then
+            echo 'Fresh initialization reported SQL errors.' >&2
+            exit 1
+          fi
+
+      - name: Verify fresh database contract
+        env:
+          MYSQL_PWD: root_password
+        run: |
+          docker exec -i -e MYSQL_PWD="${MYSQL_PWD}" xianqi-fresh-mysql mysql -uroot -N -B Xianqi > /tmp/fresh-init-contract.tsv <<'SQL'
+          SELECT 'table_count', 48, COUNT(*)
+          FROM information_schema.TABLES
+          WHERE TABLE_SCHEMA = 'Xianqi' AND TABLE_TYPE = 'BASE TABLE';
+
+          SELECT 'view_count', 0, COUNT(*)
+          FROM information_schema.VIEWS
+          WHERE TABLE_SCHEMA = 'Xianqi';
+
+          SELECT 'foreign_key_count', 69, COUNT(*)
+          FROM information_schema.REFERENTIAL_CONSTRAINTS
+          WHERE CONSTRAINT_SCHEMA = 'Xianqi';
+
+          SELECT 'residual_object_count', 0, COUNT(*)
+          FROM information_schema.TABLES
+          WHERE TABLE_SCHEMA = 'Xianqi'
+            AND TABLE_NAME IN (
+              'user_backup_20260302', 'system_notification_backup', 'operation_log_backup',
+              'user_privacy', 'user_security', 'worker_node', 'statistics_cache',
+              'error_log', 'export_log', 'user_profile', 'user_preference', 'user_credit_ext'
+            );
+
+          SELECT 'key_id_non_bigint', 0, COUNT(*)
+          FROM information_schema.COLUMNS c
+          WHERE c.TABLE_SCHEMA = 'Xianqi'
+            AND c.COLUMN_TYPE <> 'bigint'
+            AND (
+              EXISTS (
+                SELECT 1 FROM information_schema.KEY_COLUMN_USAGE k
+                WHERE k.TABLE_SCHEMA = c.TABLE_SCHEMA
+                  AND k.TABLE_NAME = c.TABLE_NAME
+                  AND k.COLUMN_NAME = c.COLUMN_NAME
+                  AND k.CONSTRAINT_NAME = 'PRIMARY'
+              )
+              OR EXISTS (
+                SELECT 1 FROM information_schema.KEY_COLUMN_USAGE k
+                WHERE k.TABLE_SCHEMA = c.TABLE_SCHEMA
+                  AND k.TABLE_NAME = c.TABLE_NAME
+                  AND k.COLUMN_NAME = c.COLUMN_NAME
+                  AND k.REFERENCED_TABLE_NAME IS NOT NULL
+              )
+            );
+
+          SELECT 'foreign_key_type_mismatch', 0, COUNT(*)
+          FROM information_schema.KEY_COLUMN_USAGE k
+          JOIN information_schema.COLUMNS c
+            ON c.TABLE_SCHEMA = k.TABLE_SCHEMA
+           AND c.TABLE_NAME = k.TABLE_NAME
+           AND c.COLUMN_NAME = k.COLUMN_NAME
+          JOIN information_schema.COLUMNS r
+            ON r.TABLE_SCHEMA = k.REFERENCED_TABLE_SCHEMA
+           AND r.TABLE_NAME = k.REFERENCED_TABLE_NAME
+           AND r.COLUMN_NAME = k.REFERENCED_COLUMN_NAME
+          WHERE k.TABLE_SCHEMA = 'Xianqi'
+            AND k.REFERENCED_TABLE_NAME IS NOT NULL
+            AND c.COLUMN_TYPE <> r.COLUMN_TYPE;
+
+          SELECT 'legacy_timestamp_count', 0, COUNT(*)
+          FROM information_schema.COLUMNS
+          WHERE TABLE_SCHEMA = 'Xianqi'
+            AND COLUMN_NAME IN ('create_time', 'update_time');
+
+          SELECT 'admin_count', 1, COUNT(*) FROM admin;
+          SELECT 'category_count', 8, COUNT(*) FROM category;
+          SELECT 'campus_location_count', 5, COUNT(*) FROM campus_location;
+          SELECT 'system_config_count', 8, COUNT(*) FROM system_config;
+          SELECT 'demo_user_count', 0, COUNT(*) FROM user;
+          SELECT 'demo_product_count', 0, COUNT(*) FROM product;
+          SELECT 'demo_order_count', 0, COUNT(*) FROM `order`;
+          SQL
+
+          cat /tmp/fresh-init-contract.tsv
+          while IFS=$'\t' read -r name expected actual; do
+            if [ "${expected}" != "${actual}" ]; then
+              echo "Assertion failed: ${name}, expected ${expected}, got ${actual}" >&2
+              exit 1
+            fi
+          done < /tmp/fresh-init-contract.tsv
+
+      - name: Show initialization logs on failure
+        if: failure()
+        run: docker logs xianqi-fresh-mysql
