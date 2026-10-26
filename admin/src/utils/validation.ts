@@ -9,8 +9,6 @@ import {
   compareAmounts,
   isValidAmount,
   toNumber,
-  toCents,
-  fromCents,
 } from './currency'
 import {
   FeedbackType,

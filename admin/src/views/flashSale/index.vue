@@ -778,7 +778,7 @@ const handleSaveSession = async () => {
   try {
     if (sessionForm.value.sessionId) {
       // 更新时，从请求体中移除sessionId（URL中已经包含）
-      const { sessionId, ...updateData } = sessionForm.value
+      const { sessionId: _sessionId, ...updateData } = sessionForm.value
       console.log('📤 [Update Request]', {
         sessionId: sessionForm.value.sessionId,
         updateData: {
