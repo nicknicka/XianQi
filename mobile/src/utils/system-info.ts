@@ -167,8 +167,7 @@ export function getNavBarInfo(): NavBarInfo {
   // #ifdef MP-WEIXIN
   // 微信小程序环境：获取胶囊按钮信息
   try {
-    // @ts-ignore - wx 对象在微信小程序环境中存在
-    const menuButton = wx.getMenuButtonBoundingClientRect()
+    const menuButton = uni.getMenuButtonBoundingClientRect()
     const navBarHeight = (menuButton.top - statusBarHeight) * 2 + menuButton.height
 
     return {

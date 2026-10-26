@@ -9,7 +9,7 @@
     >
       <!-- 分组列表 -->
       <view
-        v-for="(group, groupIndex) in dataSource"
+        v-for="group in dataSource"
         :key="group.index"
         :id="`section-${group.index}`"
         class="list-section"

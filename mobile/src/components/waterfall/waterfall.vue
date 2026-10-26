@@ -10,7 +10,7 @@
         v-for="(item, index) in column"
         :key="item.id || index"
         class="waterfall-item"
-        :style="{ height: itemHeight(item) }"
+        :style="{ height: resolveItemHeight(item) }"
       >
         <slot name="item" :item="item" :index="index" :column="columnIndex">
           <!-- 默认卡片内容 -->
@@ -120,7 +120,7 @@ function initColumns() {
 }
 
 // 计算项目高度
-function itemHeight(item: WaterfallItem): string {
+function resolveItemHeight(item: WaterfallItem): string {
   if (props.itemHeight) {
     return props.itemHeight(item)
   }

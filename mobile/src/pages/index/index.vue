@@ -319,13 +319,9 @@ import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { onShow } from '@dcloudio/uni-app'
 import { useThemePage, useThemeStyle, useThemeColors } from '@/utils/theme'
 import { getStatusBarHeight } from '@/utils/system-info'
-// @ts-ignore
 import ProductCard from '@/components/product-card/product-card.vue'
-// @ts-ignore
 import LazyImage from '@/components/lazy-image/lazy-image.vue'
-// @ts-ignore
 import EmptyState from '@/components/empty-state/empty-state.vue'
-// @ts-ignore
 import Skeleton from '@/components/skeleton/skeleton.vue'
 import { bannerApi } from '@/api/banner'
 import { productApi } from '@/api/product'

@@ -100,7 +100,7 @@ const barStyle = computed(() => {
 
 <script lang="ts">
 export default {
-  name: 'Progress',
+  name: 'XianqiProgress',
   options: {
     styleIsolation: 'shared'
   }

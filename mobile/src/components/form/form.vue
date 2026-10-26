@@ -431,7 +431,7 @@ defineExpose({
 
 <script lang="ts">
 export default {
-  name: 'Form',
+  name: 'XianqiForm',
   options: {
     styleIsolation: 'shared'
   }

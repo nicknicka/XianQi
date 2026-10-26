@@ -100,7 +100,7 @@
 
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue'
-import { addressPicker, type SelectedAddress, type Province, type City, type District } from '@/utils/address-picker'
+import { AddressPicker, addressPicker, type SelectedAddress, type Province, type City, type District } from '@/utils/address-picker'
 
 interface Props {
   /** 绑定值（区域代码或地址对象） */
@@ -142,7 +142,7 @@ const selectedAddress = ref<SelectedAddress>({})
 
 // 使用自定义数据或默认数据
 const picker = computed(() => {
-  return props.data ? new (require('@/utils/address-picker').AddressPicker)(props.data) : addressPicker
+  return props.data ? new AddressPicker(props.data) : addressPicker
 })
 
 // 省份列表

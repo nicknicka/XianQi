@@ -74,7 +74,6 @@ import { onShow } from '@dcloudio/uni-app'
 import { useThemeStyle, useThemePage } from '@/utils/theme'
 import productApi from '@/api/product'
 import { shareApi } from '@/api/share'
-// @ts-ignore
 import PublishSidebar from '@/components/publish-sidebar/publish-sidebar.vue'
 
 const { themeStyle } = useThemeStyle()
