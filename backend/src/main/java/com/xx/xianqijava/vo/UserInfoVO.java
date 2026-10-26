@@ -1,0 +1,72 @@
+package com.xx.xianqijava.vo;
+
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Data;
+
+/**
+ * 用户信息详情 VO
+ */
+@Data
+@Schema(description = "用户信息详情")
+public class UserInfoVO {
+
+    @Schema(description = "用户ID")
+    private Long id;
+
+    @Schema(description = "用户名")
+    private String username;
+
+    @Schema(description = "昵称")
+    private String nickname;
+
+    @Schema(description = "头像")
+    private String avatar;
+
+    @Schema(description = "手机号")
+    private String phone;
+
+    @Schema(description = "学号")
+    private String studentId;
+
+    @Schema(description = "真实姓名")
+    private String realName;
+
+    @Schema(description = "学院")
+    private String college;
+
+    @Schema(description = "专业")
+    private String major;
+
+    @Schema(description = "信用分数")
+    private Integer creditScore;
+
+    @Schema(description = "信用等级：excellent-优秀, good-良好, normal-一般, poor-较差")
+    private String creditLevel;
+
+    @Schema(description = "状态：0-正常，1-封禁")
+    private Integer status;
+
+    @Schema(description = "是否实名认证：0-否，1-是")
+    private Integer isVerified;
+
+    @Schema(description = "实名认证状态：0-未认证 1-审核中 2-已认证 3-认证失败")
+    private Integer realNameStatus;
+
+    @Schema(description = "学生认证状态：0-未认证 1-审核中 2-已认证 3-认证失败")
+    private Integer studentStatus;
+
+    @Schema(description = "粉丝数")
+    private Integer followerCount;
+
+    @Schema(description = "关注数")
+    private Integer followingCount;
+
+    @Schema(description = "发布商品数")
+    private Integer productCount;
+
+    @Schema(description = "创建时间")
+    private String createdAt;
+
+    @Schema(description = "更新时间")
+    private String updatedAt;
+}

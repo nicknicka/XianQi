@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xx.xianqijava.mapper.ProductMapper">
+
+    <select id="selectProductPage" resultType="com.xx.xianqijava.entity.Product">
+        SELECT *
+        FROM product
+        <where>
+            deleted = 0
+            <if test="status != null">
+                AND status = #{status}
+            </if>
+            <if test="categoryId != null">
+                AND category_id = #{categoryId}
+            </if>
+            <if test="keyword != null and keyword != ''">
+                AND (title LIKE CONCAT('%', #{keyword}, '%')
+                     OR description LIKE CONCAT('%', #{keyword}, '%'))
+            </if>
+        </where>
+        <!-- 动态排序 -->
+        <choose>
+            <when test="sortBy == 'price'">
+                ORDER BY price
+                <choose>
+                    <when test="priceAsc == true">ASC</when>
+                    <otherwise>DESC</otherwise>
+                </choose>
+            </when>
+            <when test="sortBy == 'distance'">
+                ORDER BY create_time DESC
+                <!-- 距离排序需要计算，暂时使用创建时间代替 -->
+            </when>
+            <otherwise>
+                ORDER BY create_time DESC
+            </otherwise>
+        </choose>
+    </select>
+
+    <!-- 查询商品的秒杀信息 -->
+    <select id="selectFlashSaleInfo" resultType="java.util.HashMap">
+        SELECT
+            fa.activity_id,
+            fsp.flash_price,
+            fsp.stock_count AS flash_sale_stock,
+            fsp.sold_count,
+            fspe.limit_per_user,
+            fa.end_time
+        FROM flash_sale_activity fa
+        INNER JOIN flash_sale_product fsp ON fa.activity_id = fsp.activity_id
+        LEFT JOIN flash_sale_product_ext fspe ON fsp.product_id = fspe.product_id
+        WHERE fsp.product_id = #{productId}
+          AND fsp.deleted = 0
+          AND fa.status = 1  -- 进行中
+          AND fa.start_time &lt;= #{now}
+          AND fa.end_time &gt;= #{now}
+        LIMIT 1
+    </select>
+
+    <!-- 增加商品浏览量 -->
+    <!-- 日志：每次访问商品详情页时自动+1，记录在 ProductServiceImpl.getProductDetail() -->
+    <update id="incrementViewCount">
+        UPDATE product
+        SET view_count = COALESCE(view_count, 0) + 1
+        WHERE product_id = #{productId}
+          AND deleted = 0
+    </update>
+
+    <!-- 注意：收藏计数不再维护缓存字段，已移除 incrementFavoriteCount 和 decrementFavoriteCount -->
+    <!-- 收藏数通过实时查询 product_favorite 表统计：SELECT COUNT(*) FROM product_favorite WHERE product_id = ? -->
+
+</mapper>

@@ -1,0 +1,261 @@
+.service-redesign-page {
+  position: relative;
+  min-height: 92vh;
+  background: var(--bg-color-page);
+  overflow: hidden;
+}
+
+.service-redesign-page::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 280rpx;
+  pointer-events: none;
+  background:
+    radial-gradient(140% 90% at 0% 0%, var(--primary-color-alpha-10) 0%, transparent 60%),
+    radial-gradient(120% 80% at 100% 0%, var(--primary-color-alpha-8) 0%, transparent 58%);
+}
+
+.service-redesign-page::after {
+  content: '';
+  position: absolute;
+  right: -120rpx;
+  bottom: -120rpx;
+  width: 360rpx;
+  height: 360rpx;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--primary-color-alpha-8) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.service-redesign-page .page-header,
+.service-redesign-page .header,
+.service-redesign-page .role-tabs,
+.service-redesign-page .tabs,
+.service-redesign-page .tab-bar,
+.service-redesign-page .type-tabs,
+.service-redesign-page .order-card,
+.service-redesign-page .category-section,
+.service-redesign-page .faq-section,
+.service-redesign-page .contact-card,
+.service-redesign-page .evaluation-card,
+.service-redesign-page .refund-card,
+.service-redesign-page .booking-card,
+.service-redesign-page .deposit-card,
+.service-redesign-page .transfer-card,
+.service-redesign-page .favorite-card,
+.service-redesign-page .history-item,
+.service-redesign-page .address-card,
+.service-redesign-page .blacklist-item,
+.service-redesign-page .auth-card,
+.service-redesign-page .security-item,
+.service-redesign-page .coupon-card,
+.service-redesign-page .reply-item,
+.service-redesign-page .feedback-card,
+.service-redesign-page .about-card,
+.service-redesign-page .form-section,
+.service-redesign-page .empty-state,
+.service-redesign-page .empty,
+.service-redesign-page .no-data,
+.service-redesign-page .loading,
+.service-redesign-page .no-more,
+.service-redesign-page .service-grid,
+.service-redesign-page .content {
+  position: relative;
+  z-index: 1;
+}
+
+.service-redesign-page .page-header,
+.service-redesign-page .header,
+.service-redesign-page .role-tabs,
+.service-redesign-page .tabs,
+.service-redesign-page .tab-bar,
+.service-redesign-page .type-tabs {
+  margin: 0 20rpx;
+  border-radius: 20rpx;
+  background: var(--bg-color-card);
+  box-shadow: 0 10rpx 30rpx rgba(0, 0, 0, 0.05);
+  backdrop-filter: blur(10px);
+}
+
+.service-redesign-page .page-header,
+.service-redesign-page .header {
+  margin-top: 16rpx;
+  margin-bottom: 16rpx;
+}
+
+.service-redesign-page .tabs,
+.service-redesign-page .tab-bar,
+.service-redesign-page .type-tabs,
+.service-redesign-page .role-tabs {
+  border: 1px solid var(--border-color-light);
+  overflow: hidden;
+}
+
+.service-redesign-page .tab-item,
+.service-redesign-page .role-tab-item {
+  transition: transform 0.22s ease, color 0.22s ease, background-color 0.22s ease;
+}
+
+.service-redesign-page .tab-item:active,
+.service-redesign-page .role-tab-item:active {
+  transform: scale(0.97);
+}
+
+.service-redesign-page .tab-item.active,
+.service-redesign-page .role-tab-item.active {
+  background: linear-gradient(
+    180deg,
+    var(--primary-color-alpha-8) 0%,
+    var(--primary-color-alpha-5) 100%
+  );
+}
+
+.service-redesign-page .tab-item.active .tab-text,
+.service-redesign-page .role-tab-item.active .role-tab-text {
+  color: var(--primary-color);
+  font-weight: 600;
+}
+
+.service-redesign-page .tab-slider {
+  border-radius: 0 0 20rpx 20rpx;
+  opacity: 0.9;
+}
+
+.service-redesign-page .order-card,
+.service-redesign-page .category-section,
+.service-redesign-page .faq-section,
+.service-redesign-page .contact-card,
+.service-redesign-page .evaluation-card,
+.service-redesign-page .refund-card,
+.service-redesign-page .booking-card,
+.service-redesign-page .deposit-card,
+.service-redesign-page .transfer-card,
+.service-redesign-page .favorite-card,
+.service-redesign-page .history-item,
+.service-redesign-page .address-card,
+.service-redesign-page .blacklist-item,
+.service-redesign-page .auth-card,
+.service-redesign-page .security-item,
+.service-redesign-page .coupon-card,
+.service-redesign-page .reply-item,
+.service-redesign-page .feedback-card,
+.service-redesign-page .about-card,
+.service-redesign-page .form-section {
+  border: 1px solid var(--border-color-light);
+  box-shadow: 0 10rpx 24rpx rgba(0, 0, 0, 0.05);
+}
+
+.service-redesign-page .category-section,
+.service-redesign-page .faq-section,
+.service-redesign-page .contact-card {
+  border-radius: 22rpx;
+}
+
+.service-redesign-page .category-header {
+  position: relative;
+}
+
+.service-redesign-page .category-header::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 6rpx;
+  height: 36rpx;
+  border-radius: 9999px;
+  background: var(--primary-color);
+}
+
+.service-redesign-page .service-grid {
+  padding-top: 24rpx;
+  padding-bottom: 20rpx;
+}
+
+.service-redesign-page .service-item {
+  padding: 10rpx 0;
+  border-radius: 16rpx;
+}
+
+.service-redesign-page .service-item:active {
+  background: var(--primary-color-alpha-5);
+}
+
+.service-redesign-page .service-icon {
+  border: 1px solid var(--border-color-light);
+}
+
+.service-redesign-page .faq-item {
+  border-radius: 14rpx;
+}
+
+.service-redesign-page .faq-item + .faq-item {
+  margin-top: 6rpx;
+}
+
+.service-redesign-page .contact-icon {
+  box-shadow: 0 8rpx 18rpx var(--primary-color-alpha-20);
+}
+
+.service-redesign-page .order-card:active,
+.service-redesign-page .category-section:active,
+.service-redesign-page .faq-item:active,
+.service-redesign-page .contact-card:active,
+.service-redesign-page .service-item:active,
+.service-redesign-page .address-card:active,
+.service-redesign-page .reply-item:active,
+.service-redesign-page .coupon-card:active {
+  transform: scale(0.985);
+}
+
+.service-redesign-page .action-btn.primary,
+.service-redesign-page .add-btn,
+.service-redesign-page .submit-btn,
+.service-redesign-page .save-btn,
+.service-redesign-page .confirm-btn {
+  border-radius: 9999px;
+  box-shadow: 0 8rpx 18rpx var(--primary-color-alpha-20);
+}
+
+.service-redesign-page .action-btn.secondary,
+.service-redesign-page .cancel-btn,
+.service-redesign-page .ghost-btn {
+  border-radius: 9999px;
+  border: 1px solid var(--border-color-base);
+}
+
+.service-redesign-page .order-no,
+.service-redesign-page .info-item,
+.service-redesign-page .meta,
+.service-redesign-page .time,
+.service-redesign-page .desc {
+  letter-spacing: 0.2px;
+}
+
+.service-redesign-page .product-title,
+.service-redesign-page .title,
+.service-redesign-page .page-title,
+.service-redesign-page .category-title {
+  letter-spacing: 0.4px;
+}
+
+.service-redesign-page .empty-state,
+.service-redesign-page .empty,
+.service-redesign-page .no-data {
+  border-radius: 20rpx;
+  background: var(--bg-color-card);
+  border: 1px dashed var(--border-color-base);
+  margin: 24rpx;
+}
+
+.service-redesign-page .empty-image {
+  filter: saturate(1.03);
+}
+
+.service-redesign-page .loading,
+.service-redesign-page .no-more {
+  opacity: 0.9;
+}

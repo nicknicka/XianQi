@@ -1,0 +1,104 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  # ---------- 后端构建 ----------
+  backend-build:
+    name: Backend Build
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: 'maven'
+          cache-dependency-path: backend/pom.xml
+
+      - name: Build with Maven
+        run: |
+          cd backend
+          chmod +x mvnw
+          ./mvnw clean package -DskipTests --batch-mode
+
+      - name: Upload jar artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-jar
+          path: backend/target/*.jar
+          retention-days: 7
+
+  # ---------- 管理后台构建 ----------
+  admin-build:
+    name: Admin Frontend Build
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: admin/package-lock.json
+
+      - name: Install dependencies
+        run: |
+          cd admin
+          npm ci
+
+      - name: Build
+        run: |
+          cd admin
+          npm run build
+
+      - name: Upload dist artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: admin-dist
+          path: admin/dist
+          retention-days: 7
+
+  # ---------- H5 用户端构建 ----------
+  mobile-build:
+    name: Mobile H5 Build
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: mobile/package-lock.json
+
+      - name: Install dependencies
+        run: |
+          cd mobile
+          npm ci
+
+      - name: Build H5
+        run: |
+          cd mobile
+          npm run build:h5
+
+      - name: Upload H5 dist artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: mobile-h5-dist
+          path: mobile/dist/build/h5
+          retention-days: 7

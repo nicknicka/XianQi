@@ -1,0 +1,284 @@
+/**
+ * 软萌简约主题 - Claymorphism 粘土风格全局样式
+ * 基于 Claymorphism 设计语言：双层阴影、柔和边框、弹跳交互
+ */
+
+@use './variables.scss' as *;
+
+// ============ 页面基础 ============
+
+page {
+  background-color: var(--bg-color-page, $bg-color-page);
+  color: var(--text-color-primary, $text-color-primary);
+  font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+// ============ 软萌按钮 (Claymorphism) ============
+
+.cute-btn {
+  @include pill-button;
+  background: var(--primary-color, $primary-color);
+  color: $text-color-white;
+  font-size: $font-size-base;
+  text-align: center;
+  min-height: 80rpx;
+  line-height: 80rpx;
+  width: 100%;
+
+  &--secondary {
+    background: var(--bg-color-card, $bg-color-card);
+    color: var(--primary-color, $primary-color);
+    border: 2rpx solid var(--border-color-base, $border-color-base);
+    box-shadow: $clay-shadow-tag;
+  }
+
+  &--small {
+    min-height: 56rpx;
+    line-height: 56rpx;
+    padding: 0 32rpx;
+    width: auto;
+    font-size: $font-size-sm;
+  }
+
+  &--text {
+    background: transparent;
+    color: var(--primary-color, $primary-color);
+    box-shadow: none;
+    border: none;
+    min-height: auto;
+    line-height: normal;
+    padding: 8rpx 16rpx;
+  }
+}
+
+// ============ 软萌卡片 (Claymorphism) ============
+
+.cute-card {
+  @include cute-card;
+}
+
+// ============ 输入框 (Claymorphism 内凹效果) ============
+
+.cute-input {
+  width: 100%;
+  height: 80rpx;
+  background: var(--bg-color-page, $bg-color-page);
+  border-radius: $border-radius-pill;
+  padding: 0 32rpx;
+  font-size: $font-size-base;
+  color: var(--text-color-primary, $text-color-primary);
+  border: none;
+  outline: none;
+  box-shadow: $clay-shadow-input;
+  transition: $transition-bounce;
+
+  &::placeholder {
+    color: var(--text-color-tertiary, $text-color-tertiary);
+  }
+
+  &:focus {
+    background: var(--bg-color-card, $bg-color-card);
+    box-shadow:
+      $clay-shadow-input,
+      0 0 0 4rpx var(--primary-color-faded, rgba($primary-color, 0.15));
+  }
+}
+
+// ============ 搜索框 (Claymorphism) ============
+
+.cute-search {
+  display: flex;
+  align-items: center;
+  height: 72rpx;
+  background: var(--bg-color-card, $bg-color-card);
+  border-radius: $border-radius-pill;
+  padding: 0 24rpx;
+  gap: 12rpx;
+  border: 2rpx solid rgba(255, 255, 255, 0.6);
+  box-shadow: $clay-shadow-input;
+
+  &__icon {
+    color: var(--text-color-tertiary, $text-color-tertiary);
+    flex-shrink: 0;
+  }
+
+  &__input {
+    flex: 1;
+    font-size: $font-size-sm;
+    color: var(--text-color-primary, $text-color-primary);
+    background: transparent;
+    border: none;
+    outline: none;
+  }
+}
+
+// ============ 聊天气泡 (Claymorphism) ============
+
+.cute-bubble {
+  max-width: 70%;
+  padding: 20rpx 24rpx;
+  font-size: $font-size-base;
+  line-height: 1.6;
+  word-break: break-all;
+
+  &--self {
+    background: var(--primary-color, $primary-color);
+    color: $text-color-white;
+    border-radius: 24rpx 24rpx 4rpx 24rpx;
+    align-self: flex-end;
+    border: 2rpx solid rgba(255, 255, 255, 0.2);
+    box-shadow: 4rpx 4rpx 12rpx rgba(0, 0, 0, 0.06);
+  }
+
+  &--other {
+    background: var(--bg-color-card, $bg-color-card);
+    color: var(--text-color-primary, $text-color-primary);
+    border-radius: 24rpx 24rpx 24rpx 4rpx;
+    border: 2rpx solid rgba(255, 255, 255, 0.8);
+    box-shadow: $clay-shadow-card;
+    align-self: flex-start;
+  }
+}
+
+// ============ 吉祥物容器 ============
+
+.mascot {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &__image {
+    width: 160rpx;
+    height: 160rpx;
+  }
+
+  &--large &__image {
+    width: 240rpx;
+    height: 240rpx;
+  }
+
+  &--small &__image {
+    width: 80rpx;
+    height: 80rpx;
+  }
+}
+
+// ============ 空状态 (Claymorphism) ============
+
+.cute-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 100rpx 48rpx;
+
+  &__mascot {
+    margin-bottom: 32rpx;
+  }
+
+  &__title {
+    font-size: $font-size-lg;
+    font-weight: $font-weight-medium;
+    color: var(--text-color-secondary, $text-color-secondary);
+    margin-bottom: 12rpx;
+  }
+
+  &__desc {
+    font-size: $font-size-sm;
+    color: var(--text-color-tertiary, $text-color-tertiary);
+    margin-bottom: 40rpx;
+    text-align: center;
+    line-height: 1.5;
+  }
+
+  &__action {
+    @include pill-button;
+    background: var(--primary-color, $primary-color);
+    color: $text-color-white;
+    font-size: $font-size-sm;
+    padding: 16rpx 48rpx;
+  }
+}
+
+// ============ 加载动画 (Claymorphism dots) ============
+
+.cute-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40rpx;
+  gap: 16rpx;
+
+  &__dots {
+    display: flex;
+    gap: 12rpx;
+  }
+
+  &__dot {
+    width: 16rpx;
+    height: 16rpx;
+    border-radius: 50%;
+    background: var(--primary-color, $primary-color);
+    box-shadow: 2rpx 2rpx 4rpx rgba(0, 0, 0, 0.06);
+    animation: cute-bounce 1.4s ease-in-out infinite both;
+
+    &:nth-child(1) { animation-delay: -0.32s; }
+    &:nth-child(2) { animation-delay: -0.16s; }
+    &:nth-child(3) { animation-delay: 0s; }
+  }
+}
+
+@keyframes cute-bounce {
+  0%, 80%, 100% {
+    transform: scale(0.6);
+    opacity: 0.5;
+  }
+  40% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+// ============ 导航栏样式 (Claymorphism) ============
+
+.cute-nav {
+  display: flex;
+  align-items: center;
+  height: 88rpx;
+  padding: 0 24rpx;
+  background: linear-gradient(135deg, var(--primary-color, $primary-color), var(--primary-color-light, $primary-color-light));
+  position: relative;
+
+  &__back {
+    width: 64rpx;
+    height: 64rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.25);
+    border-radius: 50%;
+    color: $text-color-white;
+    box-shadow: 2rpx 2rpx 6rpx rgba(0, 0, 0, 0.08);
+    transition: $transition-bounce;
+
+    &:active {
+      transform: scale(0.95);
+      background: rgba(255, 255, 255, 0.15);
+    }
+  }
+
+  &__title {
+    flex: 1;
+    text-align: center;
+    font-size: $font-size-lg;
+    font-weight: $font-weight-semibold;
+    color: $text-color-white;
+  }
+
+  &__right {
+    width: 64rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}

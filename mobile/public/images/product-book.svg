@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="300" height="300" viewBox="0 0 300 300">
+  <rect fill="#E8E8E8" width="300" height="300"/>
+  <rect fill="#8B4513" x="80" y="70" width="140" height="160" rx="5"/>
+  <text x="50%" y="50%" font-size="20" fill="white" text-anchor="middle" dominant-baseline="middle">数学</text>
+</svg>

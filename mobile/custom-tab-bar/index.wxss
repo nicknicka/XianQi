@@ -1,0 +1,87 @@
+@font-face {
+  font-family: 'iconfont';
+  src: url('../src/static/symbols/iconfont.ttf') format('truetype');
+}
+
+.custom-tab-bar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  min-height: 50px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding: 0 10rpx;
+  padding-bottom: env(safe-area-inset-bottom);
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+  z-index: 9999;
+  box-sizing: border-box;
+}
+
+.tab-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  position: relative;
+  padding: 10rpx 0 8rpx;
+  box-sizing: border-box;
+}
+
+.icon-wrapper {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 4rpx;
+}
+
+.iconfont {
+  font-family: 'iconfont' !important;
+  font-size: 24px;
+  line-height: 1;
+}
+
+.tab-icon {
+  color: inherit;
+}
+
+.tab-text {
+  font-size: 10px;
+  line-height: 1;
+}
+
+.publish-button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  margin-top: -12px;
+}
+
+.publish-icon-wrapper {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 4px;
+  background: linear-gradient(135deg, #8EC5E8 0%, #B8D8F2 100%);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.publish-icon {
+  color: #ffffff;
+  font-size: 28px;
+}
+
+.publish-text {
+  font-size: 10px;
+  line-height: 1;
+  font-weight: 600;
+}

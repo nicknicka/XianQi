@@ -1,0 +1,259 @@
+package com.xx.xianqijava.service.impl;
+
+import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.json.JSONUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.xx.xianqijava.common.ErrorCode;
+import com.xx.xianqijava.dto.StudentAuthSubmitDTO;
+import com.xx.xianqijava.entity.User;
+import com.xx.xianqijava.entity.UserStudentAuth;
+import com.xx.xianqijava.exception.BusinessException;
+import com.xx.xianqijava.mapper.UserStudentAuthMapper;
+import com.xx.xianqijava.service.UserStudentAuthService;
+import com.xx.xianqijava.service.UserService;
+import com.xx.xianqijava.vo.StudentAuthVO;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.time.format.DateTimeFormatter;
+import java.util.List;
+
+/**
+ * 用户学生认证服务实现类
+ */
+@Slf4j
+@Service
+@RequiredArgsConstructor
+public class UserStudentAuthServiceImpl extends ServiceImpl<UserStudentAuthMapper, UserStudentAuth>
+        implements UserStudentAuthService {
+
+    private final UserService userService;
+    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public Long submitAuth(Long userId, StudentAuthSubmitDTO submitDTO) {
+        log.info("提交学生认证, userId={}", userId);
+
+        // 1. 查询用户是否存在
+        User user = userService.getById(userId);
+        if (user == null) {
+            throw new BusinessException(ErrorCode.USER_NOT_FOUND);
+        }
+
+        // 2. 查询是否已有认证记录
+        UserStudentAuth existAuth = getOne(new LambdaQueryWrapper<UserStudentAuth>()
+                .eq(UserStudentAuth::getUserId, userId));
+
+        // 3. 如果已有认证且已通过，不允许重复提交
+        if (existAuth != null && existAuth.getStatus() == 2) {
+            throw new BusinessException(ErrorCode.AUTH_ALREADY_APPROVED);
+        }
+
+        // 4. 创建或更新认证记录
+        UserStudentAuth auth = new UserStudentAuth();
+        if (existAuth != null) {
+            auth.setId(existAuth.getId());
+        }
+
+        auth.setUserId(userId);
+        auth.setStudentId(submitDTO.getStudentId());
+        auth.setCollege(submitDTO.getCollege());
+        auth.setMajor(submitDTO.getMajor());
+        // 将图片列表转换为JSON存储
+        auth.setStudentCardImages(JSONUtil.toJsonStr(submitDTO.getStudentCardImages()));
+        auth.setStatus(1); // 审核中
+
+        // 5. 保存或更新
+        boolean saved = saveOrUpdate(auth);
+        if (!saved) {
+            throw new BusinessException(ErrorCode.INTERNAL_ERROR, "提交认证失败");
+        }
+
+        log.info("提交学生认证成功, authId={}", auth.getId());
+        return auth.getId();
+    }
+
+    @Override
+    public StudentAuthVO getAuthInfo(Long userId) {
+        log.info("获取学生认证信息, userId={}", userId);
+
+        // 1. 查询认证记录
+        UserStudentAuth auth = getOne(new LambdaQueryWrapper<UserStudentAuth>()
+                .eq(UserStudentAuth::getUserId, userId));
+
+        // 2. 如果没有认证记录，返回默认状态
+        if (auth == null) {
+            StudentAuthVO vo = new StudentAuthVO();
+            vo.setUserId(String.valueOf(userId));
+            vo.setStatus(0); // 未认证
+            return vo;
+        }
+
+        // 3. 转换为VO
+        return convertToVO(auth);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void auditAuth(Long authId, Long auditorId, Integer status, String rejectReason) {
+        log.info("审核学生认证, authId={}, auditorId={}, status={}", authId, auditorId, status);
+
+        // 1. 查询认证记录
+        UserStudentAuth auth = getById(authId);
+        if (auth == null) {
+            throw new BusinessException(ErrorCode.AUTH_NOT_EXISTS);
+        }
+
+        // 2. 校验状态
+        if (auth.getStatus() != 1) {
+            throw new BusinessException(ErrorCode.AUTH_STATUS_ERROR);
+        }
+
+        // 3. 更新认证状态
+        auth.setStatus(status);
+        auth.setAuditedBy(auditorId);
+        auth.setAuditedAt(java.time.LocalDateTime.now());
+        if (status == 3) {
+            auth.setRejectReason(rejectReason);
+        }
+        updateById(auth);
+
+        // 4. 如果审核通过，同步更新用户表的学号、学院、专业
+        if (status == 2) {
+            User user = userService.getById(auth.getUserId());
+            if (user != null) {
+                user.setStudentId(auth.getStudentId());
+                user.setCollege(auth.getCollege());
+                user.setMajor(auth.getMajor());
+                userService.updateById(user);
+                log.info("同步更新用户信息成功, userId={}, studentId={}, college={}, major={}",
+                    user.getUserId(), auth.getStudentId(), auth.getCollege(), auth.getMajor());
+            }
+        }
+
+        log.info("审核学生认证成功, authId={}, status={}", authId, status);
+    }
+
+    @Override
+    public StudentAuthVO getAuthDetail(Long authId) {
+        log.info("获取学生认证详情, authId={}", authId);
+
+        UserStudentAuth auth = getById(authId);
+        if (auth == null) {
+            throw new BusinessException(ErrorCode.AUTH_NOT_EXISTS);
+        }
+
+        return convertToVO(auth);
+    }
+
+    @Override
+    public IPage<StudentAuthVO> getPendingList(Page<UserStudentAuth> page) {
+        log.info("获取待审核的学生认证列表, page={}", page.getCurrent());
+
+        LambdaQueryWrapper<UserStudentAuth> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(UserStudentAuth::getStatus, 1) // 审核中
+                .orderByAsc(UserStudentAuth::getCreateTime);
+
+        IPage<UserStudentAuth> authPage = page(page, wrapper);
+        return authPage.convert(this::convertToVO);
+    }
+
+    @Override
+    public IPage<StudentAuthVO> getAllList(Page<UserStudentAuth> page, Integer status) {
+        log.info("获取所有学生认证列表, page={}, status={}", page.getCurrent(), status);
+
+        LambdaQueryWrapper<UserStudentAuth> wrapper = new LambdaQueryWrapper<>();
+        if (status != null) {
+            wrapper.eq(UserStudentAuth::getStatus, status);
+        }
+        wrapper.orderByDesc(UserStudentAuth::getCreateTime);
+
+        IPage<UserStudentAuth> authPage = page(page, wrapper);
+        return authPage.convert(this::convertToVO);
+    }
+
+    /**
+     * 转换为VO
+     */
+    private StudentAuthVO convertToVO(UserStudentAuth auth) {
+        // 查询用户信息
+        User user = userService.getById(auth.getUserId());
+
+        StudentAuthVO vo = new StudentAuthVO();
+        vo.setId(String.valueOf(auth.getId()));
+        vo.setUserId(String.valueOf(auth.getUserId()));
+
+        // 添加用户信息
+        if (user != null) {
+            vo.setUsername(user.getUsername());
+            vo.setNickname(user.getNickname());
+            vo.setRealName(user.getRealName());
+        }
+
+        vo.setStudentId(auth.getStudentId());
+        vo.setCollege(auth.getCollege());
+        vo.setMajor(auth.getMajor());
+        // 解析JSON图片列表
+        if (auth.getStudentCardImages() != null) {
+            List<String> images = JSONUtil.toList(auth.getStudentCardImages(), String.class);
+            vo.setStudentCardImages(images);
+        }
+        vo.setStatus(auth.getStatus());
+        vo.setRejectReason(auth.getRejectReason());
+        vo.setEnrollmentYear(auth.getEnrollmentYear());
+        vo.setGraduationYear(auth.getGraduationYear());
+        vo.setEducationLevel(auth.getEducationLevel());
+        vo.setAuditedAt(auth.getAuditedAt() != null ?
+            auth.getAuditedAt().format(FORMATTER) : null);
+        vo.setCreatedAt(auth.getCreateTime() != null ?
+            auth.getCreateTime().format(FORMATTER) : null);
+
+        return vo;
+    }
+
+    @Override
+    public java.util.Map<String, Long> getStatistics() {
+        log.info("获取学号认证统计信息");
+
+        java.time.LocalDateTime todayStart = java.time.LocalDateTime.now().toLocalDate().atStartOfDay();
+        java.time.LocalDateTime todayEnd = todayStart.plusDays(1);
+
+        // 总数
+        Long total = count();
+        // 待审核数（status=1）
+        Long pending = count(new LambdaQueryWrapper<UserStudentAuth>()
+                .eq(UserStudentAuth::getStatus, 1));
+        // 已通过数（status=2）
+        Long approved = count(new LambdaQueryWrapper<UserStudentAuth>()
+                .eq(UserStudentAuth::getStatus, 2));
+        // 已拒绝数（status=3）
+        Long rejected = count(new LambdaQueryWrapper<UserStudentAuth>()
+                .eq(UserStudentAuth::getStatus, 3));
+        // 今日通过数
+        Long todayApproved = count(new LambdaQueryWrapper<UserStudentAuth>()
+                .eq(UserStudentAuth::getStatus, 2)
+                .ge(UserStudentAuth::getAuditedAt, todayStart)
+                .lt(UserStudentAuth::getAuditedAt, todayEnd));
+        // 今日拒绝数
+        Long todayRejected = count(new LambdaQueryWrapper<UserStudentAuth>()
+                .eq(UserStudentAuth::getStatus, 3)
+                .ge(UserStudentAuth::getAuditedAt, todayStart)
+                .lt(UserStudentAuth::getAuditedAt, todayEnd));
+
+        java.util.Map<String, Long> stats = new java.util.HashMap<>();
+        stats.put("total", total);
+        stats.put("pending", pending);
+        stats.put("approved", approved);
+        stats.put("rejected", rejected);
+        stats.put("todayApproved", todayApproved);
+        stats.put("todayRejected", todayRejected);
+
+        return stats;
+    }
+}

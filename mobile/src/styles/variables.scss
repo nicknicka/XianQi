@@ -1,0 +1,146 @@
+/**
+ * 软萌简约全局样式变量
+ * 默认值取自默认主题预设 "海盐芝士" (sea-salt-cheese)
+ * 运行时由 theme.ts 注入 CSS 变量覆盖，切换为用户选择的主题
+ *
+ * 使用方式：var(--primary-color, $primary-color)
+ *   - 已注入 CSS 变量 → 使用用户选择的主题色
+ *   - 未注入时 → fallback 到默认主题色值
+ */
+
+// ========== 主题色 (默认主题: 海盐芝士) ==========
+$primary-color: #8EC5E8;
+$primary-color-light: #B8D4E8;
+$primary-color-dark: #6AA8CC;
+$secondary-color: #B8D4E8;
+$accent-color: #FFD93D;
+
+// ========== 功能色 ==========
+$success-color: #7ED4A6;
+$warning-color: #FFD666;
+$error-color: #FF8A8A;
+$info-color: #9DC4FF;
+
+// ========== 文字颜色 ==========
+$text-color-primary: #2D2D2D;
+$text-color-secondary: #7A7A7A;
+$text-color-tertiary: #AAAAAA;
+$text-color-placeholder: #CCCCCC;
+$text-color-white: #FFFFFF;
+
+// ========== 背景颜色 ==========
+$bg-color-page: #F0F8FF;
+$bg-color-card: #FFFFFF;
+$bg-color-warm: #F0F8FF;
+$bg-color-disabled: #F5F5F5;
+
+// ========== 边框颜色 ==========
+$border-color-light: #F0F0F0;
+$border-color-base: #E8E8E8;
+$border-color-dark: #BFBFBF;
+
+// ========== 间距 ==========
+$spacing-xs: 4px;
+$spacing-sm: 8px;
+$spacing-md: 16px;
+$spacing-lg: 24px;
+$spacing-xl: 32px;
+
+// ========== 字体大小 ==========
+$font-size-xs: 10px;
+$font-size-sm: 12px;
+$font-size-base: 14px;
+$font-size-lg: 16px;
+$font-size-xl: 18px;
+$font-size-xxl: 20px;
+
+// ========== 字体粗细 ==========
+$font-weight-normal: 400;
+$font-weight-medium: 500;
+$font-weight-semibold: 600;
+$font-weight-bold: 700;
+
+// ========== 圆角 (软萌放大版) ==========
+$border-radius-sm: 16px;
+$border-radius-base: 20px;
+$border-radius-md: 20px;
+$border-radius-lg: 24px;
+$border-radius-xl: 32px;
+$border-radius-round: 999px;
+$border-radius-pill: 9999px;
+
+// ========== Claymorphism 粘土阴影 ==========
+$clay-shadow-card:
+  8rpx 8rpx 16rpx rgba(0, 0, 0, 0.06),
+  -4rpx -4rpx 12rpx rgba(255, 255, 255, 0.8);
+$clay-shadow-card-pressed:
+  inset 2rpx 2rpx 6rpx rgba(0, 0, 0, 0.06),
+  2rpx 2rpx 8rpx rgba(0, 0, 0, 0.04);
+$clay-shadow-btn:
+  4rpx 4rpx 12rpx rgba(0, 0, 0, 0.08),
+  -2rpx -2rpx 8rpx rgba(255, 255, 255, 0.5);
+$clay-shadow-input:
+  inset 2rpx 2rpx 6rpx rgba(0, 0, 0, 0.04),
+  inset -1rpx -1rpx 4rpx rgba(255, 255, 255, 0.5);
+$clay-shadow-tag:
+  2rpx 2rpx 6rpx rgba(0, 0, 0, 0.04),
+  -1rpx -1rpx 4rpx rgba(255, 255, 255, 0.5);
+
+// ========== 阴影 (保留兼容) ==========
+$box-shadow-light: 0 2rpx 8rpx rgba(0, 0, 0, 0.04);
+$box-shadow-base: 0 8rpx 24rpx rgba(0, 0, 0, 0.08);
+$box-shadow-dark: 0 8rpx 32rpx rgba(142, 197, 232, 0.15);
+$box-shadow-primary: 0 8rpx 32rpx rgba(142, 197, 232, 0.30);
+$box-shadow-card: 8rpx 8rpx 16rpx rgba(0, 0, 0, 0.06), -4rpx -4rpx 12rpx rgba(255, 255, 255, 0.8);
+
+// ========== 过渡 ==========
+$transition-base: all 0.25s ease;
+$transition-fast: all 0.15s ease;
+$transition-bounce: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+
+// ========== 层级 ==========
+$z-index-dropdown: 1000;
+$z-index-sticky: 1020;
+$z-index-fixed: 1030;
+$z-index-modal-backdrop: 1040;
+$z-index-modal: 1050;
+$z-index-popover: 1060;
+$z-index-tooltip: 1070;
+$z-index-toast: 1080;
+
+// ========== Mixins ==========
+
+// 可点击元素
+@mixin clickable {
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+
+  &:active {
+    transform: scale(0.97);
+  }
+}
+
+// 胶囊按钮 (Claymorphism)
+@mixin pill-button {
+  border-radius: $border-radius-pill;
+  padding: 16rpx 48rpx;
+  font-weight: $font-weight-medium;
+  border: 2rpx solid rgba(255, 255, 255, 0.5);
+  box-shadow: $clay-shadow-btn;
+  transition: $transition-bounce;
+
+  &:active {
+    transform: scale(0.95);
+    box-shadow: $clay-shadow-card-pressed;
+  }
+}
+
+// 软萌卡片 (Claymorphism)
+@mixin cute-card {
+  background: $bg-color-card;
+  border-radius: 24rpx;
+  padding: $spacing-md;
+  border: 2rpx solid rgba(255, 255, 255, 0.8);
+  box-shadow: $clay-shadow-card;
+}

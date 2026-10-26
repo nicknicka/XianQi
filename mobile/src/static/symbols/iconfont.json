@@ -1,0 +1,51 @@
+{
+  "id": "5158848",
+  "name": "XianQi",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "4765866",
+      "name": "message",
+      "font_class": "message",
+      "unicode": "e78a",
+      "unicode_decimal": 59274
+    },
+    {
+      "icon_id": "1137795",
+      "name": "market",
+      "font_class": "jiaoyi",
+      "unicode": "e67f",
+      "unicode_decimal": 59007
+    },
+    {
+      "icon_id": "7944862",
+      "name": "publish",
+      "font_class": "fabu",
+      "unicode": "e694",
+      "unicode_decimal": 59028
+    },
+    {
+      "icon_id": "11372716",
+      "name": "mine",
+      "font_class": "wode",
+      "unicode": "e8bb",
+      "unicode_decimal": 59579
+    },
+    {
+      "icon_id": "17816847",
+      "name": "share",
+      "font_class": "fenxiang",
+      "unicode": "e600",
+      "unicode_decimal": 58880
+    },
+    {
+      "icon_id": "17830621",
+      "name": "home",
+      "font_class": "shouye",
+      "unicode": "e602",
+      "unicode_decimal": 58882
+    }
+  ]
+}

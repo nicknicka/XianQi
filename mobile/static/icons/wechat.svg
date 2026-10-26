@@ -1,0 +1,7 @@
+<svg width="80" height="80" xmlns="http://www.w3.org/2000/svg">
+  <!-- 微信图标占位符 -->
+  <circle cx="40" cy="40" r="38" fill="#07C160" opacity="0.1"/>
+  <circle cx="40" cy="40" r="38" fill="none" stroke="#07C160" stroke-width="2"/>
+  <text x="40" y="48" font-family="Arial, sans-serif" font-size="32" fill="#07C160" text-anchor="middle">微</text>
+  <text x="40" y="65" font-family="Arial, sans-serif" font-size="10" fill="#07C160" text-anchor="middle">微信</text>
+</svg>

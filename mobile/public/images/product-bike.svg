@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="300" height="300" viewBox="0 0 300 300">
+  <rect fill="#E8E8E8" width="300" height="300"/>
+  <circle cx="100" cy="200" r="40" fill="none" stroke="#333" stroke-width="8"/>
+  <circle cx="200" cy="200" r="40" fill="none" stroke="#333" stroke-width="8"/>
+  <line x1="100" y1="200" x2="150" y2="120" stroke="#333" stroke-width="6"/>
+  <line x1="200" y1="200" x2="150" y2="120" stroke="#333" stroke-width="6"/>
+  <line x1="150" y1="120" x2="150" y2="60" stroke="#333" stroke-width="6"/>
+  <text x="50%" y="40%" font-size="16" fill="#333" text-anchor="middle">自行车</text>
+</svg>

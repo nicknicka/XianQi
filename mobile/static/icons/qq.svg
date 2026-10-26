@@ -1,0 +1,7 @@
+<svg width="80" height="80" xmlns="http://www.w3.org/2000/svg">
+  <!-- QQ图标占位符 -->
+  <circle cx="40" cy="40" r="38" fill="#12B7F5" opacity="0.1"/>
+  <circle cx="40" cy="40" r="38" fill="none" stroke="#12B7F5" stroke-width="2"/>
+  <text x="40" y="48" font-family="Arial, sans-serif" font-size="32" fill="#12B7F5" text-anchor="middle">Q</text>
+  <text x="40" y="65" font-family="Arial, sans-serif" font-size="10" fill="#12B7F5" text-anchor="middle">QQ</text>
+</svg>

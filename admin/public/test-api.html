@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API 测试</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            border-bottom: 2px solid #409eff;
+            padding-bottom: 10px;
+        }
+        .section {
+            margin: 20px 0;
+            padding: 15px;
+            background: #f9f9f9;
+            border-radius: 4px;
+        }
+        .section h3 {
+            margin-top: 0;
+            color: #409eff;
+        }
+        button {
+            background: #409eff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+            font-size: 14px;
+        }
+        button:hover {
+            background: #66b1ff;
+        }
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        .result {
+            margin-top: 10px;
+            padding: 10px;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            white-space: pre-wrap;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .success {
+            border-color: #67c23a;
+            background: #f0f9ff;
+        }
+        .error {
+            border-color: #f56c6c;
+            background: #fef0f0;
+        }
+        .info {
+            color: #606266;
+            font-size: 14px;
+            margin: 5px 0;
+        }
+        .token-display {
+            background: #fff;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            word-break: break-all;
+            margin: 10px 0;
+        }
+        input {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin: 5px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔧 API 测试工具</h1>
+
+        <!-- 1. 登录测试 -->
+        <div class="section">
+            <h3>1️⃣ 管理员登录</h3>
+            <div class="info">测试连接：http://localhost:8080/api/admin/auth/login</div>
+            <input type="text" id="username" placeholder="用户名" value="admin" />
+            <input type="password" id="password" placeholder="密码" value="123456" />
+            <button onclick="testLogin()">登录测试</button>
+            <div id="login-result" class="result"></div>
+        </div>
+
+        <!-- Token 显示 -->
+        <div class="section">
+            <h3>🔑 当前 Token</h3>
+            <div id="token-display" class="token-display">未登录</div>
+            <button onclick="copyToken()">复制 Token</button>
+        </div>
+
+        <!-- 2. 用户列表测试 -->
+        <div class="section">
+            <h3>2️⃣ 获取用户列表</h3>
+            <div class="info">测试连接：http://localhost:8080/api/admin/user/list</div>
+            <input type="number" id="pageNum" placeholder="页码" value="1" style="width: 80px" />
+            <input type="number" id="pageSize" placeholder="每页数量" value="20" style="width: 80px" />
+            <button onclick="testUserList()">获取用户列表</button>
+            <div id="userlist-result" class="result"></div>
+        </div>
+
+        <!-- 3. 直接请求测试 -->
+        <div class="section">
+            <h3>3️⃣ 原始请求测试</h3>
+            <div class="info">不经过 axios 拦截器，直接使用 fetch</div>
+            <button onclick="testDirectFetch()">直接 fetch 请求</button>
+            <div id="fetch-result" class="result"></div>
+        </div>
+
+        <!-- 4. 环境信息 -->
+        <div class="section">
+            <h3>ℹ️ 环境信息</h3>
+            <div id="env-info" class="result"></div>
+        </div>
+    </div>
+
+    <script>
+        let currentToken = '';
+
+        // 显示环境信息
+        function showEnvInfo() {
+            const info = {
+                baseURL: 'http://localhost:8080/api/admin',
+                userAgent: navigator.userAgent,
+                timestamp: new Date().toISOString()
+            };
+            document.getElementById('env-info').textContent = JSON.stringify(info, null, 2);
+        }
+
+        // 1. 登录测试
+        async function testLogin() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const resultDiv = document.getElementById('login-result');
+
+            const requestData = { username, password };
+
+            resultDiv.textContent = '🚀 发送登录请求...\n' + JSON.stringify(requestData, null, 2);
+
+            try {
+                console.log('🔐 [Login] 开始登录请求');
+                console.log('URL:', 'http://localhost:8080/api/admin/auth/login');
+                console.log('Request:', requestData);
+
+                const response = await fetch('http://localhost:8080/api/admin/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(requestData)
+                });
+
+                console.log('📡 [Login] Response status:', response.status);
+                console.log('📡 [Login] Response headers:', Object.fromEntries(response.headers.entries()));
+
+                const data = await response.json();
+                console.log('✅ [Login] Response data:', data);
+
+                if (data.code === 200 && data.data) {
+                    currentToken = data.data.token;
+                    document.getElementById('token-display').textContent =
+                        currentToken ? currentToken.substring(0, 50) + '...' : '无Token';
+                    resultDiv.textContent = '✅ 登录成功！\n\n' + JSON.stringify(data, null, 2);
+                    resultDiv.className = 'result success';
+                } else {
+                    resultDiv.textContent = '❌ 登录失败：' + JSON.stringify(data, null, 2);
+                    resultDiv.className = 'result error';
+                }
+            } catch (error) {
+                console.error('❌ [Login] Error:', error);
+                resultDiv.textContent = '❌ 请求错误：\n' + error.message + '\n\n' + error.stack;
+                resultDiv.className = 'result error';
+            }
+        }
+
+        // 2. 用户列表测试
+        async function testUserList() {
+            if (!currentToken) {
+                alert('请先登录！');
+                return;
+            }
+
+            const pageNum = document.getElementById('pageNum').value;
+            const pageSize = document.getElementById('pageSize').value;
+            const resultDiv = document.getElementById('userlist-result');
+
+            const url = `http://localhost:8080/api/admin/user/list?pageNum=${pageNum}&pageSize=${pageSize}`;
+
+            resultDiv.textContent = '🚀 发送请求...\nURL: ' + url;
+
+            try {
+                console.log('📋 [UserList] 开始请求用户列表');
+                console.log('URL:', url);
+                console.log('Token:', currentToken.substring(0, 20) + '...');
+
+                const response = await fetch(url, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${currentToken}`,
+                        'Content-Type': 'application/json',
+                    }
+                });
+
+                console.log('📡 [UserList] Response status:', response.status);
+                console.log('📡 [UserList] Response headers:', Object.fromEntries(response.headers.entries()));
+
+                const data = await response.json();
+                console.log('✅ [UserList] Response data:', data);
+
+                if (data.code === 200) {
+                    resultDiv.textContent = '✅ 获取成功！\n\n' + JSON.stringify(data, null, 2);
+                    resultDiv.className = 'result success';
+                } else {
+                    resultDiv.textContent = '❌ 请求失败：\n\n' + JSON.stringify(data, null, 2);
+                    resultDiv.className = 'result error';
+                }
+            } catch (error) {
+                console.error('❌ [UserList] Error:', error);
+                resultDiv.textContent = '❌ 请求错误：\n' + error.message + '\n\n' + error.stack;
+                resultDiv.className = 'result error';
+            }
+        }
+
+        // 3. 直接 fetch 测试
+        async function testDirectFetch() {
+            const resultDiv = document.getElementById('fetch-result');
+
+            resultDiv.textContent = '🚀 发送请求...';
+
+            try {
+                console.log('🔍 [Direct] 开始直接 fetch 测试');
+
+                // 先登录获取token
+                const loginResponse = await fetch('http://localhost:8080/api/admin/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username: 'admin', password: '123456' })
+                });
+
+                const loginData = await loginResponse.json();
+                console.log('[Direct] Login response:', loginData);
+
+                if (loginData.code !== 200) {
+                    throw new Error('登录失败: ' + JSON.stringify(loginData));
+                }
+
+                const token = loginData.data.token;
+
+                // 获取用户列表
+                const userListResponse = await fetch('http://localhost:8080/api/admin/user/list?pageNum=1&pageSize=5', {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                    }
+                });
+
+                const userListData = await userListResponse.json();
+                console.log('[Direct] UserList response:', userListData);
+
+                resultDiv.textContent = '✅ 测试完成！\n\n1. 登录成功\n2. 用户列表：\n' + JSON.stringify(userListData, null, 2);
+                resultDiv.className = 'result success';
+            } catch (error) {
+                console.error('❌ [Direct] Error:', error);
+                resultDiv.textContent = '❌ 测试失败：\n' + error.message + '\n\n' + error.stack;
+                resultDiv.className = 'result error';
+            }
+        }
+
+        // 复制 Token
+        function copyToken() {
+            if (!currentToken) {
+                alert('没有Token可以复制');
+                return;
+            }
+            navigator.clipboard.writeText(currentToken).then(() => {
+                alert('Token已复制到剪贴板！');
+            });
+        }
+
+        // 页面加载时显示环境信息
+        showEnvInfo();
+    </script>
+</body>
+</html>

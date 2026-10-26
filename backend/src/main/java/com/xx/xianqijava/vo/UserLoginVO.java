@@ -1,0 +1,39 @@
+package com.xx.xianqijava.vo;
+
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Data;
+
+/**
+ * 用户登录响应 VO
+ */
+@Data
+@Schema(description = "用户登录响应")
+public class UserLoginVO {
+
+    @Schema(description = "访问令牌")
+    private String token;
+
+    @Schema(description = "刷新令牌")
+    private String refreshToken;
+
+    @Schema(description = "用户ID")
+    private Long id;
+
+    @Schema(description = "用户名")
+    private String username;
+
+    @Schema(description = "昵称")
+    private String nickname;
+
+    @Schema(description = "头像")
+    private String avatar;
+
+    @Schema(description = "手机号")
+    private String phone;
+
+    @Schema(description = "是否为新用户")
+    private Boolean isNewUser;
+
+    @Schema(description = "Token过期时间(毫秒时间戳)")
+    private Long expiresIn;
+}

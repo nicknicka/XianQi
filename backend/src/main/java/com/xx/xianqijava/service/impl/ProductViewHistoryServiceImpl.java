@@ -1,0 +1,122 @@
+package com.xx.xianqijava.service.impl;
+
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.xx.xianqijava.entity.Product;
+import com.xx.xianqijava.entity.ProductViewHistory;
+import com.xx.xianqijava.mapper.ProductMapper;
+import com.xx.xianqijava.mapper.ProductViewHistoryMapper;
+import com.xx.xianqijava.service.ProductService;
+import com.xx.xianqijava.service.ProductViewHistoryService;
+import com.xx.xianqijava.vo.ProductVO;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
+/**
+ * 商品浏览历史服务实现类
+ */
+@Service
+public class ProductViewHistoryServiceImpl extends ServiceImpl<ProductViewHistoryMapper, ProductViewHistory>
+        implements ProductViewHistoryService {
+
+    private final ProductMapper productMapper;
+    private final ProductService productService;
+
+    public ProductViewHistoryServiceImpl(ProductMapper productMapper, @Lazy ProductService productService) {
+        this.productMapper = productMapper;
+        this.productService = productService;
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void recordViewHistory(Long userId, Long productId) {
+        if (productId == null) {
+            return;
+        }
+
+        // 检查商品是否存在
+        Product product = productMapper.selectById(productId);
+        if (product == null) {
+            return;
+        }
+
+        // 只有登录用户才记录浏览历史
+        if (userId != null) {
+            // 检查是否已有浏览记录
+            LambdaQueryWrapper<ProductViewHistory> queryWrapper = new LambdaQueryWrapper<>();
+            queryWrapper.eq(ProductViewHistory::getUserId, userId)
+                    .eq(ProductViewHistory::getProductId, productId);
+            ProductViewHistory existHistory = baseMapper.selectOne(queryWrapper);
+
+            if (existHistory != null) {
+                // 更新浏览时间
+                existHistory.setViewTime(LocalDateTime.now());
+                baseMapper.updateById(existHistory);
+            } else {
+                // 新增浏览记录
+                ProductViewHistory history = new ProductViewHistory();
+                history.setUserId(userId);
+                history.setProductId(productId);
+                history.setViewTime(LocalDateTime.now());
+                history.setViewDuration(0);
+                baseMapper.insert(history);
+            }
+        }
+    }
+
+    @Override
+    public IPage<ProductVO> getViewHistoryList(Long userId, Page<ProductViewHistory> page) {
+        // 查询浏览历史记录
+        IPage<ProductViewHistory> historyPage = baseMapper.selectPage(page,
+                new LambdaQueryWrapper<ProductViewHistory>()
+                        .eq(ProductViewHistory::getUserId, userId)
+                        .orderByDesc(ProductViewHistory::getViewTime));
+
+        // 日期时间格式化器
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+        // 转换为ProductVO，过滤掉已删除的商品，并添加浏览时间
+        java.util.List<ProductVO> validProducts = historyPage.getRecords().stream()
+                .map(history -> {
+                    Product product = productMapper.selectById(history.getProductId());
+                    if (product == null || product.getDeleted() == 1) {
+                        return null;
+                    }
+                    ProductVO productVO = productService.convertToVO(product, userId);
+                    // 设置浏览时间
+                    productVO.setViewTime(history.getViewTime().format(formatter));
+                    return productVO;
+                })
+                .filter(java.util.Objects::nonNull)
+                .collect(java.util.stream.Collectors.toList());
+
+        // 构建新的分页结果
+        IPage<ProductVO> resultPage = new Page<>(page.getCurrent(), page.getSize(), validProducts.size());
+        resultPage.setRecords(validProducts);
+        return resultPage;
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void removeViewHistory(Long userId, Long historyId) {
+        LambdaQueryWrapper<ProductViewHistory> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(ProductViewHistory::getUserId, userId)
+                .eq(ProductViewHistory::getHistoryId, historyId);
+        baseMapper.delete(queryWrapper);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void clearViewHistory(Long userId) {
+        LambdaQueryWrapper<ProductViewHistory> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(ProductViewHistory::getUserId, userId);
+        baseMapper.delete(queryWrapper);
+    }
+}

@@ -1,0 +1,64 @@
+HELP.md
+target/
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+### macOS ###
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Spotlight-V100?
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+### User-specific files
+*.swp
+*.swo
+*~
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### VS Code ###
+.vscode/
+
+### Logs ###
+logs/
+*.log
+*.log.*
+
+### Database Scripts ###
+db/
+database/
+sql/
+*.sql
+import_test_data.sh
+
+### Environment Variables ###
+.env
+.env.local
+.env.*.local

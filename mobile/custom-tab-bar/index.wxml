@@ -1,0 +1,23 @@
+<view class="custom-tab-bar" style="{{tabBarStyle}}">
+  <view
+    wx:for="{{tabItems}}"
+    wx:key="pagePath"
+    class="tab-item {{selected === index ? 'active' : ''}}"
+    data-index="{{index}}"
+    bindtap="onItemTap"
+    style="color: {{selected === index ? activeColor : inactiveColor}};"
+  >
+    <view wx:if="{{index === 2}}" class="publish-button">
+      <view class="publish-icon-wrapper">
+        <text class="iconfont publish-icon icon-fabu"></text>
+      </view>
+      <text class="publish-text">{{item.text}}</text>
+    </view>
+    <block wx:else>
+      <view class="icon-wrapper">
+        <text class="iconfont tab-icon {{item.iconClass}}"></text>
+      </view>
+      <text class="tab-text">{{item.text}}</text>
+    </block>
+  </view>
+</view>

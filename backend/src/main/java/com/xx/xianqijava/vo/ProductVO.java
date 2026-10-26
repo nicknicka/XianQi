@@ -1,0 +1,148 @@
+package com.xx.xianqijava.vo;
+
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Data;
+
+import java.math.BigDecimal;
+
+/**
+ * 商品详情 VO
+ */
+@Data
+@Schema(description = "商品信息")
+public class ProductVO {
+
+    @Schema(description = "商品ID（前端兼容字段）")
+    private String id;
+
+    @Schema(description = "商品ID")
+    private String productId;
+
+    @Schema(description = "卖家ID")
+    private String sellerId;
+
+    @Schema(description = "前端兼容字段：用户ID（同sellerId）")
+    private String userId;
+
+    @Schema(description = "卖家昵称")
+    private String sellerNickname;
+
+    @Schema(description = "前端兼容字段：用户名（同sellerNickname）")
+    private String userName;
+
+    @Schema(description = "卖家头像")
+    private String sellerAvatar;
+
+    @Schema(description = "前端兼容字段：用户头像（同sellerAvatar）")
+    private String userAvatar;
+
+    @Schema(description = "卖家信用分数")
+    private Integer sellerCreditScore;
+
+    @Schema(description = "前端兼容字段：信用等级（同sellerCreditScore）")
+    private Integer creditLevel;
+
+    @Schema(description = "商品标题")
+    private String title;
+
+    @Schema(description = "商品描述")
+    private String description;
+
+    @Schema(description = "分类ID")
+    private Integer categoryId;
+
+    @Schema(description = "分类名称")
+    private String categoryName;
+
+    @Schema(description = "价格")
+    private BigDecimal price;
+
+    @Schema(description = "原价")
+    private BigDecimal originalPrice;
+
+    @Schema(description = "成色等级：1-10")
+    private Integer conditionLevel;
+
+    @Schema(description = "前端兼容字段：成色字符串（new, almost_new, lightly_used, obviously_used, has_flaws）")
+    private String condition;
+
+    @Schema(description = "封面图片")
+    private String coverImage;
+
+    @Schema(description = "前端兼容字段：图片列表")
+    private String[] images;
+
+    @Schema(description = "图片数量")
+    private Integer imageCount;
+
+    @Schema(description = "交易地点")
+    private String location;
+
+    @Schema(description = "是否支持邮寄：0-仅自提，1-支持邮寄")
+    private Boolean canDelivery;
+
+    @Schema(description = "配送费（元），NULL或0表示包邮，>0表示具体运费")
+    private BigDecimal deliveryFee;
+
+    @Schema(description = "状态：0-下架 1-在售 2-已售 3-预订")
+    private Integer status;
+
+    @Schema(description = "浏览次数")
+    private Integer viewCount;
+
+    @Schema(description = "收藏次数")
+    private Integer favoriteCount;
+
+    @Schema(description = "创建时间")
+    private String createTime;
+
+    @Schema(description = "浏览时间（用于浏览历史）")
+    private String viewTime;
+
+    @Schema(description = "是否已收藏")
+    private Boolean isFavorite;
+
+    // ========== 秒杀相关字段 ==========
+
+    @Schema(description = "秒杀价格（seckillPrice）")
+    private BigDecimal seckillPrice;
+
+    @Schema(description = "秒杀价格（flashPrice - 别名）")
+    private BigDecimal flashPrice;
+
+    @Schema(description = "秒杀库存")
+    private Integer flashSaleStock;
+
+    @Schema(description = "前端兼容字段：库存（同flashSaleStock）")
+    private Integer stock;
+
+    @Schema(description = "已售数量")
+    private Integer flashSaleSold;
+
+    @Schema(description = "已抢百分比（0-100）")
+    private Integer soldPercent;
+
+    @Schema(description = "折扣（如8表示8折）")
+    private Integer discount;
+
+    @Schema(description = "每人限购数量")
+    private Integer limitPerUser;
+
+    @Schema(description = "秒杀活动结束时间")
+    private String endTime;
+
+    @Schema(description = "是否在秒杀中")
+    private Boolean isFlashSale;
+
+    @Schema(description = "秒杀活动ID")
+    private String activityId;
+
+    @Schema(description = "秒杀场次ID")
+    private String sessionId;
+
+    @Schema(description = "场次状态：upcoming-即将开始, ongoing-进行中, ended-已结束")
+    private String sessionStatus;
+
+    @Schema(description = "场次开始时间")
+    private String startTime;
+}

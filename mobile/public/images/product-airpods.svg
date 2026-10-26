@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="300" height="300" viewBox="0 0 300 300">
+  <rect fill="#E8E8E8" width="300" height="300"/>
+  <ellipse cx="110" cy="180" rx="30" ry="50" fill="white" stroke="#333" stroke-width="3"/>
+  <ellipse cx="190" cy="180" rx="30" ry="50" fill="white" stroke="#333" stroke-width="3"/>
+  <text x="50%" y="50%" font-size="18" fill="#333" text-anchor="middle" dominant-baseline="middle">AirPods</text>
+</svg>
