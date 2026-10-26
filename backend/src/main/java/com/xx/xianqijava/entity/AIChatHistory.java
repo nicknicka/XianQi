@@ -9,8 +9,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import java.time.LocalDateTime;
-
 /**
  * AI聊天历史表
  *
@@ -57,7 +55,4 @@ public class AIChatHistory extends BaseEntity {
 
     @Schema(description = "响应时间（毫秒）")
     private Integer responseTimeMs;
-
-    @Schema(description = "创建时间")
-    private LocalDateTime createdAt;
 }

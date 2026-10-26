@@ -22,7 +22,7 @@ public class AIConfigDTO {
     @Schema(description = "是否启用AI功能", example = "true")
     private Boolean enabled;
 
-    @Schema(description = "使用的模型", example = "glm-4-flash")
+    @Schema(description = "使用的模型")
     private String model;
 
     @Schema(description = "最大回复长度", example = "2000")

@@ -2,6 +2,7 @@ package com.xx.xianqijava.agent.service;
 
 import dev.langchain4j.model.chat.ChatLanguageModel;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
 import jakarta.annotation.Resource;
@@ -17,6 +18,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 @Slf4j
 @Service
+@ConditionalOnProperty(prefix = "ai", name = "enabled", havingValue = "true")
 public class IntentClassifierService {
 
     @Resource

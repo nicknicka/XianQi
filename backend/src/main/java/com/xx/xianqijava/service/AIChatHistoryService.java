@@ -4,11 +4,11 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.xx.xianqijava.dto.AIChatHistoryVO;
 import com.xx.xianqijava.entity.AIChatHistory;
 import com.xx.xianqijava.mapper.AIChatHistoryMapper;
+import com.xx.xianqijava.ai.config.AiProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import jakarta.annotation.Resource;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,6 +24,9 @@ public class AIChatHistoryService {
 
     @Resource
     private AIChatHistoryMapper aiChatHistoryMapper;
+
+    @Resource
+    private AiProperties aiProperties;
 
     /**
      * 保存聊天历史
@@ -41,8 +44,7 @@ public class AIChatHistoryService {
             history.setAiResponse(aiResponse);
             history.setIntentType(intentType);
             history.setAgentType(determineAgentType(intentType));
-            history.setModelName("glm-4-flash");
-            history.setCreatedAt(LocalDateTime.now());
+            history.setModelName(aiProperties.getChat().getModel());
 
             aiChatHistoryMapper.insert(history);
             log.debug("保存AI聊天历史成功：userId={}, intent={}", userId, intentType);
@@ -64,7 +66,7 @@ public class AIChatHistoryService {
             QueryWrapper<AIChatHistory> wrapper = new QueryWrapper<>();
             wrapper.eq("user_id", userId);
             // 改为升序排列，使消息按时间顺序显示（最旧的在前）
-            wrapper.orderByAsc("created_at");
+            wrapper.orderByAsc("create_time");
             wrapper.last("LIMIT " + (limit != null && limit > 0 ? limit : 20));
 
             List<AIChatHistory> histories = aiChatHistoryMapper.selectList(wrapper);
@@ -120,7 +122,7 @@ public class AIChatHistoryService {
                 .aiResponse(history.getAiResponse())
                 .intentType(history.getIntentType())
                 .agentType(history.getAgentType())
-                .createdAt(history.getCreatedAt())
+                .createdAt(history.getCreateTime())
                 .build();
     }
 }

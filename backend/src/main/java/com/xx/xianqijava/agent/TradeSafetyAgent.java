@@ -2,6 +2,7 @@ package com.xx.xianqijava.agent;
 
 import dev.langchain4j.service.SystemMessage;
 import dev.langchain4j.service.UserMessage;
+import dev.langchain4j.service.MemoryId;
 
 /**
  * 交易安全顾问 Agent 接口
@@ -95,5 +96,5 @@ public interface TradeSafetyAgent {
         - 保持客观，不过度恐慌
         - 鼓励使用平台担保交易
         """)
-    String checkSafety(@UserMessage String tradeInfo);
+    String checkSafety(@MemoryId String userId, @UserMessage String tradeInfo);
 }

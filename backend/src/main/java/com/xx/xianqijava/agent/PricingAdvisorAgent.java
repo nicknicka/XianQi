@@ -2,6 +2,7 @@ package com.xx.xianqijava.agent;
 
 import dev.langchain4j.service.SystemMessage;
 import dev.langchain4j.service.UserMessage;
+import dev.langchain4j.service.MemoryId;
 
 /**
  * 智能定价助手 Agent 接口
@@ -81,5 +82,5 @@ public interface PricingAdvisorAgent {
         - 不要给出绝对准确的价格，只是参考建议
         - 提醒用户最终定价要结合实际情况
         """)
-    String advisePrice(@UserMessage String productInfo);
+    String advisePrice(@MemoryId String userId, @UserMessage String productInfo);
 }

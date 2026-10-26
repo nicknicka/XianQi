@@ -19,10 +19,10 @@
 
 ### 后端
 - **框架**：Spring Boot 3.2 + MyBatis-Plus 3.5
-- **数据库**：MySQL 8.0（49 张表）
+- **数据库**：MySQL 8.0（50 张表）
 - **缓存**：Redis 7
 - **安全**：Spring Security + JWT
-- **AI**：LangChain4j + 智谱 AI
+- **AI**：LangChain4j + 可配置 AI 服务商（当前支持智谱）
 - **文档**：Knife4j（Swagger）
 
 ### 管理后台

@@ -8,7 +8,7 @@
 -- 生成时间：2026-03-12
 -- ============================================================================
 -- 说明：
---   本脚本包含完整的数据库表结构定义，共49张表
+--   本脚本包含完整的数据库表结构定义，共50张表
 --   - User相关表（10张）：已重新设计，消除字段重复
 --   - 业务表（39张）：包含所有业务功能
 -- ============================================================================
@@ -1211,10 +1211,31 @@ CREATE TABLE `worker_node` (
   UNIQUE KEY `uk_host_port` (`host_name`,`port`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='DB WorkerID分配';
 
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `ai_chat_history` (
+  `id` bigint NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+  `user_id` bigint NOT NULL COMMENT '用户ID',
+  `user_message` text COMMENT '用户消息',
+  `ai_response` text COMMENT 'AI回复',
+  `intent_type` varchar(32) DEFAULT NULL COMMENT '意图类型',
+  `agent_type` varchar(64) DEFAULT NULL COMMENT 'Agent类型',
+  `session_id` varchar(64) DEFAULT NULL COMMENT '会话ID',
+  `model_name` varchar(64) DEFAULT NULL COMMENT '使用的模型名称',
+  `tokens_used` int DEFAULT NULL COMMENT '消耗的token数量',
+  `response_time_ms` int DEFAULT NULL COMMENT '响应时间（毫秒）',
+  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  `deleted` tinyint NOT NULL DEFAULT '0' COMMENT '逻辑删除：0-未删除 1-已删除',
+  PRIMARY KEY (`id`),
+  KEY `idx_user_id` (`user_id`),
+  KEY `idx_create_time` (`create_time`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='AI聊天历史表';
+
 
 SET FOREIGN_KEY_CHECKS = 1;
 
 SELECT '=============================' AS '';
 SELECT '✅ 数据库表结构创建完成！' AS '状态';
-SELECT '📊 共创建 49 张表' AS '统计';
+SELECT '📊 共创建 50 张表' AS '统计';
 SELECT '=============================' AS '';

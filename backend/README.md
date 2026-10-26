@@ -13,7 +13,7 @@
 - Spring Security + JWT
 - WebSocket
 - Knife4j / SpringDoc
-- LangChain4j（智谱 AI）
+- LangChain4j（厂商无关适配层，当前支持智谱）
 
 ## 本地开发
 
@@ -59,8 +59,18 @@
 | `REDIS_PASSWORD` | 空 | Redis 密码 |
 | `JWT_SECRET` | `XianQiJavaSecretKey2026` | JWT 签名密钥 |
 | `UPLOAD_PATH` | `./uploads` | 本地文件上传目录 |
-| `ZHIPUAI_API_KEY` | 空 | 智谱 AI API Key |
-| `ZHIPUAI_ENABLED` | `false` | 是否启用 AI 功能 |
+| `AI_ENABLED` | `false` | 是否启用 AI 功能 |
+| `AI_PROVIDER` | `zhipu` | AI 服务商（当前支持 `zhipu`） |
+| `AI_API_KEY` | 空 | AI 服务商 API Key |
+| `AI_BASE_URL` | 空 | AI 服务商 API 基础地址 |
+| `AI_TIMEOUT_MS` | `60000` | AI 请求超时时间（毫秒） |
+| `AI_CHAT_MODEL` | 空 | 使用的模型名称 |
+| `AI_CHAT_TEMPERATURE` | `0.7` | 模型温度参数 |
+| `AI_CHAT_MAX_TOKENS` | `2000` | 最大回复长度 |
+| `AI_CHAT_MEMORY_SIZE` | `20` | 单用户对话记忆消息数 |
+| `AI_CHAT_MAX_MEMORY_USERS` | `1000` | 内存中保留的最大用户记忆数 |
+| `AI_CHAT_MAX_RETRIES` | `2` | 模型调用失败重试次数 |
+| `AI_CHAT_STREAM_ENABLED` | `true` | 是否启用流式输出 |
 | `OSS_ENABLED` | `false` | 是否启用阿里云 OSS |
 | `OSS_ENDPOINT` | 空 | OSS Endpoint |
 | `OSS_ACCESS_KEY_ID` | 空 | OSS AccessKey ID |

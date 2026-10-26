@@ -16,6 +16,7 @@ public enum ErrorCode {
     NO_PERMISSION(40301, "无权限执行此操作"),
     NOT_FOUND(404, "资源不存在"),
     REQUEST_TIMEOUT(408, "请求超时"),
+    SERVICE_UNAVAILABLE(503, "服务暂不可用"),
     INTERNAL_ERROR(500, "服务器内部错误"),
     NOT_IMPLEMENTED(501, "功能暂未实现"),
     OPERATION_FAILED(50001, "操作失败"),

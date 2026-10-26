@@ -14,7 +14,7 @@
 采用 **MySQL 容器自动初始化 + 手动迁移脚本** 的方案：
 
 ### 首次启动
-- `sql/schema.sql`：建表脚本（49 张表），挂载到 MySQL 容器的 `/docker-entrypoint-initdb.d/01_schema.sql`
+- `sql/schema.sql`：建表脚本（50 张表），挂载到 MySQL 容器的 `/docker-entrypoint-initdb.d/01_schema.sql`
 - `sql/data.sql`：基础数据 + 测试数据，挂载到 `/docker-entrypoint-initdb.d/02_data.sql`
 - MySQL 容器首次启动时自动按文件名顺序执行
 

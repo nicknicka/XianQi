@@ -2,6 +2,7 @@ package com.xx.xianqijava.agent;
 
 import dev.langchain4j.service.SystemMessage;
 import dev.langchain4j.service.UserMessage;
+import dev.langchain4j.service.MemoryId;
 
 /**
  * 商品描述优化助手 Agent 接口
@@ -70,5 +71,5 @@ public interface ProductDescriptionAgent {
         - 不要使用夸张的词汇（如"超级好"、"极品"等）
         - 字数控制在100-300字之间
         """)
-    String optimizeDescription(@UserMessage String productInfo);
+    String optimizeDescription(@MemoryId String userId, @UserMessage String productInfo);
 }

@@ -2,6 +2,7 @@ package com.xx.xianqijava.agent;
 
 import dev.langchain4j.service.SystemMessage;
 import dev.langchain4j.service.UserMessage;
+import dev.langchain4j.service.MemoryId;
 
 /**
  * 商品推荐助手 Agent 接口
@@ -60,5 +61,5 @@ public interface ProductRecommendationAgent {
         - 如果没有找到合适商品，建议调整搜索条件
         - 考虑用户的安全和信用
         """)
-    String recommend(@UserMessage String userMessage);
+    String recommend(@MemoryId String userId, @UserMessage String userMessage);
 }

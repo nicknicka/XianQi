@@ -2,6 +2,7 @@ package com.xx.xianqijava.agent;
 
 import dev.langchain4j.service.SystemMessage;
 import dev.langchain4j.service.UserMessage;
+import dev.langchain4j.service.MemoryId;
 
 /**
  * 智能客服助手 Agent 接口
@@ -57,5 +58,5 @@ public interface CustomerServiceAgent {
         - 对于超出客服范围的问题（如技术故障），建议联系技术支持
         - 保持客观中立，不偏袒交易任何一方
         """)
-    String chat(@UserMessage String userMessage);
+    String chat(@MemoryId String userId, @UserMessage String userMessage);
 }

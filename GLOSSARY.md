@@ -58,6 +58,10 @@
 | 术语 | 英文 | 定义 |
 |------|------|------|
 | 智能体 | Agent | 基于大语言模型的 AI 角色，具备特定能力 |
+| AI 服务商 | AI Provider | 为平台提供模型推理能力的外部服务方，例如智谱 |
+| AI 模型 | AI Model | AI 服务商提供的具体推理模型，例如 `glm-4-flash` |
+| AI 适配器 | AI Adapter | 平台内部隔离 AI 服务商实现细节的边界 |
+| AI 能力开关 | AI Feature Flag | 控制平台 AI 能力是否可用的部署级开关 |
 | 客服智能体 | Customer Service Agent | 自动回复用户常见问题的 AI |
 | 定价顾问 | Pricing Advisor | 帮助卖家估算商品合理价格的 AI |
 | 商品描述生成 | Product Description Agent | 自动生成商品文案的 AI |
