@@ -62,7 +62,7 @@ service.interceptors.response.use(
 
     // 检查响应格式：如果有 code 字段，按标准格式处理
     // 如果没有 code 字段，直接返回数据（适用于分页数据等直接返回数据的接口）
-    if (res.hasOwnProperty('code')) {
+    if (Object.prototype.hasOwnProperty.call(res, 'code')) {
       // 如果code不是200，则判断为错误
       if (res.code !== 200) {
         console.error('❌ [Business Error]', {

@@ -59,6 +59,11 @@ jobs:
           cd admin
           npm ci
 
+      - name: Lint
+        run: |
+          cd admin
+          npm run lint
+
       - name: Build
         run: |
           cd admin

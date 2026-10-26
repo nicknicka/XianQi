@@ -151,9 +151,11 @@
         <el-table-column prop="content" label="评价内容" min-width="200" show-overflow-tooltip />
         <el-table-column label="标签" width="200">
           <template #default="{ row }">
-            <el-tag v-if="row.tags && row.tags.length > 0" v-for="(tag, index) in row.tags.slice(0, 3)" :key="index" size="small" style="margin-right: 4px">
-              {{ tag }}
-            </el-tag>
+            <template v-if="row.tags && row.tags.length > 0">
+              <el-tag v-for="(tag, index) in row.tags.slice(0, 3)" :key="index" size="small" style="margin-right: 4px">
+                {{ tag }}
+              </el-tag>
+            </template>
             <span v-else>-</span>
           </template>
         </el-table-column>
@@ -198,9 +200,11 @@
           {{ currentEvaluation.content || '无文字评价' }}
         </el-descriptions-item>
         <el-descriptions-item label="评价标签" :span="2">
-          <el-tag v-if="currentEvaluation.tags && currentEvaluation.tags.length > 0" v-for="(tag, index) in currentEvaluation.tags" :key="index" style="margin-right: 8px">
-            {{ tag }}
-          </el-tag>
+          <template v-if="currentEvaluation.tags && currentEvaluation.tags.length > 0">
+            <el-tag v-for="(tag, index) in currentEvaluation.tags" :key="index" style="margin-right: 8px">
+              {{ tag }}
+            </el-tag>
+          </template>
           <span v-else>无标签</span>
         </el-descriptions-item>
         <el-descriptions-item label="评价时间" :span="2">{{ currentEvaluation.createTime }}</el-descriptions-item>
