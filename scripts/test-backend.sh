@@ -75,4 +75,10 @@ set +e
 (cd "$ROOT/backend" && "$MAVEN_WRAPPER" --batch-mode verify)
 EXIT_CODE=$?
 set -e
+
+if [[ "$EXIT_CODE" -eq 0 ]]; then
+  # 被静默跳过的集成测试曾掩盖真实缺陷（见 issue #40）。
+  python3 "$ROOT/scripts/check-backend-skips.py" || EXIT_CODE=$?
+fi
+
 exit "$EXIT_CODE"

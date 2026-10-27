@@ -30,6 +30,9 @@ jobs:
       - name: CI lint order contract tests
         run: node --test scripts/tests/check-ci-order-test.mjs
 
+      - name: Backend skip guard tests
+        run: bash scripts/tests/check-backend-skips-test.bash
+
   # ---------- 后端单元测试 ----------
   backend-unit-test:
     name: Backend Unit Tests
