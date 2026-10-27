@@ -112,7 +112,7 @@ async function snapshotProjectFiles() {
         if (ignoredDirectories.has(entry.name)) continue
         if (relativePath === path.join('static', 'fontclass')) continue
         await walk(path.join(directory, entry.name), relativePath)
-      } else if (entry.isFile()) {
+      } else if (entry.isFile() && entry.name !== '.DS_Store') {
         entries.push(relativePath)
       }
     }
@@ -145,6 +145,25 @@ test('real npm run lint is read-only for project sources and config', async () =
 
   const after = await snapshotProjectFiles()
   assert.equal(after, before)
+})
+
+test('lint snapshot ignores volatile macOS metadata files', async () => {
+  const metadataFile = path.join(mobileRoot, '.DS_Store')
+  const previous = await readFile(metadataFile).catch(() => null)
+
+  try {
+    await writeFile(metadataFile, 'finder metadata\n')
+    const before = await snapshotProjectFiles()
+    await writeFile(metadataFile, 'finder metadata changed\n')
+    const after = await snapshotProjectFiles()
+    assert.equal(after, before)
+  } finally {
+    if (previous === null) {
+      await rm(metadataFile, { force: true })
+    } else {
+      await writeFile(metadataFile, previous)
+    }
+  }
 })
 
 test('mobile CI runs read-only lint before building H5', async () => {
