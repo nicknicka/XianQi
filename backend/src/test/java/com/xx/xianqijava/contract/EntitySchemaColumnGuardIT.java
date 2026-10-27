@@ -1,15 +1,22 @@
 package com.xx.xianqijava.contract;
 
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.core.MybatisConfiguration;
 import com.baomidou.mybatisplus.core.metadata.TableFieldInfo;
 import com.baomidou.mybatisplus.core.metadata.TableInfo;
 import com.baomidou.mybatisplus.core.metadata.TableInfoHelper;
+import org.apache.ibatis.builder.MapperBuilderAssistant;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
+import org.springframework.core.type.filter.AnnotationTypeFilter;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -53,15 +60,27 @@ class EntitySchemaColumnGuardIT {
         Pattern.compile("(?i)^(PRIMARY|UNIQUE|KEY|INDEX|CONSTRAINT|FOREIGN)\\b.*");
 
     @Test
-    void everyEntityColumnExistsInSchema() throws IOException {
+    void everyEntityColumnExistsInSchema() throws IOException, ClassNotFoundException {
         Map<String, Set<String>> schema = parseSchema();
 
-        List<TableInfo> tableInfos = TableInfoHelper.getTableInfos();
-        assertFalse(tableInfos.isEmpty(),
-            "MyBatis-Plus 未注册任何实体的 TableInfo；守卫本身失去意义，需排查上下文启动。");
+        // 不能只用 TableInfoHelper.getTableInfos()：它只包含带 Mapper 而被 MyBatis-Plus 注册的实体，
+        // 没有 Mapper 的实体（例如 ConversationMember）不会出现，正是本 spec 要消灭的「默认漏检」。
+        // 因此按 @TableName 注解做类路径扫描，枚举全部实体。
+        List<Class<?>> entities = scanEntities();
+        assertFalse(entities.isEmpty(),
+            "未扫描到任何带 @TableName 的实体；守卫本身失去意义，需排查类路径。");
+
+        MybatisConfiguration configuration = new MybatisConfiguration();
+        MapperBuilderAssistant assistant = new MapperBuilderAssistant(configuration, "");
 
         List<String> failures = new ArrayList<>();
-        for (TableInfo info : tableInfos) {
+        for (Class<?> entityClass : entities) {
+            TableInfoHelper.initTableInfo(assistant, entityClass);
+            TableInfo info = TableInfoHelper.getTableInfo(entityClass);
+            if (info == null) {
+                failures.add(String.format("实体 %s 无法解析 TableInfo", entityClass.getSimpleName()));
+                continue;
+            }
             String table = info.getTableName().replace("`", "");
             Set<String> schemaColumns = schema.get(table);
             if (schemaColumns == null) {
@@ -85,6 +104,32 @@ class EntitySchemaColumnGuardIT {
             "实体↔schema 列映射守卫失败（" + failures.size() + " 处）：\n  - "
                 + String.join("\n  - ", failures)
                 + "\n请把实体映射对齐 sql/schema.sql，或修正 schema。");
+    }
+
+    /**
+     * 守卫自测：枚举必须覆盖「没有 Mapper、因此不会被 MyBatis-Plus 自动注册」的实体。
+     *
+     * <p>{@code ConversationMember} 没有 Mapper，{@code TableInfoHelper.getTableInfos()} 看不到它。
+     * 若守卫退回用 getTableInfos() 枚举，本测试会失败——避免再次出现「默认漏检」。
+     */
+    @Test
+    void scanCoversEntitiesWithoutMapper() throws ClassNotFoundException {
+        List<String> simpleNames = scanEntities().stream().map(Class::getSimpleName).toList();
+        assertTrue(simpleNames.contains("ConversationMember"),
+            "列映射守卫必须覆盖没有 Mapper 的 ConversationMember；实际扫描到 " + simpleNames.size() + " 个实体");
+    }
+
+    /** 通过 @TableName 注解做类路径扫描，枚举全部实体（不只是被 Mapper 注册的那些）。 */
+    private static List<Class<?>> scanEntities() throws ClassNotFoundException {
+        ClassPathScanningCandidateComponentProvider scanner =
+            new ClassPathScanningCandidateComponentProvider(false);
+        scanner.addIncludeFilter(new AnnotationTypeFilter(TableName.class));
+        List<Class<?>> entities = new ArrayList<>();
+        for (BeanDefinition candidate : scanner.findCandidateComponents("com.xx.xianqijava.entity")) {
+            entities.add(Class.forName(candidate.getBeanClassName()));
+        }
+        entities.sort(Comparator.comparing(Class::getSimpleName));
+        return entities;
     }
 
     /** 主键列 + 所有字段列，字段名 -> 列名（用于失败信息定位到字段）。 */
