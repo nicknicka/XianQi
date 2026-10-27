@@ -82,9 +82,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from "vue";
 import { useThemeStyle } from "@/utils/theme";
-// @ts-ignore
 import LazyImage from "@/components/lazy-image/lazy-image.vue";
-// @ts-ignore
 import UserAvatar from "@/components/user-avatar/user-avatar.vue";
 import type { Product } from "@/types";
 import { getConditionLabel } from "@/types";

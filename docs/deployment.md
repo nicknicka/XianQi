@@ -132,6 +132,14 @@ docker exec -i xianqi-mysql mysql -u xianqi -pxianqi123 Xianqi < sql/migrations/
 
 ## 故障排查
 
+### GitHub、Maven Central 或 Docker Hub 网络异常
+```bash
+# 显示当前代理环境变量，并分别验证代理访问和清除代理变量后的真实直连
+./scripts/net-doctor.sh
+```
+
+脚本会检查 GitHub API、Maven Central 和 Docker Hub。若代理或直连的关键检查失败，命令返回非零退出码，并在输出中标注失败的服务与访问方式，可据此区分代理配置问题、环境变量劫持、目标服务故障或真实直连故障。
+
 ### 后端启动失败
 ```bash
 # 查看后端日志

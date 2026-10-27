@@ -7,10 +7,10 @@
         :key="item.id || index"
         v-show="expanded"
         class="fab-item"
-        :class="{
+        :class="[
           `fab-item-${direction}`,
-          [`size-${item.size || size}`]: true
-        }"
+          `size-${item.size || size}`
+        ]"
         :style="getItemStyle(index)"
         @click="handleItemClick(item, index)"
       >

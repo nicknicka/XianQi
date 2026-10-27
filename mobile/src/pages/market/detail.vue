@@ -618,7 +618,6 @@ import { useUserStore } from "@/store/user";
 import { formatDateTime } from "@/utils/date";
 import { shareManager } from "@/utils/share";
 import { getConditionLabel } from "@/types";
-// @ts-ignore
 import LazyImage from "@/components/lazy-image/lazy-image.vue";
 import ProductCard from "@/components/product-card/product-card.vue";
 import UserAvatar from "@/components/user-avatar/user-avatar.vue";

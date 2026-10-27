@@ -548,10 +548,10 @@
           <view class="preview-card">
             <!-- 图片轮播 -->
             <swiper class="card-swiper" :indicator-dots="images.length > 1" :autoplay="false" :circular="true">
-              <swiper-item v-if="images.length > 0" v-for="(image, index) in images" :key="index">
+              <swiper-item v-for="(image, index) in images" :key="index">
                 <image class="card-image" :src="image" mode="aspectFill" />
               </swiper-item>
-              <swiper-item v-else>
+              <swiper-item v-if="images.length === 0">
                 <view class="card-image-placeholder">
                   <uni-icons type="image" size="60" color="#ddd" />
                   <text class="placeholder-text">暂无图片</text>
@@ -641,9 +641,7 @@ import { getCategoryEmoji } from '@/utils/categoryIcons'
 import { uploadImage as uploadImageFile, normalizeImageUrl } from '@/utils/image'
 import {useThemeStyle, useThemeColors, useThemePage} from '@/utils/theme'
 import { checkAuth } from '@/utils/auth'
-// @ts-ignore
 import FloatingBalls from '@/components/floating-balls/floating-balls.vue'
-// @ts-ignore
 import LazyImage from '@/components/lazy-image/lazy-image.vue'
 
 const { themeStyle } = useThemeStyle()

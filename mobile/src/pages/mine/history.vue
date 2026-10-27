@@ -48,7 +48,7 @@
       <!-- 时间线列表 -->
       <view v-else class="timeline">
         <view
-          v-for="(group, gIdx) in groupedProducts"
+          v-for="group in groupedProducts"
           :key="group.date"
           class="timeline-group"
         >
@@ -62,7 +62,7 @@
           <!-- 商品卡片 -->
           <view class="group-cards">
             <view
-              v-for="(product, pIdx) in group.items"
+              v-for="product in group.items"
               :key="product.id"
               class="product-card"
               :class="{ 'edit-mode': isEditMode }"

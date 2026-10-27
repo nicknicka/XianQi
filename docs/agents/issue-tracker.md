@@ -10,8 +10,16 @@ Issues and specs for this repo live as GitHub issues. Use the `gh` CLI for all o
 - **Comment on an issue**: `gh issue comment <number> --body "..."`
 - **Apply / remove labels**: `gh issue edit <number> --add-label "..."` / `--remove-label "..."`
 - **Close**: `gh issue close <number> --comment "..."`
+- **Create and verify native blocked-by dependencies**: `scripts/issue-dependency.sh create OWNER/REPO CHILD BLOCKER...` creates dependencies one at a time, checks each response, and reads the final `blocked_by` list before returning success.
+- **Verify native blocked-by dependencies without writing**: `scripts/issue-dependency.sh verify OWNER/REPO CHILD BLOCKER...`.
+
+The dependency helper uses `gh api` only; it is not a general GitHub API client. If a create request times out, it first GETs the child's current `dependencies/blocked_by` list and retries only when the edge is absent. If the final verification cannot read every requested edge, the command exits nonzero.
 
 Infer the repo from `git remote -v`; `gh` does this automatically when run inside a clone.
+
+## Offline scratch drafts
+
+`.scratch/` is ignored by Git and is only a temporary fallback for local drafts when the network is unavailable. Do not treat it as a task system or publish it in commits. When network access returns, create or update the GitHub Issue and verify it with `gh`; GitHub Issues remain the source of truth.
 
 ## Pull requests as a triage surface
 

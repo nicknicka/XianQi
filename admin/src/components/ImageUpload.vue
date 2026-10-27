@@ -54,7 +54,6 @@
 import { ref, computed } from 'vue'
 import { ElMessage } from 'element-plus'
 import { Plus, View, Delete } from '@element-plus/icons-vue'
-import type { UploadProps } from 'element-plus'
 
 interface Props {
   modelValue?: string

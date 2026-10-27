@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * @since 2025-03-07
  */
 @SpringBootTest
-public class IdGeneratorServiceTest {
+public class IdGeneratorServiceIT {
 
     @Resource
     private IdGeneratorService idGeneratorService;

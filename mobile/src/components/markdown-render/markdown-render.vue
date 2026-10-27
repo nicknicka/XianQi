@@ -51,6 +51,7 @@ const renderedHtml = computed(() => {
 
   // #ifndef H5
   // 小程序平台：使用纯 JavaScript 实现
+  // eslint-disable-next-line no-unreachable -- UniApp 条件编译在 lint 阶段不会剔除 H5 分支
   return simpleRenderMarkdown(props.content)
   // #endif
 })
@@ -153,7 +154,7 @@ function simpleRenderMarkdown(text: string): string {
   html = html.replace(/\*(.+?)\*/g, '<em>$1</em>')
 
   // 7. 无序列表
-  html = html.replace(/^[\*\-]\s+(.+)$/gm, '<li>$1</li>')
+  html = html.replace(/^[*-]\s+(.+)$/gm, '<li>$1</li>')
 
   // 8. 有序列表
   html = html.replace(/^\d+\.\s+(.+)$/gm, '<li>$1</li>')
@@ -167,10 +168,10 @@ function simpleRenderMarkdown(text: string): string {
   })
 
   // 10. 链接
-  html = html.replace(/\[([^\]]+)\]\(([^\)]+)\)/g, '<a href="$2" target="_blank">$1</a>')
+  html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank">$1</a>')
 
   // 11. 图片
-  html = html.replace(/!\[([^\]]*)\]\(([^\)]+)\)/g, '<img src="$2" alt="$1" />')
+  html = html.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, '<img src="$2" alt="$1" />')
 
   // 12. 段落
   html = html.replace(/\n\n/g, '</p><p>')
