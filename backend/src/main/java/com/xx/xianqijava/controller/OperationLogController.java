@@ -5,7 +5,6 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.xx.xianqijava.common.Result;
 import com.xx.xianqijava.entity.OperationLog;
 import com.xx.xianqijava.service.OperationLogService;
-import com.xx.xianqijava.util.SecurityUtil;
 import com.xx.xianqijava.vo.OperationLogVO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -34,18 +33,18 @@ public class OperationLogController {
     public Result<IPage<OperationLogVO>> getLogList(
             @Parameter(description = "页码") @RequestParam(defaultValue = "1") Integer current,
             @Parameter(description = "每页数量") @RequestParam(defaultValue = "20") Integer size,
-            @Parameter(description = "用户ID") @RequestParam(required = false) Long userId,
+            @Parameter(description = "管理员ID") @RequestParam(required = false) Long adminId,
             @Parameter(description = "模块") @RequestParam(required = false) String module,
             @Parameter(description = "操作类型") @RequestParam(required = false) String action,
             @Parameter(description = "状态") @RequestParam(required = false) Integer status,
             @Parameter(description = "开始时间") @RequestParam(required = false) String startTime,
             @Parameter(description = "结束时间") @RequestParam(required = false) String endTime) {
-        log.info("查询操作日志列表, userId={}, module={}, action={}, status={}",
-                userId, module, action, status);
+        log.info("查询操作日志列表, adminId={}, module={}, action={}, status={}",
+                adminId, module, action, status);
 
         Page<OperationLog> page = new Page<>(current, size);
         IPage<OperationLogVO> result = operationLogService.getLogList(
-                page, userId, module, action, status, startTime, endTime);
+                page, adminId, module, action, status, startTime, endTime);
         return Result.success(result);
     }
 
@@ -57,11 +56,11 @@ public class OperationLogController {
     public Result<IPage<OperationLogVO>> getMyLogs(
             @Parameter(description = "页码") @RequestParam(defaultValue = "1") Integer current,
             @Parameter(description = "每页数量") @RequestParam(defaultValue = "20") Integer size) {
-        Long userId = SecurityUtil.getCurrentUserIdRequired();
-        log.info("查询我的操作日志, userId={}, page={}", userId, current);
+        Long adminId = com.xx.xianqijava.security.SecurityContextHolder.getAdminId();
+        log.info("查询我的操作日志, adminId={}, page={}", adminId, current);
 
         Page<OperationLog> page = new Page<>(current, size);
-        IPage<OperationLogVO> result = operationLogService.getMyLogs(page, userId);
+        IPage<OperationLogVO> result = operationLogService.getMyLogs(page, adminId);
         return Result.success(result);
     }
 

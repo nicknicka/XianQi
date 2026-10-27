@@ -35,7 +35,7 @@ public class ReportController {
     @Operation(summary = "创建举报")
     public Result<ReportVO> createReport(@Valid @RequestBody ReportCreateDTO createDTO) {
         Long reporterId = SecurityUtil.getCurrentUserIdRequired();
-        log.info("创建举报, reporterId={}, reportedUserId={}", reporterId, createDTO.getReportedUserId());
+        log.info("创建举报, reporterId={}, targetType={}, targetId={}", reporterId, createDTO.getTargetType(), createDTO.getTargetId());
         ReportVO reportVO = reportService.createReport(createDTO, reporterId);
         return Result.success("举报提交成功", reportVO);
     }

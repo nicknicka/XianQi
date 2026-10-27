@@ -92,14 +92,10 @@ export const commonApi = {
     reason: string
     description?: string
     images?: string[]
-    reportedUserId?: string
-    conversationId?: string
-    messageId?: string
   }) {
     return http.post('/report', {
-      reportedUserId: String(data.reportedUserId || data.targetId),
-      conversationId: data.conversationId ? String(data.conversationId) : undefined,
-      messageId: data.messageId ? String(data.messageId) : undefined,
+      targetType: data.targetType,
+      targetId: String(data.targetId),
       reason: data.reason,
       description: data.description,
       evidenceImages: data.images?.length ? JSON.stringify(data.images) : undefined

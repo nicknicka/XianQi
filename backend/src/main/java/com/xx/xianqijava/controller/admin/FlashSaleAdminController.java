@@ -306,10 +306,10 @@ public class FlashSaleAdminController {
         }
 
         // 切换启用状态
-        session.setEnabled(session.getEnabled() == null || session.getEnabled() == 1 ? 0 : 1);
+        session.setStatus(session.getStatus() == null || session.getStatus() == 1 ? 0 : 1);
         sessionMapper.updateById(session);
 
-        String status = session.getEnabled() == 1 ? "启用" : "禁用";
+        String status = session.getStatus() == 1 ? "启用" : "禁用";
         log.info("{}场次：{}", status, session.getName());
 
         return Result.success("场次已" + status);
@@ -333,7 +333,7 @@ public class FlashSaleAdminController {
 
         LambdaUpdateWrapper<FlashSaleSession> wrapper = new LambdaUpdateWrapper<>();
         wrapper.eq(FlashSaleSession::getSessionType, 1)  // 只更新固定场次
-               .set(FlashSaleSession::getEnabled, enabled);
+               .set(FlashSaleSession::getStatus, enabled);
 
         int updated = sessionMapper.update(null, wrapper);
 

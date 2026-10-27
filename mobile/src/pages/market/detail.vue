@@ -610,7 +610,7 @@ import { onShow } from "@dcloudio/uni-app";
 import { useThemePage, useThemeStyle, useThemeColors } from "@/utils/theme";
 import { productApi } from "@/api/product";
 import { evaluationApi } from "@/api/evaluation";
-import { reportApi, ReportReason } from "@/api/report";
+import { reportApi, ReportReason, ReportType } from "@/api/report";
 import { favoriteApi } from "@/api/favorite";
 import { activityApi } from "@/api/activity";
 import { checkSensitiveWord, SensitiveCheckType } from "@/utils/sensitive-word";
@@ -1391,8 +1391,7 @@ async function submitReport() {
 
 	reportApi
 		.createReport({
-			reportedUserId: product.value.userId,
-			targetType: 2, // ReportType.PRODUCT
+			targetType: ReportType.PRODUCT,
 			targetId: productId.value,
 			reason: selectedReportReason.value as ReportReason,
 			description: filteredDesc,

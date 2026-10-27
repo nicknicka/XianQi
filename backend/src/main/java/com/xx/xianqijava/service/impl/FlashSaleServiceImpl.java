@@ -57,7 +57,7 @@ public class FlashSaleServiceImpl extends ServiceImpl<FlashSaleSessionMapper, Fl
         LambdaQueryWrapper<FlashSaleSession> wrapper = new LambdaQueryWrapper<>();
         wrapper.le(FlashSaleSession::getStartTime, now)
                .ge(FlashSaleSession::getEndTime, now)
-               .eq(FlashSaleSession::getEnabled, 1)  // 只查询启用的场次
+               .eq(FlashSaleSession::getStatus, 1)  // 只查询启用的场次
                .orderByAsc(FlashSaleSession::getStartTime)
                .last("LIMIT 1");
 
@@ -74,7 +74,7 @@ public class FlashSaleServiceImpl extends ServiceImpl<FlashSaleSessionMapper, Fl
         LambdaQueryWrapper<FlashSaleSession> sessionWrapper = new LambdaQueryWrapper<>();
         sessionWrapper.ge(FlashSaleSession::getStartTime, startOfDay)
                       .le(FlashSaleSession::getStartTime, endOfDay)
-                      .eq(FlashSaleSession::getEnabled, 1)  // 只查询启用的场次
+                      .eq(FlashSaleSession::getStatus, 1)  // 只查询启用的场次
                       .orderByAsc(FlashSaleSession::getStartTime);
 
         List<FlashSaleSession> todaySessions = flashSaleSessionMapper.selectList(sessionWrapper);
@@ -267,7 +267,7 @@ public class FlashSaleServiceImpl extends ServiceImpl<FlashSaleSessionMapper, Fl
         LambdaQueryWrapper<FlashSaleSession> wrapper = new LambdaQueryWrapper<>();
         wrapper.ge(FlashSaleSession::getStartTime, startOfDay)
                .le(FlashSaleSession::getStartTime, endOfDay)
-               .eq(FlashSaleSession::getEnabled, 1)  // 只查询启用的场次
+               .eq(FlashSaleSession::getStatus, 1)  // 只查询启用的场次
                .orderByAsc(FlashSaleSession::getStartTime);
 
         List<FlashSaleSession> sessions = flashSaleSessionMapper.selectList(wrapper);
@@ -341,7 +341,7 @@ public class FlashSaleServiceImpl extends ServiceImpl<FlashSaleSessionMapper, Fl
         return flashSaleOrderExtMapper.selectCount(
                 new LambdaQueryWrapper<FlashSaleOrderExt>()
                         .eq(FlashSaleOrderExt::getUserId, userId)
-                        .eq(FlashSaleOrderExt::getSessionId, sessionId)
+                        .eq(FlashSaleOrderExt::getFlashSaleId, sessionId)
         ).intValue();
     }
 
@@ -516,7 +516,7 @@ public class FlashSaleServiceImpl extends ServiceImpl<FlashSaleSessionMapper, Fl
         flashOrderExt.setOrderId(order.getOrderId());
         flashOrderExt.setUserId(userId);
         flashOrderExt.setProductId(productId);
-        flashOrderExt.setSessionId(currentSession.getSessionId());
+        flashOrderExt.setFlashSaleId(currentSession.getSessionId());
         flashOrderExt.setFlashPrice(flashProduct.getFlashPrice());
 
         BigDecimal discount = flashProduct.getFlashPrice()

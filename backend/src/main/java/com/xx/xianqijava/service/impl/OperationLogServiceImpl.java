@@ -31,14 +31,14 @@ public class OperationLogServiceImpl extends ServiceImpl<OperationLogMapper, Ope
 
     @Override
     @Async
-    public void recordLog(Long userId, String username, String module, String action,
+    public void recordLog(Long adminId, String username, String module, String action,
                           String description, String requestMethod, String requestUrl,
                           String requestParams, String ipAddress, String userAgent,
                           Long executeTime, Integer status, String errorMessage,
                           Long bizId, String bizType) {
         try {
             OperationLog log = new OperationLog();
-            log.setUserId(userId);
+            log.setAdminId(adminId);
             log.setUsername(username);
             log.setModule(module);
             log.setAction(action);
@@ -53,7 +53,7 @@ public class OperationLogServiceImpl extends ServiceImpl<OperationLogMapper, Ope
             log.setErrorMessage(errorMessage);
             log.setBizId(bizId);
             log.setBizType(bizType);
-            log.setCreateTime(LocalDateTime.now());
+            log.setCreatedAt(LocalDateTime.now());
 
             save(log);
         } catch (Exception e) {
@@ -62,15 +62,15 @@ public class OperationLogServiceImpl extends ServiceImpl<OperationLogMapper, Ope
     }
 
     @Override
-    public IPage<OperationLogVO> getLogList(Page<OperationLog> page, Long userId, String module,
+    public IPage<OperationLogVO> getLogList(Page<OperationLog> page, Long adminId, String module,
                                             String action, Integer status, String startTime, String endTime) {
-        log.info("查询操作日志列表, userId={}, module={}, action={}, status={}",
-                userId, module, action, status);
+        log.info("查询操作日志列表, adminId={}, module={}, action={}, status={}",
+                adminId, module, action, status);
 
         LambdaQueryWrapper<OperationLog> wrapper = new LambdaQueryWrapper<>();
 
-        if (userId != null) {
-            wrapper.eq(OperationLog::getUserId, userId);
+        if (adminId != null) {
+            wrapper.eq(OperationLog::getAdminId, adminId);
         }
         if (StrUtil.isNotBlank(module)) {
             wrapper.eq(OperationLog::getModule, module);
@@ -83,26 +83,26 @@ public class OperationLogServiceImpl extends ServiceImpl<OperationLogMapper, Ope
         }
         if (StrUtil.isNotBlank(startTime)) {
             LocalDateTime start = LocalDateTime.parse(startTime, DATE_FORMATTER);
-            wrapper.ge(OperationLog::getCreateTime, start);
+            wrapper.ge(OperationLog::getCreatedAt, start);
         }
         if (StrUtil.isNotBlank(endTime)) {
             LocalDateTime end = LocalDateTime.parse(endTime, DATE_FORMATTER);
-            wrapper.le(OperationLog::getCreateTime, end);
+            wrapper.le(OperationLog::getCreatedAt, end);
         }
 
-        wrapper.orderByDesc(OperationLog::getCreateTime);
+        wrapper.orderByDesc(OperationLog::getCreatedAt);
 
         IPage<OperationLog> logPage = page(page, wrapper);
         return logPage.convert(this::convertToVO);
     }
 
     @Override
-    public IPage<OperationLogVO> getMyLogs(Page<OperationLog> page, Long userId) {
-        log.info("查询我的操作日志, userId={}, page={}", userId, page.getCurrent());
+    public IPage<OperationLogVO> getMyLogs(Page<OperationLog> page, Long adminId) {
+        log.info("查询我的操作日志, adminId={}, page={}", adminId, page.getCurrent());
 
         LambdaQueryWrapper<OperationLog> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(OperationLog::getUserId, userId)
-                .orderByDesc(OperationLog::getCreateTime);
+        wrapper.eq(OperationLog::getAdminId, adminId)
+                .orderByDesc(OperationLog::getCreatedAt);
 
         IPage<OperationLog> logPage = page(page, wrapper);
         return logPage.convert(this::convertToVO);
@@ -115,7 +115,7 @@ public class OperationLogServiceImpl extends ServiceImpl<OperationLogMapper, Ope
         LambdaQueryWrapper<OperationLog> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(OperationLog::getBizId, orderId)
                 .eq(OperationLog::getBizType, "order")
-                .orderByAsc(OperationLog::getCreateTime);
+                .orderByAsc(OperationLog::getCreatedAt);
 
         java.util.List<OperationLog> logs = list(wrapper);
         return logs.stream()
@@ -130,7 +130,7 @@ public class OperationLogServiceImpl extends ServiceImpl<OperationLogMapper, Ope
         LocalDateTime expireTime = LocalDateTime.now().minusDays(days);
 
         LambdaQueryWrapper<OperationLog> wrapper = new LambdaQueryWrapper<>();
-        wrapper.lt(OperationLog::getCreateTime, expireTime);
+        wrapper.lt(OperationLog::getCreatedAt, expireTime);
 
         int count = Math.toIntExact(count(wrapper));
         remove(wrapper);
@@ -150,8 +150,8 @@ public class OperationLogServiceImpl extends ServiceImpl<OperationLogMapper, Ope
         vo.setStatusDesc(log.getStatus() == 1 ? "成功" : "失败");
 
         // 设置时间
-        if (log.getCreateTime() != null) {
-            vo.setCreateTime(log.getCreateTime().toString());
+        if (log.getCreatedAt() != null) {
+            vo.setCreateTime(log.getCreatedAt().toString());
         }
 
         return vo;
@@ -173,8 +173,8 @@ public class OperationLogServiceImpl extends ServiceImpl<OperationLogMapper, Ope
         vo.setActionText(getActionText(log.getAction()));
 
         // 设置时间
-        if (log.getCreateTime() != null) {
-            vo.setCreateTime(log.getCreateTime().toString());
+        if (log.getCreatedAt() != null) {
+            vo.setCreateTime(log.getCreatedAt().toString());
         }
 
         return vo;

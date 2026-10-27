@@ -40,5 +40,8 @@ public class QuickReply {
     private Integer isSystem;
 
     @Schema(description = "创建时间")
-    private LocalDateTime createTime;
+    private LocalDateTime createdAt;
+
+    @Schema(description = "更新时间")
+    private LocalDateTime updatedAt;
 }

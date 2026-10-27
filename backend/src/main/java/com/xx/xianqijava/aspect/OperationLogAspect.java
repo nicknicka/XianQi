@@ -2,10 +2,9 @@ package com.xx.xianqijava.aspect;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.xx.xianqijava.annotation.OperationLog;
-import com.xx.xianqijava.entity.User;
+import com.xx.xianqijava.entity.Admin;
 import com.xx.xianqijava.service.OperationLogService;
-import com.xx.xianqijava.service.UserService;
-import com.xx.xianqijava.util.SecurityUtil;
+import com.xx.xianqijava.security.SecurityContextHolder;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,7 +28,6 @@ public class OperationLogAspect {
 
     private final OperationLogService operationLogService;
     private final ObjectMapper objectMapper;
-    private final UserService userService;
 
     @Pointcut("@annotation(com.xx.xianqijava.annotation.OperationLog)")
     public void operationLogPointcut() {
@@ -73,21 +71,19 @@ public class OperationLogAspect {
         OperationLog annotation = signature.getMethod()
                 .getAnnotation(OperationLog.class);
 
-        // 获取用户信息
-        Long userId = 0L;
+        // 获取操作管理员信息（operation_log.admin_id 外键指向 admin）
+        Long adminId = null;
         String username = "系统";
         try {
-            userId = SecurityUtil.getCurrentUserId();
-            if (userId != null) {
-                User user = userService.getById(userId);
-                if (user != null) {
-                    username = user.getUsername();
-                }
+            Admin admin = SecurityContextHolder.getAdmin();
+            if (admin != null) {
+                adminId = admin.getAdminId();
+                username = admin.getUsername();
             }
         } catch (Exception e) {
-            // 未登录用户
-            userId = 0L;
-            username = "游客";
+            // 未登录管理员
+            adminId = null;
+            username = "系统";
         }
 
         // 获取请求参数
@@ -104,7 +100,7 @@ public class OperationLogAspect {
 
         // 记录日志
         operationLogService.recordLog(
-                userId,
+                adminId,
                 username,
                 annotation.module(),
                 annotation.action(),

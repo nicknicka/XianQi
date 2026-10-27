@@ -122,7 +122,7 @@ public class QuickReplyServiceImpl extends ServiceImpl<QuickReplyMapper, QuickRe
                 )
                 .orderByAsc(QuickReply::getIsSystem) // 系统预设排在前面
                 .orderByAsc(QuickReply::getSortOrder)
-                .orderByDesc(QuickReply::getCreateTime);
+                .orderByDesc(QuickReply::getCreatedAt);
 
         IPage<QuickReply> quickReplyPage = page(page, queryWrapper);
         return quickReplyPage.convert(this::convertToVO);

@@ -28,11 +28,11 @@
                 </choose>
             </when>
             <when test="sortBy == 'distance'">
-                ORDER BY create_time DESC
+                ORDER BY created_at DESC
                 <!-- 距离排序需要计算，暂时使用创建时间代替 -->
             </when>
             <otherwise>
-                ORDER BY create_time DESC
+                ORDER BY created_at DESC
             </otherwise>
         </choose>
     </select>

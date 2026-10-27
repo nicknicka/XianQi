@@ -86,7 +86,7 @@ public class AdminAuthInterceptor implements HandlerInterceptor {
 
             // 7. 记录请求日志
             log.debug("管理员访问: adminId={}, username={}, uri={}",
-                    admin.getId(), admin.getUsername(), uri);
+                    admin.getAdminId(), admin.getUsername(), uri);
 
             return true;
 

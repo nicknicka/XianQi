@@ -51,11 +51,14 @@ public class FlashSaleSession implements Serializable {
     @Schema(description = "场次类型：1-默认固定场次，2-特殊临时场次")
     private Integer sessionType;
 
-    @Schema(description = "是否启用：0-禁用（暂停/取消），1-启用")
-    private Integer enabled;
+    @Schema(description = "状态：0-停用，1-启用")
+    private Integer status;
 
     @Schema(description = "创建时间")
-    private LocalDateTime createTime;
+    private LocalDateTime createdAt;
+
+    @Schema(description = "更新时间")
+    private LocalDateTime updatedAt;
 
     /**
      * 逻辑删除标记（0=未删除，1=已删除）

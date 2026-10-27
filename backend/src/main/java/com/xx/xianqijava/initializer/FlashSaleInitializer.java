@@ -163,7 +163,7 @@ public class FlashSaleInitializer extends BaseInitializer {
         session.setEndTime(endTime);
         session.setSortOrder(sortOrder);
         session.setSessionType(1);  // 固定场次
-        session.setEnabled(1);       // 启用
+        session.setStatus(1);       // 启用
         return session;
     }
 }

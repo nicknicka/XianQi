@@ -112,9 +112,10 @@ public class EvaluationServiceImpl extends ServiceImpl<EvaluationMapper, Evaluat
             // 5. 创建评价
             Evaluation evaluation = new Evaluation();
             evaluation.setOrderId(orderId);
-            evaluation.setFromUserId(evaluatorId);
-            evaluation.setToUserId(evaluatedUserId);
-            evaluation.setScore(createDTO.getRating());
+            evaluation.setProductId(order.getProductId());
+            evaluation.setEvaluatorId(evaluatorId);
+            evaluation.setTargetUserId(evaluatedUserId);
+            evaluation.setRating(createDTO.getRating());
             evaluation.setContent(content.trim());
             evaluation.setTags(toJsonArray(parseCommaSeparatedValues(createDTO.getTags())));
             evaluation.setImages(toJsonArray(sanitizeImages(createDTO.getImages())));
@@ -124,7 +125,7 @@ public class EvaluationServiceImpl extends ServiceImpl<EvaluationMapper, Evaluat
             // 6. 更新被评价人的信用积分
             updateUserCreditScore(evaluatedUserId, createDTO.getRating());
 
-            log.info("评价创建成功, evalId={}", evaluation.getEvalId());
+            log.info("评价创建成功, evalId={}", evaluation.getEvaluationId());
 
             return convertToVO(evaluation, isBuyer);
         } catch (BusinessException e) {
@@ -151,7 +152,7 @@ public class EvaluationServiceImpl extends ServiceImpl<EvaluationMapper, Evaluat
         if (evaluation == null) {
             throw new BusinessException(ErrorCode.EVALUATION_NOT_FOUND, "评价不存在");
         }
-        if (!evaluation.getFromUserId().equals(evaluatorId)) {
+        if (!evaluation.getEvaluatorId().equals(evaluatorId)) {
             throw new BusinessException(ErrorCode.FORBIDDEN, "您无权追加该评价");
         }
         if (evaluation.getAppendTime() != null) {
@@ -181,13 +182,13 @@ public class EvaluationServiceImpl extends ServiceImpl<EvaluationMapper, Evaluat
     public IPage<EvaluationVO> getOrderEvaluations(Long orderId, Page<Evaluation> page) {
         LambdaQueryWrapper<Evaluation> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(Evaluation::getOrderId, orderId)
-                .orderByDesc(Evaluation::getCreateTime);
+                .orderByDesc(Evaluation::getCreatedAt);
 
         IPage<Evaluation> evaluationPage = page(page, wrapper);
         return evaluationPage.convert(eval -> {
             // Determine if the evaluator was buyer or seller
             Order order = orderMapper.selectById(eval.getOrderId());
-            boolean isBuyer = order != null && order.getBuyerId().equals(eval.getFromUserId());
+            boolean isBuyer = order != null && order.getBuyerId().equals(eval.getEvaluatorId());
             return convertToVO(eval, isBuyer);
         });
     }
@@ -196,14 +197,14 @@ public class EvaluationServiceImpl extends ServiceImpl<EvaluationMapper, Evaluat
     public IPage<EvaluationVO> getUserEvaluations(Long userId, Page<Evaluation> page) {
         // 查询用户收到的评价（作为被评价人）
         LambdaQueryWrapper<Evaluation> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(Evaluation::getToUserId, userId)
-                .orderByDesc(Evaluation::getCreateTime);
+        wrapper.eq(Evaluation::getTargetUserId, userId)
+                .orderByDesc(Evaluation::getCreatedAt);
 
         IPage<Evaluation> evaluationPage = page(page, wrapper);
         return evaluationPage.convert(eval -> {
             // 当前用户是被评价人，判断评价人当时是买家还是卖家
             Order order = orderMapper.selectById(eval.getOrderId());
-            boolean isBuyer = order != null && order.getBuyerId().equals(eval.getFromUserId());
+            boolean isBuyer = order != null && order.getBuyerId().equals(eval.getEvaluatorId());
             return convertToVO(eval, isBuyer);
         });
     }
@@ -211,8 +212,8 @@ public class EvaluationServiceImpl extends ServiceImpl<EvaluationMapper, Evaluat
     @Override
     public IPage<EvaluationVO> getUserSentEvaluations(Long userId, Page<Evaluation> page) {
         LambdaQueryWrapper<Evaluation> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(Evaluation::getFromUserId, userId)
-                .orderByDesc(Evaluation::getCreateTime);
+        wrapper.eq(Evaluation::getEvaluatorId, userId)
+                .orderByDesc(Evaluation::getCreatedAt);
 
         IPage<Evaluation> evaluationPage = page(page, wrapper);
         return evaluationPage.convert(eval -> {
@@ -225,7 +226,7 @@ public class EvaluationServiceImpl extends ServiceImpl<EvaluationMapper, Evaluat
     @Override
     public Integer getUserAverageRating(Long userId) {
         List<Evaluation> evaluations = lambdaQuery()
-                .eq(Evaluation::getToUserId, userId)
+                .eq(Evaluation::getTargetUserId, userId)
                 .list();
 
         if (evaluations.isEmpty()) {
@@ -233,7 +234,7 @@ public class EvaluationServiceImpl extends ServiceImpl<EvaluationMapper, Evaluat
         }
 
         double avg = evaluations.stream()
-                .mapToInt(Evaluation::getScore)
+                .mapToInt(Evaluation::getRating)
                 .average()
                 .orElse(0.0);
 
@@ -278,14 +279,14 @@ public class EvaluationServiceImpl extends ServiceImpl<EvaluationMapper, Evaluat
      */
     private EvaluationVO convertToVO(Evaluation evaluation, boolean isBuyer) {
         EvaluationVO vo = new EvaluationVO();
-        vo.setId(String.valueOf(evaluation.getEvalId()));
-        vo.setEvaluationId(String.valueOf(evaluation.getEvalId()));
+        vo.setId(String.valueOf(evaluation.getEvaluationId()));
+        vo.setEvaluationId(String.valueOf(evaluation.getEvaluationId()));
         vo.setOrderId(String.valueOf(evaluation.getOrderId()));
-        vo.setEvaluatorId(String.valueOf(evaluation.getFromUserId()));
+        vo.setEvaluatorId(String.valueOf(evaluation.getEvaluatorId()));
         vo.setFromUserId(vo.getEvaluatorId());
-        vo.setEvaluatedUserId(String.valueOf(evaluation.getToUserId()));
+        vo.setEvaluatedUserId(String.valueOf(evaluation.getTargetUserId()));
         vo.setToUserId(vo.getEvaluatedUserId());
-        vo.setRating(evaluation.getScore());
+        vo.setRating(evaluation.getRating());
         vo.setContent(evaluation.getContent());
         vo.setTags(parseJsonArray(evaluation.getTags()));
         vo.setImages(parseJsonArray(evaluation.getImages()));
@@ -293,11 +294,13 @@ public class EvaluationServiceImpl extends ServiceImpl<EvaluationMapper, Evaluat
         vo.setAppendImages(parseJsonArray(evaluation.getAppendImages()));
         vo.setAppendTime(evaluation.getAppendTime());
         vo.setHasAppend(evaluation.getAppendTime() != null);
-        vo.setCreateTime(evaluation.getCreateTime());
-        vo.setCreatedAt(evaluation.getCreateTime());
+        vo.setCreateTime(evaluation.getCreatedAt());
+        vo.setCreatedAt(evaluation.getCreatedAt());
 
         // Set target type based on role
         vo.setTargetType(isBuyer ? 1 : 2);
+
+        vo.setProductId(String.valueOf(evaluation.getProductId()));
 
         // 查询订单信息
         Order order = orderMapper.selectById(evaluation.getOrderId());
@@ -318,7 +321,7 @@ public class EvaluationServiceImpl extends ServiceImpl<EvaluationMapper, Evaluat
         }
 
         // 查询评价人信息
-        User evaluator = userMapper.selectById(evaluation.getFromUserId());
+        User evaluator = userMapper.selectById(evaluation.getEvaluatorId());
         if (evaluator != null) {
             vo.setEvaluatorNickname(evaluator.getNickname());
             vo.setEvaluatorName(evaluator.getNickname());
@@ -328,7 +331,7 @@ public class EvaluationServiceImpl extends ServiceImpl<EvaluationMapper, Evaluat
         }
 
         // 查询被评价人信息
-        User evaluatedUser = userMapper.selectById(evaluation.getToUserId());
+        User evaluatedUser = userMapper.selectById(evaluation.getTargetUserId());
         if (evaluatedUser != null) {
             vo.setEvaluatedUserNickname(evaluatedUser.getNickname());
             vo.setToUserName(evaluatedUser.getNickname());
@@ -390,7 +393,7 @@ public class EvaluationServiceImpl extends ServiceImpl<EvaluationMapper, Evaluat
     @Override
     public int countByEvaluatedUserId(Long userId) {
         return Math.toIntExact(lambdaQuery()
-                .eq(Evaluation::getToUserId, userId)
+                .eq(Evaluation::getTargetUserId, userId)
                 .count());
     }
 
@@ -414,7 +417,7 @@ public class EvaluationServiceImpl extends ServiceImpl<EvaluationMapper, Evaluat
         // 2. 查询这些订单的评价
         LambdaQueryWrapper<Evaluation> wrapper = new LambdaQueryWrapper<>();
         wrapper.in(Evaluation::getOrderId, orderIds)
-                .orderByDesc(Evaluation::getCreateTime);
+                .orderByDesc(Evaluation::getCreatedAt);
 
         IPage<Evaluation> evaluationPage = page(page, wrapper);
         return evaluationPage.convert(evaluation -> convertToVO(evaluation, false));
@@ -430,12 +433,12 @@ public class EvaluationServiceImpl extends ServiceImpl<EvaluationMapper, Evaluat
 
         // 按评价人筛选
         if (fromUserId != null) {
-            queryWrapper.eq(Evaluation::getFromUserId, fromUserId);
+            queryWrapper.eq(Evaluation::getEvaluatorId, fromUserId);
         }
 
         // 按被评价人筛选
         if (toUserId != null) {
-            queryWrapper.eq(Evaluation::getToUserId, toUserId);
+            queryWrapper.eq(Evaluation::getTargetUserId, toUserId);
         }
 
         // 按订单筛选
@@ -445,7 +448,7 @@ public class EvaluationServiceImpl extends ServiceImpl<EvaluationMapper, Evaluat
 
         // 按评分筛选
         if (score != null) {
-            queryWrapper.eq(Evaluation::getScore, score);
+            queryWrapper.eq(Evaluation::getRating, score);
         }
 
         // 按关键词筛选（评价内容）
@@ -455,10 +458,10 @@ public class EvaluationServiceImpl extends ServiceImpl<EvaluationMapper, Evaluat
 
         // 按时间范围筛选
         if (startTime != null && !startTime.isEmpty() && endTime != null && !endTime.isEmpty()) {
-            queryWrapper.between(Evaluation::getCreateTime, startTime, endTime);
+            queryWrapper.between(Evaluation::getCreatedAt, startTime, endTime);
         }
 
-        queryWrapper.orderByDesc(Evaluation::getCreateTime);
+        queryWrapper.orderByDesc(Evaluation::getCreatedAt);
 
         IPage<Evaluation> evaluationPage = page(page, queryWrapper);
         return evaluationPage.convert(evaluation -> convertToVO(evaluation, false));
@@ -517,7 +520,7 @@ public class EvaluationServiceImpl extends ServiceImpl<EvaluationMapper, Evaluat
         }
 
         return evaluations.stream()
-                .mapToInt(Evaluation::getScore)
+                .mapToInt(Evaluation::getRating)
                 .average()
                 .orElse(0.0);
     }

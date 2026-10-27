@@ -25,9 +25,9 @@ public class Admin implements Serializable {
     /**
      * 管理员ID（雪花ID）
      */
-    @TableId(type = IdType.ASSIGN_ID)
+    @TableId(value = "admin_id", type = IdType.ASSIGN_ID)
     @JsonSerialize(using = ToStringSerializer.class)
-    private Long id;
+    private Long adminId;
 
     /**
      * 用户名
@@ -68,11 +68,11 @@ public class Admin implements Serializable {
      * 创建时间
      */
     @TableField(fill = FieldFill.INSERT)
-    private LocalDateTime createTime;
+    private LocalDateTime createdAt;
 
     /**
      * 更新时间
      */
     @TableField(fill = FieldFill.INSERT_UPDATE)
-    private LocalDateTime updateTime;
+    private LocalDateTime updatedAt;
 }

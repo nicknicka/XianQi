@@ -86,7 +86,7 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
             if (session == null) {
                 throw new BusinessException(ErrorCode.BAD_REQUEST, "秒杀场次不存在");
             }
-            if (session.getEnabled() == null || session.getEnabled() != 1) {
+            if (session.getStatus() == null || session.getStatus() != 1) {
                 throw new BusinessException(ErrorCode.BAD_REQUEST, "秒杀场次未启用");
             }
 

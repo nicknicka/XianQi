@@ -22,10 +22,10 @@ public class FlashSaleOrderExt implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @TableId(type = IdType.ASSIGN_ID)
-    @Schema(description = "主键ID")
+    @TableId(value = "ext_id", type = IdType.ASSIGN_ID)
+    @Schema(description = "扩展记录ID")
     @JsonSerialize(using = ToStringSerializer.class)
-    private Long id;
+    private Long extId;
 
     @Schema(description = "订单ID")
     @JsonSerialize(using = ToStringSerializer.class)
@@ -41,7 +41,7 @@ public class FlashSaleOrderExt implements Serializable {
 
     @Schema(description = "秒杀场次ID")
     @JsonSerialize(using = ToStringSerializer.class)
-    private Long sessionId;
+    private Long flashSaleId;
 
     @Schema(description = "秒杀成交价")
     private BigDecimal flashPrice;
@@ -56,8 +56,5 @@ public class FlashSaleOrderExt implements Serializable {
     private String clientIp;
 
     @Schema(description = "创建时间")
-    private LocalDateTime createTime;
-
-    @Schema(description = "更新时间")
-    private LocalDateTime updateTime;
+    private LocalDateTime createdAt;
 }

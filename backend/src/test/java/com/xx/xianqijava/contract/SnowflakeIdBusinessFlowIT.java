@@ -13,13 +13,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.core.io.FileSystemResource;
-import org.springframework.jdbc.datasource.init.ScriptUtils;
 
 import javax.sql.DataSource;
 import java.math.BigDecimal;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.sql.Connection;
 import java.sql.Statement;
 import java.util.concurrent.ThreadLocalRandom;
@@ -70,11 +66,8 @@ class SnowflakeIdBusinessFlowIT {
     @BeforeAll
     void initSchema() throws Exception {
         // schema.sql 是结构真源；用真实基线建表，避免手写 DDL 与实体漂移。
-        Path schema = Path.of("..", "sql", "schema.sql").normalize();
-        assertTrue(Files.exists(schema), "schema.sql must be reachable from backend/: " + schema);
-        try (Connection conn = dataSource.getConnection()) {
-            ScriptUtils.executeSqlScript(conn, new FileSystemResource(schema));
-        }
+        // 多个 IT 类共享同一初始化，见 TestSchemaSupport。
+        TestSchemaSupport.ensureSchema(dataSource);
     }
 
     @AfterAll

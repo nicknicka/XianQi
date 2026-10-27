@@ -1,6 +1,7 @@
 package com.xx.xianqijava.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -23,9 +24,10 @@ public class OperationLog {
     @JsonSerialize(using = ToStringSerializer.class)
     private Long logId;
 
-    @Schema(description = "操作用户ID（0表示系统操作）")
+    @TableField("admin_id")
+    @Schema(description = "操作管理员ID（null 表示非管理员/系统操作）")
     @JsonSerialize(using = ToStringSerializer.class)
-    private Long userId;
+    private Long adminId;
 
     @Schema(description = "用户名")
     private String username;
@@ -74,5 +76,5 @@ public class OperationLog {
     private String errorMessage;
 
     @Schema(description = "操作时间")
-    private LocalDateTime createTime;
+    private LocalDateTime createdAt;
 }

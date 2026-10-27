@@ -14,7 +14,7 @@ public interface OperationLogService extends IService<OperationLog> {
     /**
      * 记录操作日志
      *
-     * @param userId          用户ID
+     * @param adminId         管理员ID（非管理员/系统操作传 null）
      * @param username        用户名
      * @param module          操作模块
      * @param action          操作类型
@@ -30,7 +30,7 @@ public interface OperationLogService extends IService<OperationLog> {
      * @param bizId           业务对象ID（可选）
      * @param bizType         业务对象类型（可选）
      */
-    void recordLog(Long userId, String username, String module, String action,
+    void recordLog(Long adminId, String username, String module, String action,
                    String description, String requestMethod, String requestUrl,
                    String requestParams, String ipAddress, String userAgent,
                    Long executeTime, Integer status, String errorMessage,
@@ -40,7 +40,7 @@ public interface OperationLogService extends IService<OperationLog> {
      * 获取操作日志列表
      *
      * @param page        分页参数
-     * @param userId      用户ID（可选）
+     * @param adminId     管理员ID（可选）
      * @param module      模块（可选）
      * @param action      操作类型（可选）
      * @param status      状态（可选）
@@ -48,17 +48,17 @@ public interface OperationLogService extends IService<OperationLog> {
      * @param endTime     结束时间（可选）
      * @return 操作日志列表
      */
-    IPage<OperationLogVO> getLogList(Page<OperationLog> page, Long userId, String module,
+    IPage<OperationLogVO> getLogList(Page<OperationLog> page, Long adminId, String module,
                                      String action, Integer status, String startTime, String endTime);
 
     /**
      * 获取我的操作日志
      *
      * @param page   分页参数
-     * @param userId 用户ID
+     * @param adminId 管理员ID
      * @return 操作日志列表
      */
-    IPage<OperationLogVO> getMyLogs(Page<OperationLog> page, Long userId);
+    IPage<OperationLogVO> getMyLogs(Page<OperationLog> page, Long adminId);
 
     /**
      * 获取订单操作日志
