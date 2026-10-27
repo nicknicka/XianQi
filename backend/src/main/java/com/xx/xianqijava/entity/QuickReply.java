@@ -41,4 +41,7 @@ public class QuickReply {
 
     @Schema(description = "创建时间")
     private LocalDateTime createdAt;
+
+    @Schema(description = "更新时间")
+    private LocalDateTime updatedAt;
 }

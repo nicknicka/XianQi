@@ -80,10 +80,10 @@
                 {{ formatTime(row.endTime) }}
               </template>
             </el-table-column>
-            <el-table-column prop="enabled" label="状态" width="100">
+            <el-table-column prop="status" label="状态" width="100">
               <template #default="{ row }">
-                <el-tag :type="row.enabled === 1 ? 'success' : 'info'">
-                  {{ row.enabled === 1 ? '启用' : '禁用' }}
+                <el-tag :type="row.status === 1 ? 'success' : 'info'">
+                  {{ row.status === 1 ? '启用' : '禁用' }}
                 </el-tag>
               </template>
             </el-table-column>
@@ -91,10 +91,10 @@
               <template #default="{ row }">
                 <el-button
                   link
-                  :type="row.enabled === 1 ? 'warning' : 'success'"
+                  :type="row.status === 1 ? 'warning' : 'success'"
                   @click="toggleSession(row.sessionId)"
                 >
-                  {{ row.enabled === 1 ? '禁用' : '启用' }}
+                  {{ row.status === 1 ? '禁用' : '启用' }}
                 </el-button>
               </template>
             </el-table-column>

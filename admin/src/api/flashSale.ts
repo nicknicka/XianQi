@@ -28,7 +28,7 @@ export interface FlashSaleSession {
   endTime: string
   sortOrder: number
   sessionType: number // 1-固定场次，2-临时场次
-  enabled: number // 0-禁用，1-启用
+  status: number // 0-停用，1-启用
   createTime?: string
 }
 
