@@ -1,22 +1,14 @@
 package com.xx.xianqijava.contract;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.xx.xianqijava.entity.Category;
-import com.xx.xianqijava.entity.Product;
 import com.xx.xianqijava.entity.ProductFavorite;
 import com.xx.xianqijava.entity.ProductImage;
 import com.xx.xianqijava.entity.ProductStatistics;
-import com.xx.xianqijava.entity.ShareItem;
 import com.xx.xianqijava.entity.ShareItemImage;
-import com.xx.xianqijava.entity.User;
-import com.xx.xianqijava.mapper.CategoryMapper;
 import com.xx.xianqijava.mapper.ProductFavoriteMapper;
 import com.xx.xianqijava.mapper.ProductImageMapper;
-import com.xx.xianqijava.mapper.ProductMapper;
 import com.xx.xianqijava.mapper.ProductStatisticsMapper;
 import com.xx.xianqijava.mapper.ShareItemImageMapper;
-import com.xx.xianqijava.mapper.ShareItemMapper;
-import com.xx.xianqijava.mapper.UserMapper;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -59,19 +51,7 @@ class ProductAttachmentColumnIT {
     private DataSource dataSource;
 
     @Autowired
-    private UserMapper userMapper;
-
-    @Autowired
-    private CategoryMapper categoryMapper;
-
-    @Autowired
-    private ProductMapper productMapper;
-
-    @Autowired
     private ProductImageMapper productImageMapper;
-
-    @Autowired
-    private ShareItemMapper shareItemMapper;
 
     @Autowired
     private ShareItemImageMapper shareItemImageMapper;
@@ -82,40 +62,18 @@ class ProductAttachmentColumnIT {
     @Autowired
     private ProductStatisticsMapper productStatisticsMapper;
 
+    private TestParentFixtureFactory fixtures;
+
     @BeforeAll
     void initSchema() throws Exception {
-        TestSchemaSupport.ensureSchema(dataSource);
-
-        User seller = new User();
-        seller.setUserId(USER_ID);
-        seller.setUsername("col_pa_" + RUN_ID);
-        seller.setPassword("testpass");
-        seller.setNickname("附属契约用户");
-        seller.setPhone("137" + RUN_ID);
-        userMapper.insert(seller);
-
-        Category category = new Category();
-        category.setCategoryId(CATEGORY_ID);
-        category.setName("附属契约分类");
-        category.setCode("pa_" + RUN_ID);
-        category.setStatus(1);
-        categoryMapper.insert(category);
-
-        Product product = new Product();
-        product.setProductId(PRODUCT_ID);
-        product.setSellerId(USER_ID);
-        product.setCategoryId(CATEGORY_ID);
-        product.setTitle("附属契约商品 " + RUN_ID);
-        product.setPrice(new BigDecimal("1.00"));
-        productMapper.insert(product);
+        fixtures = TestParentFixtureFactory.prepare(dataSource);
+        fixtures.user(USER_ID, "col_pa_" + RUN_ID, "137" + RUN_ID);
+        fixtures.category(CATEGORY_ID, "附属契约分类", "pa_" + RUN_ID);
+        fixtures.product(PRODUCT_ID, USER_ID, CATEGORY_ID,
+            "附属契约商品 " + RUN_ID, new BigDecimal("1.00"));
 
         // share_item_image.share_id 有外键指向 share_item
-        ShareItem shareItem = new ShareItem();
-        shareItem.setShareId(SHARE_ID);
-        shareItem.setOwnerId(USER_ID);
-        shareItem.setTitle("附属契约共享 " + RUN_ID);
-        shareItem.setCategoryId(CATEGORY_ID);
-        shareItemMapper.insert(shareItem);
+        fixtures.shareItem(SHARE_ID, USER_ID, CATEGORY_ID, "附属契约共享 " + RUN_ID);
     }
 
     @AfterAll

@@ -1,6 +1,7 @@
 package com.xx.xianqijava.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -43,6 +44,7 @@ public class LoginDevice extends BaseEntity {
     @Schema(description = "设备唯一标识")
     private String deviceIdentifier;
 
+    @TableField("login_ip")
     @Schema(description = "最后登录IP")
     private String lastLoginIp;
 

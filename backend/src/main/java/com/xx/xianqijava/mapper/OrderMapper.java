@@ -29,6 +29,6 @@ public interface OrderMapper extends BaseMapper<Order> {
      * @param status 订单状态
      * @return 订单总金额
      */
-    @Select("SELECT COALESCE(SUM(amount), 0) FROM `order` WHERE create_time >= #{dateTime} AND status = #{status}")
+    @Select("SELECT COALESCE(SUM(amount), 0) FROM `order` WHERE created_at >= #{dateTime} AND status = #{status}")
     BigDecimal sumAmountAfter(@Param("dateTime") LocalDateTime dateTime, @Param("status") Integer status);
 }

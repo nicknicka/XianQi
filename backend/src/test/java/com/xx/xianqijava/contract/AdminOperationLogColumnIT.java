@@ -54,17 +54,13 @@ class AdminOperationLogColumnIT {
     @Autowired
     private OperationLogMapper operationLogMapper;
 
+    private TestParentFixtureFactory fixtures;
+
     @BeforeAll
     void initSchema() throws Exception {
-        TestSchemaSupport.ensureSchema(dataSource);
+        fixtures = TestParentFixtureFactory.prepare(dataSource);
         // operation_log / admin_login_log 的 admin_id 有外键指向 admin，先落一条管理员。
-        Admin admin = new Admin();
-        admin.setAdminId(ADMIN_ID);
-        admin.setUsername(ADMIN_USERNAME);
-        admin.setPassword("bcrypt-placeholder");
-        admin.setNickname("列名契约管理员");
-        admin.setIsActive(1);
-        adminMapper.insert(admin);
+        fixtures.admin(ADMIN_ID, ADMIN_USERNAME);
     }
 
     @AfterAll

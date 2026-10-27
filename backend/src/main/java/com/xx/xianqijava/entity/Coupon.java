@@ -1,9 +1,10 @@
 package com.xx.xianqijava.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.TableLogic;
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -74,9 +75,11 @@ public class Coupon extends BaseEntity {
     @Schema(description = "适用商品ID（JSON数组）")
     private String productIds;
 
+    @TableField("valid_start_time")
     @Schema(description = "有效开始时间")
     private LocalDateTime validFrom;
 
+    @TableField("valid_end_time")
     @Schema(description = "有效结束时间")
     private LocalDateTime validTo;
 

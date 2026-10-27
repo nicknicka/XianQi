@@ -1,9 +1,10 @@
 package com.xx.xianqijava.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.TableLogic;
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -44,6 +45,7 @@ public class FlashSaleSessionTemplate extends BaseEntity {
     @Schema(description = "排序权重")
     private Integer sortOrder;
 
+    @TableField("status")
     @Schema(description = "是否启用：0-禁用，1-启用")
     private Integer isEnabled;
 }

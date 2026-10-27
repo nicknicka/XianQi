@@ -1,16 +1,8 @@
 package com.xx.xianqijava.contract;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.xx.xianqijava.entity.Category;
-import com.xx.xianqijava.entity.Order;
 import com.xx.xianqijava.entity.OrderLog;
-import com.xx.xianqijava.entity.Product;
-import com.xx.xianqijava.entity.User;
-import com.xx.xianqijava.mapper.CategoryMapper;
 import com.xx.xianqijava.mapper.OrderLogMapper;
-import com.xx.xianqijava.mapper.OrderMapper;
-import com.xx.xianqijava.mapper.ProductMapper;
-import com.xx.xianqijava.mapper.UserMapper;
 import com.xx.xianqijava.service.OrderLogService;
 import com.xx.xianqijava.vo.OrderLogVO;
 import org.junit.jupiter.api.AfterAll;
@@ -52,64 +44,23 @@ class OrderLogColumnIT {
     private DataSource dataSource;
 
     @Autowired
-    private UserMapper userMapper;
-
-    @Autowired
-    private CategoryMapper categoryMapper;
-
-    @Autowired
-    private ProductMapper productMapper;
-
-    @Autowired
-    private OrderMapper orderMapper;
-
-    @Autowired
     private OrderLogMapper orderLogMapper;
 
     @Autowired
     private OrderLogService orderLogService;
 
+    private TestParentFixtureFactory fixtures;
+
     @BeforeAll
     void initSchema() throws Exception {
-        TestSchemaSupport.ensureSchema(dataSource);
-
-        userMapper.insert(buildUser(BUYER_ID, "ol_buyer_" + RUN_ID, "133" + RUN_ID));
-        userMapper.insert(buildUser(SELLER_ID, "ol_seller_" + RUN_ID, "132" + RUN_ID));
-
-        Category category = new Category();
-        category.setCategoryId(CATEGORY_ID);
-        category.setName("订单日志契约分类");
-        category.setCode("ol_" + RUN_ID);
-        category.setStatus(1);
-        categoryMapper.insert(category);
-
-        Product product = new Product();
-        product.setProductId(PRODUCT_ID);
-        product.setSellerId(SELLER_ID);
-        product.setCategoryId(CATEGORY_ID);
-        product.setTitle("订单日志契约商品 " + RUN_ID);
-        product.setPrice(new BigDecimal("12.00"));
-        productMapper.insert(product);
-
-        Order order = new Order();
-        order.setOrderId(ORDER_ID);
-        order.setOrderNo("OL" + RUN_ID);
-        order.setBuyerId(BUYER_ID);
-        order.setSellerId(SELLER_ID);
-        order.setProductId(PRODUCT_ID);
-        order.setType(1);
-        order.setAmount(new BigDecimal("12.00"));
-        orderMapper.insert(order);
-    }
-
-    private User buildUser(Long userId, String username, String phone) {
-        User user = new User();
-        user.setUserId(userId);
-        user.setUsername(username);
-        user.setPassword("testpass");
-        user.setNickname(username);
-        user.setPhone(phone);
-        return user;
+        fixtures = TestParentFixtureFactory.prepare(dataSource);
+        fixtures.user(BUYER_ID, "ol_buyer_" + RUN_ID, "133" + RUN_ID);
+        fixtures.user(SELLER_ID, "ol_seller_" + RUN_ID, "132" + RUN_ID);
+        fixtures.category(CATEGORY_ID, "订单日志契约分类", "ol_" + RUN_ID);
+        fixtures.product(PRODUCT_ID, SELLER_ID, CATEGORY_ID,
+            "订单日志契约商品 " + RUN_ID, new BigDecimal("12.00"));
+        fixtures.order(ORDER_ID, "OL" + RUN_ID, BUYER_ID, SELLER_ID, PRODUCT_ID,
+            new BigDecimal("12.00"));
     }
 
     @AfterAll

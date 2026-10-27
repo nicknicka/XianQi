@@ -1,6 +1,7 @@
 package com.xx.xianqijava.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -65,6 +66,7 @@ public class RefundRecord extends BaseEntity {
     @Schema(description = "备注")
     private String remark;
 
+    @TableField("process_time")
     @Schema(description = "完成时间")
     private LocalDateTime finishTime;
 }

@@ -1,12 +1,8 @@
 package com.xx.xianqijava.contract;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.xx.xianqijava.entity.Category;
 import com.xx.xianqijava.entity.Product;
-import com.xx.xianqijava.entity.User;
-import com.xx.xianqijava.mapper.CategoryMapper;
 import com.xx.xianqijava.mapper.ProductMapper;
-import com.xx.xianqijava.mapper.UserMapper;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -52,32 +48,15 @@ class ProductMapperSortIT {
     private DataSource dataSource;
 
     @Autowired
-    private UserMapper userMapper;
-
-    @Autowired
-    private CategoryMapper categoryMapper;
-
-    @Autowired
     private ProductMapper productMapper;
+
+    private TestParentFixtureFactory fixtures;
 
     @BeforeAll
     void initSchema() throws Exception {
-        TestSchemaSupport.ensureSchema(dataSource);
-
-        User seller = new User();
-        seller.setUserId(SELLER_ID);
-        seller.setUsername("sort_" + RUN_ID);
-        seller.setPassword("testpass");
-        seller.setNickname("排序契约卖家");
-        seller.setPhone("134" + RUN_ID);
-        userMapper.insert(seller);
-
-        Category category = new Category();
-        category.setCategoryId(CATEGORY_ID);
-        category.setName("排序契约分类");
-        category.setCode("sort_" + RUN_ID);
-        category.setStatus(1);
-        categoryMapper.insert(category);
+        fixtures = TestParentFixtureFactory.prepare(dataSource);
+        fixtures.user(SELLER_ID, "sort_" + RUN_ID, "134" + RUN_ID);
+        fixtures.category(CATEGORY_ID, "排序契约分类", "sort_" + RUN_ID);
 
         // created_at 与 price 刻意反向，区分按时间排序与按价格排序。
         insertProduct(CHEAPEST_OLDEST, "最旧最便宜", "10.00", LocalDateTime.now().minusDays(3));
@@ -85,16 +64,10 @@ class ProductMapperSortIT {
         insertProduct(PRICIEST_NEWEST, "最新最贵", "30.00", LocalDateTime.now().minusDays(1));
     }
 
-    private void insertProduct(Long productId, String label, String price, LocalDateTime createdAt) {
-        Product product = new Product();
-        product.setProductId(productId);
-        product.setSellerId(SELLER_ID);
-        product.setCategoryId(CATEGORY_ID);
-        product.setTitle(TITLE_PREFIX + label);
-        product.setPrice(new BigDecimal(price));
-        product.setStatus(1);
-        product.setCreatedAt(createdAt);
-        productMapper.insert(product);
+    private void insertProduct(Long productId, String label, String price, LocalDateTime createdAt)
+        throws Exception {
+        fixtures.product(productId, SELLER_ID, CATEGORY_ID, TITLE_PREFIX + label,
+            new BigDecimal(price), createdAt);
     }
 
     @AfterAll
