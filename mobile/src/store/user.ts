@@ -4,7 +4,7 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import storage from '@/utils/storage'
-import { extractUserIdFromToken } from '@/utils/id'
+import { decodeTokenPayload, extractUserIdFromToken } from '@/utils/id'
 
 interface UserInfo {
   id?: string
@@ -63,17 +63,9 @@ export const useUserStore = defineStore('user', () => {
       try {
         const parts = token.value.split('.')
         if (parts.length === 3) {
-          const payload = parts[1]
-          const decoded = JSON.parse(
-            decodeURIComponent(
-              atob(payload)
-                .split('')
-                .map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
-                .join('')
-            )
-          )
+          const decoded = decodeTokenPayload(token.value)
           // 检查过期时间
-          if (decoded.exp) {
+          if (typeof decoded.exp === 'number') {
             const now = Math.floor(Date.now() / 1000)
             tokenValid = decoded.exp >= now
           } else {
@@ -136,16 +128,8 @@ export const useUserStore = defineStore('user', () => {
       try {
         const parts = newToken.split('.')
         if (parts.length === 3) {
-          const payload = parts[1]
-          const decoded = JSON.parse(
-            decodeURIComponent(
-              atob(payload)
-                .split('')
-                .map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
-                .join('')
-            )
-          )
-          if (decoded.exp) {
+          const decoded = decodeTokenPayload(newToken)
+          if (typeof decoded.exp === 'number') {
             tokenExpireTime.value = decoded.exp * 1000
             storage.set('tokenExpireTime', tokenExpireTime.value)
           }
@@ -265,18 +249,10 @@ export const useUserStore = defineStore('user', () => {
       }
 
       // 解析 Payload
-      const payload = parts[1]
-      const decoded = JSON.parse(
-        decodeURIComponent(
-          atob(payload)
-            .split('')
-            .map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
-            .join('')
-        )
-      )
+      const decoded = decodeTokenPayload(token.value)
 
       // 检查过期时间
-      if (decoded.exp) {
+      if (typeof decoded.exp === 'number') {
         const now = Math.floor(Date.now() / 1000)
         if (decoded.exp < now) {
           console.warn('[UserStore] Token 已过期')
