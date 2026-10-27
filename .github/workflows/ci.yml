@@ -262,7 +262,7 @@ jobs:
           MYSQL_PWD: root_password
         run: |
           docker exec -i -e MYSQL_PWD="${MYSQL_PWD}" xianqi-fresh-mysql mysql -uroot -N -B Xianqi > /tmp/fresh-init-contract.tsv <<'SQL'
-          SELECT 'table_count', 48, COUNT(*)
+          SELECT 'table_count', 49, COUNT(*)
           FROM information_schema.TABLES
           WHERE TABLE_SCHEMA = 'Xianqi' AND TABLE_TYPE = 'BASE TABLE';
 
@@ -270,7 +270,7 @@ jobs:
           FROM information_schema.VIEWS
           WHERE TABLE_SCHEMA = 'Xianqi';
 
-          SELECT 'foreign_key_count', 69, COUNT(*)
+          SELECT 'foreign_key_count', 71, COUNT(*)
           FROM information_schema.REFERENTIAL_CONSTRAINTS
           WHERE CONSTRAINT_SCHEMA = 'Xianqi';
 

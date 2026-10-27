@@ -7,10 +7,10 @@ import com.xx.xianqijava.common.ErrorCode;
 import com.xx.xianqijava.dto.OrderCreateDTO;
 import com.xx.xianqijava.entity.Order;
 import com.xx.xianqijava.exception.BusinessException;
-import com.xx.xianqijava.service.OperationLogService;
+import com.xx.xianqijava.service.OrderLogService;
 import com.xx.xianqijava.service.OrderService;
 import com.xx.xianqijava.util.SecurityUtil;
-import com.xx.xianqijava.vo.OperationLogVO;
+import com.xx.xianqijava.vo.OrderLogVO;
 import com.xx.xianqijava.vo.OrderVO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -33,7 +33,7 @@ import java.util.List;
 public class OrderController {
 
     private final OrderService orderService;
-    private final OperationLogService operationLogService;
+    private final OrderLogService orderLogService;
 
     /**
      * 创建订单
@@ -171,12 +171,12 @@ public class OrderController {
      */
     @GetMapping("/{id}/logs")
     @Operation(summary = "获取订单操作日志")
-    public Result<List<OperationLogVO>> getOrderLogs(
+    public Result<List<OrderLogVO>> getOrderLogs(
             @Parameter(description = "订单ID") @PathVariable("id") String id) {
         Long userId = SecurityUtil.getCurrentUserIdRequired();
         Long orderId = Long.parseLong(id);
         log.info("获取订单操作日志, orderId={}, userId={}", orderId, userId);
-        List<OperationLogVO> logs = operationLogService.getOrderLogs(orderId);
+        List<OrderLogVO> logs = orderLogService.getOrderLogs(orderId);
         return Result.success(logs);
     }
 }

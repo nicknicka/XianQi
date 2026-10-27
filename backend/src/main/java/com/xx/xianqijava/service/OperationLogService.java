@@ -27,14 +27,11 @@ public interface OperationLogService extends IService<OperationLog> {
      * @param executeTime     执行时长
      * @param status          执行状态
      * @param errorMessage    错误信息
-     * @param bizId           业务对象ID（可选）
-     * @param bizType         业务对象类型（可选）
      */
     void recordLog(Long adminId, String username, String module, String action,
                    String description, String requestMethod, String requestUrl,
                    String requestParams, String ipAddress, String userAgent,
-                   Long executeTime, Integer status, String errorMessage,
-                   Long bizId, String bizType);
+                   Long executeTime, Integer status, String errorMessage);
 
     /**
      * 获取操作日志列表
@@ -59,14 +56,6 @@ public interface OperationLogService extends IService<OperationLog> {
      * @return 操作日志列表
      */
     IPage<OperationLogVO> getMyLogs(Page<OperationLog> page, Long adminId);
-
-    /**
-     * 获取订单操作日志
-     *
-     * @param orderId 订单ID
-     * @return 订单操作日志列表
-     */
-    java.util.List<OperationLogVO> getOrderLogs(Long orderId);
 
     /**
      * 清理过期日志
