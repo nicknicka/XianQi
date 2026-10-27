@@ -7,6 +7,20 @@ on:
     branches: [ main ]
 
 jobs:
+  # ---------- 文档契约 ----------
+  adr-contract:
+    name: ADR Contract
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Check ADR uniqueness and references
+        run: |
+          node scripts/check-adr.mjs
+          node --test scripts/tests/adr-contract-test.mjs
+
   # ---------- 后端单元测试 ----------
   backend-unit-test:
     name: Backend Unit Tests
