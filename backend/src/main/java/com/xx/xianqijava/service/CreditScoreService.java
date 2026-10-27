@@ -44,9 +44,6 @@ public class CreditScoreService {
     @Autowired
     private EvaluationMapper evaluationMapper;
 
-    @Autowired
-    private UserCreditExtMapper userCreditExtMapper;
-
     /**
      * 处理交易完成后的信用分变化
      */
@@ -374,7 +371,7 @@ public class CreditScoreService {
 
         // 更新扩展表的信用等级
         String creditLevel = calculateCreditLevel(scoreAfter);
-        userCreditExtMapper.updateCreditLevel(Long.parseLong(userId), creditLevel);
+        userMapper.updateCreditLevel(Long.parseLong(userId), creditLevel);
 
         // 记录变化
         CreditRecord record = new CreditRecord();
@@ -515,7 +512,7 @@ public class CreditScoreService {
         );
 
         // 更新扩展表的评价统计
-        userCreditExtMapper.updateEvaluationStats(
+        userMapper.updateEvaluationStats(
             Long.parseLong(userId),
             (int) positiveCount,
             (int) neutralCount,
@@ -532,18 +529,15 @@ public class CreditScoreService {
             throw new RuntimeException("用户不存在");
         }
 
-        // 获取扩展表信息
-        UserCreditExt creditExt = userCreditExtMapper.getByUserId(Long.parseLong(userId));
-
         CreditDetailVO detail = new CreditDetailVO();
         detail.setCreditScore(user.getCreditScore());
-        detail.setCreditLevel(creditExt != null ? creditExt.getCreditLevel() : "normal");
+        detail.setCreditLevel(user.getCreditLevel() != null ? user.getCreditLevel() : "normal");
         detail.setCreditLevelText(getCreditLevelText(user.getCreditScore()));
 
-        // 评价统计（从扩展表获取）
-        detail.setPositiveCount(creditExt != null ? creditExt.getTotalPositiveEvaluations() : 0);
-        detail.setNeutralCount(creditExt != null ? creditExt.getTotalNeutralEvaluations() : 0);
-        detail.setNegativeCount(creditExt != null ? creditExt.getTotalNegativeEvaluations() : 0);
+        // 评价统计（已合并进 user 表）
+        detail.setPositiveCount(user.getTotalPositiveEvaluations() != null ? user.getTotalPositiveEvaluations() : 0);
+        detail.setNeutralCount(user.getTotalNeutralEvaluations() != null ? user.getTotalNeutralEvaluations() : 0);
+        detail.setNegativeCount(user.getTotalNegativeEvaluations() != null ? user.getTotalNegativeEvaluations() : 0);
         int totalEvaluations = detail.getPositiveCount() +
             detail.getNeutralCount() + detail.getNegativeCount();
         detail.setTotalEvaluations(totalEvaluations);

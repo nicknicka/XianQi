@@ -1,6 +1,6 @@
 package com.xx.xianqijava.service;
 
-import com.xx.xianqijava.mapper.UserCreditExtMapper;
+import com.xx.xianqijava.mapper.UserMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 public class UserActiveService {
 
     @Autowired
-    private UserCreditExtMapper userCreditExtMapper;
+    private UserMapper userMapper;
 
     /**
      * 更新用户最后活跃时间
@@ -27,7 +27,7 @@ public class UserActiveService {
         }
 
         try {
-            int updated = userCreditExtMapper.updateLastActiveTime(userId, LocalDateTime.now());
+            int updated = userMapper.updateLastActiveTime(userId, LocalDateTime.now());
             if (updated > 0) {
                 log.debug("用户 {} 活跃时间已更新", userId);
             }

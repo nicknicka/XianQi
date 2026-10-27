@@ -9,12 +9,14 @@ import com.xx.xianqijava.service.StatisticsService;
 import com.xx.xianqijava.vo.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -37,7 +39,7 @@ public class StatisticsServiceImpl implements StatisticsService {
     private final SystemNotificationMapper systemNotificationMapper;
     private final UserFeedbackMapper userFeedbackMapper;
     private final ReportMapper reportMapper;
-    private final StatisticsCacheMapper statisticsCacheMapper;
+    private final StringRedisTemplate redisTemplate;
     private final ObjectMapper objectMapper;
 
     @Override
@@ -164,23 +166,12 @@ public class StatisticsServiceImpl implements StatisticsService {
         LocalDate targetDate = date != null ? date : LocalDate.now().minusDays(1);
         StatisticsVO overview = getOverviewStatistics();
 
-        StatisticsCache cache = new StatisticsCache();
-        cache.setCacheKey("daily_statistics:" + targetDate);
-        cache.setCacheData(writeDailyStatistics(targetDate, overview));
-        cache.setExpireTime(targetDate.plusDays(30).atTime(LocalTime.MAX));
+        // 每日统计快照写入 Redis，保留 30 天（无需 statistics_cache 表）
+        String cacheKey = "daily_statistics:" + targetDate;
+        String cacheValue = writeDailyStatistics(targetDate, overview);
+        redisTemplate.opsForValue().set(cacheKey, cacheValue, Duration.ofDays(30));
 
-        LambdaQueryWrapper<StatisticsCache> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(StatisticsCache::getCacheKey, cache.getCacheKey());
-        StatisticsCache existing = statisticsCacheMapper.selectOne(wrapper);
-
-        if (existing == null) {
-            statisticsCacheMapper.insert(cache);
-        } else {
-            existing.setCacheData(cache.getCacheData());
-            existing.setExpireTime(cache.getExpireTime());
-            statisticsCacheMapper.updateById(existing);
-        }
-        log.info("每日统计缓存已生成, date={}", targetDate);
+        log.info("每日统计缓存已生成（Redis）, date={}", targetDate);
     }
 
     // ==================== 私有辅助方法 ====================
