@@ -77,7 +77,7 @@ public class RecommendationServiceImpl implements RecommendationService {
         // 1. 获取用户收藏的商品
         LambdaQueryWrapper<ProductFavorite> favoriteWrapper = new LambdaQueryWrapper<>();
         favoriteWrapper.eq(ProductFavorite::getUserId, userId)
-                .orderByDesc(ProductFavorite::getCreateTime);
+                .orderByDesc(ProductFavorite::getCreatedAt);
 
         List<ProductFavorite> favoriteList = productFavoriteService.list(favoriteWrapper);
         if (favoriteList.isEmpty()) {

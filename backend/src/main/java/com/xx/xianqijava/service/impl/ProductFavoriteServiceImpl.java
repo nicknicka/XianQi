@@ -105,7 +105,7 @@ public class ProductFavoriteServiceImpl extends ServiceImpl<ProductFavoriteMappe
         IPage<ProductFavorite> favoritePage = baseMapper.selectPage(page,
                 new LambdaQueryWrapper<ProductFavorite>()
                         .eq(ProductFavorite::getUserId, userId)
-                        .orderByDesc(ProductFavorite::getCreateTime));
+                        .orderByDesc(ProductFavorite::getCreatedAt));
 
         // 转换为ProductVO，过滤掉已删除的商品
         java.util.List<ProductVO> validProducts = favoritePage.getRecords().stream()

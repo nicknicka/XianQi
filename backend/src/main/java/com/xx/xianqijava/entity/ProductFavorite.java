@@ -32,5 +32,5 @@ public class ProductFavorite {
     private Long productId;
 
     @Schema(description = "收藏时间")
-    private LocalDateTime createTime;
+    private LocalDateTime createdAt;
 }

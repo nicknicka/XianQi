@@ -181,7 +181,7 @@ public class EvaluationServiceImpl extends ServiceImpl<EvaluationMapper, Evaluat
     public IPage<EvaluationVO> getOrderEvaluations(Long orderId, Page<Evaluation> page) {
         LambdaQueryWrapper<Evaluation> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(Evaluation::getOrderId, orderId)
-                .orderByDesc(Evaluation::getCreateTime);
+                .orderByDesc(Evaluation::getCreatedAt);
 
         IPage<Evaluation> evaluationPage = page(page, wrapper);
         return evaluationPage.convert(eval -> {
@@ -197,7 +197,7 @@ public class EvaluationServiceImpl extends ServiceImpl<EvaluationMapper, Evaluat
         // 查询用户收到的评价（作为被评价人）
         LambdaQueryWrapper<Evaluation> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(Evaluation::getToUserId, userId)
-                .orderByDesc(Evaluation::getCreateTime);
+                .orderByDesc(Evaluation::getCreatedAt);
 
         IPage<Evaluation> evaluationPage = page(page, wrapper);
         return evaluationPage.convert(eval -> {
@@ -212,7 +212,7 @@ public class EvaluationServiceImpl extends ServiceImpl<EvaluationMapper, Evaluat
     public IPage<EvaluationVO> getUserSentEvaluations(Long userId, Page<Evaluation> page) {
         LambdaQueryWrapper<Evaluation> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(Evaluation::getFromUserId, userId)
-                .orderByDesc(Evaluation::getCreateTime);
+                .orderByDesc(Evaluation::getCreatedAt);
 
         IPage<Evaluation> evaluationPage = page(page, wrapper);
         return evaluationPage.convert(eval -> {
@@ -293,8 +293,8 @@ public class EvaluationServiceImpl extends ServiceImpl<EvaluationMapper, Evaluat
         vo.setAppendImages(parseJsonArray(evaluation.getAppendImages()));
         vo.setAppendTime(evaluation.getAppendTime());
         vo.setHasAppend(evaluation.getAppendTime() != null);
-        vo.setCreateTime(evaluation.getCreateTime());
-        vo.setCreatedAt(evaluation.getCreateTime());
+        vo.setCreateTime(evaluation.getCreatedAt());
+        vo.setCreatedAt(evaluation.getCreatedAt());
 
         // Set target type based on role
         vo.setTargetType(isBuyer ? 1 : 2);
@@ -414,7 +414,7 @@ public class EvaluationServiceImpl extends ServiceImpl<EvaluationMapper, Evaluat
         // 2. 查询这些订单的评价
         LambdaQueryWrapper<Evaluation> wrapper = new LambdaQueryWrapper<>();
         wrapper.in(Evaluation::getOrderId, orderIds)
-                .orderByDesc(Evaluation::getCreateTime);
+                .orderByDesc(Evaluation::getCreatedAt);
 
         IPage<Evaluation> evaluationPage = page(page, wrapper);
         return evaluationPage.convert(evaluation -> convertToVO(evaluation, false));
@@ -455,10 +455,10 @@ public class EvaluationServiceImpl extends ServiceImpl<EvaluationMapper, Evaluat
 
         // 按时间范围筛选
         if (startTime != null && !startTime.isEmpty() && endTime != null && !endTime.isEmpty()) {
-            queryWrapper.between(Evaluation::getCreateTime, startTime, endTime);
+            queryWrapper.between(Evaluation::getCreatedAt, startTime, endTime);
         }
 
-        queryWrapper.orderByDesc(Evaluation::getCreateTime);
+        queryWrapper.orderByDesc(Evaluation::getCreatedAt);
 
         IPage<Evaluation> evaluationPage = page(page, queryWrapper);
         return evaluationPage.convert(evaluation -> convertToVO(evaluation, false));

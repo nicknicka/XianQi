@@ -74,5 +74,5 @@ public class OperationLog {
     private String errorMessage;
 
     @Schema(description = "操作时间")
-    private LocalDateTime createTime;
+    private LocalDateTime createdAt;
 }

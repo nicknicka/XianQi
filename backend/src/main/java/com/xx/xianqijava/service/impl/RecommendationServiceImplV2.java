@@ -408,7 +408,7 @@ public class RecommendationServiceImplV2 {
     private List<ProductFavorite> getUserFavorites(Long userId) {
         LambdaQueryWrapper<ProductFavorite> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(ProductFavorite::getUserId, userId)
-                .orderByDesc(ProductFavorite::getCreateTime);
+                .orderByDesc(ProductFavorite::getCreatedAt);
         return productFavoriteService.list(wrapper);
     }
 

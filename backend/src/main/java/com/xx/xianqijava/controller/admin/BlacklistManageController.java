@@ -115,22 +115,22 @@ public class BlacklistManageController {
         LocalDateTime todayStart = LocalDateTime.now().toLocalDate().atStartOfDay();
         LocalDateTime todayEnd = todayStart.plusDays(1);
         long todayCount = blacklistService.lambdaQuery()
-                .ge(Blacklist::getCreateTime, todayStart)
-                .lt(Blacklist::getCreateTime, todayEnd)
+                .ge(Blacklist::getCreatedAt, todayStart)
+                .lt(Blacklist::getCreatedAt, todayEnd)
                 .count();
         statistics.put("todayCount", todayCount);
 
         // 本周新增
         LocalDateTime weekStart = LocalDateTime.now().minusDays(7);
         long weekCount = blacklistService.lambdaQuery()
-                .ge(Blacklist::getCreateTime, weekStart)
+                .ge(Blacklist::getCreatedAt, weekStart)
                 .count();
         statistics.put("weekCount", weekCount);
 
         // 本月新增
         LocalDateTime monthStart = LocalDateTime.now().minusDays(30);
         long monthCount = blacklistService.lambdaQuery()
-                .ge(Blacklist::getCreateTime, monthStart)
+                .ge(Blacklist::getCreatedAt, monthStart)
                 .count();
         statistics.put("monthCount", monthCount);
 

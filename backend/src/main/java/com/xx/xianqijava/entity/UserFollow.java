@@ -32,5 +32,5 @@ public class UserFollow {
     private Long followingId;
 
     @Schema(description = "关注时间")
-    private LocalDateTime createTime;
+    private LocalDateTime createdAt;
 }

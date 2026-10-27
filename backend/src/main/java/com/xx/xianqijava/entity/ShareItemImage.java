@@ -55,5 +55,5 @@ public class ShareItemImage {
     private Integer status;
 
     @Schema(description = "创建时间")
-    private LocalDateTime createTime;
+    private LocalDateTime createdAt;
 }
