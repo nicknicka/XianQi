@@ -44,6 +44,15 @@
 ./mvnw clean package -DskipTests
 ```
 
+### 5. 运行后端验证
+
+```bash
+# 从仓库根目录执行：自动启动隔离的 MySQL/Redis，运行全部测试与打包，然后清理容器
+./scripts/test-backend.sh
+```
+
+该命令与 CI 使用同一个脚本、同一组环境变量（`MYSQL_URL`、`MYSQL_USER`、`MYSQL_PASSWORD`、`REDIS_HOST`、`REDIS_PORT`）和同一个 Maven 目标 `--batch-mode verify`。测试容器使用独立的随机端口和项目名，不会读写本地开发数据库；无论成功或失败都会清理本次创建的容器。
+
 ## 环境变量
 
 以下变量均可省略并使用默认值；生产环境应显式配置敏感信息。
