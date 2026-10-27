@@ -22,7 +22,10 @@ jobs:
           node --test scripts/tests/adr-contract-test.mjs
 
       - name: GitHub wrapper contract tests
-        run: bash scripts/tests/gh-stable-test.bash
+        run: |
+          bash scripts/tests/gh-stable-test.bash
+          bash scripts/tests/gh-write-test.bash
+          node --test scripts/tests/safe-gh-body-check-test.mjs
 
   # ---------- 后端单元测试 ----------
   backend-unit-test:
