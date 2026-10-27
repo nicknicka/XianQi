@@ -19,6 +19,7 @@ snapshot() {
     find . -type f \
       -not -path './node_modules/*' \
       -not -path './dist/*' \
+      -not -name '.DS_Store' \
       -print0 | sort -z | xargs -0 shasum -a 256 ) | shasum -a 256 | awk '{print $1}'
 }
 
@@ -55,6 +56,22 @@ pass "不存在 .eslintrc*"
 ( cd "${ADMIN_DIR}" && npm run lint >/tmp/lint-gate-green.log 2>&1 ) \
   || { cat /tmp/lint-gate-green.log >&2; fail "基线 npm run lint 未通过"; }
 pass "基线 npm run lint 通过（绿，rc=0）"
+
+# 元数据稳定性：macOS 在 lint 期间生成或改写 .DS_Store 不应造成假失败。
+# 使用独立临时目录，不触碰用户真实元数据文件。
+metadata_probe() {
+  local probe_dir before after
+  probe_dir="$(mktemp -d "${ADMIN_DIR}/.lint-gate-meta.XXXXXX")"
+  printf 'probe-a\n' > "${probe_dir}/.DS_Store"
+  before="$(snapshot)"
+  printf 'probe-b\n' > "${probe_dir}/.DS_Store"
+  after="$(snapshot)"
+  find "${probe_dir}" -type f -delete
+  rmdir "${probe_dir}"
+  [ "${before}" = "${after}" ] || fail "snapshot 受 .DS_Store 等操作系统元数据影响"
+  pass "snapshot 忽略 macOS 元数据（含元数据时稳定）"
+}
+metadata_probe
 
 # 只读保证：lint 前后输入工作区校验和必须一致。
 BEFORE="$(snapshot)"
