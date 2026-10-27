@@ -11,7 +11,7 @@ export enum NotificationType {
 }
 
 export interface NotificationItem {
-  notificationId: number
+  notificationId: string
   title: string
   content: string
   type: NotificationType
@@ -19,8 +19,8 @@ export interface NotificationItem {
   isRead: boolean
   linkType?: number
   linkUrl?: string
-  linkProductId?: number
-  linkOrderId?: number
+  linkProductId?: string
+  linkOrderId?: string
   publishTime: string
   priority: number
 }
@@ -44,14 +44,14 @@ export const notificationApi = {
   /**
    * 获取通知详情（会自动标记为已读）
    */
-  getNotificationDetail(notificationId: number) {
+  getNotificationDetail(notificationId: string) {
     return http.get<NotificationItem>(`/notification/${notificationId}`)
   },
 
   /**
    * 标记单个通知为已读
    */
-  markAsRead(notificationId: number) {
+  markAsRead(notificationId: string) {
     return http.put<void>(`/notification/${notificationId}/read`)
   },
 

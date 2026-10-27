@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 @Schema(description = "黑名单")
 public class Blacklist {
 
-    @TableId(type = IdType.AUTO)
+    @TableId(type = IdType.ASSIGN_ID)
     @Schema(description = "黑名单ID")
     @JsonSerialize(using = ToStringSerializer.class)
     private Long blacklistId;

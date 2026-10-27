@@ -1291,7 +1291,7 @@ async function saveDraftToServer() {
       draftId: form.value.draftId,
       title: form.value.title,
       description: form.value.description,
-      categoryId: form.value.categoryId ? parseInt(form.value.categoryId) : undefined,
+      categoryId: form.value.categoryId || undefined,
       deposit: form.value.deposit ? parseFloat(form.value.deposit) : undefined,
       dailyRent: form.value.dailyRent ? parseFloat(form.value.dailyRent) : undefined,
       condition: mapConditionIdToApi(form.value.conditionId) || undefined,
@@ -1691,7 +1691,7 @@ async function handlePublish() {
       description: filteredDesc,
       dailyRent: parseFloat(form.value.dailyRent),
       deposit: parseFloat(form.value.deposit),
-      categoryId: parseInt(form.value.categoryId),
+      categoryId: form.value.categoryId,
       condition: mapConditionIdToApi(form.value.conditionId),
       imageUrls: images.value,
       availableTimes: JSON.stringify({

@@ -2,11 +2,10 @@
  * 位置相关 API
  */
 import { http } from '@/utils/request'
-import type { IdLike } from '@/utils/id'
 import { normalizeId } from '@/utils/id'
 
 export interface LocationItem {
-  locationId: string | number
+  locationId: string
   name: string
   code: string
   description: string
@@ -25,7 +24,7 @@ export const locationApi = {
   /**
    * 获取位置详情
    */
-  getLocationDetail(id: IdLike) {
+  getLocationDetail(id: string) {
     return http.get<LocationItem>(`/location/${normalizeId(id)}`)
   },
 

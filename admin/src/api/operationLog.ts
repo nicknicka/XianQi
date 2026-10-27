@@ -5,8 +5,8 @@ import type { PageParams, PageResponse } from './statistics'
  * 后端实际返回的操作日志 VO
  */
 interface BackendOperationLogVO {
-  logId: number
-  userId: number
+  logId: string
+  userId: string
   username?: string
   module: string
   action: string
@@ -14,7 +14,7 @@ interface BackendOperationLogVO {
   requestMethod?: string
   requestUrl?: string
   requestParams?: string
-  bizId?: number
+  bizId?: string
   bizType?: string
   ipAddress?: string
   userAgent?: string
@@ -28,8 +28,8 @@ interface BackendOperationLogVO {
  * 前端使用的操作日志 VO（字段映射）
  */
 export interface OperationLogVO {
-  logId: number
-  userId: number
+  logId: string
+  userId: string
   username?: string
   module: string
   action: string  // 后端的 action 字段
@@ -40,7 +40,7 @@ export interface OperationLogVO {
   requestUrl?: string
   requestParams?: string  // 后端的 requestParams 字段
   params: string  // 前端兼容：映射到 requestParams
-  bizId?: number
+  bizId?: string
   bizType?: string
   ipAddress?: string  // 后端的 ipAddress 字段
   ip: string  // 前端兼容：映射到 ipAddress
@@ -61,7 +61,7 @@ export interface OperationLogVO {
  * 操作日志查询参数
  */
 export interface OperationLogQueryParams extends PageParams {
-  userId?: number
+  userId?: string
   username?: string
   module?: string
   operation?: string  // 映射到后端的 action
@@ -140,14 +140,14 @@ export function getOperationLogList(params: OperationLogQueryParams) {
   })
 }
 
-export function deleteOperationLog(logId: number) {
+export function deleteOperationLog(logId: string) {
   return request<boolean>({
     url: `/operation-log/${logId}`,
     method: 'delete',
   })
 }
 
-export function batchDeleteOperationLogs(logIds: number[]) {
+export function batchDeleteOperationLogs(logIds: string[]) {
   return request<boolean>({
     url: '/operation-log/batch',
     method: 'delete',

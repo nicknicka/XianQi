@@ -67,7 +67,7 @@
 import { ref, computed, watch, nextTick, onMounted } from 'vue'
 
 interface WaterfallItem {
-  id?: string | number
+  id?: string
   image?: string
   title?: string
   description?: string

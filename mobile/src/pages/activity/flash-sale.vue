@@ -179,7 +179,6 @@ import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { activityApi, type FlashSaleSession, type FlashSaleProduct } from '@/api/activity'
 import LazyImage from '@/components/lazy-image/lazy-image.vue'
 import { onShow } from '@dcloudio/uni-app'
-import type { IdLike } from '@/utils/id'
 
 // 前端扩展的场次接口（包含动态计算的status字段）
 interface FlashSaleSessionWithStatus extends Omit<FlashSaleSession, 'status'> {
@@ -517,7 +516,7 @@ const isCurrentSessionEnded = () => {
 }
 
 // 跳转商品详情
-const goToProductDetail = (productId: IdLike) => {
+const goToProductDetail = (productId: string) => {
   // 检查当前场次是否已结束
   const currentSessionData = sessions.value[currentSession.value]
   if (currentSessionData && currentSessionData.status === 'ended') {

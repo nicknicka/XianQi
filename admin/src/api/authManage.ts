@@ -25,8 +25,8 @@ export interface StudentQueryParams extends PageParams {
  * 实名认证VO
  */
 export interface RealNameAuthVO {
-  id: number
-  userId: number
+  id: string
+  userId: string
   username?: string
   nickname?: string
   realName: string
@@ -41,8 +41,8 @@ export interface RealNameAuthVO {
  * 学号认证VO
  */
 export interface StudentAuthVO {
-  id: number
-  userId: number
+  id: string
+  userId: string
   username?: string
   nickname?: string
   realName?: string
@@ -63,7 +63,7 @@ export interface StudentAuthVO {
  * 认证审核参数
  */
 export interface AuditParams {
-  authId: number
+  authId: string
   action: 'approve' | 'reject'
   rejectReason?: string
 }
@@ -113,7 +113,7 @@ export function getRealNamePendingList(params?: PageParams) {
 /**
  * 获取实名认证详情
  */
-export function getRealNameDetail(authId: number) {
+export function getRealNameDetail(authId: string) {
   return request<RealNameAuthVO>({
     url: `/auth/real-name/${authId}`,
     method: 'get',
@@ -158,7 +158,7 @@ export function getStudentPendingList(params?: PageParams) {
 /**
  * 获取学号认证详情
  */
-export function getStudentDetail(authId: number) {
+export function getStudentDetail(authId: string) {
   return request<StudentAuthVO>({
     url: `/auth/student/${authId}`,
     method: 'get',

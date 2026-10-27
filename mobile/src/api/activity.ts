@@ -6,7 +6,7 @@ import type { Product } from '@/types'
 
 // 秒杀场次信息
 export interface FlashSaleSession {
-  sessionId: number
+  sessionId: string
   time: string // 格式: "HH:mm"
   progress?: number // 当前进度百分比
   startTime: string
@@ -30,9 +30,9 @@ export interface FlashSaleProduct {
   stock: number // 库存
   soldCount: number // 已售数量
   // 场次关联
-  sessionId: number // 所属场次ID
+  sessionId: string // 所属场次ID
   // 商品基础信息
-  categoryId: number
+  categoryId: string
   categoryName: string
   condition: string
   location: string
@@ -47,7 +47,7 @@ export interface FlashSaleProduct {
 
 // 秒杀活动信息
 export interface FlashSaleActivity {
-  activityId: number
+  activityId: string
   title: string
   subtitle: string
   startTime: string
@@ -72,7 +72,7 @@ export const activityApi = {
       return {
         ...res,
         data: {
-          activityId: currentSession?.sessionId || 0,
+          activityId: currentSession?.sessionId || '',
           title: '限时秒杀',
           subtitle: '当前秒杀场次',
           startTime: currentSession?.startTime || '',
@@ -93,7 +93,7 @@ export const activityApi = {
   /**
    * 获取指定场次的秒杀商品
    */
-  getFlashSaleProducts(sessionId: number, params: {
+  getFlashSaleProducts(sessionId: string, params: {
     page?: number
     pageSize?: number
   }) {

@@ -3,7 +3,6 @@
  * 用于收集用户行为数据和页面访问统计
  */
 import { getSystemString } from './system-info'
-import type { IdLike } from './id'
 import { normalizeId } from './id'
 
 /**
@@ -104,7 +103,7 @@ class Analytics {
   /**
    * 设置用户ID
    */
-  setUserId(userId: IdLike) {
+  setUserId(userId: string) {
     this.userId = normalizeId(userId) || null
   }
 
@@ -171,11 +170,11 @@ class Analytics {
    * @param sellerId 卖家ID
    */
   trackProductView(params: {
-    productId: IdLike
+    productId: string
     productName: string
-    categoryId?: number
+    categoryId?: string
     categoryName?: string
-    sellerId?: IdLike
+    sellerId?: string
   }) {
     this.track(EventType.PRODUCT_VIEW, '商品浏览', params)
   }
@@ -185,7 +184,7 @@ class Analytics {
    * @param productId 商品ID
    * @param action 操作类型：favorite/unfavorite
    */
-  trackProductFavorite(productId: IdLike, action: 'favorite' | 'unfavorite') {
+  trackProductFavorite(productId: string, action: 'favorite' | 'unfavorite') {
     this.track(
       action === 'favorite' ? EventType.PRODUCT_FAVORITE : EventType.PRODUCT_UNFAVORITE,
       action === 'favorite' ? '商品收藏' : '取消收藏',
@@ -296,18 +295,18 @@ export const analytics = new Analytics()
  */
 export const trackProduct = {
   view: (params: {
-    productId: IdLike
+    productId: string
     productName: string
-    categoryId?: number
+    categoryId?: string
     categoryName?: string
-    sellerId?: IdLike
+    sellerId?: string
   }) => analytics.trackProductView(params),
 
-  favorite: (productId: IdLike) => analytics.trackProductFavorite(productId, 'favorite'),
+  favorite: (productId: string) => analytics.trackProductFavorite(productId, 'favorite'),
 
-  unfavorite: (productId: IdLike) => analytics.trackProductFavorite(productId, 'unfavorite'),
+  unfavorite: (productId: string) => analytics.trackProductFavorite(productId, 'unfavorite'),
 
-  share: (productId: IdLike, platform: string) => {
+  share: (productId: string, platform: string) => {
     analytics.track(EventType.PRODUCT_SHARE, '商品分享', {
       productId: normalizeId(productId),
       platform
@@ -325,21 +324,21 @@ export const trackProduct = {
  * 订单相关埋点
  */
 export const trackOrder = {
-  create: (orderId: IdLike, orderAmount: number) => {
+  create: (orderId: string, orderAmount: number) => {
     analytics.track(EventType.ORDER_CREATE, '创建订单', {
       orderId: normalizeId(orderId),
       orderAmount
     })
   },
 
-  cancel: (orderId: IdLike, reason?: string) => {
+  cancel: (orderId: string, reason?: string) => {
     analytics.track(EventType.ORDER_CANCEL, '取消订单', {
       orderId: normalizeId(orderId),
       reason
     })
   },
 
-  complete: (orderId: IdLike, orderAmount: number) => {
+  complete: (orderId: string, orderAmount: number) => {
     analytics.track(EventType.ORDER_COMPLETE, '完成订单', {
       orderId: normalizeId(orderId),
       orderAmount
@@ -364,7 +363,7 @@ export const trackUser = {
     analytics.track(EventType.USER_REGISTER, '用户注册')
   },
 
-  profileView: (userId: IdLike) => {
+  profileView: (userId: string) => {
     analytics.track(EventType.USER_PROFILE_VIEW, '查看用户主页', { userId: normalizeId(userId) })
   }
 }

@@ -1,10 +1,5 @@
-export type IdLike = string | number | null | undefined
-
-export function normalizeId(value: IdLike): string {
-  if (value === null || value === undefined) {
-    return ''
-  }
-  return String(value).trim()
+export function normalizeId(value?: string | null): string {
+  return value?.trim() || ''
 }
 
 export function extractUserIdFromToken(token?: string): string {

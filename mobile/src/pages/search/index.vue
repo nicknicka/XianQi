@@ -246,10 +246,9 @@ import UserAvatar from "@/components/user-avatar/user-avatar.vue";
 import LazyImage from "@/components/lazy-image/lazy-image.vue";
 import { getNavBarInfo } from "@/utils/system-info";
 import { useThemePage, useThemeStyle } from "@/utils/theme";
-import type { IdLike } from "@/utils/id";
 
 interface SearchResult {
-	id: IdLike;
+	id: string;
 	title?: string;
 	coverImage?: string;
 	price?: number;
@@ -482,13 +481,13 @@ function clearSearch() {
 	userList.value = [];
 }
 
-function goProductDetail(id: IdLike) {
+function goProductDetail(id: string) {
 	uni.navigateTo({
 		url: `/pages/market/detail?id=${id}`,
 	});
 }
 
-function goUserHome(id: IdLike) {
+function goUserHome(id: string) {
 	uni.navigateTo({
 		url: `/pages/user/home?id=${id}`,
 	});

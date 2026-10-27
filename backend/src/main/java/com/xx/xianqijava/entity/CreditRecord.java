@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -18,13 +20,15 @@ public class CreditRecord {
     /**
      * 记录ID
      */
-    @TableId(type = IdType.ASSIGN_ID)
-    private String id;
+    @TableId(value = "record_id", type = IdType.ASSIGN_ID)
+    @JsonSerialize(using = ToStringSerializer.class)
+    private Long recordId;
 
     /**
      * 用户ID
      */
-    private String userId;
+    @JsonSerialize(using = ToStringSerializer.class)
+    private Long userId;
 
     /**
      * 变化前分数
@@ -54,7 +58,8 @@ public class CreditRecord {
     /**
      * 关联ID
      */
-    private String relatedId;
+    @JsonSerialize(using = ToStringSerializer.class)
+    private Long relatedId;
 
     /**
      * 关联类型

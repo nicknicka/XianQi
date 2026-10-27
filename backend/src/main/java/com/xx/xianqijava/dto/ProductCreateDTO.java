@@ -25,7 +25,7 @@ public class ProductCreateDTO {
 
     @Schema(description = "分类ID", requiredMode = Schema.RequiredMode.REQUIRED)
     @NotNull(message = "分类ID不能为空")
-    private Integer categoryId;
+    private Long categoryId;
 
     @Schema(description = "价格（元）", requiredMode = Schema.RequiredMode.REQUIRED)
     @NotNull(message = "价格不能为空")

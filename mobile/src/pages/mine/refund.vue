@@ -506,7 +506,7 @@ function formatCreateTime(time?: string) {
 
 // 查看退款详情
 function goRefundDetail(item: RefundItem) {
-  if (!item.refundId || item.refundId === 0) {
+  if (!item.refundId) {
     uni.showToast({
       title: '退款ID无效',
       icon: 'error'

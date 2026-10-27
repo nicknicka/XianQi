@@ -117,7 +117,6 @@ import { getConditionLabel } from '@/types'
 import UserAvatar from '@/components/user-avatar/user-avatar.vue'
 import LazyImage from '@/components/lazy-image/lazy-image.vue'
 import { useThemeStyle, useThemeColors } from '@/utils/theme'
-import type { IdLike } from '@/utils/id'
 
 const { themeStyle } = useThemeStyle()
 const { primaryColor } = useThemeColors()
@@ -133,7 +132,7 @@ const emit = defineEmits<{
   unfavorite: [product: Product]
   report: [product: Product]
   goToDetail: [product: Product]
-  goToUser: [user: { id: IdLike; name: string; avatar: string }]
+  goToUser: [user: { id: string; name: string; avatar: string }]
 }>()
 
 const popupRef = ref<UniApp.Popup>()

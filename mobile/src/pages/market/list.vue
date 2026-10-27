@@ -326,7 +326,7 @@ const layoutMode = ref<"grid" | "list">("grid");
 const currentMode = ref<"trade" | "share">("trade");
 
 // 分类数据
-const categories = ref<Category[]>([{ categoryId: 0, name: "全部分类", sortOrder: 0 }]);
+const categories = ref<Category[]>([{ categoryId: '', name: "全部分类", sortOrder: 0 }]);
 
 // 成色选项
 const conditions = ref<{ value: ProductCondition; label: string }[]>([
@@ -434,7 +434,7 @@ async function loadCategories() {
 		}));
 		// 添加"全部分类"选项
 		categories.value = [
-			{ categoryId: 0, name: "全部分类", sortOrder: 0 },
+			{ categoryId: '', name: "全部分类", sortOrder: 0 },
 			...categoryList,
 		];
 		console.log("[list.vue] 分类列表加载成功:", categories.value.length);
@@ -640,7 +640,7 @@ function openCategoryPicker() {
 		success: (res) => {
 			const index = res.tapIndex;
 			const category = categories.value[index];
-			if (category.categoryId === 0) {
+			if (category.categoryId === '') {
 				selectedCategory.value = null;
 			} else {
 				selectedCategory.value = category;

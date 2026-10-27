@@ -3,6 +3,7 @@ package com.xx.xianqijava.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -20,7 +21,13 @@ public class CampusLocation extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
 
-    @TableId(type = IdType.AUTO)
+    /**
+     * 逻辑删除标记（0=未删除，1=已删除）
+     */
+    @TableLogic
+    private Integer deleted;
+
+    @TableId(type = IdType.ASSIGN_ID)
     @Schema(description = "位置ID")
     @JsonSerialize(using = ToStringSerializer.class)
     private Long locationId;

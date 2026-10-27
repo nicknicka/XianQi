@@ -1,4 +1,4 @@
-# ADR-0008: GitHub Actions CI 质量门禁
+# ADR-0009: GitHub Actions CI 质量门禁
 
 ## 状态
 已采纳（2026-10-27）

@@ -138,13 +138,12 @@ import { http } from '@/utils/request'
 import { checkSensitiveWord, SensitiveCheckType } from '@/utils/sensitive-word'
 import {useThemeStyle, useThemeColors, useThemePage} from '@/utils/theme'
 import { onShow } from '@dcloudio/uni-app'
-import type { IdLike } from '@/utils/id'
 
 const { themeStyle } = useThemeStyle()
 const { primaryColor, dangerColor } = useThemeColors()
 
 interface QuickReply {
-  id: IdLike
+  id: string
   content: string
   category?: string
   isSystem: boolean
@@ -309,7 +308,7 @@ async function handleSave() {
   }
 }
 
-function deleteReply(id: IdLike) {
+function deleteReply(id: string) {
   console.log('[快捷回复] 请求删除快捷回复，ID:', id)
   uni.showModal({
     title: '提示',

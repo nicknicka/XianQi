@@ -225,7 +225,7 @@ public class FlashSaleServiceImpl extends ServiceImpl<FlashSaleSessionMapper, Fl
 
             vo.setLocation(product.getLocation());
             vo.setCondition(product.getConditionLevel() != null ? product.getConditionLevel().toString() : "");
-            vo.setCategoryId(product.getCategoryId() != null ? product.getCategoryId().intValue() : null);
+            vo.setCategoryId(product.getCategoryId());
         }
 
         // 设置状态（根据场次时间计算）

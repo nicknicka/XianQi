@@ -288,7 +288,7 @@ export const navigate = {
       ...extraOptions
     }),
   // 详情页
-  toDetail: (id: string | number, type = 'product') =>
+  toDetail: (id: string, type = 'product') =>
     router.to({
       url: `/pages/${type}/detail`,
       params: { id },
@@ -304,7 +304,7 @@ export const navigate = {
     }),
 
   // 用户主页
-  toUserHome: (userId: string | number) =>
+  toUserHome: (userId: string) =>
     router.to({
       url: '/pages/user/home',
       params: { userId }
@@ -318,7 +318,7 @@ export const navigate = {
     }),
 
   // 编辑页
-  toEdit: (id: string | number, type = 'product') =>
+  toEdit: (id: string, type = 'product') =>
     router.to({
       url: `/pages/${type}/edit`,
       params: { id },
@@ -326,7 +326,7 @@ export const navigate = {
     }),
 
   // 订单页
-  toOrder: (orderId?: string | number) =>
+  toOrder: (orderId?: string) =>
     router.to({
       url: orderId ? '/pages/order/detail' : '/pages/order/list',
       params: orderId ? { orderId } : undefined

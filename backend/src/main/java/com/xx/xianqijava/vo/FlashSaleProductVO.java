@@ -60,7 +60,7 @@ public class FlashSaleProductVO {
 
     // 商品详细信息
     @Schema(description = "分类ID")
-    private Integer categoryId;
+    private Long categoryId;
 
     @Schema(description = "分类名称")
     private String categoryName;

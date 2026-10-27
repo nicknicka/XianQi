@@ -78,3 +78,17 @@
 | WebSocket | WebSocket | 全双工实时通信协议，用于即时通讯 |
 | OSS | OSS | 对象存储服务（阿里云 OSS） |
 | Knife4j | Knife4j | 基于 Swagger 的 API 文档工具 |
+
+## 数据库与 ID 契约
+
+| 术语 | 英文 | 定义 |
+|------|------|------|
+| 业务主键 | Business Primary Key | 领域聚合根的唯一标识，如 user_id、product_id、order_id。数据库类型为 signed BIGINT，Java 类型为 Long，使用雪花算法（ASSIGN_ID）生成。不是自增 ID，也不是业务编号。 |
+| 业务编号 | Business Number | 面向用户或外部系统的可读编号，如订单号 order_no、退款号 refund_no、支付流水号 payment_no。通常为字符串，有业务含义和格式要求，与业务主键完全分离。 |
+| ID 对外契约 | ID External Contract | 所有通过 HTTP、WebSocket 等对外接口传递的业务主键一律序列化为字符串。前端 TypeScript 中 ID 一律使用 string 类型。禁止使用 parseInt、Number() 或数值运算处理 ID。 |
+| 数据库基线 | Database Baseline | `sql/schema.sql` 是数据库结构的真源（source of truth）。空数据库执行 schema.sql + 基础 data.sql 必须一次成功，作为每次重建的基准。后续结构变更通过 `sql/migrations/` 下的手动迁移脚本演进。 |
+| 初始化数据 | Initialization Data | `sql/data.sql` 中系统运行所必需的基础数据，如管理员账号、系统配置、默认分类、校园位置等。不含任何测试用户、测试商品或演示场景数据。 |
+| 演示数据 | Demo Data | 仅用于开发、演示和本地调试的样本数据，如测试用户、测试商品、测试订单、测试聊天记录等。不进入 data.sql，单独存放在开发 seed 中，生产环境不加载。 |
+| 软删除 | Soft Delete | 通过 deleted 标记列实现的逻辑删除，仅用于确实需要保留删除记录的聚合根。不是所有表都需要软删除，关联表、日志表、统计表等通常使用物理删除。 |
+| 手动迁移 | Manual Migration | 结构变更通过 `sql/migrations/` 下按时间命名的 SQL 脚本手动执行，不使用 Flyway/Liquibase 等自动迁移工具。版本追踪靠脚本命名和部署记录。 |
+| Fresh-init 验证 | Fresh-init Verification | 在空 MySQL volume 上执行完整 schema + 基础 data.sql，验证退出码、表清单、外键约束和必要基础数据的自动化测试。纳入 CI，确保数据库基线始终可从零重建。 |

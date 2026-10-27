@@ -152,7 +152,7 @@ const { themeStyle } = useThemeStyle()
 const { primaryColor, warningColor } = useThemeColors()
 
 interface CommentItem {
-  id?: string | number
+  id?: string
   userAvatar: string
   userName: string
   userTag?: string

@@ -70,7 +70,7 @@ const { themeStyle } = useThemeStyle()
 const { primaryColor } = useThemeColors()
 
 export interface ActionListItem {
-  id?: string | number
+  id?: string
   title: string
   description?: string
   extra?: string

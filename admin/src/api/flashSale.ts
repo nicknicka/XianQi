@@ -6,7 +6,7 @@ import request from '@/utils/request'
  * 场次模板
  */
 export interface FlashSaleSessionTemplate {
-  templateId: number
+  templateId: string
   name: string
   sessionTime: string // HH:mm 格式，如 10:00
   durationHours: number
@@ -36,7 +36,7 @@ export interface FlashSaleSession {
  * 创建/编辑模板参数
  */
 export interface FlashSaleTemplateParams {
-  templateId?: number
+  templateId?: string
   name: string
   sessionTime: string
   durationHours: number
@@ -82,7 +82,7 @@ export function saveFlashSaleTemplate(data: FlashSaleTemplateParams) {
 /**
  * 启用/禁用模板
  */
-export function toggleFlashSaleTemplate(templateId: number) {
+export function toggleFlashSaleTemplate(templateId: string) {
   return request<string>({
     url: `/flash-sale/template/${templateId}/toggle`,
     method: 'put',

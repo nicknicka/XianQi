@@ -300,7 +300,7 @@ const currentItem = ref<ShareItemManageVO | null>(null)
 // 状态修改
 const statusDialogVisible = ref(false)
 const statusForm = ref({
-  shareId: 0,
+  shareId: '',
   status: 0,
   remark: '',
 })

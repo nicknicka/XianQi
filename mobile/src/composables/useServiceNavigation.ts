@@ -141,7 +141,7 @@ export function useServiceNavigation() {
  * @param route 目标页面路径
  * @param params 其他查询参数
  */
-export function navigateFromService(route: string, params: Record<string, string | number> = {}) {
+export function navigateFromService(route: string, params: Record<string, string> = {}) {
   const queryString = Object.entries({
     [FROM_SERVICES_QUERY]: FROM_SERVICES_VALUE,
     ...params
@@ -170,7 +170,7 @@ export function navigateFromService(route: string, params: Record<string, string
  */
 export interface ServiceNavigationOptions {
   route: string
-  params?: Record<string, string | number>
+  params?: Record<string, string>
 }
 
 /**

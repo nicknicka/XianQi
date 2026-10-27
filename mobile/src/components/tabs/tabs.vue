@@ -63,7 +63,7 @@
 import { ref, watch, computed } from 'vue'
 
 interface TabItem {
-  id?: string | number
+  id?: string
   title: string
   content?: string
   icon?: string

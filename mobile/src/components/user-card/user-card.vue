@@ -22,13 +22,12 @@
 <script setup lang="ts">
 import UserAvatar from '@/components/user-avatar/user-avatar.vue'
 import { useThemeStyle, useThemeColors } from '@/utils/theme'
-import type { IdLike } from '@/utils/id'
 
 const { themeStyle } = useThemeStyle()
 const { warningColor } = useThemeColors()
 
 interface User {
-  id: IdLike
+  id: string
   username?: string
   nickname?: string
   avatar?: string

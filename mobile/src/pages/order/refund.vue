@@ -181,7 +181,6 @@ import { orderApi } from '@/api/order'
 import LazyImage from '@/components/lazy-image/lazy-image.vue'
 import {useThemeStyle, useThemeColors, useThemePage} from '@/utils/theme'
 import { onShow } from '@dcloudio/uni-app'
-import type { IdLike } from '@/utils/id'
 
 const { themeStyle } = useThemeStyle()
 const { primaryColor } = useThemeColors()
@@ -308,7 +307,7 @@ function submitRefund() {
   })
 }
 
-function cancelRefund(refundId: number) {
+function cancelRefund(refundId: string) {
   uni.showModal({
     title: '撤销申请',
     content: '确定要撤销退款申请吗？',
@@ -338,7 +337,7 @@ function viewRefundDetail(record: any) {
   })
 }
 
-function goToProduct(productId: IdLike) {
+function goToProduct(productId: string) {
   uni.navigateTo({
     url: `/pages/market/detail?id=${productId}`
   })

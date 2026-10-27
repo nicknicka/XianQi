@@ -41,8 +41,8 @@ import { computed } from 'vue'
 import LazyImage from '@/components/lazy-image/lazy-image.vue'
 
 interface ProductItemData {
-  id: number | string
-  productId?: number | string
+  id: string
+  productId?: string
   title: string
   image: string
   price: number

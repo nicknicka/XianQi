@@ -348,13 +348,13 @@ function formatDate(dateStr: string): string {
   }
 }
 
-function goToShareDetail(shareItemId: number) {
+function goToShareDetail(shareItemId: string) {
   uni.navigateTo({
     url: `/pages/share/detail?id=${shareItemId}`
   })
 }
 
-function cancelBooking(bookingId: number) {
+function cancelBooking(bookingId: string) {
   uni.showModal({
     title: '提示',
     content: '确定要取消这个借用申请吗？',
@@ -371,7 +371,7 @@ function cancelBooking(bookingId: number) {
   })
 }
 
-function approveBooking(bookingId: number) {
+function approveBooking(bookingId: string) {
   uni.showModal({
     title: '同意借用',
     content: '确定同意这个借用申请吗？同意后借用者需要支付租金和押金。',
@@ -391,13 +391,13 @@ function approveBooking(bookingId: number) {
   })
 }
 
-function payBooking(bookingId: number) {
+function payBooking(bookingId: string) {
   uni.navigateTo({
     url: `/pages/share/booking-detail?id=${bookingId}`
   })
 }
 
-function rejectBooking(bookingId: number) {
+function rejectBooking(bookingId: string) {
   uni.showModal({
     title: '拒绝借用',
     content: '确定要拒绝这个借用申请吗？',
@@ -416,7 +416,7 @@ function rejectBooking(bookingId: number) {
   })
 }
 
-function confirmReturn(bookingId: number) {
+function confirmReturn(bookingId: string) {
   uni.showModal({
     title: '确认归还',
     content: '请确认对方已归还物品且物品完好',
@@ -438,7 +438,7 @@ function confirmReturn(bookingId: number) {
   })
 }
 
-function returnDeposit(bookingId: number) {
+function returnDeposit(bookingId: string) {
   uni.showModal({
     title: '退还押金',
     content: '确定要退还押金吗？',
@@ -455,7 +455,7 @@ function returnDeposit(bookingId: number) {
   })
 }
 
-function viewDetail(bookingId: number) {
+function viewDetail(bookingId: string) {
   uni.navigateTo({
     url: `/pages/share/booking-detail?id=${bookingId}`
   })
