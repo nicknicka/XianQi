@@ -50,39 +50,6 @@ jobs:
     runs-on: ubuntu-latest
     needs: backend-unit-test
 
-    services:
-      mysql:
-        image: mysql:8.0
-        env:
-          MYSQL_ROOT_PASSWORD: xianqi_test_root
-          MYSQL_DATABASE: xianqi_test
-          MYSQL_USER: xianqi
-          MYSQL_PASSWORD: xianqi_test
-        ports:
-          - 3306:3306
-        options: >-
-          --health-cmd "mysqladmin ping -h 127.0.0.1 -u xianqi -pxianqi_test --silent"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 10
-
-      redis:
-        image: redis:7-alpine
-        ports:
-          - 6379:6379
-        options: >-
-          --health-cmd "redis-cli ping"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-
-    env:
-      MYSQL_URL: jdbc:mysql://127.0.0.1:3306/xianqi_test?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true&connectionCollation=utf8mb4_unicode_ci
-      MYSQL_USER: xianqi
-      MYSQL_PASSWORD: xianqi_test
-      REDIS_HOST: 127.0.0.1
-      REDIS_PORT: '6379'
-
     steps:
       - name: Checkout
         uses: actions/checkout@v7
@@ -97,9 +64,8 @@ jobs:
 
       - name: Verify integration tests and package
         run: |
-          cd backend
-          chmod +x mvnw
-          ./mvnw --batch-mode verify
+          chmod +x backend/mvnw scripts/test-backend.sh
+          ./scripts/test-backend.sh
 
       - name: Upload jar artifact
         uses: actions/upload-artifact@v7
