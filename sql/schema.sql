@@ -889,6 +889,20 @@ CREATE TABLE `operation_log` (
   KEY `idx_admin_id` (`admin_id`), KEY `idx_oper_time` (`oper_time`), KEY `idx_module` (`module`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='操作日志表';
 
+-- 订单操作日志：记录买家/卖家对订单的业务操作，与管理员审计日志（operation_log）分离。
+CREATE TABLE `order_log` (
+  `order_log_id` BIGINT NOT NULL COMMENT '订单日志ID',
+  `order_id` BIGINT NOT NULL COMMENT '订单ID',
+  `operator_id` BIGINT NULL COMMENT '操作人用户ID',
+  `operator_name` VARCHAR(50) NULL COMMENT '操作人昵称（冗余，便于展示）',
+  `action` VARCHAR(50) NOT NULL COMMENT '操作类型：create/confirm/cancel/complete/refund_request/refund_approve/refund_reject',
+  `detail` VARCHAR(500) NULL COMMENT '操作描述',
+  `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  PRIMARY KEY (`order_log_id`),
+  KEY `idx_order_id` (`order_id`),
+  KEY `idx_operator_id` (`operator_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='订单操作日志表';
+
 CREATE TABLE `report` (
   `report_id` BIGINT NOT NULL COMMENT '举报ID',
   `reporter_id` BIGINT NOT NULL COMMENT '举报人ID',
@@ -1093,6 +1107,9 @@ ALTER TABLE `notification_read_records`
   ADD CONSTRAINT `fk_notification_read_records_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON DELETE CASCADE;
 ALTER TABLE `operation_log`
   ADD CONSTRAINT `fk_operation_log_admin` FOREIGN KEY (`admin_id`) REFERENCES `admin` (`admin_id`);
+ALTER TABLE `order_log`
+  ADD CONSTRAINT `fk_order_log_order` FOREIGN KEY (`order_id`) REFERENCES `order` (`order_id`),
+  ADD CONSTRAINT `fk_order_log_operator` FOREIGN KEY (`operator_id`) REFERENCES `user` (`user_id`);
 ALTER TABLE `report`
   ADD CONSTRAINT `fk_report_reporter` FOREIGN KEY (`reporter_id`) REFERENCES `user` (`user_id`),
   ADD CONSTRAINT `fk_report_handler` FOREIGN KEY (`handler_id`) REFERENCES `admin` (`admin_id`);

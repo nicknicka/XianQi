@@ -16,7 +16,7 @@ import com.xx.xianqijava.mapper.OrderMapper;
 import com.xx.xianqijava.mapper.ProductImageMapper;
 import com.xx.xianqijava.mapper.ProductMapper;
 import com.xx.xianqijava.mapper.UserMapper;
-import com.xx.xianqijava.service.OperationLogService;
+import com.xx.xianqijava.service.OrderLogService;
 import com.xx.xianqijava.service.OrderService;
 import com.xx.xianqijava.util.IdConverter;
 import com.xx.xianqijava.vo.OrderVO;
@@ -41,7 +41,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
 
     private final ProductMapper productMapper;
     private final UserMapper userMapper;
-    private final OperationLogService operationLogService;
+    private final OrderLogService orderLogService;
     private final ProductImageMapper productImageMapper;
 
     private static final AtomicInteger ORDER_COUNTER = new AtomicInteger(0);
@@ -100,22 +100,12 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
         // 记录操作日志
         User buyer = userMapper.selectById(buyerId);
         if (buyer != null) {
-            operationLogService.recordLog(
-                    null,
-                    buyer.getNickname(),
-                    "订单",
-                    "创建订单",
-                    "创建订单 " + order.getOrderNo(),
-                    "POST",
-                    "/order",
-                    null,
-                    null,
-                    null,
-                    null,
-                    1,
-                    null,
+            orderLogService.record(
                     order.getOrderId(),
-                    "order"
+                    buyerId,
+                    buyer.getNickname(),
+                    "create",
+                    "创建订单 " + order.getOrderNo()
             );
         }
 
@@ -191,22 +181,12 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
         // 记录操作日志
         User seller = userMapper.selectById(sellerId);
         if (seller != null) {
-            operationLogService.recordLog(
-                    null,
-                    seller.getNickname(),
-                    "订单",
-                    "确认订单",
-                    "确认订单 " + order.getOrderNo(),
-                    "PUT",
-                    "/order/" + orderId + "/confirm",
-                    null,
-                    null,
-                    null,
-                    null,
-                    1,
-                    null,
+            orderLogService.record(
                     orderId,
-                    "order"
+                    sellerId,
+                    seller.getNickname(),
+                    "confirm",
+                    "确认订单 " + order.getOrderNo()
             );
         }
 
@@ -244,22 +224,12 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
         User user = userMapper.selectById(userId);
         if (user != null) {
             String role = order.getBuyerId().equals(userId) ? "买家" : "卖家";
-            operationLogService.recordLog(
-                    null,
-                    user.getNickname(),
-                    "订单",
-                    "取消订单",
-                    role + "取消订单 " + order.getOrderNo(),
-                    "PUT",
-                    "/order/" + orderId + "/cancel",
-                    null,
-                    null,
-                    null,
-                    null,
-                    1,
-                    null,
+            orderLogService.record(
                     orderId,
-                    "order"
+                    userId,
+                    user.getNickname(),
+                    "cancel",
+                    role + "取消订单 " + order.getOrderNo()
             );
         }
 
@@ -305,22 +275,12 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
         // 记录操作日志
         User buyer = userMapper.selectById(userId);
         if (buyer != null) {
-            operationLogService.recordLog(
-                    null,
-                    buyer.getNickname(),
-                    "订单",
-                    "完成订单",
-                    "完成订单 " + order.getOrderNo(),
-                    "PUT",
-                    "/order/" + orderId + "/complete",
-                    null,
-                    null,
-                    null,
-                    null,
-                    1,
-                    null,
+            orderLogService.record(
                     orderId,
-                    "order"
+                    userId,
+                    buyer.getNickname(),
+                    "complete",
+                    "完成订单 " + order.getOrderNo()
             );
         }
 
@@ -361,22 +321,12 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
         // 记录操作日志
         User buyer = userMapper.selectById(buyerId);
         if (buyer != null) {
-            operationLogService.recordLog(
-                    null,
-                    buyer.getNickname(),
-                    "订单",
-                    "申请退款",
-                    "申请退款 " + order.getOrderNo(),
-                    "PUT",
-                    "/order/" + orderId + "/refund-request",
-                    null,
-                    null,
-                    null,
-                    null,
-                    1,
-                    null,
+            orderLogService.record(
                     orderId,
-                    "order"
+                    buyerId,
+                    buyer.getNickname(),
+                    "refund_request",
+                    "申请退款 " + order.getOrderNo()
             );
         }
 
@@ -410,22 +360,12 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
         // 记录操作日志
         User seller = userMapper.selectById(sellerId);
         if (seller != null) {
-            operationLogService.recordLog(
-                    null,
-                    seller.getNickname(),
-                    "订单",
-                    "同意退款",
-                    "同意退款 " + order.getOrderNo(),
-                    "PUT",
-                    "/order/" + orderId + "/refund-approve",
-                    null,
-                    null,
-                    null,
-                    null,
-                    1,
-                    null,
+            orderLogService.record(
                     orderId,
-                    "order"
+                    sellerId,
+                    seller.getNickname(),
+                    "refund_approve",
+                    "同意退款 " + order.getOrderNo()
             );
         }
 
@@ -466,22 +406,12 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
         // 记录操作日志
         User seller = userMapper.selectById(sellerId);
         if (seller != null) {
-            operationLogService.recordLog(
-                    null,
-                    seller.getNickname(),
-                    "订单",
-                    "拒绝退款",
-                    "拒绝退款 " + order.getOrderNo(),
-                    "PUT",
-                    "/order/" + orderId + "/refund-reject",
-                    null,
-                    null,
-                    null,
-                    null,
-                    1,
-                    null,
+            orderLogService.record(
                     orderId,
-                    "order"
+                    sellerId,
+                    seller.getNickname(),
+                    "refund_reject",
+                    "拒绝退款 " + order.getOrderNo()
             );
         }
 

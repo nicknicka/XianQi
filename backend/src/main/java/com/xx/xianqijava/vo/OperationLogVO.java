@@ -25,12 +25,6 @@ public class OperationLogVO {
     @Schema(description = "业务对象类型")
     private String bizType;
 
-    @Schema(description = "订单ID（当bizType为order时）")
-    private String orderId;
-
-    @Schema(description = "操作文本（用于前端显示）")
-    private String actionText;
-
     @Schema(description = "操作模块")
     private String module;
 
