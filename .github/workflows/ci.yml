@@ -27,6 +27,9 @@ jobs:
           bash scripts/tests/gh-write-test.bash
           node --test scripts/tests/safe-gh-body-check-test.mjs
 
+      - name: CI lint order contract tests
+        run: node --test scripts/tests/check-ci-order-test.mjs
+
   # ---------- 后端单元测试 ----------
   backend-unit-test:
     name: Backend Unit Tests
