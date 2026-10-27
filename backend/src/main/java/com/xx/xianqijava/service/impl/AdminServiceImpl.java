@@ -61,7 +61,7 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements
 
         // 4. 生成Token
         String token = adminJwtUtil.generateToken(
-                admin.getId(),
+                admin.getAdminId(),
                 admin.getUsername(),
                 admin.getNickname()
         );
@@ -71,7 +71,7 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements
         vo.setToken(token);
         vo.setAdminInfo(convertToVO(admin));
 
-        log.info("管理员登录成功, username={}, adminId={}", admin.getUsername(), admin.getId());
+        log.info("管理员登录成功, username={}, adminId={}", admin.getUsername(), admin.getAdminId());
 
         return vo;
     }
@@ -89,7 +89,7 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements
     @Transactional(rollbackFor = Exception.class)
     public void updateLastLoginInfo(Long adminId, String ip) {
         this.lambdaUpdate()
-                .eq(Admin::getId, adminId)
+                .eq(Admin::getAdminId, adminId)
                 .set(Admin::getLastLoginTime, LocalDateTime.now())
                 .set(Admin::getLastLoginIp, ip)
                 .update();
@@ -102,7 +102,7 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements
      */
     private AdminInfoVO convertToVO(Admin admin) {
         AdminInfoVO vo = new AdminInfoVO();
-        vo.setId(admin.getId());
+        vo.setId(admin.getAdminId());
         vo.setUsername(admin.getUsername());
         vo.setNickname(admin.getNickname());
         vo.setAvatar(admin.getAvatar());

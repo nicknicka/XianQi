@@ -31,14 +31,14 @@ public class OperationLogServiceImpl extends ServiceImpl<OperationLogMapper, Ope
 
     @Override
     @Async
-    public void recordLog(Long userId, String username, String module, String action,
+    public void recordLog(Long adminId, String username, String module, String action,
                           String description, String requestMethod, String requestUrl,
                           String requestParams, String ipAddress, String userAgent,
                           Long executeTime, Integer status, String errorMessage,
                           Long bizId, String bizType) {
         try {
             OperationLog log = new OperationLog();
-            log.setUserId(userId);
+            log.setAdminId(adminId);
             log.setUsername(username);
             log.setModule(module);
             log.setAction(action);
@@ -62,15 +62,15 @@ public class OperationLogServiceImpl extends ServiceImpl<OperationLogMapper, Ope
     }
 
     @Override
-    public IPage<OperationLogVO> getLogList(Page<OperationLog> page, Long userId, String module,
+    public IPage<OperationLogVO> getLogList(Page<OperationLog> page, Long adminId, String module,
                                             String action, Integer status, String startTime, String endTime) {
-        log.info("查询操作日志列表, userId={}, module={}, action={}, status={}",
-                userId, module, action, status);
+        log.info("查询操作日志列表, adminId={}, module={}, action={}, status={}",
+                adminId, module, action, status);
 
         LambdaQueryWrapper<OperationLog> wrapper = new LambdaQueryWrapper<>();
 
-        if (userId != null) {
-            wrapper.eq(OperationLog::getUserId, userId);
+        if (adminId != null) {
+            wrapper.eq(OperationLog::getAdminId, adminId);
         }
         if (StrUtil.isNotBlank(module)) {
             wrapper.eq(OperationLog::getModule, module);
@@ -97,11 +97,11 @@ public class OperationLogServiceImpl extends ServiceImpl<OperationLogMapper, Ope
     }
 
     @Override
-    public IPage<OperationLogVO> getMyLogs(Page<OperationLog> page, Long userId) {
-        log.info("查询我的操作日志, userId={}, page={}", userId, page.getCurrent());
+    public IPage<OperationLogVO> getMyLogs(Page<OperationLog> page, Long adminId) {
+        log.info("查询我的操作日志, adminId={}, page={}", adminId, page.getCurrent());
 
         LambdaQueryWrapper<OperationLog> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(OperationLog::getUserId, userId)
+        wrapper.eq(OperationLog::getAdminId, adminId)
                 .orderByDesc(OperationLog::getCreatedAt);
 
         IPage<OperationLog> logPage = page(page, wrapper);

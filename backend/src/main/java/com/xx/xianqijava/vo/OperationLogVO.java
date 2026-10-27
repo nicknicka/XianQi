@@ -13,8 +13,8 @@ public class OperationLogVO {
     @Schema(description = "日志ID")
     private String logId;
 
-    @Schema(description = "操作用户ID")
-    private String userId;
+    @Schema(description = "操作管理员ID")
+    private String adminId;
 
     @Schema(description = "用户名")
     private String username;

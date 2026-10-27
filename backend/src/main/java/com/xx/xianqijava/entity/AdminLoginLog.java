@@ -25,9 +25,9 @@ public class AdminLoginLog implements Serializable {
     /**
      * 日志ID
      */
-    @TableId(type = IdType.ASSIGN_ID)
+    @TableId(value = "log_id", type = IdType.ASSIGN_ID)
     @JsonSerialize(using = ToStringSerializer.class)
-    private Long id;
+    private Long logId;
 
     /**
      * 管理员ID
@@ -51,29 +51,14 @@ public class AdminLoginLog implements Serializable {
     private String ip;
 
     /**
-     * IP归属地
-     */
-    private String location;
-
-    /**
      * 浏览器
      */
     private String browser;
 
     /**
-     * 操作系统
-     */
-    private String os;
-
-    /**
      * 登录状态：0-失败 1-成功
      */
     private Integer status;
-
-    /**
-     * 提示信息
-     */
-    private String message;
 
     /**
      * 创建时间

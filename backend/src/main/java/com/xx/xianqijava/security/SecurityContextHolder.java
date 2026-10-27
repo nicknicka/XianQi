@@ -32,7 +32,7 @@ public class SecurityContextHolder {
      */
     public static Long getAdminId() {
         Admin admin = getAdmin();
-        return admin != null ? admin.getId() : null;
+        return admin != null ? admin.getAdminId() : null;
     }
 
     /**

@@ -101,7 +101,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
         User buyer = userMapper.selectById(buyerId);
         if (buyer != null) {
             operationLogService.recordLog(
-                    buyerId,
+                    null,
                     buyer.getNickname(),
                     "订单",
                     "创建订单",
@@ -192,7 +192,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
         User seller = userMapper.selectById(sellerId);
         if (seller != null) {
             operationLogService.recordLog(
-                    sellerId,
+                    null,
                     seller.getNickname(),
                     "订单",
                     "确认订单",
@@ -245,7 +245,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
         if (user != null) {
             String role = order.getBuyerId().equals(userId) ? "买家" : "卖家";
             operationLogService.recordLog(
-                    userId,
+                    null,
                     user.getNickname(),
                     "订单",
                     "取消订单",
@@ -306,7 +306,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
         User buyer = userMapper.selectById(userId);
         if (buyer != null) {
             operationLogService.recordLog(
-                    userId,
+                    null,
                     buyer.getNickname(),
                     "订单",
                     "完成订单",
@@ -362,7 +362,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
         User buyer = userMapper.selectById(buyerId);
         if (buyer != null) {
             operationLogService.recordLog(
-                    buyerId,
+                    null,
                     buyer.getNickname(),
                     "订单",
                     "申请退款",
@@ -411,7 +411,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
         User seller = userMapper.selectById(sellerId);
         if (seller != null) {
             operationLogService.recordLog(
-                    sellerId,
+                    null,
                     seller.getNickname(),
                     "订单",
                     "同意退款",
@@ -467,7 +467,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
         User seller = userMapper.selectById(sellerId);
         if (seller != null) {
             operationLogService.recordLog(
-                    sellerId,
+                    null,
                     seller.getNickname(),
                     "订单",
                     "拒绝退款",

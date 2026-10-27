@@ -6,7 +6,7 @@ import type { PageParams, PageResponse } from './statistics'
  */
 interface BackendOperationLogVO {
   logId: string
-  userId: string
+  adminId: string
   username?: string
   module: string
   action: string
@@ -29,7 +29,7 @@ interface BackendOperationLogVO {
  */
 export interface OperationLogVO {
   logId: string
-  userId: string
+  adminId: string
   username?: string
   module: string
   action: string  // 后端的 action 字段
@@ -61,7 +61,7 @@ export interface OperationLogVO {
  * 操作日志查询参数
  */
 export interface OperationLogQueryParams extends PageParams {
-  userId?: string
+  adminId?: string
   username?: string
   module?: string
   operation?: string  // 映射到后端的 action
