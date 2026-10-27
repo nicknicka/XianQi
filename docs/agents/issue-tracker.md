@@ -6,6 +6,8 @@ Issues and specs for this repo live as GitHub issues. Use the `gh` CLI for all o
 
 Prefer `scripts/gh-stable.sh api ...` for GitHub reads and writes. It calls the REST API through `gh api`, clears inherited proxy variables for the call, and never silently retries write operations on timeout; `scripts/gh-stable.sh doctor` reports proxy, direct connectivity, authentication and API status. Use raw `gh` / GraphQL only when an operation has no REST equivalent.
 
+For multi-line issue comments, closing comments and PR descriptions, use `scripts/gh-write.sh` with a body file. Never inline multi-line Markdown in a double-quoted `--body` or `--comment`; `scripts/check-safe-gh-body.mjs` rejects that pattern. `scripts/gh-write.sh issue-comment|issue-close|pr-edit OWNER/REPO NUMBER BODY_FILE` builds the JSON payload from the file so backticks, `$()`, wildcards, backslashes and code fences stay byte-for-byte.
+
 - **Create an issue**: `gh issue create --title "..." --body "..."`. Use a heredoc for multi-line bodies, or `scripts/gh-stable.sh api --method POST repos/<owner>/<repo>/issues -f title=... -f body=...` for REST.
 - **Read an issue**: `gh issue view <number> --comments`, filtering comments by `jq` and also fetching labels.
 - **List issues**: `gh issue list --state open --json number,title,body,labels,comments --jq '[.[] | {number, title, body, labels: [.labels[].name], comments: [.comments[].body]}]'` with appropriate `--label` and `--state` filters.
