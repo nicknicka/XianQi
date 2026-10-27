@@ -187,12 +187,12 @@ public class CreditScoreService {
         // 被评价者（卖家）信用分变化
         CreditChangeDTO change = calculateEvaluationCredit(evaluation);
         if (change.getSuccess()) {
-            applyCreditChange(evaluation.getToUserId().toString(), change,
+            applyCreditChange(evaluation.getTargetUserId().toString(), change,
                 CreditRecord.RelatedType.EVALUATION.getCode(), evaluationId);
         }
 
         // 更新用户评价统计
-        updateUserEvaluationStats(evaluation.getToUserId().toString());
+        updateUserEvaluationStats(evaluation.getTargetUserId().toString());
 
         log.info("评价 {} 处理完成，信用分变化: {}", evaluationId, change);
     }
@@ -201,8 +201,8 @@ public class CreditScoreService {
      * 计算评价加分（防刷版）
      */
     public CreditChangeDTO calculateEvaluationCredit(Evaluation evaluation) {
-        int rating = evaluation.getScore();
-        String userId = evaluation.getToUserId().toString();
+        int rating = evaluation.getRating();
+        String userId = evaluation.getTargetUserId().toString();
 
         // 评分说明：1星=差评(-5分), 2星=较差(-3分), 3星=中评(-1分), 4-5星=好评(+1~2分)
 
@@ -236,7 +236,7 @@ public class CreditScoreService {
             // 检查是否互刷好评
             if (isMutualEvaluationSpam(evaluation)) {
                 log.warn("疑似互刷好评: 评价者 {}, 被评价者 {}",
-                    evaluation.getFromUserId(), evaluation.getToUserId());
+                    evaluation.getEvaluatorId(), evaluation.getTargetUserId());
                 return CreditChangeDTO.noop("疑似互刷好评");
             }
 
@@ -278,8 +278,8 @@ public class CreditScoreService {
      * 检查是否互刷好评
      */
     private boolean isMutualEvaluationSpam(Evaluation evaluation) {
-        String evaluatorId = evaluation.getFromUserId().toString();
-        String evaluatedId = evaluation.getToUserId().toString();
+        String evaluatorId = evaluation.getEvaluatorId().toString();
+        String evaluatedId = evaluation.getTargetUserId().toString();
 
         LocalDateTime checkTime = LocalDateTime.now().minusDays(
             config.getAntiSpam().getMutualEvaluationDays()
@@ -288,8 +288,8 @@ public class CreditScoreService {
         // 检查被评价者是否也给评价者评过分
         long count = evaluationMapper.selectCount(
             new LambdaQueryWrapper<Evaluation>()
-                .eq(Evaluation::getFromUserId, evaluatedId)
-                .eq(Evaluation::getToUserId, evaluatorId)
+                .eq(Evaluation::getEvaluatorId, evaluatedId)
+                .eq(Evaluation::getTargetUserId, evaluatorId)
                 .ge(Evaluation::getCreatedAt, checkTime)
         );
 
@@ -495,20 +495,20 @@ public class CreditScoreService {
         // 统计各等级评价数
         long positiveCount = evaluationMapper.selectCount(
             new LambdaQueryWrapper<Evaluation>()
-                .eq(Evaluation::getToUserId, userId)
-                .ge(Evaluation::getScore, 4)
+                .eq(Evaluation::getTargetUserId, userId)
+                .ge(Evaluation::getRating, 4)
         );
 
         long neutralCount = evaluationMapper.selectCount(
             new LambdaQueryWrapper<Evaluation>()
-                .eq(Evaluation::getToUserId, userId)
-                .eq(Evaluation::getScore, 3)
+                .eq(Evaluation::getTargetUserId, userId)
+                .eq(Evaluation::getRating, 3)
         );
 
         long negativeCount = evaluationMapper.selectCount(
             new LambdaQueryWrapper<Evaluation>()
-                .eq(Evaluation::getToUserId, userId)
-                .le(Evaluation::getScore, 2)
+                .eq(Evaluation::getTargetUserId, userId)
+                .le(Evaluation::getRating, 2)
         );
 
         // 更新扩展表的评价统计

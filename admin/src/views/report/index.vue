@@ -102,10 +102,10 @@
             <div class="text-secondary">ID: {{ row.reporterId }}</div>
           </template>
         </el-table-column>
-        <el-table-column label="被举报人" width="150">
+        <el-table-column label="举报对象" width="150">
           <template #default="{ row }">
-            <div>{{ row.reportedUserNickname || '-' }}</div>
-            <div class="text-secondary">ID: {{ row.reportedUserId }}</div>
+            <div>{{ reportTargetTypeLabel(row.targetType) }}</div>
+            <div class="text-secondary">ID: {{ row.targetId }}</div>
           </template>
         </el-table-column>
         <el-table-column prop="reason" label="举报原因" width="150" />
@@ -124,7 +124,7 @@
         </el-table-column>
         <el-table-column label="举报时间" width="180">
           <template #default="{ row }">
-            {{ formatTime(row.createTime) }}
+            {{ formatTime(row.createdAt) }}
           </template>
         </el-table-column>
         <el-table-column label="处理时间" width="180">
@@ -174,11 +174,11 @@
         <el-descriptions-item label="举报人">
           {{ currentReport.reporterNickname || '-' }} (ID: {{ currentReport.reporterId }})
         </el-descriptions-item>
-        <el-descriptions-item label="被举报人">
+        <el-descriptions-item v-if="currentReport.targetType === 'user'" label="被举报人">
           {{ currentReport.reportedUserNickname || '-' }} (ID: {{ currentReport.reportedUserId }})
         </el-descriptions-item>
-        <el-descriptions-item label="会话ID">{{ currentReport.conversationId || '-' }}</el-descriptions-item>
-        <el-descriptions-item label="消息ID">{{ currentReport.messageId || '-' }}</el-descriptions-item>
+        <el-descriptions-item label="举报对象类型">{{ reportTargetTypeLabel(currentReport.targetType) }}</el-descriptions-item>
+        <el-descriptions-item label="举报对象ID">{{ currentReport.targetId || '-' }}</el-descriptions-item>
         <el-descriptions-item label="举报原因" :span="2">{{ currentReport.reason }}</el-descriptions-item>
         <el-descriptions-item label="描述" :span="2">
           {{ currentReport.description || '无' }}
@@ -196,12 +196,12 @@
           </div>
           <span v-else>无</span>
         </el-descriptions-item>
-        <el-descriptions-item label="举报时间" :span="2">{{ formatTime(currentReport.createTime) }}</el-descriptions-item>
+        <el-descriptions-item label="举报时间" :span="2">{{ formatTime(currentReport.createdAt) }}</el-descriptions-item>
         <el-descriptions-item v-if="currentReport.handleTime" label="处理时间" :span="2">
           {{ formatTime(currentReport.handleTime) }}
         </el-descriptions-item>
-        <el-descriptions-item v-if="currentReport.adminNote" label="管理员备注" :span="2">
-          {{ currentReport.adminNote }}
+        <el-descriptions-item v-if="currentReport.handleNote" label="管理员备注" :span="2">
+          {{ currentReport.handleNote }}
         </el-descriptions-item>
       </el-descriptions>
     </el-dialog>
@@ -217,7 +217,7 @@
         </el-form-item>
         <el-form-item label="管理员备注">
           <el-input
-            v-model="handleForm.adminNote"
+            v-model="handleForm.handleNote"
             type="textarea"
             :rows="4"
             placeholder="请输入处理说明或备注"
@@ -292,7 +292,7 @@ const searchForm = ref<ReportQueryParams>({
 const handleForm = ref<ReportHandleParams>({
   reportId: '',
   status: 1,
-  adminNote: '',
+  handleNote: '',
 })
 
 // 加载数据
@@ -386,7 +386,7 @@ const openHandleDialog = (row: ReportVO) => {
   handleForm.value = {
     reportId: row.reportId,
     status: 1,
-    adminNote: '',
+    handleNote: '',
   }
   handleDialogVisible.value = true
 }
@@ -434,6 +434,17 @@ onMounted(() => {
   loadData()
   loadStatistics()
 })
+
+// 举报对象类型标签
+const reportTargetTypeLabel = (type?: string) => {
+  const labels: Record<string, string> = {
+    user: '用户',
+    product: '商品',
+    message: '消息',
+    conversation: '会话',
+  }
+  return type ? labels[type] || type : '-'
+}
 
 // 格式化时间
 const formatTime = (time: string | number[] | undefined) => {

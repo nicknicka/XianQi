@@ -225,7 +225,6 @@ async function handleSubmit() {
     }
 
     await reportApi.createReport({
-      reportedUserId: targetUserId.value,
       targetType: targetTypeMap[targetType.value] || ReportType.USER,
       targetId: targetUserId.value,
       reason: reasonMap[form.value.reportType] || ReportReason.OTHER,

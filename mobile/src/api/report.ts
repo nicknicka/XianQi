@@ -19,14 +19,19 @@ export enum ReportReason {
 }
 
 export interface ReportCreateParams {
-  reportedUserId: string // 被举报用户ID
-  targetType?: ReportType // 前端兼容字段，后端未使用
-  targetId?: string // 前端兼容字段，后端未使用
+  targetType: ReportType // 举报对象类型
+  targetId: string // 举报对象ID
   reason: ReportReason | string // 举报原因
   description?: string // 详细描述
   images?: string[] // 证据图片
-  conversationId?: string
-  messageId?: string
+}
+
+/** 举报对象类型：后端使用字符串枚举，前端使用数字枚举。 */
+const TARGET_TYPE_MAP: Record<ReportType, string> = {
+  [ReportType.USER]: 'user',
+  [ReportType.PRODUCT]: 'product',
+  [ReportType.MESSAGE]: 'message',
+  [ReportType.CONVERSATION]: 'conversation'
 }
 
 function normalizeReason(reason: ReportReason | string): string {
@@ -51,9 +56,8 @@ export const reportApi = {
    */
   createReport(data: ReportCreateParams) {
     return http.post('/report', {
-      reportedUserId: String(data.reportedUserId),
-      conversationId: data.conversationId ? String(data.conversationId) : undefined,
-      messageId: data.messageId ? String(data.messageId) : undefined,
+      targetType: TARGET_TYPE_MAP[data.targetType] || 'user',
+      targetId: String(data.targetId),
       reason: normalizeReason(data.reason),
       description: data.description,
       evidenceImages: data.images?.length ? JSON.stringify(data.images) : undefined

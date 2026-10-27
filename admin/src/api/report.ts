@@ -4,6 +4,11 @@ import type { PageParams, PageResponse } from './statistics'
 // ==================== 类型定义 ====================
 
 /**
+ * 举报对象类型
+ */
+export type ReportTargetType = 'user' | 'product' | 'message' | 'conversation'
+
+/**
  * 举报记录 VO
  */
 export interface ReportVO {
@@ -11,17 +16,24 @@ export interface ReportVO {
   reporterId: string
   reporterNickname?: string
   reporterPhone?: string
-  reportedUserId: string
+  /** 举报对象类型：user/product/message/conversation */
+  targetType: ReportTargetType
+  /** 举报对象ID */
+  targetId: string
+  /** 被举报人ID（仅当举报对象为用户时由 targetId 派生） */
+  reportedUserId?: string
   reportedUserNickname?: string
   reportedUserPhone?: string
-  conversationId?: string
-  messageId?: string
   reason: string
   description?: string
   evidenceImages?: string[]
+  /** 举报类型：0-其他 1-欺诈 2-色情 3-暴力 4-垃圾信息 */
+  type?: number
   status: number // 0-待处理，1-已处理，2-已驳回
-  adminNote?: string
-  createTime: string
+  handlerId?: string
+  /** 处理备注 */
+  handleNote?: string
+  createdAt: string
   handleTime?: string
 }
 
@@ -30,7 +42,6 @@ export interface ReportVO {
  */
 export interface ReportQueryParams extends PageParams {
   reporterId?: string
-  reportedUserId?: string
   status?: number
   reason?: string
   startTime?: string
@@ -43,7 +54,7 @@ export interface ReportQueryParams extends PageParams {
 export interface ReportHandleParams {
   reportId: string
   status: number // 1-已处理，2-已驳回
-  adminNote?: string
+  handleNote?: string
 }
 
 /**
@@ -92,7 +103,7 @@ export function handleReport(data: ReportHandleParams) {
   return request<boolean>({
     url: data.status === 2 ? `/report/${data.reportId}/reject` : `/report/${data.reportId}/handle`,
     method: 'put',
-    params: { adminNote: data.adminNote },
+    params: { handleNote: data.handleNote },
   })
 }
 
@@ -110,7 +121,7 @@ export async function getReportStatistics(): Promise<ReportStatistics> {
 /**
  * 批量处理举报
  */
-export function batchHandleReports(data: { reportIds: string[]; status: number; adminNote?: string }) {
+export function batchHandleReports(data: { reportIds: string[]; status: number; handleNote?: string }) {
   if (data.status === 2) {
     return Promise.reject(new Error('当前后端暂不支持批量驳回举报'))
   }
@@ -118,7 +129,7 @@ export function batchHandleReports(data: { reportIds: string[]; status: number; 
   return request<boolean>({
     url: '/report/batch/handle',
     method: 'put',
-    params: { adminNote: data.adminNote },
+    params: { handleNote: data.handleNote },
     data: data.reportIds,
   })
 }

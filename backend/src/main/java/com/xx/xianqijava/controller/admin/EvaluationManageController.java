@@ -134,7 +134,7 @@ public class EvaluationManageController {
      */
     private long countByScore(int score) {
         LambdaQueryWrapper<Evaluation> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(Evaluation::getScore, score);
+        queryWrapper.eq(Evaluation::getRating, score);
         return evaluationService.count(queryWrapper);
     }
 
