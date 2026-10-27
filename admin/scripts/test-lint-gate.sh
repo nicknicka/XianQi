@@ -106,28 +106,9 @@ FINAL="$(snapshot)"
 [ "${BEFORE}" = "${FINAL}" ] || fail "红绿探针测试后工作区未恢复（before=${BEFORE} final=${FINAL}）"
 pass "探针全部清理，工作区校验和恢复一致"
 
-# CI：admin-build job 必须在 Build 之前运行只读 lint。
+# CI：admin-build job 必须在 Build 之前运行只读 lint（共享检查器）。
 [ -f "${CI_FILE}" ] || fail "缺少 CI 文件 ${CI_FILE}"
-node - "${CI_FILE}" <<'NODE'
-const fs = require('fs');
-const text = fs.readFileSync(process.argv[2], 'utf8');
-// 截取从 admin-build job 开始的内容；步骤名按整行精确匹配，
-// 因此即使包含后续 job 也不会误匹配。
-const m = text.match(/^  admin-build:[\s\S]*/m);
-if (!m) throw new Error('ci.yml 中未找到 admin-build job');
-const job = m[0];
-const stepPos = (label) =>
-  job.search(new RegExp('^\\s*- name: ' + label + '\\s*$', 'm'));
-const lintPos = stepPos('Lint');
-const buildPos = stepPos('Build');
-if (lintPos === -1) throw new Error('admin-build 缺少 "Lint" 步骤');
-if (buildPos === -1) throw new Error('admin-build 缺少 "Build" 步骤');
-if (!(lintPos < buildPos)) throw new Error('Lint 步骤必须排在 Build 之前');
-const lintBlock = job.slice(lintPos, buildPos);
-if (!/npm run lint(?!:fix)/.test(lintBlock)) throw new Error('CI Lint 步骤必须调用只读 npm run lint');
-if (/--fix|lint:fix/.test(lintBlock)) throw new Error('CI 不得使用自动修复命令');
-NODE
-[ $? -eq 0 ] || fail "CI 未在 build 前运行只读 lint"
+node "${REPO_ROOT}/scripts/check-ci-order.mjs" "${CI_FILE}" || fail "CI 未在 build 前运行只读 lint"
 pass "CI admin-build 在 Build 前运行只读 npm run lint"
 
 echo "ALL LINT GATE CHECKS PASSED"

@@ -167,15 +167,10 @@ test('lint snapshot ignores volatile macOS metadata files', async () => {
 })
 
 test('mobile CI runs read-only lint before building H5', async () => {
-  const ci = await readFile(path.join(repoRoot, '.github', 'workflows', 'ci.yml'), 'utf8')
-  const jobStart = ci.indexOf('mobile-build:')
-  const nextJob = ci.indexOf('\n  # ----------', jobStart + 1)
-  const mobileJob = ci.slice(jobStart, nextJob === -1 ? undefined : nextJob)
-
-  const lintPosition = mobileJob.indexOf('npm run lint')
-  const buildPosition = mobileJob.indexOf('npm run build:h5')
-
-  assert.notEqual(lintPosition, -1)
-  assert.ok(lintPosition < buildPosition)
-  assert.doesNotMatch(mobileJob.slice(lintPosition, buildPosition), /--fix|lint:fix/)
+  const { stdout } = await execFileAsync(
+    process.execPath,
+    [path.join(repoRoot, 'scripts', 'check-ci-order.mjs'), path.join(repoRoot, '.github', 'workflows', 'ci.yml')],
+    { encoding: 'utf8' }
+  )
+  assert.match(stdout, /CI lint order OK/)
 })
