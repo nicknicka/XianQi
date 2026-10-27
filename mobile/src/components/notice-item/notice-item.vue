@@ -37,7 +37,7 @@ export type NoticeItemType = 'system' | 'trade' | 'activity' | 'account' | 'cust
 
 interface Props {
   /** 通知 ID */
-  id?: number | string
+  id?: string
   /** 通知类型 */
   type?: NoticeItemType
   /** 通知标题 */

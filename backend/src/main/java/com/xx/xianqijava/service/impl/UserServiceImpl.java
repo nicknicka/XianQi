@@ -1055,8 +1055,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             throw new BusinessException(ErrorCode.USER_NOT_FOUND);
         }
 
-        // 获取用户偏好设置
-        com.xx.xianqijava.entity.UserPreference preference =
+        // 获取用户偏好设置（已合并进 user 表）
+        com.xx.xianqijava.entity.User preference =
                 userPreferenceService.getOrCreateUserPreference(userId);
 
         com.xx.xianqijava.vo.ThemeConfigVO vo = new com.xx.xianqijava.vo.ThemeConfigVO();

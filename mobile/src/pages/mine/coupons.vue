@@ -103,7 +103,7 @@ type CouponStatus = 'available' | 'used' | 'expired'
 
 interface Coupon {
   id: string
-  userCouponId: number
+  userCouponId: string
   title: string
   description?: string
   amount: string

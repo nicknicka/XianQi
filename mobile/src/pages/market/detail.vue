@@ -1141,7 +1141,7 @@ function loadSellerProducts(userId: string) {
 		.getSellerProducts(userId, {
 			page: 1,
 			pageSize: 10,
-			excludeProductId: Number(productId.value),
+			excludeProductId: productId.value,
 		})
 		.then((res: any) => {
 			sellerProducts.value = (res.data?.list || []).map((item: any) =>
@@ -1394,7 +1394,7 @@ async function submitReport() {
 		.createReport({
 			reportedUserId: product.value.userId,
 			targetType: 2, // ReportType.PRODUCT
-			targetId: Number(productId.value),
+			targetId: productId.value,
 			reason: selectedReportReason.value as ReportReason,
 			description: filteredDesc,
 		})

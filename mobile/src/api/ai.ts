@@ -3,7 +3,6 @@
  */
 import { http } from '@/utils/request'
 import { wsClient } from '@/utils/websocket'
-import type { IdLike } from '@/utils/id'
 import { normalizeId } from '@/utils/id'
 
 interface AIChatRequest {
@@ -149,14 +148,14 @@ export const aiApi = {
   /**
    * 获取聊天历史记录
    */
-  getHistory(userId: IdLike, limit = 20) {
+  getHistory(userId: string, limit = 20) {
     return http.get<AIChatMessage[]>(`/ai/history/${normalizeId(userId)}`, { limit })
   },
 
   /**
    * 清除聊天历史记录
    */
-  clearHistory(userId: IdLike) {
+  clearHistory(userId: string) {
     return http.delete<void>(`/ai/history/${normalizeId(userId)}`, { showLoading: true })
   },
 

@@ -104,7 +104,7 @@ function goBack() {
 }
 
 // 跳转到用户主页
-function goToUserHome(id: string | number) {
+function goToUserHome(id: string) {
   uni.navigateTo({
     url: `/pages/user/home?id=${id}`
   })

@@ -766,9 +766,6 @@ function resolveDraftId(draft: any, type: 'market' | 'share'): string {
   const stringId = candidates.find((id) => typeof id === 'string' && id.trim().length > 0)
   if (stringId) return stringId
 
-  const numericId = candidates.find((id) => typeof id === 'number' && Number.isFinite(id))
-  if (numericId !== undefined) return String(numericId)
-
   return ''
 }
 
@@ -799,7 +796,7 @@ async function saveLocalDraftToServer(type: 'market' | 'share') {
     const serverDraftData = {
       title: draftData.form.title,
       description: draftData.form.description,
-      categoryId: draftData.form.categoryId ? parseInt(draftData.form.categoryId) : undefined,
+      categoryId: draftData.form.categoryId || undefined,
       price: draftData.form.price ? parseFloat(draftData.form.price) : undefined,
       originalPrice: draftData.form.originalPrice ? parseFloat(draftData.form.originalPrice) : undefined,
       conditionLevel: conditionMap[draftData.form.condition] || 10,
@@ -813,7 +810,7 @@ async function saveLocalDraftToServer(type: 'market' | 'share') {
     const serverDraftData = {
       title: draftData.form.title,
       description: draftData.form.description,
-      categoryId: draftData.form.categoryId ? parseInt(draftData.form.categoryId) : undefined,
+      categoryId: draftData.form.categoryId || undefined,
       deposit: draftData.form.deposit ? parseFloat(draftData.form.deposit) : undefined,
       dailyRent: draftData.form.dailyRent ? parseFloat(draftData.form.dailyRent) : undefined,
       imageUrls: draftData.images || [],

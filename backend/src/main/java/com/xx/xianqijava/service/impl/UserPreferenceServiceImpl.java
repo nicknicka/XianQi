@@ -1,71 +1,89 @@
 package com.xx.xianqijava.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xx.xianqijava.common.ErrorCode;
-import com.xx.xianqijava.entity.UserPreference;
+import com.xx.xianqijava.entity.User;
 import com.xx.xianqijava.exception.BusinessException;
-import com.xx.xianqijava.mapper.UserPreferenceMapper;
+import com.xx.xianqijava.mapper.UserMapper;
 import com.xx.xianqijava.service.UserPreferenceService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 用户偏好设置服务实现类
+ *
+ * 偏好字段已合并进 user 表，本实现直接读写 User 聚合的偏好相关列，
+ * 不再依赖独立的 user_preference 表。
  */
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class UserPreferenceServiceImpl extends ServiceImpl<UserPreferenceMapper, UserPreference>
-        implements UserPreferenceService {
+public class UserPreferenceServiceImpl implements UserPreferenceService {
 
-    private final UserPreferenceMapper userPreferenceMapper;
+    private final UserMapper userMapper;
 
     @Override
-    public UserPreference getUserPreference(Long userId) {
+    public User getUserPreference(Long userId) {
         log.info("获取用户偏好设置, userId={}", userId);
 
-        return userPreferenceMapper.selectOne(
-                new LambdaQueryWrapper<UserPreference>()
-                        .eq(UserPreference::getUserId, userId)
-        );
+        if (userId == null) {
+            return null;
+        }
+        return userMapper.selectById(userId);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public UserPreference getOrCreateUserPreference(Long userId) {
+    public User getOrCreateUserPreference(Long userId) {
         log.info("获取或创建用户偏好设置, userId={}", userId);
 
-        UserPreference preference = getUserPreference(userId);
-
-        if (preference == null) {
-            preference = new UserPreference();
-            preference.setUserId(userId);
-            preference.setTheme("light");
-            preference.setAutoDarkMode(0);
-            preference.setFontSize(16);
-            preference.setDeviceType("unknown");
-            preference.setLanguage("zh-CN");
-            preference.setNotificationEnabled(1);
-            preference.setSoundEnabled(1);
-            preference.setVibrationEnabled(1);
-            try {
-                userPreferenceMapper.insert(preference);
-            } catch (DuplicateKeyException e) {
-                // 首次进入主题页时，读取和更新接口可能并发触发，唯一键冲突后重查即可。
-                log.warn("用户偏好设置已被并发创建，重新读取, userId={}", userId);
-                preference = getUserPreference(userId);
-                if (preference == null) {
-                    throw e;
-                }
-            }
-            log.info("创建默认用户偏好设置, userId={}", userId);
+        User user = getUserPreference(userId);
+        if (user == null) {
+            throw new BusinessException(ErrorCode.USER_NOT_FOUND);
         }
 
-        return preference;
+        // 偏好缺省时补齐默认值并落库
+        boolean changed = false;
+        if (user.getTheme() == null) {
+            user.setTheme("light");
+            changed = true;
+        }
+        if (user.getAutoDarkMode() == null) {
+            user.setAutoDarkMode(0);
+            changed = true;
+        }
+        if (user.getFontSize() == null) {
+            user.setFontSize(16);
+            changed = true;
+        }
+        if (user.getDeviceType() == null) {
+            user.setDeviceType("unknown");
+            changed = true;
+        }
+        if (user.getLanguage() == null) {
+            user.setLanguage("zh-CN");
+            changed = true;
+        }
+        if (user.getNotificationEnabled() == null) {
+            user.setNotificationEnabled(1);
+            changed = true;
+        }
+        if (user.getSoundEnabled() == null) {
+            user.setSoundEnabled(1);
+            changed = true;
+        }
+        if (user.getVibrationEnabled() == null) {
+            user.setVibrationEnabled(1);
+            changed = true;
+        }
+
+        if (changed) {
+            userMapper.updateById(user);
+            log.info("补齐默认用户偏好设置, userId={}", userId);
+        }
+
+        return user;
     }
 
     @Override
@@ -84,20 +102,19 @@ public class UserPreferenceServiceImpl extends ServiceImpl<UserPreferenceMapper,
             throw new BusinessException(ErrorCode.BAD_REQUEST, "字体大小必须在12-24之间");
         }
 
-        UserPreference preference = getOrCreateUserPreference(userId);
+        User user = getOrCreateUserPreference(userId);
 
-        // 更新主题配置
         if (theme != null) {
-            preference.setTheme(theme);
+            user.setTheme(theme);
         }
         if (autoDarkMode != null) {
-            preference.setAutoDarkMode(autoDarkMode ? 1 : 0);
+            user.setAutoDarkMode(autoDarkMode ? 1 : 0);
         }
         if (fontSize != null) {
-            preference.setFontSize(fontSize);
+            user.setFontSize(fontSize);
         }
 
-        userPreferenceMapper.updateById(preference);
+        userMapper.updateById(user);
         log.info("主题配置更新成功, userId={}", userId);
     }
 
@@ -108,19 +125,19 @@ public class UserPreferenceServiceImpl extends ServiceImpl<UserPreferenceMapper,
         log.info("更新通知设置, userId={}, notification={}, sound={}, vibration={}",
                 userId, notificationEnabled, soundEnabled, vibrationEnabled);
 
-        UserPreference preference = getOrCreateUserPreference(userId);
+        User user = getOrCreateUserPreference(userId);
 
         if (notificationEnabled != null) {
-            preference.setNotificationEnabled(notificationEnabled ? 1 : 0);
+            user.setNotificationEnabled(notificationEnabled ? 1 : 0);
         }
         if (soundEnabled != null) {
-            preference.setSoundEnabled(soundEnabled ? 1 : 0);
+            user.setSoundEnabled(soundEnabled ? 1 : 0);
         }
         if (vibrationEnabled != null) {
-            preference.setVibrationEnabled(vibrationEnabled ? 1 : 0);
+            user.setVibrationEnabled(vibrationEnabled ? 1 : 0);
         }
 
-        userPreferenceMapper.updateById(preference);
+        userMapper.updateById(user);
         log.info("通知设置更新成功, userId={}", userId);
     }
 

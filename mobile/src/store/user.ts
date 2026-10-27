@@ -7,8 +7,8 @@ import storage from '@/utils/storage'
 import { extractUserIdFromToken } from '@/utils/id'
 
 interface UserInfo {
-  id?: string | number
-  userId?: string | number
+  id?: string
+  userId?: string
   username?: string
   nickname?: string
   avatar?: string

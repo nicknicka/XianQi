@@ -6,10 +6,10 @@ import request from '@/utils/request'
  * 分类 VO
  */
 export interface CategoryVO {
-  categoryId: number
+  categoryId: string
   name: string
   code?: string
-  parentId?: number | null
+  parentId?: string | null
   icon?: string
   gradient?: string
   sortOrder: number
@@ -26,7 +26,7 @@ export interface CategoryVO {
 export interface CategoryCreateParams {
   name: string
   code?: string
-  parentId?: number | null
+  parentId?: string | null
   icon?: string
   gradient?: string
   sortOrder?: number
@@ -37,7 +37,7 @@ export interface CategoryCreateParams {
  * 更新分类参数
  */
 export interface CategoryUpdateParams extends CategoryCreateParams {
-  categoryId: number
+  categoryId: string
 }
 
 // ==================== API 接口 ====================
@@ -65,7 +65,7 @@ export function getCategoryList() {
 /**
  * 获取分类详情
  */
-export function getCategoryDetail(categoryId: number) {
+export function getCategoryDetail(categoryId: string) {
   return request<CategoryVO>({
     url: `/category/${categoryId}`,
     method: 'get',
@@ -80,7 +80,7 @@ export function createCategory(data: CategoryCreateParams) {
     url: '/category',
     method: 'post',
     data,
-  })
+  }).then(categoryId => String(categoryId))
 }
 
 /**
@@ -97,7 +97,7 @@ export function updateCategory(data: CategoryUpdateParams) {
 /**
  * 删除分类
  */
-export function deleteCategory(categoryId: number) {
+export function deleteCategory(categoryId: string) {
   return request<boolean>({
     url: `/category/${categoryId}`,
     method: 'delete',
@@ -107,7 +107,7 @@ export function deleteCategory(categoryId: number) {
 /**
  * 更新分类状态
  */
-export function updateCategoryStatus(categoryId: number, status: number) {
+export function updateCategoryStatus(categoryId: string, status: number) {
   return request<boolean>({
     url: `/category/${categoryId}/status`,
     method: 'put',
@@ -118,7 +118,7 @@ export function updateCategoryStatus(categoryId: number, status: number) {
 /**
  * 批量更新排序
  */
-export function batchUpdateSortOrder(sortData: { categoryId: number; sortOrder: number }[]) {
+export function batchUpdateSortOrder(sortData: { categoryId: string; sortOrder: number }[]) {
   return request<boolean>({
     url: '/category/sort',
     method: 'put',

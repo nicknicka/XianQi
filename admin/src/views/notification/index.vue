@@ -232,7 +232,7 @@ const formSubmitting = ref(false)
 const formRef = ref<FormInstance>()
 
 // 表单数据
-const notificationForm = reactive<CreateNotificationParams & { notificationId?: number }>({
+const notificationForm = reactive<CreateNotificationParams & { notificationId?: string }>({
   title: '',
   content: '',
   type: 'system',

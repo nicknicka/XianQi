@@ -78,7 +78,7 @@
 import { ref, watch } from 'vue'
 
 export interface CollapseItem {
-  id?: string | number
+  id?: string
   name?: string
   title: string
   content?: string

@@ -130,7 +130,7 @@ interface Props {
 type DraftMode = 'market' | 'share'
 
 interface DraftItem {
-  id?: string | number
+  id?: string
   type?: DraftMode
   title?: string
   updateTime?: string

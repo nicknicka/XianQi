@@ -7,13 +7,13 @@ import type { PageParams } from './statistics'
  * 轮播图管理VO
  */
 export interface BannerManageVO {
-  bannerId: number
+  bannerId: string
   title: string
   imageUrl: string
   imageThumbnailUrl?: string
   linkType: number
   linkUrl?: string
-  linkProductId?: number
+  linkProductId?: string
   linkProductTitle?: string
   linkPagePath?: string
   sortOrder: number
@@ -44,7 +44,7 @@ export interface BannerCreateParams {
   imageThumbnailUrl?: string
   linkType: number
   linkUrl?: string
-  linkProductId?: number
+  linkProductId?: string
   linkPagePath?: string
   sortOrder?: number
   status: number
@@ -56,13 +56,13 @@ export interface BannerCreateParams {
  * 更新轮播图参数
  */
 export interface BannerUpdateParams {
-  bannerId: number
+  bannerId: string
   title?: string
   imageUrl?: string
   imageThumbnailUrl?: string
   linkType?: number
   linkUrl?: string
-  linkProductId?: number
+  linkProductId?: string
   linkPagePath?: string
   sortOrder?: number
   status?: number
@@ -97,7 +97,7 @@ export function getBannerList(params: BannerManageQueryParams) {
 /**
  * 获取轮播图详情
  */
-export function getBannerDetail(bannerId: number) {
+export function getBannerDetail(bannerId: string) {
   return request<BannerManageVO>({
     url: `/banner/${bannerId}`,
     method: 'get',
@@ -129,7 +129,7 @@ export function updateBanner(data: BannerUpdateParams) {
 /**
  * 删除轮播图
  */
-export function deleteBanner(bannerId: number) {
+export function deleteBanner(bannerId: string) {
   return request<boolean>({
     url: `/banner/${bannerId}`,
     method: 'delete',
@@ -139,7 +139,7 @@ export function deleteBanner(bannerId: number) {
 /**
  * 启用/禁用轮播图
  */
-export function updateBannerStatus(bannerId: number, status: number) {
+export function updateBannerStatus(bannerId: string, status: number) {
   return request<boolean>({
     url: `/banner/${bannerId}/status`,
     method: 'put',

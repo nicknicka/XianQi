@@ -1,7 +1,7 @@
 import request from '@/utils/request'
 
 export interface SystemConfig {
-  configId: number
+  configId: string
   configKey: string
   configValue: string
   configType: string // 配置值类型：string/number/boolean/json

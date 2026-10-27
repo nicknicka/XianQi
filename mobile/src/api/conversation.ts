@@ -34,7 +34,7 @@ export interface Message {
   senderAvatar: string
   content: string
   messageType: number // 1-文本，2-图片，3-商品卡片，4-订单卡片，5-引用消息，6-系统通知
-  replyToMessageId?: number
+  replyToMessageId?: string
   status: number // 1-发送中，2-发送成功，3-发送失败
   sendTime: string
   isRecalled?: boolean
@@ -75,7 +75,7 @@ function normalizeMessage(data: any): Message {
     senderAvatar: data?.fromUserAvatar || data?.senderAvatar || '',
     content: data?.content || '',
     messageType: Number(data?.type ?? data?.messageType ?? 1),
-    replyToMessageId: data?.parentMessageId ? Number(data.parentMessageId) : undefined,
+    replyToMessageId: data?.parentMessageId ? String(data.parentMessageId) : undefined,
     status: Number(data?.sendStatus ?? data?.status ?? 1),
     sendTime: data?.createTime || data?.sendTime || '',
     isRecalled: false,
@@ -119,12 +119,12 @@ export const conversationApi = {
    */
   createConversation(data: {
     type: number
-    targetUserId?: number
+    targetUserId?: string
     name?: string
     memberIds?: string[]
   }) {
     if (data.type === 1 && data.targetUserId) {
-      return http.post<number | string>(`/conversation/one-to-one?userId=${data.targetUserId}`).then((res: any) => ({
+      return http.post<string>(`/conversation/one-to-one?userId=${data.targetUserId}`).then((res: any) => ({
         ...res,
         data: {
           conversationId: String(res.data),
@@ -168,7 +168,7 @@ export const conversationApi = {
     conversationId: string
     content: string
     messageType: number
-    replyToMessageId?: number
+    replyToMessageId?: string
   }) {
     return http.post<Message>('/conversation/message', {
       conversationId: data.conversationId,

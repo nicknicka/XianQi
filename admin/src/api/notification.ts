@@ -16,7 +16,7 @@ export interface NotificationQueryParams extends PageParams {
  * 系统通知VO
  */
 export interface NotificationVO {
-  notificationId: number
+  notificationId: string
   title: string
   content: string
   type: string // system-系统公告, activity-活动通知, urgent-紧急通知
@@ -46,7 +46,7 @@ export interface CreateNotificationParams {
  * 更新通知参数
  */
 export interface UpdateNotificationParams extends CreateNotificationParams {
-  notificationId: number
+  notificationId: string
 }
 
 /**
@@ -63,7 +63,7 @@ export function getNotificationList(params: NotificationQueryParams) {
 /**
  * 获取通知详情
  */
-export function getNotificationDetail(notificationId: number) {
+export function getNotificationDetail(notificationId: string) {
   return request<NotificationVO>({
     url: `/system-notification/${notificationId}`,
     method: 'get',
@@ -82,14 +82,14 @@ export function createNotification(data: CreateNotificationParams) {
     // 指定用户：将逗号分隔的ID转换为JSON数组
     const ids = data.targetUserIds
       .split(',')
-      .map(id => parseInt(id.trim()))
-      .filter(id => !isNaN(id))
+      .map(id => id.trim())
+      .filter(Boolean)
     processedTargetUsers = JSON.stringify(ids)
     processedTargetUserIds = data.targetUserIds
   }
   // 如果是 'all'，则 targetUsers 保持为 null，表示全部用户
 
-  return request<number>({
+  return request<unknown>({
     url: '/system-notification',
     method: 'post',
     data: {
@@ -101,7 +101,7 @@ export function createNotification(data: CreateNotificationParams) {
       targetUsers: processedTargetUsers, // JSON 数组字符串或 null
       targetUserIds: processedTargetUserIds,
     },
-  })
+  }).then(notificationId => String(notificationId))
 }
 
 /**
@@ -116,8 +116,8 @@ export function updateNotification(data: UpdateNotificationParams) {
     // 指定用户：将逗号分隔的ID转换为JSON数组
     const ids = data.targetUserIds
       .split(',')
-      .map(id => parseInt(id.trim()))
-      .filter(id => !isNaN(id))
+      .map(id => id.trim())
+      .filter(Boolean)
     processedTargetUsers = JSON.stringify(ids)
     processedTargetUserIds = data.targetUserIds
   }
@@ -142,7 +142,7 @@ export function updateNotification(data: UpdateNotificationParams) {
 /**
  * 发布通知
  */
-export function publishNotification(notificationId: number) {
+export function publishNotification(notificationId: string) {
   return request<boolean>({
     url: `/system-notification/${notificationId}/publish`,
     method: 'put',
@@ -152,7 +152,7 @@ export function publishNotification(notificationId: number) {
 /**
  * 删除通知
  */
-export function deleteNotification(notificationId: number) {
+export function deleteNotification(notificationId: string) {
   return request<boolean>({
     url: `/system-notification/${notificationId}`,
     method: 'delete',

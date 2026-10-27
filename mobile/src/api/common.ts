@@ -88,13 +88,13 @@ export const commonApi = {
    */
   report(data: {
     targetType: string
-    targetId: number
+    targetId: string
     reason: string
     description?: string
     images?: string[]
-    reportedUserId?: number | string
-    conversationId?: number | string
-    messageId?: number | string
+    reportedUserId?: string
+    conversationId?: string
+    messageId?: string
   }) {
     return http.post('/report', {
       reportedUserId: String(data.reportedUserId || data.targetId),

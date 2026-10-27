@@ -4,16 +4,16 @@
 import { http } from '@/utils/request'
 
 export interface SystemNotice {
-  id?: string | number
-  noticeId?: string | number
-  notificationId?: string | number
+  id?: string
+  noticeId?: string
+  notificationId?: string
   title: string
   content: string
   type: number
   linkType?: number
   linkUrl?: string
-  linkProductId?: string | number
-  linkOrderId?: string | number
+  linkProductId?: string
+  linkOrderId?: string
   publishTime: string
   priority: number
 }

@@ -4,7 +4,7 @@
 import { http } from '@/utils/request'
 
 export interface UserAddress {
-  addressId: number
+  addressId: string
   contactName: string
   contactPhone: string
   province: string

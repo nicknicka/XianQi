@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 
 import java.time.LocalDateTime;
 
@@ -17,13 +19,15 @@ public class CreditAlert {
     /**
      * 预警ID
      */
-    @TableId(type = IdType.ASSIGN_ID)
-    private String id;
+    @TableId(value = "alert_id", type = IdType.ASSIGN_ID)
+    @JsonSerialize(using = ToStringSerializer.class)
+    private Long alertId;
 
     /**
      * 用户ID
      */
-    private String userId;
+    @JsonSerialize(using = ToStringSerializer.class)
+    private Long userId;
 
     /**
      * 预警类型
@@ -48,7 +52,8 @@ public class CreditAlert {
     /**
      * 处理人ID
      */
-    private String handledBy;
+    @JsonSerialize(using = ToStringSerializer.class)
+    private Long handledBy;
 
     /**
      * 处理结果

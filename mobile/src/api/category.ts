@@ -2,12 +2,11 @@
  * 分类 API
  */
 import { http } from '@/utils/request'
-import type { IdLike } from '@/utils/id'
 import { normalizeId } from '@/utils/id'
 
 export interface Category {
-  categoryId: string | number
-  id?: string | number
+  categoryId: string
+  id?: string
   name: string
   code: string
   icon: string
@@ -26,7 +25,7 @@ export const categoryApi = {
   /**
    * 获取分类详情
    */
-  getCategoryDetail(id: IdLike) {
+  getCategoryDetail(id: string) {
     return http.get<Category>(`/category/${normalizeId(id)}`)
   }
 }

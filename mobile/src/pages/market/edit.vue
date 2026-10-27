@@ -1273,7 +1273,7 @@ async function submitEdit() {
 			? parseFloat(form.value.originalPrice)
 			: undefined,
 		conditionLevel: conditionMap[form.value.condition],
-		categoryId: parseInt(form.value.categoryId),
+		categoryId: form.value.categoryId,
 		imageUrls: images.value,
 		location: location,
 		latitude: latitude,

@@ -166,7 +166,7 @@
         </el-form-item>
 
         <el-form-item v-if="bannerForm.linkType === 3" label="关联商品ID" prop="linkProductId">
-          <el-input-number v-model="bannerForm.linkProductId" :min="1" placeholder="请输入商品ID" style="width: 100%" />
+          <el-input v-model="bannerForm.linkProductId" placeholder="请输入商品ID" style="width: 100%" />
         </el-form-item>
 
         <el-form-item v-if="bannerForm.linkType === 4" label="功能页面路径" prop="linkPagePath">
@@ -256,7 +256,7 @@ const formSubmitting = ref(false)
 const formRef = ref<FormInstance>()
 
 // 表单数据
-const bannerForm = reactive<BannerCreateParams & { bannerId?: number }>({
+const bannerForm = reactive<BannerCreateParams & { bannerId?: string }>({
   title: '',
   imageUrl: '',
   imageThumbnailUrl: '',

@@ -94,7 +94,6 @@ import { userApi } from '@/api/user'
 import UserAvatar from '@/components/user-avatar/user-avatar.vue'
 import { useThemePage, useThemeStyle } from '@/utils/theme'
 import { getNavBarInfo } from '@/utils/system-info'
-import type { IdLike } from '@/utils/id'
 
 const { themeStyle } = useThemeStyle()
 
@@ -130,7 +129,7 @@ const emptyText = computed(() => currentTab.value === 'following' ? '还没有�
 
 // 用户列表
 interface UserItem {
-  id: IdLike
+  id: string
   username: string
   nickname: string
   avatar: string
@@ -238,7 +237,7 @@ function loadMore() {
 }
 
 // 关注用户
-async function followUser(userId: IdLike) {
+async function followUser(userId: string) {
   try {
     await userApi.followUser(String(userId))
     uni.showToast({
@@ -263,7 +262,7 @@ async function followUser(userId: IdLike) {
 }
 
 // 取消关注
-async function unfollowUser(userId: IdLike) {
+async function unfollowUser(userId: string) {
   try {
     await userApi.unfollowUser(String(userId))
     uni.showToast({
@@ -288,7 +287,7 @@ async function unfollowUser(userId: IdLike) {
 }
 
 // 跳转到用户主页
-function goUserHome(userId: IdLike) {
+function goUserHome(userId: string) {
   uni.navigateTo({
     url: `/pages/user/home?id=${userId}`
   })

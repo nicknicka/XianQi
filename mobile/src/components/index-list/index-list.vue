@@ -77,7 +77,7 @@ import { ref, computed } from 'vue'
 import UserAvatar from '@/components/user-avatar/user-avatar.vue'
 
 export interface IndexListItem {
-  id?: string | number
+  id?: string
   name: string
   avatar?: string
   description?: string

@@ -93,8 +93,7 @@ public class TransferRecordServiceImpl extends ServiceImpl<TransferRecordMapper,
         // 6. 检查是否有未完成的借用订单（待审批、已批准、借用中）
         LambdaQueryWrapper<ShareItemBooking> bookingWrapper = new LambdaQueryWrapper<>();
         bookingWrapper.eq(ShareItemBooking::getShareId, createDTO.getShareId())
-                .in(ShareItemBooking::getStatus, 0, 1, 4) // 待审批、已批准、借用中
-                .eq(ShareItemBooking::getDeleted, 0);
+                .in(ShareItemBooking::getStatus, 0, 1, 4); // 待审批、已批准、借用中
         long activeBookingCount = shareItemBookingMapper.selectCount(bookingWrapper);
         if (activeBookingCount > 0) {
             throw new BusinessException(ErrorCode.BAD_REQUEST, "该物品有未完成的借用订单，暂时不能转赠");
@@ -171,8 +170,7 @@ public class TransferRecordServiceImpl extends ServiceImpl<TransferRecordMapper,
         // 再次检查是否有未完成的借用订单（防止待审批状态被转赠）
         LambdaQueryWrapper<ShareItemBooking> bookingWrapper = new LambdaQueryWrapper<>();
         bookingWrapper.eq(ShareItemBooking::getShareId, record.getShareId())
-                .in(ShareItemBooking::getStatus, 0, 1, 4) // 待审批、已批准、借用中
-                .eq(ShareItemBooking::getDeleted, 0);
+                .in(ShareItemBooking::getStatus, 0, 1, 4); // 待审批、已批准、借用中
         long activeBookingCount = shareItemBookingMapper.selectCount(bookingWrapper);
         if (activeBookingCount > 0) {
             throw new BusinessException(ErrorCode.BAD_REQUEST, "该物品有未完成的借用订单，请先处理完订单后再接受转赠");

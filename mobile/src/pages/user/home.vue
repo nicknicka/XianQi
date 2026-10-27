@@ -322,7 +322,6 @@ import LazyImage from '@/components/lazy-image/lazy-image.vue'
 import { shareManager } from '@/utils/share'
 import {useThemeStyle, useThemeColors, useThemePage} from '@/utils/theme'
 import { onShow } from '@dcloudio/uni-app'
-import type { IdLike } from '@/utils/id'
 
 const userStore = useUserStore()
 const { themeStyle } = useThemeStyle()
@@ -1004,7 +1003,7 @@ function goFollowing() {
   })
 }
 
-function goProductDetail(id: IdLike) {
+function goProductDetail(id: string) {
   uni.navigateTo({
     url: `/pages/market/detail?id=${id}`
   })
@@ -1028,7 +1027,7 @@ function handleAvatarClick() {
   }
 }
 
-function goUserProfile(userId: IdLike) {
+function goUserProfile(userId: string) {
   uni.navigateTo({
     url: `/pages/user/home?id=${userId}`
   })

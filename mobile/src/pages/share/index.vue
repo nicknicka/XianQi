@@ -152,7 +152,6 @@ import { shareApi } from '@/api/share'
 import ProductListItem from '@/components/product-list-item/product-list-item.vue'
 import { normalizeImageUrl } from '@/utils/image'
 import { onShow } from '@dcloudio/uni-app'
-import type { IdLike } from '@/utils/id'
 
 function formatAvailableTime(raw: string): string {
   if (!raw) return '随时可借用'
@@ -179,8 +178,8 @@ function formatAvailableTime(raw: string): string {
 }
 
 interface ShareItem {
-  id: IdLike
-  shareId?: IdLike
+  id: string
+  shareId?: string
   title: string
   coverImage: string
   dailyRent: number
@@ -366,7 +365,7 @@ function onRefresh() {
   }, 1000)
 }
 
-function goDetail(id: IdLike) {
+function goDetail(id: string) {
   uni.navigateTo({
     url: `/pages/share/detail?id=${id}`
   })

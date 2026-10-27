@@ -12,7 +12,7 @@ export interface ProductDraftDto {
   draftId?: string                    // 更新时传入
   title?: string                      // 商品标题
   description?: string                // 商品描述
-  categoryId?: number                 // 分类ID
+  categoryId?: string                 // 分类ID
   price?: number                      // 价格
   originalPrice?: number              // 原价
   condition?: string                  // 成色字符串: new, almost_new, lightly_used, obviously_used, has_flaws
@@ -25,7 +25,7 @@ export interface ProductDraftDto {
   freeShipping?: boolean              // 是否包邮
   // 秒杀配置
   isFlashSale?: boolean               // 是否参与秒杀
-  sessionId?: number                  // 秒杀场次ID
+  sessionId?: string                  // 秒杀场次ID
   flashPrice?: number                 // 秒杀价格
   flashSaleStock?: number             // 秒杀库存
   limitPerUser?: number               // 每人限购数量
@@ -39,7 +39,7 @@ export interface ProductDraftVo {
   productId: string
   title: string
   description: string
-  categoryId: number
+  categoryId: string
   categoryName: string
   price: number
   originalPrice: number
@@ -77,7 +77,7 @@ export interface ProductDto {
   description: string
   price: number
   condition: ProductCondition | string
-  categoryId: number
+  categoryId: string
   images: string[]
   coverImage: string
   location: string
@@ -94,7 +94,7 @@ export interface ProductDto {
 interface ProductListParams {
   page?: number
   pageSize?: number
-  categoryId?: number
+  categoryId?: string
   keyword?: string
   minPrice?: number
   maxPrice?: number
@@ -184,7 +184,7 @@ export const productApi = {
     description: string
     price: number
     condition: string
-    categoryId: number
+    categoryId: string
     images: string[]
     location: string
     latitude?: number
@@ -246,7 +246,7 @@ export const productApi = {
   /**
    * 获取推荐商品（热门商品）V1
    */
-  getRecommendProducts(params: { categoryId?: number; limit?: number }) {
+  getRecommendProducts(params: { categoryId?: string; limit?: number }) {
     return http.get<Product[]>('/recommend/hot', params)
   },
 
@@ -264,7 +264,7 @@ export const productApi = {
   /**
    * 获取热门商品推荐（V2，带缓存）
    */
-  getHotProductsV2(params: { categoryId?: number; limit?: number }) {
+  getHotProductsV2(params: { categoryId?: string; limit?: number }) {
     return http.get<Product[]>('/recommend/v2/hot', params)
   },
 
@@ -323,7 +323,7 @@ export const productApi = {
   /**
    * 删除单条浏览历史
    */
-  deleteViewHistory(historyId: number) {
+  deleteViewHistory(historyId: string) {
     return http.delete(`/history/${historyId}`, undefined, { showLoading: true })
   },
 
@@ -344,7 +344,7 @@ export const productApi = {
   /**
    * 获取卖家的其他商品
    */
-  getSellerProducts(userId: string, params: { page?: number; pageSize?: number; excludeProductId?: number }) {
+  getSellerProducts(userId: string, params: { page?: number; pageSize?: number; excludeProductId?: string }) {
     return http.get<{
       list: Product[]
       total: number

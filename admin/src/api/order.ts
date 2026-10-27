@@ -7,8 +7,8 @@ import type { PageParams, PageResponse } from './statistics'
 export interface OrderManageQueryParams extends PageParams {
   orderNo?: string // 订单号
   productTitle?: string // 商品标题
-  buyerId?: number // 买家ID
-  sellerId?: number // 卖家ID
+  buyerId?: string // 买家ID
+  sellerId?: string // 卖家ID
   status?: number // 订单状态
 }
 
@@ -16,15 +16,15 @@ export interface OrderManageQueryParams extends PageParams {
  * 订单管理VO
  */
 export interface OrderManageVO {
-  orderId: number
+  orderId: string
   orderNo: string
-  buyerId?: number
+  buyerId?: string
   buyerNickname?: string
   buyerPhone?: string
-  sellerId?: number
+  sellerId?: string
   sellerNickname?: string
   sellerPhone?: string
-  productId?: number
+  productId?: string
   productTitle?: string
   productImage?: string
   productPrice: string // 商品价格 - 使用string避免精度问题
@@ -43,7 +43,7 @@ export interface OrderManageVO {
  * 退款处理参数
  */
 export interface OrderRefundProcessParams {
-  orderId: number
+  orderId: string
   action: 'approve' | 'reject' // 同意或拒绝退款
   reason?: string
 }
@@ -77,7 +77,7 @@ export function getOrderList(params: OrderManageQueryParams) {
 /**
  * 获取订单详情
  */
-export function getOrderDetail(orderId: number) {
+export function getOrderDetail(orderId: string) {
   return request<OrderManageVO>({
     url: `/order/${orderId}`,
     method: 'get',

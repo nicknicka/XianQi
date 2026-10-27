@@ -46,7 +46,7 @@ export interface Product {
   price: number
   originalPrice?: number
   condition: ProductCondition
-  categoryId: number
+  categoryId: string
   categoryName?: string
   userId: string
   userName: string
@@ -145,7 +145,7 @@ export interface ProductImage {
  */
 export interface ProductQueryParams extends PageParams {
   keyword?: string
-  categoryId?: number
+  categoryId?: string
   condition?: ProductCondition
   sortBy?: ProductSortType
   priceAsc?: boolean
@@ -165,7 +165,7 @@ export type ProductSortType = 'latest' | 'price' | 'distance' | 'popularity'
  * 用户类型（基础信息）
  */
 export interface User {
-  id: string | number
+  id: string
   username?: string  // 用户名可能不返回
   nickname: string
   avatar: string
@@ -198,7 +198,7 @@ export interface User {
   // 后端可能返回的字段
   createTime?: string
   updateTime?: string
-  userId?: string | number  // 后端可能返回 userId 而不是 id
+  userId?: string  // 后端可能返回 userId 而不是 id
 }
 
 /**
@@ -274,16 +274,16 @@ export interface RegisterParams {
  * 商品分类
  */
 export interface Category {
-  categoryId: string | number
+  categoryId: string
   name: string
   icon?: string
   code?: string      // 分类代码
   gradient?: string  // 渐变色
-  parentId?: string | number
+  parentId?: string
   sortOrder: number
   children?: Category[]
   // 兼容字段（后端可能返回 id 而不是 categoryId）
-  id?: string | number
+  id?: string
 }
 
 // ==================== 订单相关类型 ====================
@@ -479,7 +479,7 @@ export interface ShareItem {
   images: string[]
   deposit: number
   dailyRent: number
-  categoryId: number
+  categoryId: string
   categoryName?: string
   userId: string
   userName: string

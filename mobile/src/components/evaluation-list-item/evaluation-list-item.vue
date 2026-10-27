@@ -55,8 +55,8 @@ import { useAttrs } from 'vue'
 import LazyImage from '@/components/lazy-image/lazy-image.vue'
 
 interface EvaluationItemData {
-  id: number | string
-  productId: number | string
+  id: string
+  productId: string
   productName: string
   productImage: string
   productPrice: number
@@ -79,7 +79,7 @@ withDefaults(defineProps<Props>(), {
 })
 
 const emit = defineEmits<{
-  click: [id: string | number]
+  click: [id: string]
 }>()
 
 function previewImages(images: string[], index: number) {

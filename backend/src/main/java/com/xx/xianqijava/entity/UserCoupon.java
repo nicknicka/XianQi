@@ -22,7 +22,7 @@ public class UserCoupon extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
 
-    @TableId(type = IdType.AUTO)
+    @TableId(type = IdType.ASSIGN_ID)
     @Schema(description = "用户优惠券ID")
     @JsonSerialize(using = ToStringSerializer.class)
     private Long userCouponId;

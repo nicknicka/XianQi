@@ -7,7 +7,7 @@ import type { PageParams, PageResponse } from './statistics'
  * 敏感词 VO
  */
 export interface SensitiveWordVO {
-  wordId: number
+  wordId: string
   word: string
   type: number // 1-禁止词，2-敏感词，3-替换词
   replaceWord?: string
@@ -31,7 +31,7 @@ export interface SensitiveWordQueryParams extends PageParams {
  * 创建/更新敏感词参数
  */
 export interface SensitiveWordParams {
-  wordId?: number
+  wordId?: string
   word: string
   type: number
   replaceWord?: string
@@ -55,7 +55,7 @@ export function getSensitiveWordList(params: SensitiveWordQueryParams) {
 /**
  * 获取敏感词详情
  */
-export function getSensitiveWordDetail(wordId: number) {
+export function getSensitiveWordDetail(wordId: string) {
   return request<SensitiveWordVO>({
     url: `/sensitive-word/${wordId}`,
     method: 'get',
@@ -87,7 +87,7 @@ export function updateSensitiveWord(data: SensitiveWordParams) {
 /**
  * 删除敏感词
  */
-export function deleteSensitiveWord(wordId: number) {
+export function deleteSensitiveWord(wordId: string) {
   return request<boolean>({
     url: `/sensitive-word/${wordId}`,
     method: 'delete',
@@ -97,7 +97,7 @@ export function deleteSensitiveWord(wordId: number) {
 /**
  * 批量删除敏感词
  */
-export function batchDeleteSensitiveWords(wordIds: number[]) {
+export function batchDeleteSensitiveWords(wordIds: string[]) {
   return request<boolean>({
     url: '/sensitive-word/batch',
     method: 'delete',
@@ -108,7 +108,7 @@ export function batchDeleteSensitiveWords(wordIds: number[]) {
 /**
  * 更新敏感词状态
  */
-export function updateSensitiveWordStatus(wordId: number, status: number) {
+export function updateSensitiveWordStatus(wordId: string, status: number) {
   return request<boolean>({
     url: `/sensitive-word/${wordId}/status`,
     method: 'put',

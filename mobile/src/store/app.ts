@@ -15,7 +15,7 @@ interface LocationInfo {
 
 // 分类选择状态
 interface CategorySelection {
-  categoryId: number // 分类ID
+  categoryId: string // 分类ID
   name: string       // 分类名称
 }
 

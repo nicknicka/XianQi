@@ -7,19 +7,19 @@ import type { PageParams } from './statistics'
  * 共享物品管理VO
  */
 export interface ShareItemManageVO {
-  shareId: number
+  shareId: string
   title: string
   description?: string
-  categoryId?: number
+  categoryId?: string
   categoryName?: string
   deposit: string // 押金 - 使用string避免精度问题
   dailyRent: string // 日租金 - 使用string避免精度问题
-  coverImageId?: number
+  coverImageId?: string
   coverImageUrl?: string
   imageCount?: number
   status: number
   availableTimes?: string
-  ownerId: number
+  ownerId: string
   ownerNickname?: string
   ownerPhone?: string
   createTime: string
@@ -33,8 +33,8 @@ export interface ShareItemManageVO {
  */
 export interface ShareItemManageQueryParams extends PageParams {
   title?: string
-  ownerId?: number
-  categoryId?: number
+  ownerId?: string
+  categoryId?: string
   status?: number
 }
 
@@ -42,7 +42,7 @@ export interface ShareItemManageQueryParams extends PageParams {
  * 共享物品状态更新参数
  */
 export interface ShareItemStatusUpdateParams {
-  shareId: number
+  shareId: string
   status: number
   remark?: string
 }
@@ -90,7 +90,7 @@ export function getShareItemList(params: ShareItemManageQueryParams) {
 /**
  * 获取共享物品详情
  */
-export function getShareItemDetail(shareId: number) {
+export function getShareItemDetail(shareId: string) {
   return request<ShareItemManageVO>({
     url: `/share-item/${shareId}`,
     method: 'get',

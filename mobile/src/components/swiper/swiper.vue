@@ -106,7 +106,7 @@ export type IndicatorType = 'default' | 'number' | 'progress' | 'custom' | 'none
 export type ImageMode = 'aspectFill' | 'aspectFit' | 'scaleToFill' | 'widthFix'
 
 export interface SwiperItem {
-  id?: string | number
+  id?: string
   type?: 'image' | 'video' | 'custom'
   url?: string
   image?: string

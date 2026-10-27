@@ -82,7 +82,7 @@ export type FabSize = 'small' | 'medium' | 'large'
 export type FabPosition = 'bottom-right' | 'bottom-left' | 'top-right' | 'top-left'
 
 export interface FabItem {
-  id?: string | number
+  id?: string
   icon: string
   iconType?: 'text' | 'image'
   label?: string

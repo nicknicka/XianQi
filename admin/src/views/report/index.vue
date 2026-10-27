@@ -290,7 +290,7 @@ const searchForm = ref<ReportQueryParams>({
 
 // 处理表单
 const handleForm = ref<ReportHandleParams>({
-  reportId: 0,
+  reportId: '',
   status: 1,
   adminNote: '',
 })

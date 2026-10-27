@@ -426,7 +426,7 @@ const currentStudentAuth = ref<StudentAuthVO | null>(null)
 // 拒绝弹窗
 const rejectDialogVisible = ref(false)
 const rejectForm = ref({
-  authId: 0,
+  authId: '',
   authType: 'realName' as 'realName' | 'student',
   rejectReason: '',
 })

@@ -75,7 +75,7 @@
 import { ref } from 'vue'
 
 interface BannerItem {
-  id?: string | number
+  id?: string
   image: string
   video?: string
   title?: string

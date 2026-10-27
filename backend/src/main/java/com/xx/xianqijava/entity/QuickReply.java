@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 @Schema(description = "快捷回复模板")
 public class QuickReply {
 
-    @TableId(type = IdType.AUTO)
+    @TableId(type = IdType.ASSIGN_ID)
     @Schema(description = "回复ID")
     @JsonSerialize(using = ToStringSerializer.class)
     private Long replyId;

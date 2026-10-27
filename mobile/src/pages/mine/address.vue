@@ -83,7 +83,6 @@ import { navigate } from '@/utils/router'
 import { usePageAnimation } from '@/composables/usePageAnimation'
 import { useServiceNavigation } from '@/composables/useServiceNavigation'
 import { addressApi, type UserAddress } from '@/api/address'
-import type { IdLike } from '@/utils/id'
 
 // 启用服务页面导航（从服务页面进入时会自动处理返回逻辑）
 useServiceNavigation()
@@ -110,7 +109,7 @@ onShow(() => {
 })
 
 interface Address {
-  id: IdLike
+  id: string
   name: string
   phone: string
   province: string

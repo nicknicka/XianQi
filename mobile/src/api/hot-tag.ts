@@ -4,7 +4,7 @@
 import { http } from '@/utils/request'
 
 export interface HotTag {
-  id: string | number
+  id: string
   keyword: string
   searchCount: number
   sortOrder: number

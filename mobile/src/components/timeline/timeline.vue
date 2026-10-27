@@ -76,7 +76,7 @@ export type TimelinePosition = 'left' | 'right' | 'alternate'
 export type TimelineDotType = 'default' | 'primary' | 'success' | 'warning' | 'error' | 'info'
 
 export interface TimelineItem {
-  id?: string | number
+  id?: string
   title?: string
   description?: string
   content?: string

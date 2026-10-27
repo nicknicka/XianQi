@@ -25,7 +25,7 @@ public class ProductDraftVO {
     private String description;
 
     @Schema(description = "分类ID")
-    private Integer categoryId;
+    private Long categoryId;
 
     @Schema(description = "分类名称")
     private String categoryName;

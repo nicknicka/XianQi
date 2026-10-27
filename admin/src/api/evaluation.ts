@@ -7,20 +7,20 @@ import type { PageParams, PageResponse } from './statistics'
  * 评价 VO
  */
 export interface EvaluationVO {
-  evaluationId: number
-  orderId: number
+  evaluationId: string
+  orderId: string
   orderNo?: string
   rating: number // 1-5星
   content?: string
   tags?: string // 评价标签（JSON字符串）
-  evaluatorId: number // 评价人ID
+  evaluatorId: string // 评价人ID
   evaluatorNickname?: string // 评价人昵称
   evaluatorAvatar?: string // 评价人头像
-  evaluatedUserId: number // 被评价人ID
+  evaluatedUserId: string // 被评价人ID
   evaluatedUserNickname?: string // 被评价人昵称
   evaluatedUserAvatar?: string // 被评价人头像
   targetType?: number // 评价对象类型：1-评价卖家 2-评价买家
-  productId?: number
+  productId?: string
   productTitle?: string
   productImage?: string
   createTime: string
@@ -43,9 +43,9 @@ export function parseTags(tagsStr?: string): string[] {
  * 评价查询参数
  */
 export interface EvaluationQueryParams extends PageParams {
-  fromUserId?: number
-  toUserId?: number
-  orderId?: number
+  fromUserId?: string
+  toUserId?: string
+  orderId?: string
   score?: number // 评分筛选
   keyword?: string // 搜索内容
   startTime?: string
@@ -84,7 +84,7 @@ export function getEvaluationList(params: EvaluationQueryParams) {
 /**
  * 获取评价详情
  */
-export function getEvaluationDetail(evalId: number) {
+export function getEvaluationDetail(evalId: string) {
   return request<EvaluationVO>({
     url: `/evaluation/${evalId}`,
     method: 'get',
@@ -94,7 +94,7 @@ export function getEvaluationDetail(evalId: number) {
 /**
  * 删除评价
  */
-export function deleteEvaluation(evalId: number) {
+export function deleteEvaluation(evalId: string) {
   return request<boolean>({
     url: `/evaluation/${evalId}`,
     method: 'delete',
@@ -104,7 +104,7 @@ export function deleteEvaluation(evalId: number) {
 /**
  * 批量删除评价
  */
-export function batchDeleteEvaluations(evalIds: number[]) {
+export function batchDeleteEvaluations(evalIds: string[]) {
   return request<boolean>({
     url: '/evaluation/batch',
     method: 'delete',

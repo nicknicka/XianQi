@@ -127,7 +127,7 @@ export function testFieldMapping() {
 
   // 商品审核VO字段类型
   interface ProductAuditVO {
-    productId: number
+    productId: string
     title: string
     price: string // 修复后：string类型
     originalPrice?: string // 修复后：string类型
@@ -136,7 +136,7 @@ export function testFieldMapping() {
   }
 
   const product: ProductAuditVO = {
-    productId: 1,
+    productId: '1',
     title: '测试商品',
     price: '1234.56', // 正确使用string
     originalPrice: '2345.67', // 正确使用string
@@ -150,13 +150,13 @@ export function testFieldMapping() {
 
   // 订单管理VO字段类型
   interface OrderManageVO {
-    orderId: number
+    orderId: string
     productPrice: string // 修复后：string类型
     totalAmount: string // 修复后：string类型
   }
 
   const order: OrderManageVO = {
-    orderId: 1,
+    orderId: '1',
     productPrice: '99.99', // 正确使用string
     totalAmount: '199.98', // 正确使用string
   }

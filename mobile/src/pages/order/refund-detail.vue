@@ -170,22 +170,21 @@ import {onLoad, onShow} from '@dcloudio/uni-app'
 import { refundApi } from '@/api/refund'
 import LazyImage from '@/components/lazy-image/lazy-image.vue'
 import {useThemeStyle, useThemePage} from '@/utils/theme'
-import type { IdLike } from '@/utils/id'
 
 const { themeStyle } = useThemeStyle()
 
 interface RefundDetail {
-  refundId: IdLike
+  refundId: string
   refundNo: string
-  orderId: IdLike
+  orderId: string
   orderNo: string
-  productId: IdLike
+  productId: string
   productName: string
   productSpec: string
   productImage: string
-  buyerId: IdLike
+  buyerId: string
   buyerNickname: string
-  sellerId: IdLike
+  sellerId: string
   sellerNickname: string
   refundAmount: number
   refundReason: string
