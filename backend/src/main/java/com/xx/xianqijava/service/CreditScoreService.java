@@ -290,7 +290,7 @@ public class CreditScoreService {
             new LambdaQueryWrapper<Evaluation>()
                 .eq(Evaluation::getFromUserId, evaluatedId)
                 .eq(Evaluation::getToUserId, evaluatorId)
-                .ge(Evaluation::getCreateTime, checkTime)
+                .ge(Evaluation::getCreatedAt, checkTime)
         );
 
         if (count == 0) {

@@ -56,8 +56,8 @@ public class FlashSaleOrderExt implements Serializable {
     private String clientIp;
 
     @Schema(description = "创建时间")
-    private LocalDateTime createTime;
+    private LocalDateTime createdAt;
 
     @Schema(description = "更新时间")
-    private LocalDateTime updateTime;
+    private LocalDateTime updatedAt;
 }

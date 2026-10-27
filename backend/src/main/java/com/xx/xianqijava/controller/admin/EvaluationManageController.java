@@ -143,7 +143,7 @@ public class EvaluationManageController {
      */
     private long countByTime(LocalDateTime start, LocalDateTime end) {
         LambdaQueryWrapper<Evaluation> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.between(Evaluation::getCreateTime, start, end);
+        queryWrapper.between(Evaluation::getCreatedAt, start, end);
         return evaluationService.count(queryWrapper);
     }
 }

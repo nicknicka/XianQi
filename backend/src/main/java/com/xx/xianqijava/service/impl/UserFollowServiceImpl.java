@@ -108,7 +108,7 @@ public class UserFollowServiceImpl extends ServiceImpl<UserFollowMapper, UserFol
         IPage<UserFollow> followPage = baseMapper.selectPage(page,
                 new LambdaQueryWrapper<UserFollow>()
                         .eq(UserFollow::getFollowerId, followerId)
-                        .orderByDesc(UserFollow::getCreateTime));
+                        .orderByDesc(UserFollow::getCreatedAt));
 
         // 转换为UserInfoVO，只返回基本信息
         List<UserInfoVO> userInfoList = followPage.getRecords().stream()
@@ -134,7 +134,7 @@ public class UserFollowServiceImpl extends ServiceImpl<UserFollowMapper, UserFol
         IPage<UserFollow> followPage = baseMapper.selectPage(page,
                 new LambdaQueryWrapper<UserFollow>()
                         .eq(UserFollow::getFollowingId, followingId)
-                        .orderByDesc(UserFollow::getCreateTime));
+                        .orderByDesc(UserFollow::getCreatedAt));
 
         // 转换为UserInfoVO，只返回基本信息
         List<UserInfoVO> userInfoList = followPage.getRecords().stream()

@@ -69,7 +69,7 @@ public class ReportServiceImpl extends ServiceImpl<ReportMapper, Report> impleme
 
         LambdaQueryWrapper<Report> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(Report::getReporterId, reporterId)
-                .orderByDesc(Report::getCreateTime);
+                .orderByDesc(Report::getCreatedAt);
 
         IPage<Report> reportPage = page(page, queryWrapper);
         return reportPage.convert(this::convertToVO);

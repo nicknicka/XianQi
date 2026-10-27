@@ -56,7 +56,7 @@ public class ReportManageController {
             queryWrapper.like(Report::getReason, reason);
         }
 
-        queryWrapper.orderByDesc(Report::getCreateTime);
+        queryWrapper.orderByDesc(Report::getCreatedAt);
 
         IPage<Report> resultPage = reportMapper.selectPage(pageParam, queryWrapper);
 
@@ -110,7 +110,7 @@ public class ReportManageController {
         // 今日举报数
         LocalDateTime todayStart = LocalDateTime.now().withHour(0).withMinute(0).withSecond(0);
         Long todayCount = reportMapper.selectCount(
-            new LambdaQueryWrapper<Report>().ge(Report::getCreateTime, todayStart)
+            new LambdaQueryWrapper<Report>().ge(Report::getCreatedAt, todayStart)
         );
         stats.put("todayCount", todayCount);
 

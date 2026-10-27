@@ -55,7 +55,7 @@ public class FlashSaleSession implements Serializable {
     private Integer enabled;
 
     @Schema(description = "创建时间")
-    private LocalDateTime createTime;
+    private LocalDateTime createdAt;
 
     /**
      * 逻辑删除标记（0=未删除，1=已删除）
