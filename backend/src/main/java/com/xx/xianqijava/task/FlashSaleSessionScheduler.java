@@ -76,9 +76,9 @@ public class FlashSaleSessionScheduler {
 
         LambdaUpdateWrapper<FlashSaleProduct> updateWrapper = new LambdaUpdateWrapper<>();
         updateWrapper.eq(FlashSaleProduct::getRepeatType, 1)  // 每日重复
-                   .eq(FlashSaleProduct::getStockStatus, 1)   // 已售罄
+                   .eq(FlashSaleProduct::getStatus, 1)   // 已售罄
                    .set(FlashSaleProduct::getSoldCount, 0)     // 重置已售数量
-                   .set(FlashSaleProduct::getStockStatus, 0);  // 恢复在售状态
+                   .set(FlashSaleProduct::getStatus, 0);  // 恢复在售状态
 
         int updated = productMapper.update(null, updateWrapper);
         log.info("重置了 {} 个每日重复商品的库存", updated);
@@ -88,7 +88,7 @@ public class FlashSaleSessionScheduler {
         LambdaUpdateWrapper<FlashSaleProduct> expiredWrapper = new LambdaUpdateWrapper<>();
         expiredWrapper.eq(FlashSaleProduct::getRepeatType, 0)  // 不重复
                      .eq(FlashSaleProduct::getSaleDate, yesterday)  // 昨天的日期
-                     .set(FlashSaleProduct::getStockStatus, 2);  // 标记为手动下架（已结束）
+                     .set(FlashSaleProduct::getStatus, 2);  // 标记为手动下架（已结束）
 
         int expired = productMapper.update(null, expiredWrapper);
         log.info("{} 个不重复商品已过期下架", expired);
