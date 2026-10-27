@@ -163,6 +163,11 @@ jobs:
           cd mobile
           npm run lint
 
+      - name: Mobile ID contract tests
+        run: |
+          cd mobile
+          node --test test/id-contract.test.mjs
+
       - name: Lint gate self-test
         run: |
           cd mobile
