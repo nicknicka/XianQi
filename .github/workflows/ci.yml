@@ -21,6 +21,9 @@ jobs:
           node scripts/check-adr.mjs
           node --test scripts/tests/adr-contract-test.mjs
 
+      - name: GitHub wrapper contract tests
+        run: bash scripts/tests/gh-stable-test.bash
+
   # ---------- 后端单元测试 ----------
   backend-unit-test:
     name: Backend Unit Tests
