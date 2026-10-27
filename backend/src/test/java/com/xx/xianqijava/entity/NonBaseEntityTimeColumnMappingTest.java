@@ -57,7 +57,7 @@ class NonBaseEntityTimeColumnMappingTest {
             Arguments.of(OperationLog.class, Set.of("created_at")),
             Arguments.of(ProductFavorite.class, Set.of("created_at")),
             Arguments.of(ProductImage.class, Set.of("created_at")),
-            Arguments.of(ProductStatistics.class, Set.of("updated_at")),
+            Arguments.of(ProductStatistics.class, Set.of("created_at", "updated_at")),
             Arguments.of(QuickReply.class, Set.of("created_at")),
             Arguments.of(Report.class, Set.of("created_at")),
             Arguments.of(ShareItemImage.class, Set.of("created_at")),

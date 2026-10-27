@@ -1,5 +1,6 @@
 package com.xx.xianqijava.entity;
 
+import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -19,7 +20,12 @@ import java.time.LocalDateTime;
 @Schema(description = "商品统计")
 public class ProductStatistics {
 
-    @TableId(type = IdType.INPUT)
+    @TableId(type = IdType.ASSIGN_ID)
+    @Schema(description = "统计ID")
+    @JsonSerialize(using = ToStringSerializer.class)
+    private Long statId;
+
+    @TableField("product_id")
     @Schema(description = "商品ID")
     @JsonSerialize(using = ToStringSerializer.class)
     private Long productId;
@@ -45,6 +51,11 @@ public class ProductStatistics {
     @TableField("cover_image_url")
     private String coverImageUrl;
 
+    @Schema(description = "创建时间")
+    @TableField(fill = FieldFill.INSERT)
+    private LocalDateTime createdAt;
+
     @Schema(description = "更新时间")
+    @TableField(fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime updatedAt;
 }

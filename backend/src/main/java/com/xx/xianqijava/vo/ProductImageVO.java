@@ -36,9 +36,6 @@ public class ProductImageVO {
     @Schema(description = "图片宽度")
     private Integer width;
 
-    @Schema(description = "图片高度")
-    private Integer height;
-
     @Schema(description = "是否为封面：0-否，1-是")
     private Integer isCover;
 
