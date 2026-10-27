@@ -30,10 +30,10 @@ public class FlashSaleProduct extends BaseEntity {
     @TableLogic
     private Integer deleted;
 
-    @TableId(type = IdType.ASSIGN_ID)
+    @TableId(value = "flash_sale_id", type = IdType.ASSIGN_ID)
     @Schema(description = "秒杀商品ID")
     @JsonSerialize(using = ToStringSerializer.class)
-    private Long id;
+    private Long flashSaleId;
 
     @Schema(description = "场次ID")
     @JsonSerialize(using = ToStringSerializer.class)
@@ -62,7 +62,7 @@ public class FlashSaleProduct extends BaseEntity {
     private LocalDate saleDate;
 
     @Schema(description = "库存状态：0-在售，1-已售罄，2-手动下架")
-    private Integer stockStatus;
+    private Integer status;
 
     @Schema(description = "排序权重")
     private Integer sortOrder;

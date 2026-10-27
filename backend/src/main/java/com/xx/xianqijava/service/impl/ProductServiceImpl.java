@@ -163,7 +163,7 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
         flashProduct.setLimitPerUser(createDTO.getLimitPerUser() != null ? createDTO.getLimitPerUser() : 1);
         flashProduct.setRepeatType(createDTO.getRepeatType() != null ? createDTO.getRepeatType() : 1); // 默认每日重复
         flashProduct.setSaleDate(createDTO.getSaleDate());
-        flashProduct.setStockStatus(0); // 在售
+        flashProduct.setStatus(0); // 在售
         flashProduct.setSortOrder(0);
         flashProduct.setDeleted(0);
 
@@ -172,7 +172,7 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
             throw new BusinessException(ErrorCode.INTERNAL_ERROR, "秒杀商品创建失败");
         }
 
-        log.info("秒杀商品创建成功, id={}", flashProduct.getId());
+        log.info("秒杀商品创建成功, id={}", flashProduct.getFlashSaleId());
     }
 
     @Override
