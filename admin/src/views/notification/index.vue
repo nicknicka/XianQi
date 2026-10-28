@@ -345,7 +345,6 @@ const handleEdit = (notification: NotificationVO) => {
       // 如果不是 JSON，可能是 'all' 或其他字符串值
       if (notification.targetUsers === 'all' || notification.targetUsers === 'specific') {
         targetUsersValue = notification.targetUsers
-        targetUserIdsValue = notification.targetUserIds || ''
       }
     }
   }

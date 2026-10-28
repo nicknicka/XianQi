@@ -56,6 +56,11 @@ jobs:
           python3 scripts/check-time-field-naming.py
           node --test scripts/tests/time-field-naming-test.mjs
 
+      - name: Field contract guard
+        run: |
+          python3 scripts/check-field-contract.py
+          node --test scripts/tests/field-contract-test.mjs
+
   # ---------- 后端单元测试 ----------
   backend-unit-test:
     name: Backend Unit Tests

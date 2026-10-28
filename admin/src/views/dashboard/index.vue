@@ -121,7 +121,7 @@
                 <span>待处理退款</span>
               </div>
               <div class="todo-right">
-                <el-tag size="large" type="primary">{{ statisticsData?.order?.refundedCount || 0 }}</el-tag>
+                <el-tag size="large" type="primary">{{ statisticsData?.order?.refundingCount || 0 }}</el-tag>
                 <el-icon><ArrowRight /></el-icon>
               </div>
             </div>

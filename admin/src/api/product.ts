@@ -55,11 +55,11 @@ export interface ProductAuditParams {
  * 商品审核统计
  */
 export interface ProductAuditStatistics {
-  totalCount: number
-  pendingCount: number
+  totalProducts: number
+  pendingAuditCount: number
   approvedCount: number
   rejectedCount: number
-  todayAuditCount: number
+  todayPendingCount: number
 }
 
 /**
