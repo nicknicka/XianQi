@@ -72,6 +72,41 @@ assert_log_contains() {
   fi
 }
 
+# reuse mode: no containers are started, the provided MYSQL_URL is used, and extra
+# args are forwarded to Maven.
+tmp="$(mktemp -d "$TMP_ROOT/case.XXXXXX")"
+make_fakes "$tmp/bin"
+: > "$tmp/log"; : > "$tmp/env"
+set +e
+PATH="$tmp/bin:$PATH" FAKE_LOG="$tmp/log" FAKE_ENV_LOG="$tmp/env" \
+  XIANQI_BACKEND_MVN="$tmp/bin/mvnw" \
+  XIANQI_TEST_REUSE_DB=1 \
+  MYSQL_URL="jdbc:mysql://127.0.0.1:9/reuse_db" \
+  "$SCRIPT" -Dit.test=SomeIT -Dfailsafe.failIfNoSpecifiedTests=false >"$tmp/out" 2>&1
+reuse_rc=$?
+set -e
+printf '%s\n' "$reuse_rc" > "$tmp/rc"
+expect_rc "$tmp" 0 "reuse mode runs the suite and exits 0"
+if grep -Fq "docker run" "$tmp/log"; then fail_case "reuse mode does not start containers"; else pass "reuse mode does not start containers"; fi
+if grep -Fq "docker rm" "$tmp/log"; then fail_case "reuse mode does not clean up containers it never started"; else pass "reuse mode does not clean up containers it never started"; fi
+assert_log_contains "$tmp" "mvnw --batch-mode verify -Dit.test=SomeIT -Dfailsafe.failIfNoSpecifiedTests=false" "forwards extra args to Maven"
+assert_contains() { grep -Fq "$1" "$tmp/env" && pass "$2" || fail_case "$2"; }
+assert_contains "MYSQL_URL=jdbc:mysql://127.0.0.1:9/reuse_db" "reuse mode passes the caller MYSQL_URL to Maven"
+
+# reuse mode without MYSQL_URL: must fail fast with rc=2 and never touch docker or Maven
+tmp="$(mktemp -d "$TMP_ROOT/case.XXXXXX")"
+make_fakes "$tmp/bin"
+: > "$tmp/log"; : > "$tmp/env"
+set +e
+PATH="$tmp/bin:$PATH" FAKE_LOG="$tmp/log" FAKE_ENV_LOG="$tmp/env" \
+  XIANQI_BACKEND_MVN="$tmp/bin/mvnw" XIANQI_TEST_REUSE_DB=1 env -u MYSQL_URL \
+  "$SCRIPT" >"$tmp/out" 2>&1
+nourl_rc=$?
+set -e
+printf '%s\n' "$nourl_rc" > "$tmp/rc"
+expect_rc "$tmp" 2 "reuse mode without MYSQL_URL fails fast"
+if grep -Eq "docker run|mvnw" "$tmp/log"; then fail_case "reuse without MYSQL_URL touches docker/Maven"; else pass "reuse without MYSQL_URL touches nothing"; fi
+
 # happy path: dependencies start, mvn verify runs and everything is cleaned up
 tmp="$(run_case happy 0 healthy 0)"
 expect_rc "$tmp" 0 "successful verification exits 0"
