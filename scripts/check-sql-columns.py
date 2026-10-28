@@ -63,7 +63,39 @@ def parse_schema(root):
         tables[match.group(1)] = columns
     if not tables:
         fail(f'no table definitions parsed from {path}')
+    apply_alter_table(sql, tables)
     return tables
+
+
+def apply_alter_table(sql, tables):
+    """Apply ALTER TABLE statements so a later ADD/DROP/CHANGE/MODIFY COLUMN is not a silent hole.
+
+    The schema is a CREATE pass followed by an ALTER pass (see docs/adr/0004). A parser that
+    reads only the CREATE blocks would treat an ``ALTER TABLE ... ADD COLUMN`` as a phantom
+    "missing column" and, worse, would miss the column the ALTER actually adds.
+    """
+    block = re.compile(r'ALTER TABLE `([^`]+)`(.*?);', re.DOTALL)
+    for match in block.finditer(sql):
+        table = match.group(1)
+        if table not in tables:
+            fail(f'ALTER TABLE references a table with no CREATE TABLE: `{table}`')
+            continue
+        for statement in match.group(2).split(','):
+            text = statement.strip()
+            # Only column operations carry a backticked identifier right after the verb
+            # (ADD COLUMN `x` / ADD `x` / DROP COLUMN `x`); ADD CONSTRAINT/KEY/INDEX do not
+            # and therefore never match. MODIFY redefines an existing column, so the set is
+            # unchanged and it is intentionally ignored.
+            add = re.match(r'(?i)ADD\s+(?:COLUMN\s+)?`([^`]+)`', text)
+            drop = re.match(r'(?i)DROP\s+(?:COLUMN\s+)?`([^`]+)`', text)
+            change = re.match(r'(?i)CHANGE\s+(?:COLUMN\s+)?`([^`]+)`\s+`([^`]+)`', text)
+            if change:
+                tables[table].discard(change.group(1))
+                tables[table].add(change.group(2))
+            elif add:
+                tables[table].add(add.group(1))
+            elif drop:
+                tables[table].discard(drop.group(1))
 
 
 def normalize_sql(text):

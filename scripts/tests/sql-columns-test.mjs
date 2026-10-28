@@ -42,10 +42,10 @@ CREATE TABLE \`flash_sale_order_ext\` (
 ) ENGINE=InnoDB;
 `
 
-function fixture({ mapper, xml, service, entity }) {
+function fixture({ mapper, xml, service, entity, schemaSuffix }) {
   const root = mkdtempSync(path.join(tmpdir(), 'sql-columns-'))
   mkdirSync(path.join(root, 'sql'), { recursive: true })
-  writeFileSync(path.join(root, 'sql', 'schema.sql'), SCHEMA)
+  writeFileSync(path.join(root, 'sql', 'schema.sql'), SCHEMA + (schemaSuffix || ''))
 
   const mapperDir = path.join(root, 'backend', 'src', 'main', 'java', 'com', 'x', 'mapper')
   mkdirSync(mapperDir, { recursive: true })
@@ -216,6 +216,36 @@ test('catches a string column reference broken across lines', () => {
   withFixture({ service }, (result) => {
     assert.notEqual(result.status, 0)
     assert.match(result.stderr, /create_time/)
+  })
+})
+
+// ---- ALTER TABLE handling (retro #5): a column added by ALTER must count as existing,
+// and a column the entity/query relies on must not be reported as missing. ----
+test('treats a column added via ALTER TABLE as present', () => {
+  withFixture({
+    schemaSuffix: '\nALTER TABLE `user`\n  ADD COLUMN `nickname` VARCHAR(50) NULL;\n',
+    mapper: annotation('SELECT user_id FROM user WHERE nickname = #{n}')
+  }, (result) => {
+    assert.equal(result.status, 0, result.stderr)
+  })
+})
+
+test('treats a column dropped via ALTER TABLE as absent', () => {
+  withFixture({
+    schemaSuffix: '\nALTER TABLE `user`\n  DROP COLUMN `created_at`;\n',
+    mapper: annotation('SELECT user_id FROM user WHERE created_at IS NOT NULL')
+  }, (result) => {
+    assert.notEqual(result.status, 0)
+    assert.match(result.stderr, /created_at/)
+  })
+})
+
+test('treats a column renamed via ALTER TABLE CHANGE as the new name', () => {
+  withFixture({
+    schemaSuffix: '\nALTER TABLE `user`\n  CHANGE COLUMN `created_at` `created_on` DATETIME NOT NULL;\n',
+    mapper: annotation('SELECT user_id FROM user WHERE created_on IS NOT NULL')
+  }, (result) => {
+    assert.equal(result.status, 0, result.stderr)
   })
 })
 

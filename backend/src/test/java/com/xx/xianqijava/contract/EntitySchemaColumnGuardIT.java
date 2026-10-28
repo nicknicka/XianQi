@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.core.metadata.TableInfo;
 import com.baomidou.mybatisplus.core.metadata.TableInfoHelper;
 import org.apache.ibatis.builder.MapperBuilderAssistant;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
@@ -58,6 +59,19 @@ class EntitySchemaColumnGuardIT {
 
     private static final Pattern TABLE_CONSTRAINT =
         Pattern.compile("(?i)^(PRIMARY|UNIQUE|KEY|INDEX|CONSTRAINT|FOREIGN)\\b.*");
+
+    /** ALTER TABLE `name` ( ... ); —— schema 的第二个 pass（见 docs/adr/0004）。 */
+    private static final Pattern ALTER_TABLE =
+        Pattern.compile("ALTER TABLE `([^`]+)`(.*?);", Pattern.DOTALL);
+
+    private static final Pattern ALTER_ADD_COLUMN =
+        Pattern.compile("(?i)ADD\\s+(?:COLUMN\\s+)?`([^`]+)`");
+
+    private static final Pattern ALTER_DROP_COLUMN =
+        Pattern.compile("(?i)DROP\\s+(?:COLUMN\\s+)?`([^`]+)`");
+
+    private static final Pattern ALTER_CHANGE_COLUMN =
+        Pattern.compile("(?i)CHANGE\\s+(?:COLUMN\\s+)?`([^`]+)`\\s+`([^`]+)`");
 
     /** 扫描全部带 @TableName 的实体的基础包（不限于 entity 子包）。 */
     private static final String BASE_PACKAGE = "com.xx.xianqijava";
@@ -128,6 +142,37 @@ class EntitySchemaColumnGuardIT {
             "列映射守卫必须覆盖没有 Mapper 的 ConversationMember；实际扫描到 " + simpleNames.size() + " 个实体");
     }
 
+    /**
+     * 守卫自测：schema 的 ALTER pass 必须被解析，否则 {@code ALTER TABLE ... ADD COLUMN}
+     * 会导致假阳性（把真实存在的列报成不存在）。用合成 schema 直接验证。
+     */
+    @Test
+    void applyAlterTableTracksColumnLifecycle(@TempDir Path dir) throws IOException {
+        Path schema = dir.resolve("schema.sql");
+        Files.writeString(schema, """
+            CREATE TABLE `t` (
+              `id` BIGINT NOT NULL,
+              `old_name` VARCHAR(10) NOT NULL,
+              `dropped` TINYINT NOT NULL,
+              PRIMARY KEY (`id`)
+            ) ENGINE=InnoDB;
+            ALTER TABLE `t`
+              ADD COLUMN `added` TINYINT NULL,
+              CHANGE COLUMN `old_name` `renamed` VARCHAR(10) NOT NULL,
+              DROP COLUMN `dropped`,
+              MODIFY COLUMN `id` BIGINT NOT NULL,
+              ADD CONSTRAINT `fk_t` FOREIGN KEY (`id`) REFERENCES `t` (`id`);
+            """);
+
+        Map<String, Set<String>> tables = parseSchemaFile(schema);
+        Set<String> columns = tables.get("t");
+        assertTrue(columns.contains("added"), "ADD COLUMN must register the column");
+        assertTrue(columns.contains("renamed"), "CHANGE COLUMN must register the new name");
+        assertFalse(columns.contains("old_name"), "CHANGE COLUMN must drop the old name");
+        assertFalse(columns.contains("dropped"), "DROP COLUMN must remove the column");
+        assertTrue(columns.contains("id"), "MODIFY COLUMN must keep the column");
+    }
+
     /** 通过 @TableName 注解做类路径扫描，枚举全部实体（不只是被 Mapper 注册的那些）。 */
     private static List<Class<?>> scanEntities() throws ClassNotFoundException {
         ClassPathScanningCandidateComponentProvider scanner =
@@ -157,6 +202,11 @@ class EntitySchemaColumnGuardIT {
     static Map<String, Set<String>> parseSchema() throws IOException {
         Path schemaPath = Path.of("..", "sql", "schema.sql").normalize();
         assertTrue(Files.exists(schemaPath), "schema.sql must be reachable from backend/: " + schemaPath);
+        return parseSchemaFile(schemaPath);
+    }
+
+    /** 解析指定 schema 文件（结构真源），返回 表名 -> 列名集合。供守卫与自测共用。 */
+    static Map<String, Set<String>> parseSchemaFile(Path schemaPath) throws IOException {
         String sql = Files.readString(schemaPath);
 
         Map<String, Set<String>> tables = new LinkedHashMap<>();
@@ -176,6 +226,40 @@ class EntitySchemaColumnGuardIT {
             tables.put(tableMatcher.group(1), columns);
         }
         assertFalse(tables.isEmpty(), "未从 sql/schema.sql 解析出任何表定义");
+        applyAlterTable(sql, tables);
         return tables;
+    }
+
+    /**
+     * 应用 ALTER TABLE，避免把 {@code ALTER TABLE ... ADD COLUMN} 当成「实体列不存在」的假象，
+     * 也避免漏掉 ALTER 真正新增的列。schema 是 CREATE pass + ALTER pass（见 docs/adr/0004）。
+     *
+     * <p>只处理列操作：{@code ADD [COLUMN] x}、{@code DROP [COLUMN] x}、{@code CHANGE ... x y}。
+     * {@code ADD CONSTRAINT/KEY/INDEX} 后面跟的不是反引号列名，因此不会命中；
+     * {@code MODIFY COLUMN} 只是重定义既有列，列集合不变，故有意忽略。
+     */
+    private static void applyAlterTable(String sql, Map<String, Set<String>> tables) {
+        Matcher alterMatcher = ALTER_TABLE.matcher(sql);
+        while (alterMatcher.find()) {
+            String table = alterMatcher.group(1);
+            Set<String> columns = tables.get(table);
+            if (columns == null) {
+                continue;
+            }
+            for (String statement : alterMatcher.group(2).split(",")) {
+                String text = statement.trim();
+                Matcher change = ALTER_CHANGE_COLUMN.matcher(text);
+                Matcher add = ALTER_ADD_COLUMN.matcher(text);
+                Matcher drop = ALTER_DROP_COLUMN.matcher(text);
+                if (change.find()) {
+                    columns.remove(change.group(1));
+                    columns.add(change.group(2));
+                } else if (add.find()) {
+                    columns.add(add.group(1));
+                } else if (drop.find()) {
+                    columns.remove(drop.group(1));
+                }
+            }
+        }
     }
 }
