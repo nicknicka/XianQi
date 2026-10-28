@@ -55,7 +55,7 @@ public class CouponServiceImpl extends ServiceImpl<CouponMapper, Coupon> impleme
                 .le(Coupon::getValidFrom, now)
                 .ge(Coupon::getValidTo, now)
                 .orderByDesc(Coupon::getSortOrder)
-                .orderByDesc(Coupon::getCreateTime);
+                .orderByDesc(Coupon::getCreatedAt);
 
         IPage<Coupon> couponPage = baseMapper.selectPage(page, queryWrapper);
 
@@ -119,7 +119,7 @@ public class CouponServiceImpl extends ServiceImpl<CouponMapper, Coupon> impleme
             queryWrapper.eq(UserCoupon::getStatus, status);
         }
 
-        queryWrapper.orderByDesc(UserCoupon::getCreateTime);
+        queryWrapper.orderByDesc(UserCoupon::getCreatedAt);
 
         IPage<UserCoupon> userCouponPage = userCouponMapper.selectPage(page, queryWrapper);
 

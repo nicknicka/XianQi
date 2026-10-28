@@ -16,7 +16,7 @@ export interface UserFeedbackVO {
   handlerId?: string // 处理人ID（管理员）
   handleNote?: string // 处理备注
   reply?: string
-  createTime: string
+  createdAt: string
   handleTime?: string
 }
 

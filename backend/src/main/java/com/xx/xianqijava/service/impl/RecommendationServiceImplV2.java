@@ -363,7 +363,7 @@ public class RecommendationServiceImplV2 {
 
         LambdaQueryWrapper<Product> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(Product::getStatus, 1)
-                .orderByDesc(Product::getCreateTime)
+                .orderByDesc(Product::getCreatedAt)
                 .last("LIMIT " + limit);
 
         List<Product> products = productService.list(wrapper);
@@ -383,7 +383,7 @@ public class RecommendationServiceImplV2 {
      */
     private double calculateProductScore(Product product, ProductVO vo, double viewWeight,
                                          double favoriteWeight, double freshnessWeight) {
-        long daysSinceCreated = helperService.calculateDaysSinceCreated(product.getCreateTime());
+        long daysSinceCreated = helperService.calculateDaysSinceCreated(product.getCreatedAt());
         return helperService.calculateProductScore(
                 product, vo.getFavoriteCount(), viewWeight, favoriteWeight, freshnessWeight, daysSinceCreated);
     }

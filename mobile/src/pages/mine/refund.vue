@@ -57,7 +57,7 @@
           <view class="refund-card-top">
             <view class="refund-meta">
               <text class="refund-no">退款单号 {{ item.refundNo }}</text>
-              <text class="refund-time">{{ formatCreateTime(item.createTime) }}</text>
+              <text class="refund-time">{{ formatCreateTime(item.createdAt) }}</text>
             </view>
             <view class="status-badge" :class="'status-' + item.status">
               <text class="status-text">{{ item.statusDesc || getStatusText(item.status) }}</text>
@@ -178,7 +178,7 @@ interface RefundItem {
   refundReason: string
   status: RefundStatus
   statusDesc: string
-  createTime: string
+  createdAt: string
 }
 
 const tabs = [

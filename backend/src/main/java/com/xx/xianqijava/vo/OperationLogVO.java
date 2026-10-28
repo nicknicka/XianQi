@@ -62,5 +62,5 @@ public class OperationLogVO {
     private String errorMessage;
 
     @Schema(description = "操作时间")
-    private String createTime;
+    private String createdAt;
 }

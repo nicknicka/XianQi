@@ -132,7 +132,7 @@
                 :type="notice.type as any"
                 :title="notice.title"
                 :content="notice.summary"
-                :createTime="notice.createTime"
+                :createdAt="notice.createdAt"
                 :isRead="notice.isRead"
                 :style="{ animationDelay: index * 40 + 'ms' }"
                 @click="handleNoticeItemClick"
@@ -192,7 +192,7 @@ interface Notice {
   title: string
   summary: string
   content: string
-  createTime: string
+  createdAt: string
   isRead: boolean
   linkType?: number
   linkUrl?: string
@@ -477,7 +477,7 @@ async function loadNotices() {
       title: item.title,
       summary: item.content?.substring(0, 50) || item.content,
       content: item.content,
-      createTime: item.publishTime,
+      createdAt: item.publishTime,
       isRead: item.isRead,
       linkType: item.linkType,
       linkUrl: item.linkUrl,

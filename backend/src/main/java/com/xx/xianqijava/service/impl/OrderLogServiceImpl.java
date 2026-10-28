@@ -57,7 +57,7 @@ public class OrderLogServiceImpl extends ServiceImpl<OrderLogMapper, OrderLog>
         vo.setAction(orderLog.getAction());
         vo.setActionText(getActionText(orderLog.getAction()));
         vo.setDescription(orderLog.getDetail());
-        vo.setCreateTime(orderLog.getCreatedAt() == null ? null : orderLog.getCreatedAt().toString());
+        vo.setCreatedAt(orderLog.getCreatedAt() == null ? null : orderLog.getCreatedAt().toString());
         return vo;
     }
 

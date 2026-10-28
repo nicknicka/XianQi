@@ -25,8 +25,8 @@ export interface NotificationVO {
   targetUsers?: string // all-全部用户, specific-指定用户
   targetUserIds?: string
   createdBy?: string
-  createdTime: string
-  updatedTime: string
+  createdAt: string
+  updatedAt: string
 }
 
 /**

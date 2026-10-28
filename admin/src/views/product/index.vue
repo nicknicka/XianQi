@@ -67,9 +67,9 @@
           </template>
         </el-table-column>
 
-        <el-table-column prop="createTime" label="发布时间" width="180">
+        <el-table-column prop="createdAt" label="发布时间" width="180">
           <template #default="{ row }">
-            {{ formatTime(row.createTime) }}
+            {{ formatTime(row.createdAt) }}
           </template>
         </el-table-column>
 
@@ -151,7 +151,7 @@
             <el-descriptions-item label="卖家">{{ currentProduct.sellerNickname || '-' }}</el-descriptions-item>
             <el-descriptions-item label="联系电话">{{ currentProduct.sellerPhone || '-' }}</el-descriptions-item>
             <el-descriptions-item label="位置" :span="2">{{ currentProduct.location || '-' }}</el-descriptions-item>
-            <el-descriptions-item label="发布时间" :span="2">{{ formatTime(currentProduct.createTime) }}</el-descriptions-item>
+            <el-descriptions-item label="发布时间" :span="2">{{ formatTime(currentProduct.createdAt) }}</el-descriptions-item>
           </el-descriptions>
         </div>
 

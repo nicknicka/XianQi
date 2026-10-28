@@ -673,8 +673,8 @@ const loadProducts = async () => {
       console.log('信用等级:', firstProduct.creditLevel)
       console.log('距离:', firstProduct.distance)
       console.log('成色:', firstProduct.condition)
-      console.log('创建时间:', firstProduct.createTime)
-      console.log('更新时间:', firstProduct.updateTime)
+      console.log('创建时间:', firstProduct.createdAt)
+      console.log('更新时间:', firstProduct.updatedAt)
       // 图片相关字段
       console.log('========== 图片相关字段 ==========')
       console.log('coverImage:', firstProduct.coverImage)
@@ -764,8 +764,8 @@ const loadProducts = async () => {
       isFavorite: p.isFavorite || false,
 
       // 时间字段
-      createdAt: p.createTime || p.createdAt || '',
-      updatedAt: p.updateTime || p.updatedAt || p.createTime || '',
+      createdAt: p.createdAt || '',
+      updatedAt: p.updatedAt || '',
 
       // 标签字段（后端可能没有，根据业务逻辑添加）
       isNew: p.isNew || false,

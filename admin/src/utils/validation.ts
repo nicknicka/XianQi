@@ -68,7 +68,7 @@ export function testPaginationParams() {
   const standardParams = {
     pageNum: 1,
     pageSize: 20,
-    sortBy: 'createTime',
+    sortBy: 'createdAt',
     sortOrder: 'desc' as const,
   }
 

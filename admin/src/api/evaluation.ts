@@ -23,7 +23,7 @@ export interface EvaluationVO {
   productId?: string
   productTitle?: string
   productImage?: string
-  createTime: string
+  createdAt: string
 }
 
 /**

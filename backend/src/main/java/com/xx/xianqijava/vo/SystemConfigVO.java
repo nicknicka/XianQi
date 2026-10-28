@@ -41,8 +41,8 @@ public class SystemConfigVO {
     private Integer sortOrder;
 
     @Schema(description = "创建时间")
-    private String createTime;
+    private String createdAt;
 
     @Schema(description = "更新时间")
-    private String updateTime;
+    private String updatedAt;
 }

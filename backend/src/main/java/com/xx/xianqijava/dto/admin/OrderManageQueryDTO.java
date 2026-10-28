@@ -31,8 +31,8 @@ public class OrderManageQueryDTO {
     @Schema(description = "每页大小", example = "20")
     private Integer pageSize = 20;
 
-    @Schema(description = "排序字段：createTime/totalAmount/completeTime", example = "createTime")
-    private String sortBy = "createTime";
+    @Schema(description = "排序字段：createdAt/totalAmount/completeTime", example = "createdAt")
+    private String sortBy = "createdAt";
 
     @Schema(description = "排序方式：asc/desc", example = "desc")
     private String sortOrder = "desc";

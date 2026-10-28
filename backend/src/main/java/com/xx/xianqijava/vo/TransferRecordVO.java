@@ -59,5 +59,5 @@ public class TransferRecordVO {
     private String completeTime;
 
     @Schema(description = "创建时间")
-    private String createTime;
+    private String createdAt;
 }

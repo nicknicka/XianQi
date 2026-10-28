@@ -22,8 +22,8 @@ export interface ShareItemManageVO {
   ownerId: string
   ownerNickname?: string
   ownerPhone?: string
-  createTime: string
-  updateTime: string
+  createdAt: string
+  updatedAt: string
   borrowCount?: number
   currentBorrowCount?: number
 }

@@ -91,7 +91,7 @@
 							<text class="product-title">{{ item.productName }}</text>
 							<view class="product-meta">
 								<text v-if="item.productPrice" class="product-price">¥{{ item.productPrice }}</text>
-								<text class="eval-time">{{ formatTime(item.createTime) }}</text>
+								<text class="eval-time">{{ formatTime(item.createdAt) }}</text>
 							</view>
 							<text class="counterparty-text">{{ item.counterpartyText }}</text>
 						</view>
@@ -224,7 +224,7 @@ interface Evaluation {
 	content: string;
 	images: string[];
 	counterpartyText: string;
-	createTime: string;
+	createdAt: string;
 }
 
 const evaluations = ref<Evaluation[]>([]);
@@ -391,7 +391,7 @@ function loadEvaluations(refresh = false) {
 						requestScope === "received"
 							? `来自 ${counterpartyName}`
 							: `评价给 ${counterpartyName}`,
-					createTime: item.createTime || item.createdAt || new Date().toISOString(),
+					createdAt: item.createdAt || new Date().toISOString(),
 				};
 			});
 

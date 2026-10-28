@@ -125,7 +125,7 @@ public class SystemConfigServiceImpl extends ServiceImpl<SystemConfigMapper, Sys
         }
         queryWrapper.orderByAsc(SystemConfig::getGroupName)
                 .orderByAsc(SystemConfig::getSortOrder)
-                .orderByDesc(SystemConfig::getCreateTime);
+                .orderByDesc(SystemConfig::getCreatedAt);
 
         IPage<SystemConfig> configPage = page(page, queryWrapper);
         return configPage.convert(this::convertToVO);
@@ -190,7 +190,7 @@ public class SystemConfigServiceImpl extends ServiceImpl<SystemConfigMapper, Sys
         LambdaQueryWrapper<SystemConfig> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.orderByAsc(SystemConfig::getGroupName)
                 .orderByAsc(SystemConfig::getSortOrder)
-                .orderByDesc(SystemConfig::getCreateTime);
+                .orderByDesc(SystemConfig::getCreatedAt);
 
         List<SystemConfig> configs = list(queryWrapper);
         return configs.stream()
@@ -261,11 +261,11 @@ public class SystemConfigServiceImpl extends ServiceImpl<SystemConfigMapper, Sys
         SystemConfigVO vo = new SystemConfigVO();
         BeanUtil.copyProperties(config, vo);
 
-        if (config.getCreateTime() != null) {
-            vo.setCreateTime(config.getCreateTime().toString());
+        if (config.getCreatedAt() != null) {
+            vo.setCreatedAt(config.getCreatedAt().toString());
         }
-        if (config.getUpdateTime() != null) {
-            vo.setUpdateTime(config.getUpdateTime().toString());
+        if (config.getUpdatedAt() != null) {
+            vo.setUpdatedAt(config.getUpdatedAt().toString());
         }
 
         return vo;

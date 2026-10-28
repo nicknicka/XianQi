@@ -66,9 +66,9 @@
           </template>
         </el-table-column>
 
-        <el-table-column prop="createTime" label="注册时间" width="180">
+        <el-table-column prop="createdAt" label="注册时间" width="180">
           <template #default="{ row }">
-            {{ formatTime(row.createTime) }}
+            {{ formatTime(row.createdAt) }}
           </template>
         </el-table-column>
 
@@ -138,7 +138,7 @@
             <el-descriptions-item label="信用分">
               <el-tag type="warning">{{ currentUser.creditScore }}</el-tag>
             </el-descriptions-item>
-            <el-descriptions-item label="注册时间">{{ currentUser.createTime }}</el-descriptions-item>
+            <el-descriptions-item label="注册时间">{{ currentUser.createdAt }}</el-descriptions-item>
           </el-descriptions>
         </div>
 

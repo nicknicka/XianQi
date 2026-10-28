@@ -35,10 +35,10 @@ public class CategoryVO {
     private String parentId;
 
     @Schema(description = "创建时间")
-    private String createTime;
+    private String createdAt;
 
     @Schema(description = "更新时间")
-    private String updateTime;
+    private String updatedAt;
 
     @Schema(description = "子分类列表")
     private java.util.List<CategoryVO> children;

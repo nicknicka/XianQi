@@ -14,8 +14,8 @@ export interface CategoryVO {
   gradient?: string
   sortOrder: number
   status: number // 0-禁用，1-启用
-  createTime?: string
-  updateTime?: string
+  createdAt?: string
+  updatedAt?: string
   children?: CategoryVO[] // 子分类
   productCount?: number // 商品数量
 }

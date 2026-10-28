@@ -56,7 +56,7 @@ public class DepositRecordController {
         LambdaQueryWrapper<ShareItemBooking> queryWrapper = new LambdaQueryWrapper<ShareItemBooking>()
                 .eq(ShareItemBooking::getBorrowerId, userId)
                 .gt(ShareItemBooking::getDeposit, BigDecimal.ZERO)
-                .orderByDesc(ShareItemBooking::getCreateTime);
+                .orderByDesc(ShareItemBooking::getCreatedAt);
 
         IPage<ShareItemBooking> bookingPage = shareItemBookingMapper.selectPage(pageParam, queryWrapper);
 
@@ -80,8 +80,8 @@ public class DepositRecordController {
 
                     // 设置时间字段（使用 DateTimeFormatter 格式化）
                     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-                    if (booking.getCreateTime() != null) {
-                        vo.setCreateTime(booking.getCreateTime().format(formatter));
+                    if (booking.getCreatedAt() != null) {
+                        vo.setCreatedAt(booking.getCreatedAt().format(formatter));
                     }
                     if (booking.getDepositReturnTime() != null) {
                         vo.setRefundTime(booking.getDepositReturnTime().format(formatter));

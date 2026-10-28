@@ -58,7 +58,7 @@ export const commonApi = {
         title: string
         content: string
         type: string
-        createTime: string
+        createdAt: string
       }>
       total: number
     }>('/notification', params)

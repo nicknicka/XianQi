@@ -322,7 +322,7 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
             wrapper.le(Product::getPrice, maxPrice);
         }
         
-        wrapper.orderByDesc(Product::getCreateTime);
+        wrapper.orderByDesc(Product::getCreatedAt);
         
         IPage<Product> productPage = page(page, wrapper);
         
@@ -462,7 +462,7 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
     public ProductVO convertToVO(Product product, Long currentUserId) {
         ProductVO vo = new ProductVO();
         BeanUtil.copyProperties(product, vo);
-        vo.setCreateTime(product.getCreateTime().toString());
+        vo.setCreatedAt(product.getCreatedAt().toString());
 
         // 设置前端兼容字段
         vo.setId(String.valueOf(product.getProductId()));
@@ -593,7 +593,7 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
             }
         }
 
-        wrapper.orderByDesc(Product::getCreateTime);
+        wrapper.orderByDesc(Product::getCreatedAt);
 
         IPage<Product> productPage = page(page, wrapper);
         return productPage.convert(product -> convertToVO(product, userId));
@@ -636,7 +636,7 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
 
         LambdaQueryWrapper<Product> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(Product::getAuditStatus, 0) // 待审核
-                .orderByAsc(Product::getCreateTime);
+                .orderByAsc(Product::getCreatedAt);
 
         IPage<Product> productPage = page(page, wrapper);
         return productPage.convert(this::convertToAuditVO);
@@ -650,7 +650,7 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
         if (auditStatus != null) {
             wrapper.eq(Product::getAuditStatus, auditStatus);
         }
-        wrapper.orderByDesc(Product::getCreateTime);
+        wrapper.orderByDesc(Product::getCreatedAt);
 
         IPage<Product> productPage = page(page, wrapper);
         return productPage.convert(this::convertToAuditVO);
@@ -682,8 +682,8 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
         vo.setConditionDesc(getConditionDesc(product.getConditionLevel()));
 
         // 设置时间
-        if (product.getCreateTime() != null) {
-            vo.setCreateTime(product.getCreateTime().toString());
+        if (product.getCreatedAt() != null) {
+            vo.setCreatedAt(product.getCreatedAt().toString());
         }
         if (product.getAuditTime() != null) {
             vo.setAuditTime(product.getAuditTime().toString());
@@ -764,7 +764,7 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
         java.util.List<Product> products = lambdaQuery()
                 .eq(Product::getSellerId, userId)
                 .eq(Product::getDeleted, 0)
-                .orderByDesc(Product::getCreateTime)
+                .orderByDesc(Product::getCreatedAt)
                 .last("LIMIT " + limit)
                 .list();
 
@@ -792,7 +792,7 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
             log.info("   查询条件: 未过滤状态（查询所有非删除、非草稿商品）");
         }
 
-        wrapper.orderByDesc(Product::getCreateTime);
+        wrapper.orderByDesc(Product::getCreatedAt);
 
         IPage<Product> productPage = page(page, wrapper);
 
@@ -835,7 +835,7 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
                 .eq(Product::getStatus, 1)
                 .eq(Product::getDeleted, 0)
                 .ne(Product::getProductId, productId)
-                .orderByDesc(Product::getCreateTime)
+                .orderByDesc(Product::getCreatedAt)
                 .last("LIMIT " + limit);
 
         return list(wrapper).stream()
@@ -856,7 +856,7 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
             wrapper.ne(Product::getProductId, excludeProductId);
         }
 
-        wrapper.orderByDesc(Product::getCreateTime);
+        wrapper.orderByDesc(Product::getCreatedAt);
 
         IPage<Product> productPage = page(page, wrapper);
         return productPage.convert(product -> convertToVO(product, userId));
@@ -979,7 +979,7 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
         wrapper.eq(Product::getSellerId, userId);
         wrapper.eq(Product::getStatus, Product.STATUS_DRAFT);
         wrapper.eq(Product::getDeleted, 0);
-        wrapper.orderByDesc(Product::getUpdateTime);
+        wrapper.orderByDesc(Product::getUpdatedAt);
 
         IPage<Product> draftPage = page(page, wrapper);
         return draftPage.convert(this::convertToDraftVO);
@@ -1135,11 +1135,11 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
         }
 
         // 格式化时间
-        if (product.getCreateTime() != null) {
-            vo.setCreateTime(product.getCreateTime().toString());
+        if (product.getCreatedAt() != null) {
+            vo.setCreatedAt(product.getCreatedAt().toString());
         }
-        if (product.getUpdateTime() != null) {
-            vo.setUpdateTime(product.getUpdateTime().toString());
+        if (product.getUpdatedAt() != null) {
+            vo.setUpdatedAt(product.getUpdatedAt().toString());
         }
 
         // 获取分类名称

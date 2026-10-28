@@ -50,7 +50,7 @@ public class MessageVO {
     private String extraData;
 
     @Schema(description = "创建时间")
-    private String createTime;
+    private String createdAt;
 
     @Schema(description = "是否为当前用户发送的消息")
     private Boolean isMine;

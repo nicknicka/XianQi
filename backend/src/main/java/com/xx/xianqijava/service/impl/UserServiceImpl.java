@@ -158,8 +158,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         userInfo.setFollowerCount(0);
         userInfo.setFollowingCount(0);
         userInfo.setProductCount(0);
-        userInfo.setCreatedAt(user.getCreateTime().toString());
-        userInfo.setUpdatedAt(user.getUpdateTime().toString());
+        userInfo.setCreatedAt(user.getCreatedAt().toString());
+        userInfo.setUpdatedAt(user.getUpdatedAt().toString());
 
         // 10. 返回注册结果
         UserRegisterVO registerVO = new UserRegisterVO();
@@ -168,7 +168,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         registerVO.setId(user.getUserId());
         registerVO.setUsername(user.getUsername());
         registerVO.setNickname(user.getNickname());
-        registerVO.setCreatedAt(user.getCreateTime().toString());
+        registerVO.setCreatedAt(user.getCreatedAt().toString());
 
         return registerVO;
     }
@@ -243,8 +243,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             userInfoVO.setAvatar(user.getAvatar());
         }
 
-        userInfoVO.setCreatedAt(user.getCreateTime().toString());
-        userInfoVO.setUpdatedAt(user.getUpdateTime().toString());
+        userInfoVO.setCreatedAt(user.getCreatedAt().toString());
+        userInfoVO.setUpdatedAt(user.getUpdatedAt().toString());
 
         // 计算信用等级
         userInfoVO.setCreditLevel(calculateCreditLevel(user.getCreditScore()));
@@ -563,7 +563,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             wrapper.eq(User::getCollege, currentUser.getCollege());
         }
 
-        wrapper.orderByDesc(User::getUpdateTime).last("LIMIT 20");
+        wrapper.orderByDesc(User::getUpdatedAt).last("LIMIT 20");
 
         java.util.List<User> nearbyUsers = list(wrapper);
         log.info("找到附近用户数量, userId={}, count={}", userId, nearbyUsers.size());
@@ -686,7 +686,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
                                 .and(priv -> priv.eq(User::getPhoneSearchEnabled, 1)
                                         .or()
                                         .isNull(User::getPhoneSearchEnabled))))
-                .orderByDesc(User::getUpdateTime);
+                .orderByDesc(User::getUpdatedAt);
 
         Page<User> userPage = page(new Page<>(pageNo, pageSize), wrapper);
         Page<UserInfoVO> resultPage = new Page<>(userPage.getCurrent(), userPage.getSize(), userPage.getTotal());
@@ -929,8 +929,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         userInfoVO.setIsVerified(user.getIsVerified());
         userInfoVO.setFollowerCount(userFollowService.countFollowers(user.getUserId()));
         userInfoVO.setFollowingCount(userFollowService.countFollowing(user.getUserId()));
-        userInfoVO.setCreatedAt(user.getCreateTime() != null ? user.getCreateTime().toString() : null);
-        userInfoVO.setUpdatedAt(user.getUpdateTime() != null ? user.getUpdateTime().toString() : null);
+        userInfoVO.setCreatedAt(user.getCreatedAt() != null ? user.getCreatedAt().toString() : null);
+        userInfoVO.setUpdatedAt(user.getUpdatedAt() != null ? user.getUpdatedAt().toString() : null);
         return userInfoVO;
     }
 

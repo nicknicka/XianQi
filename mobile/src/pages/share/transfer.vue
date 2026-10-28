@@ -44,7 +44,7 @@
             <lazy-image class="item-image" :src="item.shareItemCover" mode="aspectFit" width="100" height="100" />
             <view class="item-details">
               <text class="item-title">{{ item.shareItemTitle }}</text>
-              <text class="item-time">{{ item.createTime }}</text>
+              <text class="item-time">{{ item.createdAt }}</text>
             </view>
             <view :class="['status-tag', `status-${item.status}`]">
               {{ getSendStatusText(item.status) }}
@@ -97,7 +97,7 @@
             <lazy-image class="item-image" :src="item.shareItemCover" mode="aspectFit" width="100" height="100" />
             <view class="item-details">
               <text class="item-title">{{ item.shareItemTitle }}</text>
-              <text class="item-time">{{ item.createTime }}</text>
+              <text class="item-time">{{ item.createdAt }}</text>
             </view>
             <view :class="['status-tag', `status-${item.status}`]">
               {{ getReceiveStatusText(item.status) }}

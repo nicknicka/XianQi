@@ -12,8 +12,8 @@ export interface FlashSaleSessionTemplate {
   durationHours: number
   sortOrder: number
   isEnabled: number // 0-禁用，1-启用
-  createTime?: string
-  updateTime?: string
+  createdAt?: string
+  updatedAt?: string
 }
 
 /**
@@ -29,7 +29,7 @@ export interface FlashSaleSession {
   sortOrder: number
   sessionType: number // 1-固定场次，2-临时场次
   status: number // 0-停用，1-启用
-  createTime?: string
+  createdAt?: string
 }
 
 /**

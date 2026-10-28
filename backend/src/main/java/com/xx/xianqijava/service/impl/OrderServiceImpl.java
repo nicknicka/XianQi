@@ -144,7 +144,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
             wrapper.eq(Order::getStatus, status);
         }
 
-        wrapper.orderByDesc(Order::getCreateTime);
+        wrapper.orderByDesc(Order::getCreatedAt);
 
         IPage<Order> orderPage = page(page, wrapper);
         return orderPage.convert(order -> convertToVO(order, 1));

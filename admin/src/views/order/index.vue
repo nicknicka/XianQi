@@ -98,9 +98,9 @@
           </template>
         </el-table-column>
 
-        <el-table-column prop="createTime" label="下单时间" width="180">
+        <el-table-column prop="createdAt" label="下单时间" width="180">
           <template #default="{ row }">
-            {{ formatTime(row.createTime) }}
+            {{ formatTime(row.createdAt) }}
           </template>
         </el-table-column>
 
@@ -202,8 +202,8 @@
         <div class="detail-section">
           <div class="section-title">时间信息</div>
           <el-descriptions :column="1" border>
-            <el-descriptions-item label="下单时间">{{ formatTime(currentOrder.createTime) }}</el-descriptions-item>
-            <el-descriptions-item v-if="currentOrder.updateTime" label="更新时间">{{ formatTime(currentOrder.updateTime) }}</el-descriptions-item>
+            <el-descriptions-item label="下单时间">{{ formatTime(currentOrder.createdAt) }}</el-descriptions-item>
+            <el-descriptions-item v-if="currentOrder.updatedAt" label="更新时间">{{ formatTime(currentOrder.updatedAt) }}</el-descriptions-item>
             <el-descriptions-item v-if="currentOrder.finishTime" label="完成时间">{{ formatTime(currentOrder.finishTime) }}</el-descriptions-item>
           </el-descriptions>
         </div>
@@ -322,7 +322,7 @@ const loadOrderList = async () => {
       orderNo: searchForm.value.orderNo || undefined,
       productTitle: searchForm.value.productTitle || undefined,
       status: searchForm.value.status,
-      sortBy: 'createTime',
+      sortBy: 'createdAt',
       sortOrder: 'desc',
     }
 

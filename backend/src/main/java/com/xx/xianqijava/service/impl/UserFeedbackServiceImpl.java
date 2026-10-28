@@ -80,7 +80,7 @@ public class UserFeedbackServiceImpl extends ServiceImpl<UserFeedbackMapper, Use
 
         LambdaQueryWrapper<UserFeedback> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(UserFeedback::getUserId, userId)
-                .orderByDesc(UserFeedback::getCreateTime);
+                .orderByDesc(UserFeedback::getCreatedAt);
 
         IPage<UserFeedback> feedbackPage = page(page, queryWrapper);
         return feedbackPage.convert(this::convertToVO);
@@ -103,7 +103,7 @@ public class UserFeedbackServiceImpl extends ServiceImpl<UserFeedbackMapper, Use
             queryWrapper.eq(UserFeedback::getStatus, status);
         }
 
-        queryWrapper.orderByDesc(UserFeedback::getCreateTime);
+        queryWrapper.orderByDesc(UserFeedback::getCreatedAt);
 
         IPage<UserFeedback> feedbackPage = page(page, queryWrapper);
         return feedbackPage.convert(this::convertToVO);

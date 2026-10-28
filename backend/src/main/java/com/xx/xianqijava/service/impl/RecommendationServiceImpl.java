@@ -247,7 +247,7 @@ public class RecommendationServiceImpl implements RecommendationService {
 
         LambdaQueryWrapper<Product> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(Product::getStatus, 1) // 在售
-                .orderByDesc(Product::getCreateTime) // 按创建时间排序
+                .orderByDesc(Product::getCreatedAt) // 按创建时间排序
                 .last("LIMIT " + limit);
 
         List<Product> products = productService.list(wrapper);

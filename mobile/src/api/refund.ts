@@ -28,8 +28,8 @@ interface RefundItem {
   logisticsTime: string
   evidenceImages: string[]
   remark: string
-  createTime: string
-  updateTime: string
+  createdAt: string
+  updatedAt: string
   finishTime: string
 }
 

@@ -40,8 +40,8 @@ public class UserQueryDTO {
     @Schema(description = "每页大小", example = "20")
     private Integer pageSize = 20;
 
-    @Schema(description = "排序字段：createTime/creditScore", example = "createTime")
-    private String sortBy = "createTime";
+    @Schema(description = "排序字段：createdAt/creditScore", example = "createdAt")
+    private String sortBy = "createdAt";
 
     @Schema(description = "排序方式：asc/desc", example = "desc")
     private String sortOrder = "desc";

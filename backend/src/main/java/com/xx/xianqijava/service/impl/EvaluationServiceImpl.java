@@ -294,7 +294,6 @@ public class EvaluationServiceImpl extends ServiceImpl<EvaluationMapper, Evaluat
         vo.setAppendImages(parseJsonArray(evaluation.getAppendImages()));
         vo.setAppendTime(evaluation.getAppendTime());
         vo.setHasAppend(evaluation.getAppendTime() != null);
-        vo.setCreateTime(evaluation.getCreatedAt());
         vo.setCreatedAt(evaluation.getCreatedAt());
 
         // Set target type based on role

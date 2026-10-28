@@ -49,7 +49,7 @@ public class UserFeedbackVO {
     private String handleNote;
 
     @Schema(description = "创建时间")
-    private LocalDateTime createTime;
+    private LocalDateTime createdAt;
 
     @Schema(description = "处理时间")
     private LocalDateTime handleTime;

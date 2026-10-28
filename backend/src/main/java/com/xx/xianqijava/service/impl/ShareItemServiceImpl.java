@@ -256,7 +256,7 @@ public class ShareItemServiceImpl extends ServiceImpl<ShareItemMapper, ShareItem
                     .like(ShareItem::getDescription, keyword)
             );
         }
-        queryWrapper.orderByDesc(ShareItem::getCreateTime);
+        queryWrapper.orderByDesc(ShareItem::getCreatedAt);
 
         IPage<ShareItem> shareItemPage = page(page, queryWrapper);
         return shareItemPage.convert(this::convertToVO);
@@ -269,7 +269,7 @@ public class ShareItemServiceImpl extends ServiceImpl<ShareItemMapper, ShareItem
         LambdaQueryWrapper<ShareItem> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(ShareItem::getOwnerId, ownerId)
                 .ne(ShareItem::getStatus, ShareItem.STATUS_DRAFT)
-                .orderByDesc(ShareItem::getCreateTime);
+                .orderByDesc(ShareItem::getCreatedAt);
 
         IPage<ShareItem> shareItemPage = page(page, queryWrapper);
         return shareItemPage.convert(this::convertToVO);
@@ -287,7 +287,7 @@ public class ShareItemServiceImpl extends ServiceImpl<ShareItemMapper, ShareItem
         if (status != null) {
             queryWrapper.eq(ShareItem::getStatus, status);
         }
-        queryWrapper.orderByDesc(ShareItem::getCreateTime);
+        queryWrapper.orderByDesc(ShareItem::getCreatedAt);
 
         IPage<ShareItem> shareItemPage = page(page, queryWrapper);
         return shareItemPage.convert(this::convertToVO);
@@ -312,11 +312,11 @@ public class ShareItemServiceImpl extends ServiceImpl<ShareItemMapper, ShareItem
         vo.setConditionDesc(formatConditionDesc(shareItem.getConditionLevel()));
 
         // 设置时间
-        if (shareItem.getCreateTime() != null) {
-            vo.setCreateTime(shareItem.getCreateTime().toString());
+        if (shareItem.getCreatedAt() != null) {
+            vo.setCreatedAt(shareItem.getCreatedAt().toString());
         }
-        if (shareItem.getUpdateTime() != null) {
-            vo.setUpdateTime(shareItem.getUpdateTime().toString());
+        if (shareItem.getUpdatedAt() != null) {
+            vo.setUpdatedAt(shareItem.getUpdatedAt().toString());
         }
 
         // 获取所有者信息
@@ -428,7 +428,7 @@ public class ShareItemServiceImpl extends ServiceImpl<ShareItemMapper, ShareItem
             queryWrapper.ne(ShareItem::getOwnerId, userId); // 排除自己的物品
         }
 
-        queryWrapper.orderByDesc(ShareItem::getCreateTime);
+        queryWrapper.orderByDesc(ShareItem::getCreatedAt);
 
         IPage<ShareItem> shareItemPage = page(page, queryWrapper);
         return shareItemPage.convert(this::convertToVO);
@@ -528,7 +528,7 @@ public class ShareItemServiceImpl extends ServiceImpl<ShareItemMapper, ShareItem
         wrapper.eq(ShareItem::getOwnerId, ownerId);
         wrapper.eq(ShareItem::getStatus, ShareItem.STATUS_DRAFT);
         wrapper.eq(ShareItem::getDeleted, 0);
-        wrapper.orderByDesc(ShareItem::getUpdateTime);
+        wrapper.orderByDesc(ShareItem::getUpdatedAt);
 
         IPage<ShareItem> draftPage = page(page, wrapper);
         return draftPage.convert(this::convertToDraftVO);
@@ -710,11 +710,11 @@ public class ShareItemServiceImpl extends ServiceImpl<ShareItemMapper, ShareItem
         vo.setConditionDesc(formatConditionDesc(shareItem.getConditionLevel()));
 
         // 格式化时间
-        if (shareItem.getCreateTime() != null) {
-            vo.setCreateTime(shareItem.getCreateTime().toString());
+        if (shareItem.getCreatedAt() != null) {
+            vo.setCreatedAt(shareItem.getCreatedAt().toString());
         }
-        if (shareItem.getUpdateTime() != null) {
-            vo.setUpdateTime(shareItem.getUpdateTime().toString());
+        if (shareItem.getUpdatedAt() != null) {
+            vo.setUpdatedAt(shareItem.getUpdatedAt().toString());
         }
 
         // 获取分类名称

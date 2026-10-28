@@ -92,7 +92,7 @@ public class OrderManageServiceImpl implements OrderManageService {
         } else if ("completeTime".equals(queryDTO.getSortBy())) {
             queryWrapper.orderBy(true, "asc".equalsIgnoreCase(queryDTO.getSortOrder()), Order::getFinishTime);
         } else {
-            queryWrapper.orderBy(true, "asc".equalsIgnoreCase(queryDTO.getSortOrder()), Order::getCreateTime);
+            queryWrapper.orderBy(true, "asc".equalsIgnoreCase(queryDTO.getSortOrder()), Order::getCreatedAt);
         }
 
         // 分页查询
@@ -201,21 +201,21 @@ public class OrderManageServiceImpl implements OrderManageService {
         // 今日新增订单数
         LocalDateTime todayStart = LocalDateTime.now().withHour(0).withMinute(0).withSecond(0);
         Long todayNewOrders = orderMapper.selectCount(
-                new LambdaQueryWrapper<Order>().ge(Order::getCreateTime, todayStart)
+                new LambdaQueryWrapper<Order>().ge(Order::getCreatedAt, todayStart)
         );
         statistics.setTodayNewOrders(todayNewOrders);
 
         // 本周新增订单数
         LocalDateTime weekStart = LocalDateTime.now().minusDays(7);
         Long weekNewOrders = orderMapper.selectCount(
-                new LambdaQueryWrapper<Order>().ge(Order::getCreateTime, weekStart)
+                new LambdaQueryWrapper<Order>().ge(Order::getCreatedAt, weekStart)
         );
         statistics.setWeekNewOrders(weekNewOrders);
 
         // 本月新增订单数
         LocalDateTime monthStart = LocalDateTime.now().minusDays(30);
         Long monthNewOrders = orderMapper.selectCount(
-                new LambdaQueryWrapper<Order>().ge(Order::getCreateTime, monthStart)
+                new LambdaQueryWrapper<Order>().ge(Order::getCreatedAt, monthStart)
         );
         statistics.setMonthNewOrders(monthNewOrders);
 
@@ -232,7 +232,7 @@ public class OrderManageServiceImpl implements OrderManageService {
         List<Order> todayOrders = orderMapper.selectList(
                 new LambdaQueryWrapper<Order>()
                         .eq(Order::getStatus, 2)
-                        .ge(Order::getCreateTime, todayStart)
+                        .ge(Order::getCreatedAt, todayStart)
         );
         BigDecimal todayAmount = todayOrders.stream()
                 .map(Order::getAmount)
@@ -243,7 +243,7 @@ public class OrderManageServiceImpl implements OrderManageService {
         List<Order> weekOrders = orderMapper.selectList(
                 new LambdaQueryWrapper<Order>()
                         .eq(Order::getStatus, 2)
-                        .ge(Order::getCreateTime, weekStart)
+                        .ge(Order::getCreatedAt, weekStart)
         );
         BigDecimal weekAmount = weekOrders.stream()
                 .map(Order::getAmount)
@@ -254,7 +254,7 @@ public class OrderManageServiceImpl implements OrderManageService {
         List<Order> monthOrders = orderMapper.selectList(
                 new LambdaQueryWrapper<Order>()
                         .eq(Order::getStatus, 2)
-                        .ge(Order::getCreateTime, monthStart)
+                        .ge(Order::getCreatedAt, monthStart)
         );
         BigDecimal monthAmount = monthOrders.stream()
                 .map(Order::getAmount)
@@ -352,9 +352,9 @@ public class OrderManageServiceImpl implements OrderManageService {
         vo.setTotalAmount(order.getAmount());
 
         // 设置各种时间（使用现有的字段）
-        // 注意：Order实体只有createTime、updateTime、finishTime
+        // 注意：Order实体只有createdAt、updatedAt、finishTime
         // 其他时间字段需要从RefundRecord等表中获取
-        vo.setUpdateTime(order.getUpdateTime());
+        vo.setUpdatedAt(order.getUpdatedAt());
         vo.setFinishTime(order.getFinishTime());
         // 从RefundRecord表获取退款状态
         vo.setRefundStatus(getRefundStatus(order.getOrderId()));
@@ -369,7 +369,7 @@ public class OrderManageServiceImpl implements OrderManageService {
         RefundRecord refundRecord = refundRecordMapper.selectOne(
                 new LambdaQueryWrapper<RefundRecord>()
                         .eq(RefundRecord::getOrderId, orderId)
-                        .orderByDesc(RefundRecord::getCreateTime)
+                        .orderByDesc(RefundRecord::getCreatedAt)
                         .last("LIMIT 1")
         );
         return refundRecord != null ? refundRecord.getStatus() : null;

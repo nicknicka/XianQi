@@ -995,19 +995,9 @@ function loadProductDetail() {
 				images: processedImages,
 				coverImage:
 					data.coverImage || processedImages[0] || "/static/images/empty.png",
-				// 时间字段映射（后端可能返回 createTime/updateTime）
-				createdAt:
-					data.createTime ||
-					data.createdAt ||
-					data.updateTime ||
-					data.updatedAt ||
-					"",
-				updatedAt:
-					data.updateTime ||
-					data.updatedAt ||
-					data.createTime ||
-					data.createdAt ||
-					"",
+				// 时间字段映射
+				createdAt: data.createdAt || "",
+				updatedAt: data.updatedAt || "",
 				// 其他字段处理
 				creditScore:
 					data.sellerCreditScore ||

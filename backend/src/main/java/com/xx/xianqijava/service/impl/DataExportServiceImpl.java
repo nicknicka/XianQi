@@ -56,15 +56,15 @@ public class DataExportServiceImpl implements DataExportService {
         // 构建查询条件
         LambdaQueryWrapper<Order> wrapper = new LambdaQueryWrapper<>();
         if (startTime != null && !startTime.isEmpty()) {
-            wrapper.ge(Order::getCreateTime, LocalDateTime.parse(startTime, DATE_FORMATTER));
+            wrapper.ge(Order::getCreatedAt, LocalDateTime.parse(startTime, DATE_FORMATTER));
         }
         if (endTime != null && !endTime.isEmpty()) {
-            wrapper.le(Order::getCreateTime, LocalDateTime.parse(endTime, DATE_FORMATTER));
+            wrapper.le(Order::getCreatedAt, LocalDateTime.parse(endTime, DATE_FORMATTER));
         }
         if (status != null) {
             wrapper.eq(Order::getStatus, status);
         }
-        wrapper.orderByDesc(Order::getCreateTime);
+        wrapper.orderByDesc(Order::getCreatedAt);
         wrapper.last("LIMIT 10000"); // 最多导出 10000 条
 
         // 查询数据
@@ -89,7 +89,7 @@ public class DataExportServiceImpl implements DataExportService {
                         order.getSellerId(),
                         getOrderStatusText(order.getStatus()),
                         order.getAmount(),
-                        formatDateTime(order.getCreateTime()),
+                        formatDateTime(order.getCreatedAt()),
                         formatDateTime(order.getFinishTime())
                 ));
             }
@@ -123,7 +123,7 @@ public class DataExportServiceImpl implements DataExportService {
         if (status != null) {
             wrapper.eq(User::getStatus, status);
         }
-        wrapper.orderByDesc(User::getCreateTime);
+        wrapper.orderByDesc(User::getCreatedAt);
         wrapper.last("LIMIT 10000"); // 最多导出 10000 条
 
         // 查询数据
@@ -151,7 +151,7 @@ public class DataExportServiceImpl implements DataExportService {
                         escapeCsv(user.getMajor()),
                         user.getCreditScore(),
                         user.getStatus() == 0 ? "正常" : "封禁",
-                        formatDateTime(user.getCreateTime())
+                        formatDateTime(user.getCreatedAt())
                 ));
             }
 

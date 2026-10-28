@@ -157,7 +157,7 @@ public class UserStudentAuthServiceImpl extends ServiceImpl<UserStudentAuthMappe
 
         LambdaQueryWrapper<UserStudentAuth> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(UserStudentAuth::getStatus, 1) // 审核中
-                .orderByAsc(UserStudentAuth::getCreateTime);
+                .orderByAsc(UserStudentAuth::getCreatedAt);
 
         IPage<UserStudentAuth> authPage = page(page, wrapper);
         return authPage.convert(this::convertToVO);
@@ -171,7 +171,7 @@ public class UserStudentAuthServiceImpl extends ServiceImpl<UserStudentAuthMappe
         if (status != null) {
             wrapper.eq(UserStudentAuth::getStatus, status);
         }
-        wrapper.orderByDesc(UserStudentAuth::getCreateTime);
+        wrapper.orderByDesc(UserStudentAuth::getCreatedAt);
 
         IPage<UserStudentAuth> authPage = page(page, wrapper);
         return authPage.convert(this::convertToVO);
@@ -210,8 +210,8 @@ public class UserStudentAuthServiceImpl extends ServiceImpl<UserStudentAuthMappe
         vo.setEducationLevel(auth.getEducationLevel());
         vo.setAuditedAt(auth.getAuditedAt() != null ?
             auth.getAuditedAt().format(FORMATTER) : null);
-        vo.setCreatedAt(auth.getCreateTime() != null ?
-            auth.getCreateTime().format(FORMATTER) : null);
+        vo.setCreatedAt(auth.getCreatedAt() != null ?
+            auth.getCreatedAt().format(FORMATTER) : null);
 
         return vo;
     }

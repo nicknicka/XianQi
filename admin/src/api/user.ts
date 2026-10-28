@@ -28,7 +28,7 @@ export interface UserManageVO {
   creditScore: number
   status: number // 0-正常，1-已封禁
   isVerified: number // 0-未认证，1-已认证
-  createTime: string
+  createdAt: string
   lastLoginTime?: string
   productCount?: number
   orderCount?: number

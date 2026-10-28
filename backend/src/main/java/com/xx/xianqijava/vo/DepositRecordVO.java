@@ -61,5 +61,5 @@ public class DepositRecordVO {
     private String deductReason;
 
     @Schema(description = "创建时间")
-    private String createTime;
+    private String createdAt;
 }

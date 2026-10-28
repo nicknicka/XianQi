@@ -151,7 +151,7 @@ public class UserAddressServiceImpl extends ServiceImpl<UserAddressMapper, UserA
         queryWrapper.eq(UserAddress::getUserId, userId)
                 .eq(UserAddress::getStatus, 0)
                 .orderByDesc(UserAddress::getIsDefault)
-                .orderByDesc(UserAddress::getCreateTime);
+                .orderByDesc(UserAddress::getCreatedAt);
 
         IPage<UserAddress> addressPage = baseMapper.selectPage(page, queryWrapper);
 
@@ -164,7 +164,7 @@ public class UserAddressServiceImpl extends ServiceImpl<UserAddressMapper, UserA
         queryWrapper.eq(UserAddress::getUserId, userId)
                 .eq(UserAddress::getStatus, 0)
                 .eq(UserAddress::getIsDefault, 1)
-                .orderByDesc(UserAddress::getCreateTime)
+                .orderByDesc(UserAddress::getCreatedAt)
                 .last("LIMIT 1");
 
         UserAddress address = baseMapper.selectOne(queryWrapper);
@@ -176,7 +176,7 @@ public class UserAddressServiceImpl extends ServiceImpl<UserAddressMapper, UserA
         queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(UserAddress::getUserId, userId)
                 .eq(UserAddress::getStatus, 0)
-                .orderByDesc(UserAddress::getCreateTime)
+                .orderByDesc(UserAddress::getCreatedAt)
                 .last("LIMIT 1");
 
         address = baseMapper.selectOne(queryWrapper);

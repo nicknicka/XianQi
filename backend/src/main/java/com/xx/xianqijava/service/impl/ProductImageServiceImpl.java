@@ -166,7 +166,7 @@ public class ProductImageServiceImpl extends ServiceImpl<ProductImageMapper, Pro
         ProductImageVO vo = new ProductImageVO();
         BeanUtil.copyProperties(productImage, vo);
         if (productImage.getCreatedAt() != null) {
-            vo.setCreateTime(productImage.getCreatedAt().toString());
+            vo.setCreatedAt(productImage.getCreatedAt().toString());
         }
         return vo;
     }

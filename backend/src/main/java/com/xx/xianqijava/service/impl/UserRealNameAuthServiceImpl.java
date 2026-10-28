@@ -103,8 +103,8 @@ public class UserRealNameAuthServiceImpl extends ServiceImpl<UserRealNameAuthMap
         vo.setRejectReason(auth.getRejectReason());
         vo.setAuditedAt(auth.getAuditedAt() != null ?
             auth.getAuditedAt().format(FORMATTER) : null);
-        vo.setCreatedAt(auth.getCreateTime() != null ?
-            auth.getCreateTime().format(FORMATTER) : null);
+        vo.setCreatedAt(auth.getCreatedAt() != null ?
+            auth.getCreatedAt().format(FORMATTER) : null);
 
         return vo;
     }
@@ -155,7 +155,7 @@ public class UserRealNameAuthServiceImpl extends ServiceImpl<UserRealNameAuthMap
 
         LambdaQueryWrapper<UserRealNameAuth> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(UserRealNameAuth::getStatus, 1) // 审核中
-                .orderByAsc(UserRealNameAuth::getCreateTime);
+                .orderByAsc(UserRealNameAuth::getCreatedAt);
 
         IPage<UserRealNameAuth> authPage = page(page, wrapper);
         return authPage.convert(this::convertToVO);
@@ -169,7 +169,7 @@ public class UserRealNameAuthServiceImpl extends ServiceImpl<UserRealNameAuthMap
         if (status != null) {
             wrapper.eq(UserRealNameAuth::getStatus, status);
         }
-        wrapper.orderByDesc(UserRealNameAuth::getCreateTime);
+        wrapper.orderByDesc(UserRealNameAuth::getCreatedAt);
 
         IPage<UserRealNameAuth> authPage = page(page, wrapper);
         return authPage.convert(this::convertToVO);
@@ -199,8 +199,8 @@ public class UserRealNameAuthServiceImpl extends ServiceImpl<UserRealNameAuthMap
         vo.setRejectReason(auth.getRejectReason());
         vo.setAuditedAt(auth.getAuditedAt() != null ?
             auth.getAuditedAt().format(FORMATTER) : null);
-        vo.setCreatedAt(auth.getCreateTime() != null ?
-            auth.getCreateTime().format(FORMATTER) : null);
+        vo.setCreatedAt(auth.getCreatedAt() != null ?
+            auth.getCreatedAt().format(FORMATTER) : null);
 
         return vo;
     }

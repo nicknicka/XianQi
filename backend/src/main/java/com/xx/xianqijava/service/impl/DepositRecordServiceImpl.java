@@ -247,7 +247,7 @@ public class DepositRecordServiceImpl extends ServiceImpl<DepositRecordMapper, D
 
         LambdaQueryWrapper<DepositRecord> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(DepositRecord::getUserId, userId)
-                .orderByDesc(DepositRecord::getCreateTime);
+                .orderByDesc(DepositRecord::getCreatedAt);
 
         IPage<DepositRecord> recordPage = page(page, wrapper);
         return recordPage.convert(this::convertToVO);
@@ -257,7 +257,7 @@ public class DepositRecordServiceImpl extends ServiceImpl<DepositRecordMapper, D
     public DepositRecordVO getDepositByBookingId(Long bookingId) {
         LambdaQueryWrapper<DepositRecord> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(DepositRecord::getBookingId, bookingId)
-                .orderByDesc(DepositRecord::getCreateTime)
+                .orderByDesc(DepositRecord::getCreatedAt)
                 .last("LIMIT 1");
 
         DepositRecord record = getOne(wrapper);
@@ -288,8 +288,8 @@ public class DepositRecordServiceImpl extends ServiceImpl<DepositRecordMapper, D
         vo.setPaymentMethodDesc(getPaymentMethodDesc(record.getPaymentMethod()));
 
         // 设置时间
-        if (record.getCreateTime() != null) {
-            vo.setCreateTime(record.getCreateTime().toString());
+        if (record.getCreatedAt() != null) {
+            vo.setCreatedAt(record.getCreatedAt().toString());
         }
         if (record.getRefundTime() != null) {
             vo.setRefundTime(record.getRefundTime().toString());

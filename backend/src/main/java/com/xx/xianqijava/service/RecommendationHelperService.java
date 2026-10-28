@@ -89,14 +89,14 @@ public class RecommendationHelperService {
     /**
      * 计算商品发布以来的天数
      *
-     * @param createTime 创建时间
+     * @param createdAt 创建时间
      * @return 天数
      */
-    public long calculateDaysSinceCreated(LocalDateTime createTime) {
-        if (createTime == null) {
+    public long calculateDaysSinceCreated(LocalDateTime createdAt) {
+        if (createdAt == null) {
             return 0;
         }
-        return ChronoUnit.DAYS.between(createTime, LocalDateTime.now());
+        return ChronoUnit.DAYS.between(createdAt, LocalDateTime.now());
     }
 
     /**

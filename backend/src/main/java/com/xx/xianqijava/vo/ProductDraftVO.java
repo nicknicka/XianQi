@@ -76,10 +76,10 @@ public class ProductDraftVO {
     private Integer flashSaleStock;
 
     @Schema(description = "保存时间")
-    private String createTime;
+    private String createdAt;
 
     @Schema(description = "更新时间")
-    private String updateTime;
+    private String updatedAt;
 
     @Schema(description = "完成度（0-100）")
     private Integer completion;

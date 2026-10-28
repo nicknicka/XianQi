@@ -161,11 +161,11 @@
             </view>
           </view>
           <view class="timeline">
-            <view class="timeline-item" v-if="bookingDetail.createTime">
+            <view class="timeline-item" v-if="bookingDetail.createdAt">
               <view class="timeline-dot active"></view>
               <view class="timeline-content">
                 <text class="timeline-title">创建时间</text>
-                <text class="timeline-time">{{ bookingDetail.createTime }}</text>
+                <text class="timeline-time">{{ bookingDetail.createdAt }}</text>
               </view>
             </view>
             <view class="timeline-item" v-if="bookingDetail.approveTime">

@@ -34,8 +34,8 @@ export interface OrderManageVO {
   refundStatus?: number // 退款状态码：0-无退款，1-退款中，2-退款成功，3-退款拒绝
   refundStatusDesc?: string // 退款状态描述
   remark?: string
-  createTime: string
-  updateTime?: string
+  createdAt: string
+  updatedAt?: string
   finishTime?: string
 }
 
