@@ -1,8 +1,6 @@
 package com.xx.xianqijava.controller;
 
-import com.xx.xianqijava.common.ErrorCode;
 import com.xx.xianqijava.entity.ProductImage;
-import com.xx.xianqijava.exception.BusinessException;
 import com.xx.xianqijava.mapper.ProductImageMapper;
 import com.xx.xianqijava.service.OssService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -20,7 +18,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;

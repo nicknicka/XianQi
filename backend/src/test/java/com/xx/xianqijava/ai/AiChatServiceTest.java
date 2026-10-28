@@ -1,11 +1,8 @@
 package com.xx.xianqijava.ai;
 
-import com.xx.xianqijava.agent.service.IntentClassifierService;
 import com.xx.xianqijava.ai.config.AiProperties;
 import com.xx.xianqijava.exception.BusinessException;
 import com.xx.xianqijava.service.AIChatHistoryService;
-import dev.langchain4j.memory.chat.ChatMemoryProvider;
-import dev.langchain4j.model.chat.StreamingChatLanguageModel;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.ObjectProvider;
 

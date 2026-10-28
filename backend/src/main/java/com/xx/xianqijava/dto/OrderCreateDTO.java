@@ -4,8 +4,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;
 import lombok.Data;
 
-import java.math.BigDecimal;
-
 /**
  * 创建订单 DTO
  */

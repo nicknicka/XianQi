@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.xx.xianqijava.entity.FlashSaleProduct;
 import com.xx.xianqijava.entity.FlashSaleSession;
-import com.xx.xianqijava.entity.FlashSaleSessionTemplate;
 import com.xx.xianqijava.mapper.FlashSaleProductMapper;
 import com.xx.xianqijava.mapper.FlashSaleSessionMapper;
 import com.xx.xianqijava.mapper.FlashSaleSessionTemplateMapper;

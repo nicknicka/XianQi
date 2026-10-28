@@ -1,10 +1,8 @@
 package com.xx.xianqijava.controller;
 
-import com.xx.xianqijava.common.ErrorCode;
 import com.xx.xianqijava.common.Result;
 import com.xx.xianqijava.dto.*;
 import com.xx.xianqijava.entity.User;
-import com.xx.xianqijava.exception.BusinessException;
 import com.xx.xianqijava.service.FileUploadService;
 import com.xx.xianqijava.service.ThirdPartyLoginService;
 import com.xx.xianqijava.service.UserPreferenceService;

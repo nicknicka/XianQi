@@ -1,8 +1,6 @@
 package com.xx.xianqijava.entity;
 
-import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -66,6 +64,5 @@ public class UserStudentAuth extends BaseEntity {
 
     @Schema(description = "学历层次：本科/硕士/博士")
     private String educationLevel;
-
 
 }

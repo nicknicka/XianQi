@@ -60,6 +60,12 @@ jobs:
           cache: 'maven'
           cache-dependency-path: backend/pom.xml
 
+      - name: Run checkstyle
+        run: |
+          cd backend
+          chmod +x mvnw
+          ./mvnw --batch-mode checkstyle:check
+
       - name: Run unit tests
         run: |
           cd backend

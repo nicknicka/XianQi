@@ -18,7 +18,6 @@ import com.xx.xianqijava.entity.ProductFavorite;
 import com.xx.xianqijava.entity.ProductImage;
 import com.xx.xianqijava.entity.User;
 import com.xx.xianqijava.exception.BusinessException;
-import com.xx.xianqijava.entity.ProductStatistics;
 import com.xx.xianqijava.mapper.CategoryMapper;
 import com.xx.xianqijava.util.ProductConditionUtil;
 import com.xx.xianqijava.mapper.FlashSaleProductMapper;
@@ -36,7 +35,6 @@ import com.xx.xianqijava.vo.ProductDraftVO;
 import com.xx.xianqijava.vo.ProductVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

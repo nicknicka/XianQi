@@ -1,8 +1,6 @@
 package com.xx.xianqijava.entity;
 
-import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -51,6 +49,5 @@ public class UserRealNameAuth extends BaseEntity {
 
     @Schema(description = "审核时间")
     private LocalDateTime auditedAt;
-
 
 }

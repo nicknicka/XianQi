@@ -6,7 +6,6 @@ import com.xx.xianqijava.entity.HotTag;
 import com.xx.xianqijava.entity.SystemNotification;
 import com.xx.xianqijava.mapper.HotTagMapper;
 import com.xx.xianqijava.mapper.SystemNotificationMapper;
-import com.xx.xianqijava.util.IdConverter;
 import com.xx.xianqijava.vo.HotTagVO;
 import com.xx.xianqijava.vo.SystemNotificationVO;
 import io.swagger.v3.oas.annotations.Operation;

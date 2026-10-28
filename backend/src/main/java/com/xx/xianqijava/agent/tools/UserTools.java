@@ -4,7 +4,6 @@ import com.xx.xianqijava.agent.context.AIContext;
 import com.xx.xianqijava.entity.User;
 import com.xx.xianqijava.service.UserService;
 import dev.langchain4j.agent.tool.Tool;
-import dev.langchain4j.agent.tool.P;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;

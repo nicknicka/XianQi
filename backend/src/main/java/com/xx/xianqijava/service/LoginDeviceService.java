@@ -6,8 +6,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.xx.xianqijava.entity.LoginDevice;
 import com.xx.xianqijava.vo.LoginDeviceVO;
 
-import java.util.List;
-
 /**
  * 登录设备服务接口
  */

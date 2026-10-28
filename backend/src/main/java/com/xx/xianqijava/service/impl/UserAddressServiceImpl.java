@@ -1,6 +1,5 @@
 package com.xx.xianqijava.service.impl;
 
-import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.text.StrFormatter;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
@@ -18,9 +17,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * 用户地址服务实现类
