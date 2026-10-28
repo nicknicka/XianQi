@@ -1,6 +1,7 @@
 package com.xx.xianqijava.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -54,6 +55,7 @@ public class UserFeedback extends BaseEntity {
     @Schema(description = "处理备注")
     private String handleNote;
 
+    @TableField("reply_time")
     @Schema(description = "处理时间")
     private java.time.LocalDateTime handleTime;
 }

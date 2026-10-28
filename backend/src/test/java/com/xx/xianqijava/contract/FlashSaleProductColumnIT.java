@@ -2,16 +2,8 @@ package com.xx.xianqijava.contract;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
-import com.xx.xianqijava.entity.Category;
 import com.xx.xianqijava.entity.FlashSaleProduct;
-import com.xx.xianqijava.entity.FlashSaleSession;
-import com.xx.xianqijava.entity.Product;
-import com.xx.xianqijava.entity.User;
-import com.xx.xianqijava.mapper.CategoryMapper;
 import com.xx.xianqijava.mapper.FlashSaleProductMapper;
-import com.xx.xianqijava.mapper.FlashSaleSessionMapper;
-import com.xx.xianqijava.mapper.ProductMapper;
-import com.xx.xianqijava.mapper.UserMapper;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -24,7 +16,6 @@ import javax.sql.DataSource;
 import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.Statement;
-import java.time.LocalDateTime;
 import java.util.concurrent.ThreadLocalRandom;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -56,55 +47,18 @@ class FlashSaleProductColumnIT {
     private DataSource dataSource;
 
     @Autowired
-    private UserMapper userMapper;
-
-    @Autowired
-    private CategoryMapper categoryMapper;
-
-    @Autowired
-    private ProductMapper productMapper;
-
-    @Autowired
-    private FlashSaleSessionMapper flashSaleSessionMapper;
-
-    @Autowired
     private FlashSaleProductMapper flashSaleProductMapper;
+
+    private TestParentFixtureFactory fixtures;
 
     @BeforeAll
     void initSchema() throws Exception {
-        TestSchemaSupport.ensureSchema(dataSource);
-
-        User seller = new User();
-        seller.setUserId(SELLER_ID);
-        seller.setUsername("fsp_" + RUN_ID);
-        seller.setPassword("testpass");
-        seller.setNickname("秒杀契约卖家");
-        seller.setPhone("131" + RUN_ID);
-        userMapper.insert(seller);
-
-        Category category = new Category();
-        category.setCategoryId(CATEGORY_ID);
-        category.setName("秒杀商品契约分类");
-        category.setCode("fsp_" + RUN_ID);
-        category.setStatus(1);
-        categoryMapper.insert(category);
-
-        Product product = new Product();
-        product.setProductId(PRODUCT_ID);
-        product.setSellerId(SELLER_ID);
-        product.setCategoryId(CATEGORY_ID);
-        product.setTitle("秒杀商品契约 " + RUN_ID);
-        product.setPrice(new BigDecimal("80.00"));
-        productMapper.insert(product);
-
-        FlashSaleSession session = new FlashSaleSession();
-        session.setSessionId(SESSION_ID);
-        session.setName("秒杀商品契约场次 " + RUN_ID);
-        session.setStartTime(LocalDateTime.now().minusHours(1));
-        session.setEndTime(LocalDateTime.now().plusHours(1));
-        session.setSessionType(2);
-        session.setStatus(1);
-        flashSaleSessionMapper.insert(session);
+        fixtures = TestParentFixtureFactory.prepare(dataSource);
+        fixtures.user(SELLER_ID, "fsp_" + RUN_ID, "131" + RUN_ID);
+        fixtures.category(CATEGORY_ID, "秒杀商品契约分类", "fsp_" + RUN_ID);
+        fixtures.product(PRODUCT_ID, SELLER_ID, CATEGORY_ID,
+            "秒杀商品契约 " + RUN_ID, new BigDecimal("80.00"));
+        fixtures.flashSaleSession(SESSION_ID, "秒杀商品契约场次 " + RUN_ID);
     }
 
     /** 每个测试结束后清掉本测试写入的秒杀商品行（避免外键阻塞父行清理）。 */

@@ -28,22 +28,22 @@ public class HotTag extends BaseEntity {
     @TableLogic
     private Integer deleted;
 
-    @TableId(type = IdType.ASSIGN_ID)
+    @TableId(value = "tag_id", type = IdType.ASSIGN_ID)
     @Schema(description = "标签ID")
     @JsonSerialize(using = ToStringSerializer.class)
     private Long id;
 
+    @TableField("name")
     @Schema(description = "关键词")
     private String keyword;
 
-    @TableField("click_count")
+    @TableField("heat")
     @Schema(description = "搜索次数")
     private Integer searchCount;
 
     @Schema(description = "排序（数值越小越靠前）")
     private Integer sortOrder;
 
-    @TableField("is_active")
     @Schema(description = "状态：0-禁用，1-启用")
     private Integer status;
 }

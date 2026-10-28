@@ -25,7 +25,7 @@ public class AdminSession implements Serializable {
     /**
      * 会话ID
      */
-    @TableId(type = IdType.ASSIGN_ID)
+    @TableId(value = "session_id", type = IdType.ASSIGN_ID)
     @JsonSerialize(using = ToStringSerializer.class)
     private Long id;
 

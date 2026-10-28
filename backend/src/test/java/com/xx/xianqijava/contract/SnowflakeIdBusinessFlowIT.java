@@ -1,7 +1,6 @@
 package com.xx.xianqijava.contract;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.xx.xianqijava.entity.Category;
 import com.xx.xianqijava.entity.Product;
 import com.xx.xianqijava.entity.User;
 import com.xx.xianqijava.mapper.CategoryMapper;
@@ -63,11 +62,13 @@ class SnowflakeIdBusinessFlowIT {
     @Autowired
     private ProductMapper productMapper;
 
+    private TestParentFixtureFactory fixtures;
+
     @BeforeAll
     void initSchema() throws Exception {
         // schema.sql 是结构真源；用真实基线建表，避免手写 DDL 与实体漂移。
         // 多个 IT 类共享同一初始化，见 TestSchemaSupport。
-        TestSchemaSupport.ensureSchema(dataSource);
+        fixtures = TestParentFixtureFactory.prepare(dataSource);
     }
 
     @AfterAll
@@ -82,11 +83,7 @@ class SnowflakeIdBusinessFlowIT {
 
     @Test
     void category_snowflakeId_generatedAndQueryable() {
-        Category category = new Category();
-        category.setName(CATEGORY_NAME);
-        category.setCode(CATEGORY_CODE);
-        category.setStatus(1);
-        categoryMapper.insert(category);
+        var category = fixtures.getOrCreateCategory(categoryMapper, CATEGORY_NAME, CATEGORY_CODE);
 
         assertNotNull(category.getCategoryId(), "categoryId should be generated");
         assertTrue(category.getCategoryId() > 0, "categoryId should be positive");
@@ -95,7 +92,7 @@ class SnowflakeIdBusinessFlowIT {
         assertTrue(category.getCategoryId() > jsSafeMax,
             "categoryId should exceed JS safe integer max");
 
-        Category found = categoryMapper.selectById(category.getCategoryId());
+        var found = categoryMapper.selectById(category.getCategoryId());
         assertNotNull(found, "should find category by ID");
         assertEquals(category.getCategoryId(), found.getCategoryId());
         assertEquals(CATEGORY_NAME, found.getName());
@@ -103,12 +100,7 @@ class SnowflakeIdBusinessFlowIT {
 
     @Test
     void user_snowflakeId_generatedAndQueryable() {
-        User user = new User();
-        user.setUsername(USER_NAME);
-        user.setPassword("testpass");
-        user.setNickname("测试用户");
-        user.setPhone(USER_PHONE);
-        userMapper.insert(user);
+        User user = fixtures.getOrCreateUser(userMapper, USER_NAME, USER_PHONE, "测试用户", null);
 
         assertNotNull(user.getUserId(), "userId should be generated");
 
@@ -123,13 +115,8 @@ class SnowflakeIdBusinessFlowIT {
 
     @Test
     void user_locationColumn_mapsToLocationDisplay() {
-        User user = new User();
-        user.setUsername(USER_NAME + "_location");
-        user.setPassword("testpass");
-        user.setNickname("位置映射用户");
-        user.setPhone(LOCATION_PHONE);
-        user.setLocationDisplay("北京市海淀区");
-        userMapper.insert(user);
+        User user = fixtures.getOrCreateUser(userMapper, USER_NAME + "_location", LOCATION_PHONE,
+            "位置映射用户", "北京市海淀区");
 
         User found = userMapper.selectById(user.getUserId());
         assertNotNull(found, "selectById must not fail on the location column");
@@ -138,26 +125,11 @@ class SnowflakeIdBusinessFlowIT {
 
     @Test
     void product_withCategoryAndSeller_fullIdChain() {
-        User seller = new User();
-        seller.setUsername(SELLER_NAME);
-        seller.setPassword("pass");
-        seller.setNickname("卖家");
-        seller.setPhone(SELLER_PHONE);
-        userMapper.insert(seller);
-
-        Category category = new Category();
-        category.setName(DIGITAL_CATEGORY_NAME);
-        category.setCode(DIGITAL_CATEGORY_CODE);
-        category.setStatus(1);
-        categoryMapper.insert(category);
-
-        Product product = new Product();
-        product.setTitle(PRODUCT_TITLE);
-        product.setSellerId(seller.getUserId());
-        product.setCategoryId(category.getCategoryId());
-        product.setPrice(PRICE);
-        product.setStatus(1);
-        productMapper.insert(product);
+        User seller = fixtures.getOrCreateUser(userMapper, SELLER_NAME, SELLER_PHONE, "卖家", null);
+        var category = fixtures.getOrCreateCategory(categoryMapper, DIGITAL_CATEGORY_NAME,
+            DIGITAL_CATEGORY_CODE);
+        var product = fixtures.getOrCreateProduct(productMapper, seller.getUserId(),
+            category.getCategoryId(), PRODUCT_TITLE, PRICE);
 
         assertNotNull(product.getProductId());
         long jsSafeMax = (1L << 53) - 1;
@@ -165,7 +137,7 @@ class SnowflakeIdBusinessFlowIT {
         assertTrue(seller.getUserId() > jsSafeMax, "sellerId should exceed JS safe max");
         assertTrue(category.getCategoryId() > jsSafeMax, "categoryId should exceed JS safe max");
 
-        Product found = productMapper.selectById(product.getProductId());
+        var found = productMapper.selectById(product.getProductId());
         assertNotNull(found);
         assertEquals(seller.getUserId(), found.getSellerId(), "sellerId should match");
         assertEquals(category.getCategoryId(), found.getCategoryId(), "categoryId should match");

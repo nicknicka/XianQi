@@ -1,6 +1,7 @@
 package com.xx.xianqijava.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -31,10 +32,12 @@ public class Message extends BaseEntity {
     @JsonSerialize(using = ToStringSerializer.class)
     private Long conversationId;
 
+    @TableField("sender_id")
     @Schema(description = "发送者ID")
     @JsonSerialize(using = ToStringSerializer.class)
     private Long fromUserId;
 
+    @TableField("receiver_id")
     @Schema(description = "接收者ID")
     @JsonSerialize(using = ToStringSerializer.class)
     private Long toUserId;
@@ -69,4 +72,10 @@ public class Message extends BaseEntity {
 
     @Schema(description = "状态：0-正常，1-撤回，2-删除")
     private Integer status;
+
+    /**
+     * 该表没有 updated_at 列；覆盖 BaseEntity 字段，避免映射到不存在的列。
+     */
+    @TableField(exist = false)
+    private LocalDateTime updatedAt;
 }

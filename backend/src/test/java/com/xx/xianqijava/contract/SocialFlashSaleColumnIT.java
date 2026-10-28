@@ -2,23 +2,15 @@ package com.xx.xianqijava.contract;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.xx.xianqijava.entity.Blacklist;
-import com.xx.xianqijava.entity.Category;
 import com.xx.xianqijava.entity.FlashSaleOrderExt;
 import com.xx.xianqijava.entity.FlashSaleSession;
-import com.xx.xianqijava.entity.Order;
-import com.xx.xianqijava.entity.Product;
 import com.xx.xianqijava.entity.QuickReply;
-import com.xx.xianqijava.entity.User;
 import com.xx.xianqijava.entity.UserFollow;
 import com.xx.xianqijava.mapper.BlacklistMapper;
-import com.xx.xianqijava.mapper.CategoryMapper;
 import com.xx.xianqijava.mapper.FlashSaleOrderExtMapper;
 import com.xx.xianqijava.mapper.FlashSaleSessionMapper;
-import com.xx.xianqijava.mapper.OrderMapper;
-import com.xx.xianqijava.mapper.ProductMapper;
 import com.xx.xianqijava.mapper.QuickReplyMapper;
 import com.xx.xianqijava.mapper.UserFollowMapper;
-import com.xx.xianqijava.mapper.UserMapper;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -64,22 +56,10 @@ class SocialFlashSaleColumnIT {
     private DataSource dataSource;
 
     @Autowired
-    private UserMapper userMapper;
-
-    @Autowired
-    private CategoryMapper categoryMapper;
-
-    @Autowired
-    private ProductMapper productMapper;
+    private FlashSaleOrderExtMapper flashSaleOrderExtMapper;
 
     @Autowired
     private FlashSaleSessionMapper flashSaleSessionMapper;
-
-    @Autowired
-    private OrderMapper orderMapper;
-
-    @Autowired
-    private FlashSaleOrderExtMapper flashSaleOrderExtMapper;
 
     @Autowired
     private QuickReplyMapper quickReplyMapper;
@@ -90,64 +70,23 @@ class SocialFlashSaleColumnIT {
     @Autowired
     private BlacklistMapper blacklistMapper;
 
+    private TestParentFixtureFactory fixtures;
+
     @BeforeAll
     void initSchema() throws Exception {
-        TestSchemaSupport.ensureSchema(dataSource);
-
-        userMapper.insert(buildUser(USER_A, "sf_a_" + RUN_ID, "136" + RUN_ID));
-        userMapper.insert(buildUser(USER_B, "sf_b_" + RUN_ID, "135" + RUN_ID));
-
-        Category category = new Category();
-        category.setCategoryId(CATEGORY_ID);
-        category.setName("秒杀契约分类");
-        category.setCode("sf_" + RUN_ID);
-        category.setStatus(1);
-        categoryMapper.insert(category);
-
-        Product product = new Product();
-        product.setProductId(PRODUCT_ID);
-        product.setSellerId(USER_A);
-        product.setCategoryId(CATEGORY_ID);
-        product.setTitle("秒杀契约商品 " + RUN_ID);
-        product.setPrice(new BigDecimal("50.00"));
-        productMapper.insert(product);
-
-        FlashSaleSession session = new FlashSaleSession();
-        session.setSessionId(SESSION_ID);
-        session.setName("秒杀契约场次 " + RUN_ID);
-        session.setStartTime(LocalDateTime.now().minusHours(1));
-        session.setEndTime(LocalDateTime.now().plusHours(1));
-        session.setSessionType(2);
-        session.setStatus(1);
-        flashSaleSessionMapper.insert(session);
+        fixtures = TestParentFixtureFactory.prepare(dataSource);
+        fixtures.user(USER_A, "sf_a_" + RUN_ID, "136" + RUN_ID);
+        fixtures.user(USER_B, "sf_b_" + RUN_ID, "135" + RUN_ID);
+        fixtures.category(CATEGORY_ID, "秒杀契约分类", "sf_" + RUN_ID);
+        fixtures.product(PRODUCT_ID, USER_A, CATEGORY_ID,
+            "秒杀契约商品 " + RUN_ID, new BigDecimal("50.00"));
+        fixtures.flashSaleSession(SESSION_ID, "秒杀契约场次 " + RUN_ID);
 
         // FlashSaleProduct 自身的列名漂移不在 #31 范围；这里只补一条满足外键的父行。
-        try (Connection conn = dataSource.getConnection();
-             Statement stmt = conn.createStatement()) {
-            stmt.executeUpdate(
-                "INSERT INTO flash_sale_product (flash_sale_id, session_id, product_id, flash_price) VALUES ("
-                    + FLASH_SALE_ID + ", " + SESSION_ID + ", " + PRODUCT_ID + ", 25.00)");
-        }
-
-        Order order = new Order();
-        order.setOrderId(ORDER_ID);
-        order.setOrderNo("SF" + RUN_ID);
-        order.setBuyerId(USER_B);
-        order.setSellerId(USER_A);
-        order.setProductId(PRODUCT_ID);
-        order.setType(1);
-        order.setAmount(new BigDecimal("25.00"));
-        orderMapper.insert(order);
-    }
-
-    private User buildUser(Long userId, String username, String phone) {
-        User user = new User();
-        user.setUserId(userId);
-        user.setUsername(username);
-        user.setPassword("testpass");
-        user.setNickname(username);
-        user.setPhone(phone);
-        return user;
+        fixtures.flashSaleProduct(FLASH_SALE_ID, SESSION_ID, PRODUCT_ID,
+            new BigDecimal("25.00"));
+        fixtures.order(ORDER_ID, "SF" + RUN_ID, USER_B, USER_A, PRODUCT_ID,
+            new BigDecimal("25.00"));
     }
 
     @AfterAll

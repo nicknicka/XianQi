@@ -1,9 +1,10 @@
 package com.xx.xianqijava.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.TableLogic;
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -81,6 +82,7 @@ public class Order extends BaseEntity {
     @Schema(description = "送达时间")
     private LocalDateTime deliverTime;
 
+    @TableField("complete_time")
     @Schema(description = "完成时间")
     private LocalDateTime finishTime;
 

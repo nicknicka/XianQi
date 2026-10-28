@@ -4,6 +4,8 @@ Issues and specs for this repo live as GitHub issues. Use the `gh` CLI for all o
 
 ## Conventions
 
+**GitHub 读写一律走 `scripts/gh-stable.sh`；裸 `gh` 会因代理超时失败。** 先运行 `scripts/gh-stable.sh doctor` 确认代理、连通性、认证与 API 状态，再执行任何 GitHub 操作。
+
 Prefer `scripts/gh-stable.sh api ...` for GitHub reads and writes. It calls the REST API through `gh api`, clears inherited proxy variables for the call, and never silently retries write operations on timeout; `scripts/gh-stable.sh doctor` reports proxy, direct connectivity, authentication and API status. Use raw `gh` / GraphQL only when an operation has no REST equivalent.
 
 For multi-line issue comments, closing comments and PR descriptions, use `scripts/gh-write.sh` with a body file. Never inline multi-line Markdown in a double-quoted `--body` or `--comment`; `scripts/check-safe-gh-body.mjs` rejects that pattern. `scripts/gh-write.sh issue-comment|issue-close|pr-edit OWNER/REPO NUMBER BODY_FILE` builds the JSON payload from the file so backticks, `$()`, wildcards, backslashes and code fences stay byte-for-byte.

@@ -1,18 +1,10 @@
 package com.xx.xianqijava.contract;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.xx.xianqijava.entity.Category;
 import com.xx.xianqijava.entity.Evaluation;
-import com.xx.xianqijava.entity.Order;
-import com.xx.xianqijava.entity.Product;
 import com.xx.xianqijava.entity.Report;
-import com.xx.xianqijava.entity.User;
-import com.xx.xianqijava.mapper.CategoryMapper;
 import com.xx.xianqijava.mapper.EvaluationMapper;
-import com.xx.xianqijava.mapper.OrderMapper;
-import com.xx.xianqijava.mapper.ProductMapper;
 import com.xx.xianqijava.mapper.ReportMapper;
-import com.xx.xianqijava.mapper.UserMapper;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -59,67 +51,27 @@ class EvaluationReportColumnIT {
     private DataSource dataSource;
 
     @Autowired
-    private CategoryMapper categoryMapper;
-
-    @Autowired
-    private UserMapper userMapper;
-
-    @Autowired
-    private ProductMapper productMapper;
-
-    @Autowired
-    private OrderMapper orderMapper;
-
-    @Autowired
     private EvaluationMapper evaluationMapper;
 
     @Autowired
     private ReportMapper reportMapper;
 
+    private TestParentFixtureFactory fixtures;
+
     @BeforeAll
     void initSchema() throws Exception {
-        TestSchemaSupport.ensureSchema(dataSource);
+        fixtures = TestParentFixtureFactory.prepare(dataSource);
         seedParentRows();
     }
 
-    private void seedParentRows() {
-        Category category = new Category();
-        category.setCategoryId(CATEGORY_ID);
-        category.setName("列名契约分类");
-        category.setCode("col_contract_" + RUN_ID);
-        category.setStatus(1);
-        categoryMapper.insert(category);
-
-        userMapper.insert(buildUser(BUYER_ID, "col_buyer_" + RUN_ID, "138" + RUN_ID));
-        userMapper.insert(buildUser(SELLER_ID, "col_seller_" + RUN_ID, "139" + RUN_ID));
-
-        Product product = new Product();
-        product.setProductId(PRODUCT_ID);
-        product.setSellerId(SELLER_ID);
-        product.setCategoryId(CATEGORY_ID);
-        product.setTitle("列名契约商品 " + RUN_ID);
-        product.setPrice(new BigDecimal("9.99"));
-        productMapper.insert(product);
-
-        Order order = new Order();
-        order.setOrderId(ORDER_ID);
-        order.setOrderNo("COL" + RUN_ID);
-        order.setBuyerId(BUYER_ID);
-        order.setSellerId(SELLER_ID);
-        order.setProductId(PRODUCT_ID);
-        order.setType(1);
-        order.setAmount(new BigDecimal("9.99"));
-        orderMapper.insert(order);
-    }
-
-    private User buildUser(Long userId, String username, String phone) {
-        User user = new User();
-        user.setUserId(userId);
-        user.setUsername(username);
-        user.setPassword("testpass");
-        user.setNickname(username);
-        user.setPhone(phone);
-        return user;
+    private void seedParentRows() throws Exception {
+        fixtures.category(CATEGORY_ID, "列名契约分类", "col_contract_" + RUN_ID);
+        fixtures.user(BUYER_ID, "col_buyer_" + RUN_ID, "138" + RUN_ID);
+        fixtures.user(SELLER_ID, "col_seller_" + RUN_ID, "139" + RUN_ID);
+        fixtures.product(PRODUCT_ID, SELLER_ID, CATEGORY_ID,
+            "列名契约商品 " + RUN_ID, new BigDecimal("9.99"));
+        fixtures.order(ORDER_ID, "COL" + RUN_ID, BUYER_ID, SELLER_ID, PRODUCT_ID,
+            new BigDecimal("9.99"));
     }
 
     @AfterAll
