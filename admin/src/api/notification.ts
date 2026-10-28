@@ -22,9 +22,7 @@ export interface NotificationVO {
   type: string // system-系统公告, activity-活动通知, urgent-紧急通知
   status: number // 0-草稿，1-已发布，2-已撤回
   publishTime?: string
-  targetUsers?: string // all-全部用户, specific-指定用户
-  targetUserIds?: string
-  createdBy?: string
+  targetUsers?: string // all-全部用户, specific-指定用户（JSON 数组字符串）
   createdAt: string
   updatedAt: string
 }

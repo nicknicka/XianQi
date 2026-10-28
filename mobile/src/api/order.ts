@@ -3,27 +3,44 @@
  */
 import { http } from '@/utils/request'
 
+/**
+ * 订单信息。
+ *
+ * 字段名与后端 OrderVO 保持一致（见 ADR-0012：对外字段以后端视图对象为准）。
+ * 展示所需的派生字段（price / buyerName / sellerName 等）由 normalizeOrder 统一补齐，
+ * 页面不再自行兜底。
+ */
 interface Order {
-  id: string
   orderId: string  // 订单ID，使用 string 避免 JavaScript 大整数精度丢失
   orderNo: string
   productId: string
-  productName: string
+  productTitle: string
   productImage: string
-  price: number
+  unitPrice: string
+  totalPrice: string
   quantity: number
-  totalAmount: number
   buyerId: string
-  buyerName: string
+  buyerNickname: string
   buyerAvatar: string
   sellerId: string
-  sellerName: string
+  sellerNickname: string
   sellerAvatar: string
   status: number
+  statusDesc?: string
   address: string
+  contactPhone?: string
+  contactName?: string
   remark: string
   createdAt: string
   updatedAt: string
+  // ---- 派生展示字段（由 normalizeOrder 补，页面直接读）----
+  price: number          // 展示用金额口径（取总价）
+  productName: string     // 兼容展示名（等同 productTitle）
+  buyerName: string       // 兼容展示名（等同 buyerNickname）
+  sellerName: string      // 兼容展示名（等同 sellerNickname）
+  // ---- 页面上下文字段（依赖当前登录用户，由页面自行补充）----
+  isBuyer?: boolean
+  isSeller?: boolean
 }
 
 /**
@@ -42,6 +59,36 @@ export interface OrderLog {
   createdAt: string
 }
 
+/**
+ * 归一化订单字段：把后端字段名映射成页面展示所需形状。
+ * 页面不再各自兜底（原先散落在 list.vue / detail.vue）。
+ */
+function normalizeOrder(data: any): Order {
+  // 展示口径为订单总价：unitPrice 是查询商品得到的当前价（非下单快照），
+  // 商品改价后历史订单会显示错误金额；totalPrice 落库自订单金额，才是成交价。
+  const totalPrice = Number(data?.totalPrice ?? 0)
+  const unitPrice = Number(data?.unitPrice ?? 0)
+  return {
+    ...data,
+    price: totalPrice || unitPrice,
+    productName: data?.productTitle || data?.productName || '未知商品',
+    buyerName: data?.buyerNickname || data?.buyerName || '',
+    sellerName: data?.sellerNickname || data?.sellerName || ''
+  }
+}
+
+function normalizeOrderPage(res: any) {
+  const page = res?.data
+  if (!page || typeof page !== 'object') return res
+  return {
+    ...res,
+    data: {
+      ...page,
+      list: (page.list || page.records || []).map(normalizeOrder)
+    }
+  }
+}
+
 export const orderApi = {
   /**
    * 创建订单
@@ -53,7 +100,7 @@ export const orderApi = {
     phone: string
     remark?: string
   }) {
-    return http.post<Order>('/order', data, { showLoading: true })
+    return http.post<Order>('/order', data, { showLoading: true }).then(normalizeOrder)
   },
 
   /**
@@ -75,14 +122,14 @@ export const orderApi = {
     return http.get<{
       list: Order[]
       total: number
-    }>('/order', params)
+    }>('/order', params).then(normalizeOrderPage)
   },
 
   /**
    * 获取订单详情
    */
   getOrderDetail(id: string) {
-    return http.get<Order>(`/order/${id}`)
+    return http.get<Order>(`/order/${id}`).then(normalizeOrder)
   },
 
   /**

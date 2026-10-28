@@ -338,21 +338,13 @@ function loadOrderDetail() {
       // 获取当前用户ID（转为字符串进行比较）
       const currentUserId = String(userStore.userInfo?.userId || userStore.userInfo?.id || '')
 
-      // 适配后端字段到前端字段
+      // 字段名归一化（price / buyerName / sellerName）已在 api/order.ts 完成。
+      // 这里只补充依赖页面上下文的角色判断与展示用电话。
       const data = res.data || {}
       order.value = {
         ...data,
-        // 价格字段适配：使用 unitPrice 或 totalPrice
-        price: data.unitPrice || data.totalPrice || 0,
-        // 用户名适配：buyerNickname -> buyerName
-        buyerName: data.buyerNickname || '',
-        // 用户名适配：sellerNickname -> sellerName
-        sellerName: data.sellerNickname || '',
-        // 电话适配：contactPhone -> phone
         phone: data.contactPhone || '',
-        // 判断当前用户是否是买家（都转为字符串比较）
         isBuyer: String(data.buyerId) === currentUserId,
-        // 判断当前用户是否是卖家（都转为字符串比较）
         isSeller: String(data.sellerId) === currentUserId
       }
       pageLoading.value = false

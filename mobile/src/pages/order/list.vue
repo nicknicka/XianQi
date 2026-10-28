@@ -97,7 +97,7 @@
 							>下单时间：{{ formatTime(order.createdAt) }}</text
 						>
 						<text class="info-item"
-							>交易地点：{{ order.location || "线上交易" }}</text
+							>交易地点：{{ order.address || "线上交易" }}</text
 						>
 					</view>
 
@@ -331,7 +331,8 @@ function loadOrders(refresh = false) {
 			const list = Array.isArray(res.data?.list) ? res.data.list : [];
 			const total = res.data?.total || 0;
 
-			// 归一化订单字段，避免状态/角色因类型或用户信息未就绪导致按钮误隐藏
+			// 补充页面上下文相关字段（角色判断依赖当前登录用户，无法在 API 层完成）。
+			// 字段名与展示值的归一化已在 api/order.ts 的 normalizeOrder 中完成。
 			const listWithIsBuyer = list.map((order: any) => {
 				const normalizedStatus = Number(order.status);
 				const isBuyerById = String(order.buyerId) === currentUserId;
@@ -339,13 +340,6 @@ function loadOrders(refresh = false) {
 
 				return {
 					...order,
-					productTitle:
-						order.productTitle || order.productName || "未知商品",
-					productImage:
-						order.productImage || order.coverImage || order.productCover || "",
-					price:
-						order.price ?? order.unitPrice ?? order.totalPrice ?? order.totalAmount ?? 0,
-					location: order.location || order.address || "",
 					status: Number.isNaN(normalizedStatus) ? order.status : normalizedStatus,
 					isBuyer: isBuyerById || role.value === 0,
 					isSeller: isSellerById || role.value === 1,

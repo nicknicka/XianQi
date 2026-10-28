@@ -52,14 +52,14 @@ export interface OrderRefundProcessParams {
  * 订单统计信息
  */
 export interface OrderManageStatistics {
-  totalCount: number
-  pendingCount: number
-  processingCount: number
+  totalOrders: number
+  pendingConfirmCount: number
+  inProgressCount: number
   completedCount: number
   cancelledCount: number
-  refundedCount: number
+  refundingCount: number
   totalAmount: string // 总金额 - 使用string避免精度问题
-  todayCount: number
+  todayNewOrders: number
   todayAmount: string // 今日金额 - 使用string避免精度问题
 }
 

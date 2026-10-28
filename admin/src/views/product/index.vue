@@ -5,11 +5,11 @@
       <el-radio-group v-model="activeTab" @change="handleTabChange">
         <el-radio-button value="all">
           全部
-          <el-badge v-if="statistics.totalCount > 0" :value="statistics.totalCount" class="badge" />
+          <el-badge v-if="statistics.totalProducts > 0" :value="statistics.totalProducts" class="badge" />
         </el-radio-button>
         <el-radio-button value="pending">
           待审核
-          <el-badge v-if="statistics.pendingCount > 0" :value="statistics.pendingCount" class="badge" type="warning" />
+          <el-badge v-if="statistics.pendingAuditCount > 0" :value="statistics.pendingAuditCount" class="badge" type="warning" />
         </el-radio-button>
         <el-radio-button value="approved">
           已通过
@@ -222,11 +222,11 @@ const total = ref(0)
 
 // 统计数据
 const statistics = ref({
-  totalCount: 0,
-  pendingCount: 0,
+  totalProducts: 0,
+  pendingAuditCount: 0,
   approvedCount: 0,
   rejectedCount: 0,
-  todayAuditCount: 0,
+  todayPendingCount: 0,
 })
 
 // 详情弹窗

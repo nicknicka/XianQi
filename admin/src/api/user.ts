@@ -48,12 +48,12 @@ export interface UserStatusUpdateParams {
  * 用户统计信息
  */
 export interface UserStatistics {
-  totalCount: number // 总用户数
-  normalCount: number // 正常用户数
-  bannedCount: number // 已封禁用户数
-  todayNew: number // 今日新增
-  weekNew: number // 本周新增
-  monthNew: number // 本月新增
+  totalUsers: number // 总用户数
+  normalUsers: number // 正常用户数
+  bannedUsers: number // 已封禁用户数
+  todayNewUsers: number // 今日新增
+  weekNewUsers: number // 本周新增
+  monthNewUsers: number // 本月新增
 }
 
 /**
