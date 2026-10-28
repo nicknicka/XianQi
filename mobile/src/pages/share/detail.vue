@@ -295,6 +295,7 @@ import { shareApi } from "@/api/share";
 import { favoriteApi } from "@/api/favorite";
 import { useUserStore } from "@/store/user";
 import { useThemeStyle, useThemeColors, useThemePage } from "@/utils/theme";
+import { formatAvailableTime } from "@/utils/common";
 import UserAvatar from "@/components/user-avatar/user-avatar.vue";
 import LazyImage from "@/components/lazy-image/lazy-image.vue";
 import { onLoad, onShow } from "@dcloudio/uni-app";
@@ -442,58 +443,31 @@ function refreshShareItemState() {
 	checkFavoriteStatus();
 }
 
-function formatAvailableTime(raw: string): string {
-	if (!raw) return "随时可借用";
-	try {
-		const obj = JSON.parse(raw);
-		const parts: string[] = [];
-		if (obj.rentalType === "days" && obj.rentalDays) {
-			parts.push(`可借${obj.rentalDays}天`);
-		} else if (obj.rentalType === "hours" && obj.rentalHours) {
-			parts.push(`可借${obj.rentalHours}小时`);
-		}
-		const deliveryMap: Record<string, string> = {
-			self: "自取",
-			mailing: "邮寄",
-			both: "自取/邮寄",
-		};
-		if (obj.deliveryMethod) {
-			parts.push(deliveryMap[obj.deliveryMethod] || obj.deliveryMethod);
-		}
-		return parts.length > 0 ? parts.join(" · ") : "随时可借用";
-	} catch {
-		return raw || "随时可借用";
-	}
-}
-
 function loadShareItem() {
 	shareApi
 		.getShareItemDetail(shareItemId.value)
 		.then((response: any) => {
 			const data = response.data || response || {};
 
-			// 映射后端字段到模板所需的字段名
+			// 字段名与图片 URL 归一化已在 api/share.ts 的 normalizeShareItem 完成；
+			// 这里只做展示文案转换（availableTime 是 JSON，需格式化为可读文本）。
 			const imageList =
-				data.imageUrls && data.imageUrls.length > 0
-					? data.imageUrls
-					: data.images && data.images.length > 0
+				data.images && data.images.length > 0
 					? data.images
-					: data.coverImageUrl || data.coverImage || data.image
-					? [data.coverImageUrl || data.coverImage || data.image]
+					: data.coverImage
+					? [data.coverImage]
 					: [];
-
-			const availableTimeRaw = data.availableTimes || data.availableTime || "";
 
 			shareItem.value = {
 				images: imageList,
-				coverImage: data.coverImageUrl || data.coverImage || data.image || "",
+				coverImage: data.coverImage || "",
 				dailyRent: data.dailyRent || 0,
 				deposit: data.deposit || 0,
 				title: data.title || "",
-				availableTime: formatAvailableTime(availableTimeRaw),
-				userAvatar: data.ownerAvatar || data.userAvatar || "",
-				userName: data.ownerNickname || data.userName || "",
-				userId: String(data.ownerId || data.userId || ""),
+				availableTime: formatAvailableTime(data.availableTime),
+				userAvatar: data.userAvatar || "",
+				userName: data.userName || "",
+				userId: String(data.userId || ""),
 				description: data.description || "",
 				status: data.status ?? 0,
 				// 预约统计

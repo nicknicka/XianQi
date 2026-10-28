@@ -150,32 +150,8 @@ import { useThemePage } from '@/utils/theme'
 import { ref, onMounted, computed } from 'vue'
 import { shareApi } from '@/api/share'
 import ProductListItem from '@/components/product-list-item/product-list-item.vue'
-import { normalizeImageUrl } from '@/utils/image'
+import { formatAvailableTime } from '@/utils/common'
 import { onShow } from '@dcloudio/uni-app'
-
-function formatAvailableTime(raw: string): string {
-  if (!raw) return '随时可借用'
-  try {
-    const obj = JSON.parse(raw)
-    const parts: string[] = []
-    if (obj.rentalType === 'days' && obj.rentalDays) {
-      parts.push(`可借${obj.rentalDays}天`)
-    } else if (obj.rentalType === 'hours' && obj.rentalHours) {
-      parts.push(`可借${obj.rentalHours}小时`)
-    }
-    const deliveryMap: Record<string, string> = {
-      self: '自取',
-      mailing: '邮寄',
-      both: '自取/邮寄'
-    }
-    if (obj.deliveryMethod) {
-      parts.push(deliveryMap[obj.deliveryMethod] || obj.deliveryMethod)
-    }
-    return parts.length > 0 ? parts.join(' · ') : '随时可借用'
-  } catch {
-    return raw || '随时可借用'
-  }
-}
 
 interface ShareItem {
   id: string
@@ -258,17 +234,9 @@ async function loadData() {
 
       // 处理数据字段映射
       const mappedList = list.map((item: any) => ({
-        id: item.id || item.shareId,
-        shareId: item.shareId || item.id,
-        title: item.title,
-        coverImage: normalizeImageUrl(item.coverImageUrl || item.coverImage || item.image || ''),
-        dailyRent: item.dailyRent,
-        deposit: item.deposit,
-        availableTime: formatAvailableTime(item.availableTimes || item.availableTime || ''),
-        status: item.status,
-        distance: item.distance,
-        userName: item.ownerNickname || item.userName || '',
-        userAvatar: item.ownerAvatar || item.userAvatar || ''
+        ...item,
+        shareId: item.id,
+        availableTime: formatAvailableTime(item.availableTime)
       }))
 
       if (currentPage.value === 1) {
@@ -292,16 +260,9 @@ async function loadData() {
 
       // 处理数据字段映射
       const mappedList = list.map((item: any) => ({
-        id: item.id || item.shareId,
-        shareId: item.shareId || item.id,
-        title: item.title,
-        coverImage: normalizeImageUrl(item.coverImageUrl || item.coverImage || item.image || ''),
-        dailyRent: item.dailyRent,
-        deposit: item.deposit,
-        availableTime: formatAvailableTime(item.availableTimes || item.availableTime || ''),
-        status: item.status,
-        userName: item.ownerNickname || item.userName || '',
-        userAvatar: item.ownerAvatar || item.userAvatar || ''
+        ...item,
+        shareId: item.id,
+        availableTime: formatAvailableTime(item.availableTime)
       }))
 
       if (currentPage.value === 1) {

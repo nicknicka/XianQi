@@ -2,7 +2,7 @@
  * 共享物品相关 API
  */
 import { http } from '@/utils/request'
-import { normalizeImageUrl } from '@/utils/image'
+import { normalizeImageEntry, parseImageList } from '@/utils/image'
 
 // ===== 草稿相关类型定义 =====
 
@@ -73,12 +73,17 @@ interface ShareItemListParams {
 }
 
 function normalizeShareItem(data: any): ShareItem {
+  const imageUrls = parseImageList(data?.imageUrls)
+  const images = imageUrls.length > 0 ? imageUrls : parseImageList(data?.images)
+
   return {
     id: String(data?.shareId || data?.id || ''),
     title: data?.title || '',
     description: data?.description || '',
-    images: data?.imageUrls || data?.images || [],
-    coverImage: data?.coverImageUrl || data?.coverImage || data?.imageUrls?.[0] || '',
+    images,
+    coverImage: normalizeImageEntry(
+      data?.coverImageUrl || data?.coverImage || data?.image || images[0] || ''
+    ),
     dailyRent: Number(data?.dailyRent || 0),
     deposit: Number(data?.deposit || 0),
     categoryId: data?.categoryId ? String(data.categoryId) : undefined,
@@ -107,31 +112,6 @@ function normalizeSharePage(res: any) {
 
 function getPageList(data: any): any[] {
   return data?.list || data?.records || []
-}
-
-function normalizeImageEntry(image: unknown): string {
-  if (typeof image !== 'string') return ''
-  return normalizeImageUrl(image)
-}
-
-function parseImageList(images: unknown): string[] {
-  if (Array.isArray(images)) {
-    return images.map(normalizeImageEntry).filter(Boolean)
-  }
-
-  if (typeof images === 'string') {
-    try {
-      const parsed = JSON.parse(images)
-      if (Array.isArray(parsed)) {
-        return parsed.map(normalizeImageEntry).filter(Boolean)
-      }
-    } catch {
-      const normalized = normalizeImageEntry(images)
-      return normalized ? [normalized] : []
-    }
-  }
-
-  return []
 }
 
 function getBookingCoverImage(data: any): string {

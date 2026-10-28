@@ -318,6 +318,7 @@ import { checkSensitiveWord, SensitiveCheckType } from '@/utils/sensitive-word'
 import { useUserStore } from '@/store/user'
 import { useAppStore } from '@/store/app'
 import { formatTime } from '@/utils/date'
+import { formatAvailableTime } from '@/utils/common'
 import { checkAuth } from '@/utils/auth'
 import { updateMessageBadge } from '@/utils/tabbar'
 import { messageEventBus, MessageEvents } from '@/utils/message-bus'
@@ -476,35 +477,6 @@ function formatAmount(value: any): string {
   const amount = Number(value)
   if (!Number.isFinite(amount)) return '0'
   return Number.isInteger(amount) ? String(amount) : amount.toFixed(2).replace(/\.?0+$/, '')
-}
-
-function formatAvailableTime(raw: string): string {
-  if (!raw) return '随时可借用'
-
-  try {
-    const parsed = JSON.parse(raw)
-    const parts: string[] = []
-
-    if (parsed.rentalType === 'days' && parsed.rentalDays) {
-      parts.push(`可借${parsed.rentalDays}天`)
-    } else if (parsed.rentalType === 'hours' && parsed.rentalHours) {
-      parts.push(`可借${parsed.rentalHours}小时`)
-    }
-
-    const deliveryMap: Record<string, string> = {
-      self: '自取',
-      mailing: '邮寄',
-      both: '自取/邮寄'
-    }
-
-    if (parsed.deliveryMethod) {
-      parts.push(deliveryMap[parsed.deliveryMethod] || parsed.deliveryMethod)
-    }
-
-    return parts.length > 0 ? parts.join(' · ') : '随时可借用'
-  } catch {
-    return raw || '随时可借用'
-  }
 }
 
 function normalizeProductCard(card: any) {

@@ -653,3 +653,43 @@ export default {
   makePhoneCall,
   scanCode
 }
+
+
+/**
+ * 格式化共享物品的可借用时间。
+ *
+ * 入参是共享物品的 availableTime 字段（JSON 字符串），形如
+ * `{"rentalType":"days","rentalDays":3,"deliveryMethod":"both"}`。
+ * 字段名已在 api 层归一（后端原名为 availableTimes）。
+ * 解析失败或字段缺失时回退为原文或「随时可借用」。
+ *
+ * 原先在 share/index.vue、share/detail.vue、message/chat.vue 各有一份逐字相同的实现。
+ */
+export function formatAvailableTime(raw?: string | null): string {
+  if (!raw) return '随时可借用'
+
+  try {
+    const obj = JSON.parse(raw)
+    const parts: string[] = []
+
+    if (obj.rentalType === 'days' && obj.rentalDays) {
+      parts.push(`可借${obj.rentalDays}天`)
+    } else if (obj.rentalType === 'hours' && obj.rentalHours) {
+      parts.push(`可借${obj.rentalHours}小时`)
+    }
+
+    const deliveryMap: Record<string, string> = {
+      self: '自取',
+      mailing: '邮寄',
+      both: '自取/邮寄'
+    }
+
+    if (obj.deliveryMethod) {
+      parts.push(deliveryMap[obj.deliveryMethod] || obj.deliveryMethod)
+    }
+
+    return parts.length > 0 ? parts.join(' · ') : '随时可借用'
+  } catch {
+    return raw || '随时可借用'
+  }
+}
