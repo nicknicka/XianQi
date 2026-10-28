@@ -49,5 +49,8 @@ Thumbs.db
 *.bak
 *.old
 
+# ========== Python ==========
+__pycache__/
+
 # ========== 本地临时草稿 ==========
 /.scratch/
