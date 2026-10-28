@@ -154,7 +154,7 @@ public class CategoryManageController {
             category.setParentId(0L); // 0表示顶级分类
         }
         category.setDeleted(0);
-        category.setCreateTime(java.time.LocalDateTime.now());
+        category.setCreatedAt(java.time.LocalDateTime.now());
 
         categoryMapper.insert(category);
         log.info("创建分类成功, categoryId={}", category.getCategoryId());
@@ -197,7 +197,7 @@ public class CategoryManageController {
             }
         }
 
-        category.setUpdateTime(java.time.LocalDateTime.now());
+        category.setUpdatedAt(java.time.LocalDateTime.now());
         categoryMapper.updateById(category);
 
         log.info("更新分类成功, categoryId={}", category.getCategoryId());
@@ -235,7 +235,7 @@ public class CategoryManageController {
 
         // 逻辑删除
         category.setDeleted(1);
-        category.setUpdateTime(java.time.LocalDateTime.now());
+        category.setUpdatedAt(java.time.LocalDateTime.now());
         categoryMapper.updateById(category);
 
         log.info("删除分类成功, categoryId={}", categoryId);
@@ -263,7 +263,7 @@ public class CategoryManageController {
         }
 
         category.setStatus(status);
-        category.setUpdateTime(java.time.LocalDateTime.now());
+        category.setUpdatedAt(java.time.LocalDateTime.now());
         categoryMapper.updateById(category);
 
         log.info("更新分类状态成功, categoryId={}, status={}", categoryId, status);
@@ -338,10 +338,10 @@ public class CategoryManageController {
         vo.setSortOrder(category.getSortOrder());
         vo.setStatus(category.getStatus());
         vo.setParentId(String.valueOf(category.getParentId()));
-        vo.setCreateTime(category.getCreateTime() != null ?
-            category.getCreateTime().toString() : null);
-        vo.setUpdateTime(category.getUpdateTime() != null ?
-            category.getUpdateTime().toString() : null);
+        vo.setCreatedAt(category.getCreatedAt() != null ?
+            category.getCreatedAt().toString() : null);
+        vo.setUpdatedAt(category.getUpdatedAt() != null ?
+            category.getUpdatedAt().toString() : null);
 
         // 如果数据库中没有 code，根据名称生成默认值
         String code = category.getCode();

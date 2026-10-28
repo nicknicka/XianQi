@@ -133,7 +133,7 @@ public class OperationLogServiceImpl extends ServiceImpl<OperationLogMapper, Ope
 
         // 设置时间
         if (log.getCreatedAt() != null) {
-            vo.setCreateTime(log.getCreatedAt().toString());
+            vo.setCreatedAt(log.getCreatedAt().toString());
         }
 
         return vo;

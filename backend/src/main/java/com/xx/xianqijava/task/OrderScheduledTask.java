@@ -73,7 +73,7 @@ public class OrderScheduledTask {
 
             LambdaUpdateWrapper<Order> updateWrapper = new LambdaUpdateWrapper<>();
             updateWrapper.eq(Order::getStatus, OrderStatus.PENDING_CONFIRM.getCode())
-                    .le(Order::getCreateTime, expireTime)
+                    .le(Order::getCreatedAt, expireTime)
                     .set(Order::getStatus, OrderStatus.CANCELLED.getCode())
                     .set(Order::getCancelReason, "超时未确认自动关闭");
 
@@ -108,7 +108,7 @@ public class OrderScheduledTask {
             // 使用更新时间作为判断标准（卖家确认订单的时间）
             LambdaUpdateWrapper<Order> updateWrapper = new LambdaUpdateWrapper<>();
             updateWrapper.eq(Order::getStatus, OrderStatus.IN_PROGRESS.getCode())
-                    .le(Order::getUpdateTime, expireTime)
+                    .le(Order::getUpdatedAt, expireTime)
                     .set(Order::getStatus, OrderStatus.COMPLETED.getCode())
                     .set(Order::getFinishTime, LocalDateTime.now())
                     .set(Order::getConfirmTime, LocalDateTime.now()); // 设置自动确认收货时间
@@ -137,7 +137,7 @@ public class OrderScheduledTask {
             LocalDateTime expireTime = LocalDateTime.now().minusSeconds(transferAutoCloseTimeSeconds);
             LambdaQueryWrapper<TransferRecord> wrapper = new LambdaQueryWrapper<>();
             wrapper.eq(TransferRecord::getAcceptStatus, 0)
-                    .le(TransferRecord::getCreateTime, expireTime);
+                    .le(TransferRecord::getCreatedAt, expireTime);
 
             java.util.List<TransferRecord> expiredTransfers = transferRecordMapper.selectList(wrapper);
             if (expiredTransfers.isEmpty()) {

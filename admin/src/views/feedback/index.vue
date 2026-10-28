@@ -56,7 +56,7 @@
         </el-table-column>
         <el-table-column label="提交时间" width="180">
           <template #default="{ row }">
-            {{ formatTime(row.createTime) }}
+            {{ formatTime(row.createdAt) }}
           </template>
         </el-table-column>
         <el-table-column label="操作" width="200" fixed="right">
@@ -101,7 +101,7 @@
             {{ currentFeedback.status === 1 ? '已处理' : '待处理' }}
           </el-tag>
         </el-descriptions-item>
-        <el-descriptions-item label="提交时间">{{ formatTime(currentFeedback.createTime) }}</el-descriptions-item>
+        <el-descriptions-item label="提交时间">{{ formatTime(currentFeedback.createdAt) }}</el-descriptions-item>
         <el-descriptions-item v-if="currentFeedback.reply" label="回复" :span="2">{{ currentFeedback.reply }}</el-descriptions-item>
         <el-descriptions-item v-if="currentFeedback.replyTime" label="回复时间" :span="2">{{ formatTime(currentFeedback.replyTime) }}</el-descriptions-item>
       </el-descriptions>

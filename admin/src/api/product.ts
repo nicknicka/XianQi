@@ -37,7 +37,7 @@ export interface ProductAuditVO {
   status: number // 商品状态：0-下架，1-在售，2-已售
   auditStatus: number // 审核状态：0-待审核，1-已通过，2-已拒绝
   auditRemark?: string // 审核备注
-  createTime: string
+  createdAt: string
   auditTime?: string
   auditorId?: string
 }

@@ -149,7 +149,7 @@ public class ProductAuditServiceImpl implements ProductAuditService {
         Long todayPendingCount = productMapper.selectCount(
                 new LambdaQueryWrapper<Product>()
                         .eq(Product::getAuditStatus, 0)
-                        .ge(Product::getCreateTime, todayStart)
+                        .ge(Product::getCreatedAt, todayStart)
         );
         statistics.setTodayPendingCount(todayPendingCount);
 
@@ -206,7 +206,7 @@ public class ProductAuditServiceImpl implements ProductAuditService {
         } else if ("auditTime".equals(queryDTO.getSortBy())) {
             queryWrapper.orderBy(true, "asc".equalsIgnoreCase(queryDTO.getSortOrder()), Product::getAuditTime);
         } else {
-            queryWrapper.orderBy(true, "asc".equalsIgnoreCase(queryDTO.getSortOrder()), Product::getCreateTime);
+            queryWrapper.orderBy(true, "asc".equalsIgnoreCase(queryDTO.getSortOrder()), Product::getCreatedAt);
         }
 
         return queryWrapper;

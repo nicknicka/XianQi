@@ -122,7 +122,7 @@ public class AIChatHistoryService {
                 .aiResponse(history.getAiResponse())
                 .intentType(history.getIntentType())
                 .agentType(history.getAgentType())
-                .createdAt(history.getCreateTime())
+                .createdAt(history.getCreatedAt())
                 .build();
     }
 }

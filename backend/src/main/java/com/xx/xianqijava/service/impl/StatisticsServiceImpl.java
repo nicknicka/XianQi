@@ -178,14 +178,14 @@ public class StatisticsServiceImpl implements StatisticsService {
 
     private Long countUsersCreatedAfter(LocalDateTime dateTime) {
         LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
-        wrapper.ge(User::getCreateTime, dateTime);
+        wrapper.ge(User::getCreatedAt, dateTime);
         return userMapper.selectCount(wrapper);
     }
 
     private Long countActiveUsers() {
         // 7天内登录过的用户（假设最后更新时间在7天内）
         LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
-        wrapper.ge(User::getUpdateTime, LocalDateTime.now().minusDays(7));
+        wrapper.ge(User::getUpdatedAt, LocalDateTime.now().minusDays(7));
         return userMapper.selectCount(wrapper);
     }
 
@@ -219,7 +219,7 @@ public class StatisticsServiceImpl implements StatisticsService {
 
     private Long countProductsCreatedAfter(LocalDateTime dateTime) {
         LambdaQueryWrapper<Product> wrapper = new LambdaQueryWrapper<>();
-        wrapper.ge(Product::getCreateTime, dateTime);
+        wrapper.ge(Product::getCreatedAt, dateTime);
         return productMapper.selectCount(wrapper);
     }
 
@@ -235,7 +235,7 @@ public class StatisticsServiceImpl implements StatisticsService {
 
     private Long countOrdersCreatedAfter(LocalDateTime dateTime) {
         LambdaQueryWrapper<Order> wrapper = new LambdaQueryWrapper<>();
-        wrapper.ge(Order::getCreateTime, dateTime);
+        wrapper.ge(Order::getCreatedAt, dateTime);
         return orderMapper.selectCount(wrapper);
     }
 
@@ -264,7 +264,7 @@ public class StatisticsServiceImpl implements StatisticsService {
 
     private Long countNotificationsAfter(LocalDateTime dateTime) {
         LambdaQueryWrapper<SystemNotification> wrapper = new LambdaQueryWrapper<>();
-        wrapper.ge(SystemNotification::getCreateTime, dateTime);
+        wrapper.ge(SystemNotification::getCreatedAt, dateTime);
         return systemNotificationMapper.selectCount(wrapper);
     }
 
@@ -293,8 +293,8 @@ public class StatisticsServiceImpl implements StatisticsService {
             LocalDateTime endOfDay = date.atTime(LocalTime.MAX);
 
             LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
-            wrapper.ge(User::getCreateTime, startOfDay);
-            wrapper.le(User::getCreateTime, endOfDay);
+            wrapper.ge(User::getCreatedAt, startOfDay);
+            wrapper.le(User::getCreatedAt, endOfDay);
 
             long count = userMapper.selectCount(wrapper);
 
@@ -320,8 +320,8 @@ public class StatisticsServiceImpl implements StatisticsService {
             LocalDateTime endOfDay = date.atTime(LocalTime.MAX);
 
             LambdaQueryWrapper<Product> wrapper = new LambdaQueryWrapper<>();
-            wrapper.ge(Product::getCreateTime, startOfDay);
-            wrapper.le(Product::getCreateTime, endOfDay);
+            wrapper.ge(Product::getCreatedAt, startOfDay);
+            wrapper.le(Product::getCreatedAt, endOfDay);
 
             long count = productMapper.selectCount(wrapper);
 
@@ -347,8 +347,8 @@ public class StatisticsServiceImpl implements StatisticsService {
             LocalDateTime endOfDay = date.atTime(LocalTime.MAX);
 
             LambdaQueryWrapper<Order> wrapper = new LambdaQueryWrapper<>();
-            wrapper.ge(Order::getCreateTime, startOfDay);
-            wrapper.le(Order::getCreateTime, endOfDay);
+            wrapper.ge(Order::getCreatedAt, startOfDay);
+            wrapper.le(Order::getCreatedAt, endOfDay);
 
             long count = orderMapper.selectCount(wrapper);
 
@@ -374,8 +374,8 @@ public class StatisticsServiceImpl implements StatisticsService {
             LocalDateTime endOfDay = date.atTime(LocalTime.MAX);
 
             LambdaQueryWrapper<Order> wrapper = new LambdaQueryWrapper<>();
-            wrapper.ge(Order::getCreateTime, startOfDay);
-            wrapper.le(Order::getCreateTime, endOfDay);
+            wrapper.ge(Order::getCreatedAt, startOfDay);
+            wrapper.le(Order::getCreatedAt, endOfDay);
             wrapper.eq(Order::getStatus, 2); // 只统计已完成的订单
 
             List<Order> orders = orderMapper.selectList(wrapper);

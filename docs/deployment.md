@@ -108,7 +108,9 @@ docker compose --profile dev up -d
 
 1. 将迁移 SQL 文件放到 `sql/migrations/` 目录
 2. 命名格式：`YYYYMMDD_description.sql`
-3. 手动执行迁移：
+3. **提交前必须通过迁移守卫**：`python3 scripts/check-migration-baseline.py`
+   —— 迁移脚本描述的结构必须与 `sql/schema.sql`（数据库基线）一致：键列用有符号整数、时间列用 `created_at`/`updated_at`、主键名与列类型/长度/可空性都与基线相同。CI 会强制校验。
+4. 手动执行迁移：
 
 ```bash
 # 方式一：用 phpMyAdmin 导入

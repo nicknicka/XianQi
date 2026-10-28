@@ -64,7 +64,7 @@
           </view>
           <view class="info-item">
             <text class="label">申请时间</text>
-            <text class="value">{{ formatTime(refund.createTime) }}</text>
+            <text class="value">{{ formatTime(refund.createdAt) }}</text>
           </view>
           <view v-if="refund.finishTime" class="info-item">
             <text class="label">完成时间</text>
@@ -198,8 +198,8 @@ interface RefundDetail {
   logisticsTime: string
   evidenceImages: string[]
   remark: string
-  createTime: string
-  updateTime: string
+  createdAt: string
+  updatedAt: string
   finishTime: string
 }
 

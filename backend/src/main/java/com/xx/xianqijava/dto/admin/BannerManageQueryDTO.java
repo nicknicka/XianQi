@@ -25,7 +25,7 @@ public class BannerManageQueryDTO {
     @Schema(description = "每页大小", example = "20")
     private Integer pageSize = 20;
 
-    @Schema(description = "排序字段：createTime/sortOrder/clickCount/exposureCount", example = "sortOrder")
+    @Schema(description = "排序字段：createdAt/sortOrder/clickCount/exposureCount", example = "sortOrder")
     private String sortBy = "sortOrder";
 
     @Schema(description = "排序方式：asc/desc", example = "asc")

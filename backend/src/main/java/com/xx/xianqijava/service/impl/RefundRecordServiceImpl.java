@@ -156,7 +156,7 @@ public class RefundRecordServiceImpl extends ServiceImpl<RefundRecordMapper, Ref
         if (status != null) {
             wrapper.eq(RefundRecord::getStatus, status);
         }
-        wrapper.orderByDesc(RefundRecord::getCreateTime);
+        wrapper.orderByDesc(RefundRecord::getCreatedAt);
 
         Page<RefundRecord> resultPage = page(page, wrapper);
 
@@ -193,7 +193,7 @@ public class RefundRecordServiceImpl extends ServiceImpl<RefundRecordMapper, Ref
         if (status != null) {
             wrapper.eq(RefundRecord::getStatus, status);
         }
-        wrapper.orderByDesc(RefundRecord::getCreateTime);
+        wrapper.orderByDesc(RefundRecord::getCreatedAt);
 
         Page<RefundRecord> resultPage = page(page, wrapper);
 

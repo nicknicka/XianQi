@@ -94,7 +94,7 @@
 
 					<view class="order-info">
 						<text class="info-item"
-							>下单时间：{{ formatTime(order.createTime) }}</text
+							>下单时间：{{ formatTime(order.createdAt) }}</text
 						>
 						<text class="info-item"
 							>交易地点：{{ order.location || "线上交易" }}</text
@@ -205,7 +205,7 @@ interface Order {
 	isSeller?: boolean;
 	buyerId?: string;
 	sellerId?: string;
-	createTime: string;
+	createdAt: string;
 }
 
 const tabs = [

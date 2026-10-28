@@ -77,7 +77,7 @@ public class ShareItemManageServiceImpl implements ShareItemManageService {
         } else if ("deposit".equals(queryDTO.getSortBy())) {
             queryWrapper.orderBy(true, "asc".equalsIgnoreCase(queryDTO.getSortOrder()), ShareItem::getDeposit);
         } else {
-            queryWrapper.orderBy(true, "asc".equalsIgnoreCase(queryDTO.getSortOrder()), ShareItem::getCreateTime);
+            queryWrapper.orderBy(true, "asc".equalsIgnoreCase(queryDTO.getSortOrder()), ShareItem::getCreatedAt);
         }
 
         // 分页查询
@@ -147,21 +147,21 @@ public class ShareItemManageServiceImpl implements ShareItemManageService {
         // 今日新增物品数
         LocalDateTime todayStart = LocalDateTime.now().withHour(0).withMinute(0).withSecond(0);
         Long todayNewItems = shareItemMapper.selectCount(
-                new LambdaQueryWrapper<ShareItem>().ge(ShareItem::getCreateTime, todayStart)
+                new LambdaQueryWrapper<ShareItem>().ge(ShareItem::getCreatedAt, todayStart)
         );
         statistics.setTodayNewItems(todayNewItems);
 
         // 本周新增物品数
         LocalDateTime weekStart = LocalDateTime.now().minusDays(7);
         Long weekNewItems = shareItemMapper.selectCount(
-                new LambdaQueryWrapper<ShareItem>().ge(ShareItem::getCreateTime, weekStart)
+                new LambdaQueryWrapper<ShareItem>().ge(ShareItem::getCreatedAt, weekStart)
         );
         statistics.setWeekNewItems(weekNewItems);
 
         // 本月新增物品数
         LocalDateTime monthStart = LocalDateTime.now().minusDays(30);
         Long monthNewItems = shareItemMapper.selectCount(
-                new LambdaQueryWrapper<ShareItem>().ge(ShareItem::getCreateTime, monthStart)
+                new LambdaQueryWrapper<ShareItem>().ge(ShareItem::getCreatedAt, monthStart)
         );
         statistics.setMonthNewItems(monthNewItems);
 

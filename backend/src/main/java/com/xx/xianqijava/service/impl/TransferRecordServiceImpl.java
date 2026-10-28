@@ -286,7 +286,7 @@ public class TransferRecordServiceImpl extends ServiceImpl<TransferRecordMapper,
 
         LambdaQueryWrapper<TransferRecord> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(TransferRecord::getFromUserId, fromUserId)
-                .orderByDesc(TransferRecord::getCreateTime);
+                .orderByDesc(TransferRecord::getCreatedAt);
 
         IPage<TransferRecord> recordPage = page(page, wrapper);
         return recordPage.convert(this::convertToVO);
@@ -298,7 +298,7 @@ public class TransferRecordServiceImpl extends ServiceImpl<TransferRecordMapper,
 
         LambdaQueryWrapper<TransferRecord> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(TransferRecord::getToUserId, toUserId)
-                .orderByDesc(TransferRecord::getCreateTime);
+                .orderByDesc(TransferRecord::getCreatedAt);
 
         IPage<TransferRecord> recordPage = page(page, wrapper);
         return recordPage.convert(this::convertToVO);
@@ -311,7 +311,7 @@ public class TransferRecordServiceImpl extends ServiceImpl<TransferRecordMapper,
         LambdaQueryWrapper<TransferRecord> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(TransferRecord::getToUserId, toUserId)
                 .eq(TransferRecord::getAcceptStatus, 0)
-                .orderByDesc(TransferRecord::getCreateTime);
+                .orderByDesc(TransferRecord::getCreatedAt);
 
         return list(wrapper).stream()
                 .map(this::convertToVO)
@@ -329,8 +329,8 @@ public class TransferRecordServiceImpl extends ServiceImpl<TransferRecordMapper,
         vo.setAcceptStatusDesc(getAcceptStatusDesc(record.getAcceptStatus()));
 
         // 设置时间
-        if (record.getCreateTime() != null) {
-            vo.setCreateTime(record.getCreateTime().toString());
+        if (record.getCreatedAt() != null) {
+            vo.setCreatedAt(record.getCreatedAt().toString());
         }
         if (record.getConfirmTime() != null) {
             vo.setConfirmTime(record.getConfirmTime().toString());

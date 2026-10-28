@@ -94,7 +94,7 @@ public class UserManageServiceImpl implements UserManageService {
         if ("creditScore".equals(queryDTO.getSortBy())) {
             queryWrapper.orderBy(true, "asc".equalsIgnoreCase(queryDTO.getSortOrder()), User::getCreditScore);
         } else {
-            queryWrapper.orderBy(true, "asc".equalsIgnoreCase(queryDTO.getSortOrder()), User::getCreateTime);
+            queryWrapper.orderBy(true, "asc".equalsIgnoreCase(queryDTO.getSortOrder()), User::getCreatedAt);
         }
 
         // 分页查询
@@ -175,21 +175,21 @@ public class UserManageServiceImpl implements UserManageService {
         // 今日新增用户数
         LocalDateTime todayStart = LocalDateTime.now().withHour(0).withMinute(0).withSecond(0);
         Long todayNewUsers = userMapper.selectCount(
-                new LambdaQueryWrapper<User>().ge(User::getCreateTime, todayStart)
+                new LambdaQueryWrapper<User>().ge(User::getCreatedAt, todayStart)
         );
         statistics.setTodayNewUsers(todayNewUsers);
 
         // 本周新增用户数
         LocalDateTime weekStart = LocalDateTime.now().minusDays(7);
         Long weekNewUsers = userMapper.selectCount(
-                new LambdaQueryWrapper<User>().ge(User::getCreateTime, weekStart)
+                new LambdaQueryWrapper<User>().ge(User::getCreatedAt, weekStart)
         );
         statistics.setWeekNewUsers(weekNewUsers);
 
         // 本月新增用户数
         LocalDateTime monthStart = LocalDateTime.now().minusDays(30);
         Long monthNewUsers = userMapper.selectCount(
-                new LambdaQueryWrapper<User>().ge(User::getCreateTime, monthStart)
+                new LambdaQueryWrapper<User>().ge(User::getCreatedAt, monthStart)
         );
         statistics.setMonthNewUsers(monthNewUsers);
 

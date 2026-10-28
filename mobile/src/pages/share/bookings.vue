@@ -89,7 +89,7 @@
             </view>
             <view class="info-row">
               <text class="info-label">创建时间：</text>
-              <text class="info-value">{{ booking.createTime || booking.createdAt }}</text>
+              <text class="info-value">{{ booking.createdAt }}</text>
             </view>
           </view>
 

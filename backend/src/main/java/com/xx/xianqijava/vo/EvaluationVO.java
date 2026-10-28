@@ -110,9 +110,5 @@ public class EvaluationVO {
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Schema(description = "创建时间")
-    private LocalDateTime createTime;
-
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @Schema(description = "创建时间，兼容字段")
     private LocalDateTime createdAt;
 }

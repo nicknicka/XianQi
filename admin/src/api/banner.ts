@@ -22,8 +22,8 @@ export interface BannerManageVO {
   endTime?: string
   clickCount?: number
   exposureCount?: number
-  createTime: string
-  updateTime: string
+  createdAt: string
+  updatedAt: string
 }
 
 /**

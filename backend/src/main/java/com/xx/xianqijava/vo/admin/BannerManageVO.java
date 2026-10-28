@@ -91,11 +91,11 @@ public class BannerManageVO {
 
     @Schema(description = "创建时间")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime createTime;
+    private LocalDateTime createdAt;
 
     @Schema(description = "更新时间")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime updateTime;
+    private LocalDateTime updatedAt;
 
     @Schema(description = "是否正在展示")
     public Boolean getIsShowing() {

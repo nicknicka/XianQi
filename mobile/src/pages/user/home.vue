@@ -229,7 +229,7 @@
                 <text class="condition">{{ product.condition }}</text>
               </view>
               <view class="product-footer">
-                <text class="publish-time">{{ formatTime(product.createTime) }}</text>
+                <text class="publish-time">{{ formatTime(product.createdAt) }}</text>
                 <view class="product-stats">
                   <uni-icons type="eye" size="12" :color="primaryColor" />
                   <text>{{ product.viewCount || 0 }}</text>
@@ -275,7 +275,7 @@
                       :color="star <= evaluation.rating ? '#FFD700' : '#E8E8E8'"
                     />
                   </view>
-                  <text class="eval-time">{{ formatTime(evaluation.createTime) }}</text>
+                  <text class="eval-time">{{ formatTime(evaluation.createdAt) }}</text>
                 </view>
               </view>
               <view class="eval-rating-badge" :class="`rating-${evaluation.rating}`">
@@ -667,7 +667,7 @@ function loadEvaluations(refresh = false) {
         evaluatorName: item.evaluatorName || item.fromUserName || item.evaluatorNickname || '匿名用户',
         evaluatorAvatar: item.evaluatorAvatar || item.fromUserAvatar || '',
         productName: item.productName || item.productTitle || '未知商品',
-        createTime: item.createTime || item.createdAt || ''
+        createdAt: item.createdAt || ''
       }))
       if (refresh) {
         evaluations.value = list

@@ -11,8 +11,8 @@ export interface SystemConfig {
   isPublic?: number // 是否公开：0-否，1-是
   isSystem?: number // 是否系统配置：0-否，1-是
   sortOrder?: number
-  createTime?: string
-  updateTime?: string
+  createdAt?: string
+  updatedAt?: string
 }
 
 // 扩展类型：用于表格编辑状态

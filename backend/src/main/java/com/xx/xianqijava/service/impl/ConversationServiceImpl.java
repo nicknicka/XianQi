@@ -188,7 +188,7 @@ public class ConversationServiceImpl extends ServiceImpl<ConversationMapper, Con
                 .eq(Conversation::getConversationType, 1)
                 .eq(Conversation::getStatus, 0)
                 .orderByDesc(Conversation::getLastMessageTime)
-                .orderByDesc(Conversation::getCreateTime)
+                .orderByDesc(Conversation::getCreatedAt)
                 .last("LIMIT 1")
                 .one();
     }
@@ -249,7 +249,7 @@ public class ConversationServiceImpl extends ServiceImpl<ConversationMapper, Con
                         .thenComparing((Conversation c) -> {
                             // 如果有最后消息时间，使用消息时间；否则使用创建时间
                             // 这样新创建的会话（没有消息）也会按创建时间倒序显示在前面
-                            return c.getLastMessageTime() != null ? c.getLastMessageTime() : c.getCreateTime();
+                            return c.getLastMessageTime() != null ? c.getLastMessageTime() : c.getCreatedAt();
                         }, Comparator.reverseOrder())
                 )
                 .collect(Collectors.toList());
@@ -452,7 +452,7 @@ public class ConversationServiceImpl extends ServiceImpl<ConversationMapper, Con
         String displayContent = getMessageDisplayContent(message.getType(), message.getContent());
         conversation.setLastMessageContent(displayContent);
         conversation.setLastMessageType(message.getType());
-        conversation.setLastMessageTime(message.getCreateTime());
+        conversation.setLastMessageTime(message.getCreatedAt());
 
         // 增加接收者的未读数
         if (conversation.getUserId1().equals(toUserId)) {
@@ -492,7 +492,7 @@ public class ConversationServiceImpl extends ServiceImpl<ConversationMapper, Con
         LambdaQueryWrapper<Message> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(Message::getConversationId, conversationId)
                 .eq(Message::getStatus, 0) // 未删除的消息
-                .orderByDesc(Message::getCreateTime);
+                .orderByDesc(Message::getCreatedAt);
 
         IPage<Message> messagePage = messageMapper.selectPage(page, queryWrapper);
 
@@ -518,9 +518,9 @@ public class ConversationServiceImpl extends ServiceImpl<ConversationMapper, Con
         }
 
         // 检查时间：只能撤回2分钟内的消息
-        if (message.getCreateTime() != null) {
+        if (message.getCreatedAt() != null) {
             LocalDateTime twoMinutesAgo = LocalDateTime.now().minusMinutes(2);
-            if (message.getCreateTime().isBefore(twoMinutesAgo)) {
+            if (message.getCreatedAt().isBefore(twoMinutesAgo)) {
                 throw new BusinessException(ErrorCode.BAD_REQUEST, "超过2分钟，无法撤回消息");
             }
         }
@@ -599,7 +599,7 @@ public class ConversationServiceImpl extends ServiceImpl<ConversationMapper, Con
         String displayContent = getMessageDisplayContent(message.getType(), message.getContent());
         conversation.setLastMessageContent(displayContent);
         conversation.setLastMessageType(message.getType());
-        conversation.setLastMessageTime(message.getCreateTime());
+        conversation.setLastMessageTime(message.getCreatedAt());
 
         // 增加接收者的未读数
         if (conversation.getUserId1().equals(toUserId)) {
@@ -678,7 +678,7 @@ public class ConversationServiceImpl extends ServiceImpl<ConversationMapper, Con
         String displayContent = "[商品] " + product.getTitle();
         conversation.setLastMessageContent(displayContent);
         conversation.setLastMessageType(message.getType());
-        conversation.setLastMessageTime(message.getCreateTime());
+        conversation.setLastMessageTime(message.getCreatedAt());
 
         // 增加接收者的未读数
         if (conversation.getUserId1().equals(toUserId)) {
@@ -757,7 +757,7 @@ public class ConversationServiceImpl extends ServiceImpl<ConversationMapper, Con
         String displayContent = "[订单] " + order.getOrderNo();
         conversation.setLastMessageContent(displayContent);
         conversation.setLastMessageType(message.getType());
-        conversation.setLastMessageTime(message.getCreateTime());
+        conversation.setLastMessageTime(message.getCreatedAt());
 
         // 增加接收者的未读数
         if (conversation.getUserId1().equals(toUserId)) {
@@ -949,8 +949,8 @@ public class ConversationServiceImpl extends ServiceImpl<ConversationMapper, Con
         vo.setMine(message.getFromUserId().equals(currentUserId));
 
         // 设置创建时间
-        if (message.getCreateTime() != null) {
-            vo.setCreateTime(message.getCreateTime().toString());
+        if (message.getCreatedAt() != null) {
+            vo.setCreatedAt(message.getCreatedAt().toString());
         }
 
         // 如果有引用消息，获取被引用消息的内容

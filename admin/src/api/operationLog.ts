@@ -21,7 +21,7 @@ interface BackendOperationLogVO {
   status: number
   errorMessage?: string
   executeTime?: number
-  createTime: string
+  createdAt: string
 }
 
 /**
@@ -52,7 +52,7 @@ export interface OperationLogVO {
   errorMsg: string  // 前端兼容：映射到 errorMessage
   executeTime?: number  // 后端的 executeTime 字段
   costTime: number  // 前端兼容：映射到 executeTime
-  createTime: string
+  createdAt: string
   // 兼容 location 字段（暂时设为空，后续可实现IP地理位置查询）
   location?: string
 }

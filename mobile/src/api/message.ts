@@ -30,7 +30,7 @@ interface Message {
   extraData?: string
   type: number // 1-文本，2-图片，3-商品卡片，4-订单卡片
   status: number
-  createTime: string
+  createdAt: string
   isMine?: boolean
 }
 
@@ -64,7 +64,7 @@ function normalizeMessage(data: any): Message {
     extraData: data?.extraData || '',
     type: Number(data?.type ?? data?.messageType ?? 1),
     status: Number(data?.sendStatus ?? data?.status ?? 1),
-    createTime: data?.createTime || data?.sendTime || '',
+    createdAt: data?.createdAt || data?.sendTime || '',
     isMine: data?.isMine ?? data?.mine
   }
 }
@@ -242,7 +242,7 @@ export const messageApi = {
         category?: string
         userId: string
         isSystem: number
-        createTime: string
+        createdAt: string
       }>
       total: number
       size: number

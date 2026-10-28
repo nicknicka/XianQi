@@ -37,8 +37,8 @@ export interface ShareItemDraftVo {
   images: string[]
   imageCount: number
   availableTimes: string
-  createTime: string
-  updateTime: string
+  createdAt: string
+  updatedAt: string
   completion: number                  // 完成度 0-100
   missingFields: string[]             // 缺少的必填字段
 }

@@ -42,7 +42,7 @@ public class BusinessNotificationServiceImpl implements BusinessNotificationServ
         notification.setPriority(2); // 中等优先级
         notification.setStatus(1); // 已发布
         notification.setPublishTime(LocalDateTime.now());
-        notification.setCreateTime(LocalDateTime.now());
+        notification.setCreatedAt(LocalDateTime.now());
 
         boolean saved = systemNotificationService.save(notification);
         if (saved) {
@@ -94,7 +94,7 @@ public class BusinessNotificationServiceImpl implements BusinessNotificationServ
         notification.setPriority(2); // 中等优先级
         notification.setStatus(1); // 已发布
         notification.setPublishTime(LocalDateTime.now());
-        notification.setCreateTime(LocalDateTime.now());
+        notification.setCreatedAt(LocalDateTime.now());
 
         boolean saved = systemNotificationService.save(notification);
         if (saved) {
@@ -123,7 +123,7 @@ public class BusinessNotificationServiceImpl implements BusinessNotificationServ
         notification.setPriority(1); // 低优先级
         notification.setStatus(1); // 已发布
         notification.setPublishTime(LocalDateTime.now());
-        notification.setCreateTime(LocalDateTime.now());
+        notification.setCreatedAt(LocalDateTime.now());
 
         boolean saved = systemNotificationService.save(notification);
         if (saved) {
@@ -150,7 +150,7 @@ public class BusinessNotificationServiceImpl implements BusinessNotificationServ
         notification.setPriority(priority != null ? priority : 2); // 默认中等优先级
         notification.setStatus(1); // 已发布
         notification.setPublishTime(LocalDateTime.now());
-        notification.setCreateTime(LocalDateTime.now());
+        notification.setCreatedAt(LocalDateTime.now());
 
         boolean saved = systemNotificationService.save(notification);
         if (saved) {
@@ -200,7 +200,7 @@ public class BusinessNotificationServiceImpl implements BusinessNotificationServ
         notification.setPriority(3); // 高优先级
         notification.setStatus(1); // 已发布
         notification.setPublishTime(LocalDateTime.now());
-        notification.setCreateTime(LocalDateTime.now());
+        notification.setCreatedAt(LocalDateTime.now());
 
         boolean saved = systemNotificationService.save(notification);
         if (saved) {
@@ -222,7 +222,7 @@ public class BusinessNotificationServiceImpl implements BusinessNotificationServ
         notification.setPriority(2); // 中等优先级
         notification.setStatus(1); // 已发布
         notification.setPublishTime(LocalDateTime.now());
-        notification.setCreateTime(LocalDateTime.now());
+        notification.setCreatedAt(LocalDateTime.now());
         if (bookingId != null) {
             notification.setLinkType(2);
             notification.setLinkUrl("/pages/share/booking-detail?id=" + bookingId);

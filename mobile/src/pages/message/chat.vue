@@ -739,7 +739,7 @@ function setupMessageListeners() {
         console.log('[Chat] 收到图片消息，URL:', content)
       }
 
-      const timestamp = data.message.sendTime || data.message.createTime || new Date().toISOString()
+      const timestamp = data.message.sendTime || data.message.createdAt || new Date().toISOString()
 
       // 判断是否为自己发送的消息
       let isSelf = false
@@ -893,7 +893,7 @@ async function loadMessages(isLoadMore = false) {
           console.log('[Chat] 图片消息URL:', content)
         }
 
-        const timestamp = msg.sendTime || msg.createTime || new Date().toISOString()
+        const timestamp = msg.sendTime || msg.createdAt || new Date().toISOString()
 
         // 计算是否显示时间（基于列表中的上一条消息）
         let showTime = false
@@ -903,7 +903,7 @@ async function loadMessages(isLoadMore = false) {
         } else {
           const prevMsg = list[index - 1]
           if (prevMsg) {
-            const prevTimestamp = prevMsg.sendTime || prevMsg.createTime
+            const prevTimestamp = prevMsg.sendTime || prevMsg.createdAt
             if (prevTimestamp) {
               const currentTime = new Date(timestamp).getTime()
               const prevTime = new Date(prevTimestamp).getTime()

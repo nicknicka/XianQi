@@ -36,7 +36,7 @@
           <lazy-image class="item-image" :src="record.shareItemCover" mode="aspectFit" width="100" height="100" />
           <view class="item-info">
             <text class="item-title">{{ record.shareItemTitle }}</text>
-            <text class="item-time">{{ record.createTime }}</text>
+            <text class="item-time">{{ record.createdAt }}</text>
           </view>
         </view>
 

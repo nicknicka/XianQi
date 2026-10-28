@@ -81,7 +81,6 @@ npm run build:mp-weixin
 |------|-----------|------|
 | `VITE_API_BASE_URL` | http://localhost:8080/api | API 基础地址 |
 | `VITE_WS_BASE_URL` | ws://localhost:8080/api/ws | WebSocket 地址 |
-| `VITE_OSS_ENABLED` | false | 是否启用阿里云 OSS |
 | `VITE_UPLOAD_BASE_URL` | /api/uploads | 文件上传地址 |
 | `VITE_AMAP_WEB_KEY` | - | 高德地图 Web Key |
 | `VITE_AMAP_MINIPROGRAM_KEY` | - | 高德地图小程序 Key |

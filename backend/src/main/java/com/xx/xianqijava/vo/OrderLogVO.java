@@ -7,7 +7,7 @@ import lombok.Data;
  * 订单操作日志视图对象。
  *
  * <p>字段命名保持与旧 {@code OperationLogVO} 订单视图一致（{@code logId}、
- * {@code username}、{@code actionText}、{@code createTime}），
+ * {@code username}、{@code actionText}、{@code createdAt}），
  * 让移动端订单详情页无需改动即可继续展示（移动端自行把 {@code username} 映射为 {@code userName}）。
  */
 @Data
@@ -39,5 +39,5 @@ public class OrderLogVO {
     private String description;
 
     @Schema(description = "操作时间")
-    private String createTime;
+    private String createdAt;
 }

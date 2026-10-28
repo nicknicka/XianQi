@@ -8,7 +8,7 @@ export interface BlacklistUser {
   userId: string
   blockedUserId: string
   reason: string
-  createTime: string
+  createdAt: string
   // 用户信息
   username: string
   nickname: string

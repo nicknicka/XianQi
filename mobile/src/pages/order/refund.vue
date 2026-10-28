@@ -33,7 +33,7 @@
             </view>
             <view class="detail-row">
               <text class="label">下单时间：</text>
-              <text class="value">{{ orderInfo.createTime }}</text>
+              <text class="value">{{ orderInfo.createdAt }}</text>
             </view>
             <view class="detail-row">
               <text class="label">订单金额：</text>
@@ -130,7 +130,7 @@
             </view>
             <view class="info-row">
               <text class="label">申请时间：</text>
-              <text class="value">{{ record.createTime }}</text>
+              <text class="value">{{ record.createdAt }}</text>
             </view>
           </view>
 

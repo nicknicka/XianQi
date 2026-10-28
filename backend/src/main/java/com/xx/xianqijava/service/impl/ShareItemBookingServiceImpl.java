@@ -439,7 +439,7 @@ public class ShareItemBookingServiceImpl extends ServiceImpl<ShareItemBookingMap
 
         LambdaQueryWrapper<ShareItemBooking> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(ShareItemBooking::getBorrowerId, borrowerId)
-                .orderByDesc(ShareItemBooking::getCreateTime);
+                .orderByDesc(ShareItemBooking::getCreatedAt);
 
         IPage<ShareItemBooking> bookingPage = page(page, wrapper);
         return bookingPage.convert(this::convertToVO);
@@ -451,7 +451,7 @@ public class ShareItemBookingServiceImpl extends ServiceImpl<ShareItemBookingMap
 
         LambdaQueryWrapper<ShareItemBooking> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(ShareItemBooking::getOwnerId, ownerId)
-                .orderByDesc(ShareItemBooking::getCreateTime);
+                .orderByDesc(ShareItemBooking::getCreatedAt);
 
         IPage<ShareItemBooking> bookingPage = page(page, wrapper);
         return bookingPage.convert(this::convertToVO);
@@ -468,8 +468,8 @@ public class ShareItemBookingServiceImpl extends ServiceImpl<ShareItemBookingMap
         vo.setStatusDesc(getStatusDesc(booking.getStatus()));
 
         // 设置时间
-        if (booking.getCreateTime() != null) {
-            vo.setCreateTime(booking.getCreateTime().toString());
+        if (booking.getCreatedAt() != null) {
+            vo.setCreatedAt(booking.getCreatedAt().toString());
         }
         if (booking.getApproveTime() != null) {
             vo.setApproveTime(booking.getApproveTime().toString());

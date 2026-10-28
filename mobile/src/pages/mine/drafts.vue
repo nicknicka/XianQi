@@ -111,7 +111,7 @@
               <text class="draft-tag category-tag" v-if="draft.category">{{ draft.category }}</text>
             </view>
             <view class="draft-footer">
-              <text class="draft-time">{{ formatTime(draft.updateTime) }}</text>
+              <text class="draft-time">{{ formatTime(draft.updatedAt) }}</text>
               <view class="completion-mini" v-if="draft.completion !== undefined">
                 <view class="mini-track">
                   <view class="mini-fill" :style="{ width: draft.completion + '%' }" :class="completionClass(draft.completion)"></view>
@@ -180,7 +180,7 @@
               <text class="draft-tag category-tag share-cat" v-if="draft.category">{{ draft.category }}</text>
             </view>
             <view class="draft-footer">
-              <text class="draft-time">{{ formatTime(draft.updateTime) }}</text>
+              <text class="draft-time">{{ formatTime(draft.updatedAt) }}</text>
               <view class="completion-mini" v-if="draft.completion !== undefined">
                 <view class="mini-track share-track">
                   <view class="mini-fill share-fill" :style="{ width: draft.completion + '%' }" :class="completionClass(draft.completion)"></view>
@@ -345,7 +345,7 @@
           <!-- 保存时间 -->
           <view class="detail-section">
             <text class="detail-label">保存时间</text>
-            <text class="detail-value time">{{ formatFullTime(currentDraft?.updateTime) }}</text>
+            <text class="detail-value time">{{ formatFullTime(currentDraft?.updatedAt) }}</text>
           </view>
 
           <!-- 草稿ID -->
@@ -426,7 +426,8 @@ function normalizeMarketDraft(draft: any) {
     draftKey: buildDraftKey('market', draftId),
     coverImage: normalizeImageUrl(draft.coverImage || draft.image || draft.productImage || draft.coverImageUrl),
     condition: conditionMap[draft.conditionLevel] || draft.condition || '未知成色',
-    category: draft.categoryName
+    category: draft.categoryName,
+    updatedAt: draft.updatedAt
   }
 }
 
@@ -439,7 +440,8 @@ function normalizeShareDraft(draft: any) {
     draftKey: buildDraftKey('share', draftId),
     coverImage: normalizeImageUrl(draft.coverImage || draft.image || draft.shareItemImage || draft.coverImageUrl),
     condition: draft.conditionText || draft.condition || '',
-    category: draft.categoryName
+    category: draft.categoryName,
+    updatedAt: draft.updatedAt
   }
 }
 
@@ -468,14 +470,14 @@ async function loadDrafts() {
 
     marketDrafts.value = marketData
       .map(normalizeMarketDraft)
-      .sort((a: any, b: any) => new Date(b.updateTime).getTime() - new Date(a.updateTime).getTime())
+      .sort((a: any, b: any) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime())
       .slice(0, MAX_DRAFTS)
 
     const shareRes = await shareApi.getDraftList({ page: 1, pageSize: MAX_DRAFTS })
     let shareData = shareRes.data?.records || []
     shareDrafts.value = shareData
       .map(normalizeShareDraft)
-      .sort((a: any, b: any) => new Date(b.updateTime).getTime() - new Date(a.updateTime).getTime())
+      .sort((a: any, b: any) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime())
       .slice(0, MAX_DRAFTS)
 
     console.log('[Drafts] 加载草稿成功:', {
@@ -501,7 +503,7 @@ function loadDraftsFromLocal() {
           draftId: data.form.draftId,
           images: data.images || [],
           coverImage: data.images?.[0],
-          updateTime: data.updateTime
+          updatedAt: data.updateTime
         })]
       }
     }
@@ -514,7 +516,7 @@ function loadDraftsFromLocal() {
           draftId: data.form.draftId,
           images: data.images || [],
           coverImage: data.images?.[0],
-          updateTime: data.updateTime
+          updatedAt: data.updateTime
         })]
       }
     }

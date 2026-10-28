@@ -50,7 +50,7 @@
                 />
               </view>
             </view>
-            <text class="eval-time">{{ formatTime(item.createTime) }}</text>
+            <text class="eval-time">{{ formatTime(item.createdAt) }}</text>
           </view>
 
           <!-- 评价内容 -->
@@ -219,7 +219,7 @@ function loadEvaluations(refresh = false) {
       tags: normalizeStringArray(item.tags),
       images: normalizeStringArray(item.images),
       appendImages: normalizeStringArray(item.appendImages),
-      createTime: item.createTime || item.createdAt || ''
+      createdAt: item.createdAt || ''
     }))
 
     if (refresh) {

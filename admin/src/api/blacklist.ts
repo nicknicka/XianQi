@@ -15,7 +15,7 @@ export interface BlacklistVO {
   blockedUserNickname?: string
   blockedUserPhone?: string
   reason?: string
-  createTime: string
+  createdAt: string
 }
 
 /**

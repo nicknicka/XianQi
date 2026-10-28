@@ -89,7 +89,7 @@ public class ShareItemBookingVO {
     private Integer depositReturned;
 
     @Schema(description = "创建时间")
-    private String createTime;
+    private String createdAt;
 
     @Schema(description = "审批时间")
     private String approveTime;

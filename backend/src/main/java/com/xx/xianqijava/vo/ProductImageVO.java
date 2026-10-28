@@ -38,5 +38,5 @@ public class ProductImageVO {
     private Integer isCover;
 
     @Schema(description = "创建时间")
-    private String createTime;
+    private String createdAt;
 }

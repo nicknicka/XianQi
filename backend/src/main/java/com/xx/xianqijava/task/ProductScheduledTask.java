@@ -38,9 +38,9 @@ public class ProductScheduledTask {
 
             LambdaUpdateWrapper<Product> updateWrapper = new LambdaUpdateWrapper<>();
             updateWrapper.eq(Product::getStatus, ProductStatus.ON_SALE.getCode())
-                    .le(Product::getCreateTime, expireTime)
+                    .le(Product::getCreatedAt, expireTime)
                     .set(Product::getStatus, ProductStatus.OFFLINE.getCode())
-                    .set(Product::getUpdateTime, LocalDateTime.now());
+                    .set(Product::getUpdatedAt, LocalDateTime.now());
 
             int updatedCount = productMapper.update(null, updateWrapper);
 

@@ -66,7 +66,7 @@
         </el-table-column>
         <el-table-column label="创建时间" width="180">
           <template #default="{ row }">
-            {{ formatTime(row.createdTime) }}
+            {{ formatTime(row.createdAt) }}
           </template>
         </el-table-column>
         <el-table-column label="操作" width="250" fixed="right">

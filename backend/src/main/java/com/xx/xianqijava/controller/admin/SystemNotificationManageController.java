@@ -42,7 +42,7 @@ public class SystemNotificationManageController {
         log.info("创建系统通知, title={}", notification.getTitle());
 
         // 设置创建时间
-        notification.setCreateTime(LocalDateTime.now());
+        notification.setCreatedAt(LocalDateTime.now());
 
         // 如果状态为已发布，设置发布时间
         if (notification.getStatus() != null && notification.getStatus() == 1) {
@@ -178,7 +178,7 @@ public class SystemNotificationManageController {
         }
 
         // 按创建时间倒序排列
-        queryWrapper.orderByDesc(SystemNotification::getCreateTime);
+        queryWrapper.orderByDesc(SystemNotification::getCreatedAt);
 
         Page<SystemNotification> pageParam = new Page<>(page, size);
         IPage<SystemNotification> notificationPage = systemNotificationService.page(pageParam, queryWrapper);

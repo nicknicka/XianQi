@@ -70,3 +70,13 @@ docker exec -i xianqi-mysql mysql -u xianqi -pxianqi123 Xianqi < sql/seed/dev_de
 每次部署时按顺序执行尚未执行的迁移脚本。
 
 迁移脚本命名格式：`YYYYMMDD_description.sql`
+
+提交任何迁移脚本前，必须通过迁移守卫：
+
+```bash
+python3 scripts/check-migration-baseline.py
+```
+
+该守卫静态比对 `sql/migrations/` 与 `sql/schema.sql`（数据库基线），要求迁移脚本产出的结构与全新安装一致：
+键列一律有符号整数（ADR-0008）、时间列只用 `created_at`/`updated_at`、主键列名与列的
+类型/长度/可空性都与基线相同。CI 已强制校验，不通过即构建失败。

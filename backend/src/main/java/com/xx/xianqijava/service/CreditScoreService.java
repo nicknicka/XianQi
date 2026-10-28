@@ -133,7 +133,7 @@ public class CreditScoreService {
             new LambdaQueryWrapper<Order>()
                 .eq(Order::getSellerId, userId)
                 .eq(Order::getBuyerId, counterpartyId)
-                .ge(Order::getCreateTime, sevenDaysAgo)
+                .ge(Order::getCreatedAt, sevenDaysAgo)
                 .in(Order::getStatus, List.of("completed", "in_transaction"))
         );
 
@@ -147,7 +147,7 @@ public class CreditScoreService {
             new LambdaQueryWrapper<Order>()
                 .eq(Order::getSellerId, userId)
                 .lt(Order::getAmount, config.getAntiSpam().getSmallAmountLimit())
-                .ge(Order::getCreateTime, sevenDaysAgo)
+                .ge(Order::getCreatedAt, sevenDaysAgo)
                 .in(Order::getStatus, List.of("completed", "in_transaction"))
         );
 
@@ -161,7 +161,7 @@ public class CreditScoreService {
         long todayCount = orderMapper.selectCount(
             new LambdaQueryWrapper<Order>()
                 .eq(Order::getSellerId, userId)
-                .ge(Order::getCreateTime, todayStart)
+                .ge(Order::getCreatedAt, todayStart)
                 .in(Order::getStatus, List.of("pending_confirm", "in_transaction", "completed"))
         );
 
@@ -308,7 +308,7 @@ public class CreditScoreService {
                     .eq(Order::getSellerId, evaluatedId)
                     .eq(Order::getBuyerId, evaluatorId)
                 )
-                .ge(Order::getCreateTime, checkTime)
+                .ge(Order::getCreatedAt, checkTime)
                 .in(Order::getStatus, List.of("completed", "in_transaction"))
         );
 

@@ -94,7 +94,7 @@
           </view>
           <view class="info-item">
             <text class="label">下单时间</text>
-            <text class="value">{{ formatTime(order.createTime) }}</text>
+            <text class="value">{{ formatTime(order.createdAt) }}</text>
           </view>
           <view class="info-item">
             <text class="label">交易地点</text>
@@ -151,7 +151,7 @@
             <view class="timeline-content">
               <view class="timeline-header">
                 <text class="timeline-action">{{ log.actionText }}</text>
-                <text class="timeline-time">{{ formatLogTime(log.createTime) }}</text>
+                <text class="timeline-time">{{ formatLogTime(log.createdAt) }}</text>
               </view>
               <view class="timeline-desc" v-if="log.description">{{ log.description }}</view>
               <view class="timeline-user">{{ log.userName }}</view>

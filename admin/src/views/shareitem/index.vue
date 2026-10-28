@@ -112,9 +112,9 @@
           </template>
         </el-table-column>
 
-        <el-table-column prop="createTime" label="创建时间" width="180">
+        <el-table-column prop="createdAt" label="创建时间" width="180">
           <template #default="{ row }">
-            {{ formatTime(row.createTime) }}
+            {{ formatTime(row.createdAt) }}
           </template>
         </el-table-column>
 
@@ -215,8 +215,8 @@
         <div class="detail-section">
           <div class="section-title">时间信息</div>
           <el-descriptions :column="1" border>
-            <el-descriptions-item label="创建时间">{{ currentItem.createTime }}</el-descriptions-item>
-            <el-descriptions-item label="更新时间">{{ currentItem.updateTime }}</el-descriptions-item>
+            <el-descriptions-item label="创建时间">{{ currentItem.createdAt }}</el-descriptions-item>
+            <el-descriptions-item label="更新时间">{{ currentItem.updatedAt }}</el-descriptions-item>
           </el-descriptions>
         </div>
       </div>

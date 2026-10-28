@@ -46,6 +46,16 @@ jobs:
           python3 scripts/check-sql-columns.py
           node --test scripts/tests/sql-columns-test.mjs
 
+      - name: Migration baseline guard
+        run: |
+          python3 scripts/check-migration-baseline.py
+          node --test scripts/tests/migration-baseline-test.mjs
+
+      - name: Time field naming guard
+        run: |
+          python3 scripts/check-time-field-naming.py
+          node --test scripts/tests/time-field-naming-test.mjs
+
   # ---------- 后端单元测试 ----------
   backend-unit-test:
     name: Backend Unit Tests

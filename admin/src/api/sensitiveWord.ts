@@ -13,8 +13,8 @@ export interface SensitiveWordVO {
   replaceWord?: string
   level: number // 1-一般，2-严重
   status: number // 0-禁用，1-启用
-  createTime?: string
-  updateTime?: string
+  createdAt?: string
+  updatedAt?: string
 }
 
 /**

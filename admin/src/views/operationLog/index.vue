@@ -47,7 +47,7 @@
           </template>
         </el-table-column>
         <el-table-column prop="costTime" label="耗时(ms)" width="100" />
-        <el-table-column prop="createTime" label="时间" width="180" />
+        <el-table-column prop="createdAt" label="时间" width="180" />
         <el-table-column label="操作" width="100" fixed="right">
           <template #default="{ row }">
             <el-button link type="primary" @click="openDetailDialog(row)">详情</el-button>
@@ -91,7 +91,7 @@
         <el-descriptions-item v-if="currentLog.errorMsg" label="错误信息" :span="2">
           <pre class="log-content error-content">{{ currentLog.errorMsg }}</pre>
         </el-descriptions-item>
-        <el-descriptions-item label="创建时间" :span="2">{{ currentLog.createTime }}</el-descriptions-item>
+        <el-descriptions-item label="创建时间" :span="2">{{ currentLog.createdAt }}</el-descriptions-item>
       </el-descriptions>
     </el-dialog>
   </div>

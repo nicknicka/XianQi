@@ -159,7 +159,7 @@
             <span v-else>-</span>
           </template>
         </el-table-column>
-        <el-table-column prop="createTime" label="评价时间" width="180" />
+        <el-table-column prop="createdAt" label="评价时间" width="180" />
         <el-table-column label="操作" width="150" fixed="right">
           <template #default="{ row }">
             <el-button link type="primary" @click="openDetailDialog(row)">查看详情</el-button>
@@ -207,7 +207,7 @@
           </template>
           <span v-else>无标签</span>
         </el-descriptions-item>
-        <el-descriptions-item label="评价时间" :span="2">{{ currentEvaluation.createTime }}</el-descriptions-item>
+        <el-descriptions-item label="评价时间" :span="2">{{ currentEvaluation.createdAt }}</el-descriptions-item>
       </el-descriptions>
     </el-dialog>
   </div>

@@ -68,9 +68,6 @@ export interface Product {
   favoriteCount?: number
   createdAt: string
   updatedAt: string
-  // 后端可能返回的字段（用于兼容）
-  createTime?: string  // 后端可能使用 createTime
-  updateTime?: string  // 后端可能使用 updateTime
   sellerId?: string   // 后端可能返回 sellerId
   sellerNickname?: string  // 后端可能返回 sellerNickname
   sellerAvatar?: string  // 后端可能返回 sellerAvatar
@@ -195,9 +192,6 @@ export interface User {
   evaluationCount?: number  // 评价数量
   createdAt?: string
   updatedAt?: string
-  // 后端可能返回的字段
-  createTime?: string
-  updateTime?: string
   userId?: string  // 后端可能返回 userId 而不是 id
 }
 
@@ -313,9 +307,6 @@ export interface Order {
   isBuyer?: boolean  // 是否是买家视角
   createdAt: string
   updatedAt: string
-  // 后端可能返回的字段
-  createTime?: string
-  updateTime?: string
   productTitle?: string  // 后端可能返回 productTitle 而不是 productName
 }
 
@@ -362,8 +353,6 @@ export interface Evaluation {
   tags?: string[]
   images?: string[]
   createdAt: string
-  // 后端可能返回的字段
-  createTime?: string
   productId?: string  // 后端可能不返回
 }
 
@@ -385,8 +374,6 @@ export interface Conversation {
   nickname?: string  // 会话对方的昵称（单聊时使用）
   userAvatar?: string  // 会话对方的头像（单聊时使用）
   createdAt: string
-  // 后端可能返回的字段
-  createTime?: string
   updatedAt?: string
   blockedByUser?: boolean  // 是否被当前用户屏蔽
 }
@@ -425,8 +412,6 @@ export interface Message {
   isRevoked?: boolean
   blockedByUser?: boolean  // 是否被当前用户屏蔽
   createdAt: string
-  // 后端可能返回的字段
-  createTime?: string
   sendTime?: string
 }
 

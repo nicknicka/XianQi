@@ -45,7 +45,7 @@ interface Props {
   /** 通知内容/摘要 */
   content?: string
   /** 创建时间（支持字符串或数组格式） */
-  createTime?: string | number[]
+  createdAt?: string | number[]
   /** 是否已读 */
   isRead?: boolean
   /** 自定义图标 */
@@ -67,7 +67,7 @@ const props = withDefaults(defineProps<Props>(), {
   type: 'system',
   title: '',
   content: '',
-  createTime: () => '' as string | number[],
+  createdAt: () => '' as string | number[],
   isRead: false,
   customIcon: '',
   customIconColor: '',
@@ -123,11 +123,11 @@ const iconBgColor = computed(() => {
 
 // 格式化显示时间
 const displayTime = computed(() => {
-  if (!props.createTime) return ''
+  if (!props.createdAt) return ''
   
   // 如果是数组格式（如 [2025,1,15,11,0]），转换为字符串
-  if (Array.isArray(props.createTime)) {
-    const arr = props.createTime
+  if (Array.isArray(props.createdAt)) {
+    const arr = props.createdAt
     if (arr.length >= 5) {
       // 格式：[年，月，日，时，分]
       const year = arr[0]
@@ -142,7 +142,7 @@ const displayTime = computed(() => {
   }
   
   // 如果已经是字符串，直接使用
-  return getRelativeTime(props.createTime as string)
+  return getRelativeTime(props.createdAt as string)
 })
 
 // 点击事件
@@ -152,7 +152,7 @@ function handleClick() {
     type: props.type,
     title: props.title,
     content: props.content,
-    createTime: props.createTime,
+    createdAt: props.createdAt,
     isRead: props.isRead
   })
 }

@@ -21,7 +21,7 @@ export interface Conversation {
   relatedProductId?: string
   relatedOrderId?: string
   relatedShareId?: string
-  createTime: string
+  createdAt: string
 }
 
 export interface Message {
@@ -60,7 +60,7 @@ function normalizeConversation(data: any): Conversation {
     relatedProductId: data?.relatedProductId ? String(data.relatedProductId) : undefined,
     relatedOrderId: data?.relatedOrderId ? String(data.relatedOrderId) : undefined,
     relatedShareId: data?.relatedShareId ? String(data.relatedShareId) : undefined,
-    createTime: data?.createTime || data?.lastMessageTime || ''
+    createdAt: data?.createdAt || data?.lastMessageTime || ''
   }
 }
 
@@ -77,7 +77,7 @@ function normalizeMessage(data: any): Message {
     messageType: Number(data?.type ?? data?.messageType ?? 1),
     replyToMessageId: data?.parentMessageId ? String(data.parentMessageId) : undefined,
     status: Number(data?.sendStatus ?? data?.status ?? 1),
-    sendTime: data?.createTime || data?.sendTime || '',
+    sendTime: data?.createdAt || data?.sendTime || '',
     isRecalled: false,
     isMine: data?.isMine ?? data?.mine
   }
@@ -130,7 +130,7 @@ export const conversationApi = {
           conversationId: String(res.data),
           type: 1,
           unreadCount: 0,
-          createTime: ''
+          createdAt: ''
         }
       }))
     }

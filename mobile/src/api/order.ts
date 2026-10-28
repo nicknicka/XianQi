@@ -22,8 +22,8 @@ interface Order {
   status: number
   address: string
   remark: string
-  createTime: string
-  updateTime: string
+  createdAt: string
+  updatedAt: string
 }
 
 /**
@@ -39,7 +39,7 @@ export interface OrderLog {
   action: string
   actionText: string
   description: string
-  createTime: string
+  createdAt: string
 }
 
 export const orderApi = {

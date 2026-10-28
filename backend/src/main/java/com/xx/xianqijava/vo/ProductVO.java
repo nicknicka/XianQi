@@ -94,7 +94,7 @@ public class ProductVO {
     private Integer favoriteCount;
 
     @Schema(description = "创建时间")
-    private String createTime;
+    private String createdAt;
 
     @Schema(description = "浏览时间（用于浏览历史）")
     private String viewTime;

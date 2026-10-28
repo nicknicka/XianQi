@@ -61,8 +61,8 @@ public class BannerManageServiceImpl implements BannerManageService {
             queryWrapper.orderBy(true, "asc".equalsIgnoreCase(queryDTO.getSortOrder()), Banner::getClickCount);
         } else if ("exposureCount".equals(queryDTO.getSortBy())) {
             queryWrapper.orderBy(true, "asc".equalsIgnoreCase(queryDTO.getSortOrder()), Banner::getExposureCount);
-        } else if ("createTime".equals(queryDTO.getSortBy())) {
-            queryWrapper.orderBy(true, "asc".equalsIgnoreCase(queryDTO.getSortOrder()), Banner::getCreateTime);
+        } else if (isCreateTimeSort(queryDTO.getSortBy())) {
+            queryWrapper.orderBy(true, "asc".equalsIgnoreCase(queryDTO.getSortOrder()), Banner::getCreatedAt);
         } else {
             queryWrapper.orderBy(true, "asc".equalsIgnoreCase(queryDTO.getSortOrder()), Banner::getSortOrder);
         }
@@ -250,4 +250,11 @@ public class BannerManageServiceImpl implements BannerManageService {
 
         return vo;
     }
+    /**
+     * 排序字段：按创建时间排序。
+     */
+    private boolean isCreateTimeSort(String sortBy) {
+        return "createdAt".equals(sortBy);
+    }
+
 }

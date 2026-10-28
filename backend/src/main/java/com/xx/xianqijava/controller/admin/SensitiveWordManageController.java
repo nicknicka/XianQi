@@ -61,7 +61,7 @@ public class SensitiveWordManageController {
             queryWrapper.eq(SensitiveWord::getStatus, status);
         }
 
-        queryWrapper.orderByDesc(SensitiveWord::getCreateTime);
+        queryWrapper.orderByDesc(SensitiveWord::getCreatedAt);
 
         IPage<SensitiveWord> resultPage = sensitiveWordMapper.selectPage(pageParam, queryWrapper);
 
@@ -165,8 +165,8 @@ public class SensitiveWordManageController {
             sensitiveWord.setLevel(1); // 默认一般
         }
 
-        sensitiveWord.setCreateTime(LocalDateTime.now());
-        sensitiveWord.setUpdateTime(LocalDateTime.now());
+        sensitiveWord.setCreatedAt(LocalDateTime.now());
+        sensitiveWord.setUpdatedAt(LocalDateTime.now());
         sensitiveWord.setDeleted(0);
 
         sensitiveWordMapper.insert(sensitiveWord);
@@ -209,7 +209,7 @@ public class SensitiveWordManageController {
             }
         }
 
-        sensitiveWord.setUpdateTime(LocalDateTime.now());
+        sensitiveWord.setUpdatedAt(LocalDateTime.now());
         sensitiveWordMapper.updateById(sensitiveWord);
 
         log.info("更新敏感词成功, wordId={}", sensitiveWord.getWordId());
@@ -285,7 +285,7 @@ public class SensitiveWordManageController {
         }
 
         sensitiveWord.setStatus(status);
-        sensitiveWord.setUpdateTime(LocalDateTime.now());
+        sensitiveWord.setUpdatedAt(LocalDateTime.now());
         sensitiveWordMapper.updateById(sensitiveWord);
 
         log.info("更新敏感词状态成功, wordId={}, status={}", wordId, status);
@@ -350,8 +350,8 @@ public class SensitiveWordManageController {
             sensitiveWord.setType(type);
             sensitiveWord.setLevel(level);
             sensitiveWord.setStatus(1); // 默认启用
-            sensitiveWord.setCreateTime(now);
-            sensitiveWord.setUpdateTime(now);
+            sensitiveWord.setCreatedAt(now);
+            sensitiveWord.setUpdatedAt(now);
             sensitiveWord.setDeleted(0);
 
             sensitiveWordMapper.insert(sensitiveWord);

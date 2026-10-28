@@ -56,8 +56,8 @@ export interface ProductDraftVo {
   isFlashSale: boolean
   flashPrice: number
   flashSaleStock: number
-  createTime: string
-  updateTime: string
+  createdAt: string
+  updatedAt: string
   completion: number                  // 完成度 0-100
   missingFields: string[]             // 缺少的必填字段
 }
@@ -87,7 +87,7 @@ export interface ProductDto {
   status: number
   viewCount: number
   favoriteCount: number
-  createTime: string
+  createdAt: string
   distance?: number
 }
 

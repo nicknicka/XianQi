@@ -64,7 +64,7 @@ public class ProductAuditVO {
     private String description;
 
     @Schema(description = "创建时间")
-    private String createTime;
+    private String createdAt;
 
     @Schema(description = "商品状态：0-下架，1-在售，2-已售")
     private Integer status;

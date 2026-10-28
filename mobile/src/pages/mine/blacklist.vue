@@ -58,7 +58,7 @@
           <UserAvatar class="avatar" :src="item.avatar" size="sm" shape="circle" @click="goUserHome(item.userId)" />
           <view class="user-info" @click="goUserHome(item.userId)">
             <text class="name">{{ item.nickname || item.username }}</text>
-            <text class="add-time">{{ formatTime(item.createTime) }} 拉黑</text>
+            <text class="add-time">{{ formatTime(item.createdAt) }} 拉黑</text>
           </view>
           <button v-if="selectedItems.length === 0 && !isSelectMode" class="remove-btn" @click="removeBlacklist(item.id)">移除</button>
         </view>
@@ -102,7 +102,7 @@ interface BlacklistItem {
   username: string
   nickname: string
   avatar: string
-  createTime: string
+  createdAt: string
 }
 
 const blacklist = ref<BlacklistItem[]>([])
@@ -176,7 +176,7 @@ async function loadBlacklist() {
       nickname: item.nickname,
       avatar: item.avatar,
       reason: item.reason || '',
-      createTime: item.createTime
+      createdAt: item.createdAt
     }))
   } catch (error) {
     console.error('加载黑名单失败:', error)
