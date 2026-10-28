@@ -132,7 +132,7 @@ import { ref, onMounted } from 'vue'
 import { useServiceNavigation } from '@/composables/useServiceNavigation'
 import { shareApi } from '@/api/share'
 import { onShow } from '@dcloudio/uni-app'
-import { normalizeImageUrl } from '@/utils/image'
+import { normalizeImageEntry, parseImageList } from '@/utils/image'
 
 // 启用服务页面导航（从服务页面进入时会自动处理返回逻辑）
 useServiceNavigation()
@@ -163,7 +163,6 @@ const pageSize = ref(10)
 onShow(() => {
   useThemePage()
 })
-
 
 onMounted(() => {
   loadData()
@@ -211,20 +210,16 @@ async function loadData() {
       })
     })
 
-    const mappedList = newList.map((item: any) => {
-      const images = getDisplayImages(item)
-      return {
-        id: String(item.id || item.shareId || ''),
-        title: item.title || '',
-        images,
-        coverImage: images[0] || '',
-        dailyRent: Number(item.dailyRent || 0),
-        deposit: Number(item.deposit || 0),
-        status: Number(item.status ?? 0),
-        description: item.description || '',
-        availableTime: item.availableTimes || item.availableTime || ''
-      }
-    })
+    // 字段名与图片归一化已在 api/share.ts 的 normalizeShareItem 完成；
+    // 这里只把 coverImage 兜底进 images（列表可能没有 images 但有封面）。
+    const mappedList = newList.map((item: any) => ({
+      ...item,
+      images: item.images && item.images.length > 0
+        ? item.images
+        : item.coverImage
+        ? [item.coverImage]
+        : []
+    }))
 
     console.log('[MyShare] 映射后的封面图:', mappedList.map((item) => ({
       id: item.id,
@@ -317,42 +312,6 @@ async function onlineItem(id: string) {
 function refreshList() {
   page.value = 1
   loadData()
-}
-
-function normalizeImageEntry(image: unknown): string {
-  if (typeof image !== 'string') return ''
-  return normalizeImageUrl(image)
-}
-
-function parseImageList(images: unknown): string[] {
-  if (Array.isArray(images)) {
-    return images.map(normalizeImageEntry).filter(Boolean)
-  }
-
-  if (typeof images === 'string') {
-    try {
-      const parsed = JSON.parse(images)
-      if (Array.isArray(parsed)) {
-        return parsed.map(normalizeImageEntry).filter(Boolean)
-      }
-    } catch {
-      const normalized = normalizeImageEntry(images)
-      return normalized ? [normalized] : []
-    }
-  }
-
-  return []
-}
-
-function getDisplayImages(item: any): string[] {
-  const imageList = parseImageList(item.imageUrls)
-  if (imageList.length > 0) return imageList
-
-  const images = parseImageList(item.images)
-  if (images.length > 0) return images
-
-  const coverImage = normalizeImageEntry(item.coverImageUrl || item.coverImage || item.image || '')
-  return coverImage ? [coverImage] : []
 }
 
 function handleCoverError(id: string) {

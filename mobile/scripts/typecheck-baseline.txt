@@ -1,0 +1,76 @@
+# mobile 既存 TypeScript 错误基线（行号已去除，避免代码挪动造成噪声）。
+# 每行格式：<文件>: error TSxxxx: <消息>
+# 重构期间要求：不得新增此清单之外的错误。
+src/api/ai.ts: error TS18048: 'reader' is possibly 'undefined'.
+src/components/index.ts: error TS2307: Cannot find module './action-list/action-list.vue' or its corresponding type declarations.
+src/components/index.ts: error TS2307: Cannot find module './avatar/avatar.vue' or its corresponding type declarations.
+src/components/index.ts: error TS2307: Cannot find module './badge/badge.vue' or its corresponding type declarations.
+src/components/index.ts: error TS2307: Cannot find module './card/card.vue' or its corresponding type declarations.
+src/components/index.ts: error TS2307: Cannot find module './chat-input/chat-input.vue' or its corresponding type declarations.
+src/components/index.ts: error TS2307: Cannot find module './collapse-card/collapse-card.vue' or its corresponding type declarations.
+src/components/index.ts: error TS2307: Cannot find module './collapse/collapse.vue' or its corresponding type declarations.
+src/components/index.ts: error TS2307: Cannot find module './comment-list/comment-list.vue' or its corresponding type declarations.
+src/components/index.ts: error TS2307: Cannot find module './divider/divider.vue' or its corresponding type declarations.
+src/components/index.ts: error TS2307: Cannot find module './drawer/drawer.vue' or its corresponding type declarations.
+src/components/index.ts: error TS2307: Cannot find module './empty-state/empty-state.vue' or its corresponding type declarations.
+src/components/index.ts: error TS2307: Cannot find module './fab/fab.vue' or its corresponding type declarations.
+src/components/index.ts: error TS2307: Cannot find module './filter-bar/filter-bar.vue' or its corresponding type declarations.
+src/components/index.ts: error TS2307: Cannot find module './form/form.vue' or its corresponding type declarations.
+src/components/index.ts: error TS2307: Cannot find module './grid-menu/grid-menu.vue' or its corresponding type declarations.
+src/components/index.ts: error TS2307: Cannot find module './image-uploader-enhanced/image-uploader-enhanced.vue' or its corresponding type declarations.
+src/components/index.ts: error TS2307: Cannot find module './index-list/index-list.vue' or its corresponding type declarations.
+src/components/index.ts: error TS2307: Cannot find module './loading/loading.vue' or its corresponding type declarations.
+src/components/index.ts: error TS2307: Cannot find module './location-picker/location-picker.vue' or its corresponding type declarations.
+src/components/index.ts: error TS2307: Cannot find module './notice-bar/notice-bar.vue' or its corresponding type declarations.
+src/components/index.ts: error TS2307: Cannot find module './notice-item/notice-item.vue' or its corresponding type declarations.
+src/components/index.ts: error TS2307: Cannot find module './popover/popover.vue' or its corresponding type declarations.
+src/components/index.ts: error TS2307: Cannot find module './progress/progress.vue' or its corresponding type declarations.
+src/components/index.ts: error TS2307: Cannot find module './rate/rate.vue' or its corresponding type declarations.
+src/components/index.ts: error TS2307: Cannot find module './result/result.vue' or its corresponding type declarations.
+src/components/index.ts: error TS2307: Cannot find module './search-bar/search-bar.vue' or its corresponding type declarations.
+src/components/index.ts: error TS2307: Cannot find module './segmented/segmented.vue' or its corresponding type declarations.
+src/components/index.ts: error TS2307: Cannot find module './skeleton/skeleton.vue' or its corresponding type declarations.
+src/components/index.ts: error TS2307: Cannot find module './swipe-cell/swipe-cell.vue' or its corresponding type declarations.
+src/components/index.ts: error TS2307: Cannot find module './swiper/swiper.vue' or its corresponding type declarations.
+src/components/index.ts: error TS2307: Cannot find module './tab-bar/tab-bar.vue' or its corresponding type declarations.
+src/components/index.ts: error TS2307: Cannot find module './tabs/tabs.vue' or its corresponding type declarations.
+src/components/index.ts: error TS2307: Cannot find module './timeline/timeline.vue' or its corresponding type declarations.
+src/components/index.ts: error TS2307: Cannot find module './user-avatar/user-avatar.vue' or its corresponding type declarations.
+src/hooks/usePageAnimation.ts: error TS2322: Type '(T | UnwrapRefSimple<T>)[]' is not assignable to type 'T[] | UnwrapRefSimple<T>[]'.
+src/types/index.ts: error TS2300: Duplicate identifier 'productId'.
+src/types/index.ts: error TS2687: All declarations of 'productId' must have identical modifiers.
+src/types/index.ts: error TS2717: Subsequent property declarations must have the same type.  Property 'productId' must be of type 'string', but here has type 'string | undefined'.
+src/utils/analytics.ts: error TS2591: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.
+src/utils/auth.ts: error TS7053: Element implicitly has an 'any' type because expression of type 'any' can't be used to index type 'Record<UserRole, Permission[]>'.
+src/utils/cache.ts: error TS2503: Cannot find namespace 'NodeJS'.
+src/utils/error-handler.ts: error TS2339: Property 'response' does not exist on type '{}'.
+src/utils/error-handler.ts: error TS2503: Cannot find namespace 'NodeJS'.
+src/utils/error-handler.ts: error TS7053: Element implicitly has an 'any' type because expression of type 'any' can't be used to index type 'Record<ErrorCode, string>'.
+src/utils/error-handler.ts: error TS7053: Element implicitly has an 'any' type because expression of type 'number' can't be used to index type 'Record<ErrorCode, string>'.
+src/utils/form-validator.ts: error TS2304: Cannot find name 'ref'.
+src/utils/form-validator.ts: error TS2614: Module '"./common"' has no exported member 'isValid'. Did you mean to use 'import isValid from "./common"' instead?
+src/utils/hot-search.ts: error TS2558: Expected 0 type arguments, but got 1.
+src/utils/hot-search.ts: error TS7006: Parameter 'a' implicitly has an 'any' type.
+src/utils/hot-search.ts: error TS7006: Parameter 'b' implicitly has an 'any' type.
+src/utils/hot-search.ts: error TS7006: Parameter 'index' implicitly has an 'any' type.
+src/utils/hot-search.ts: error TS7006: Parameter 'item' implicitly has an 'any' type.
+src/utils/hot-search.ts: error TS7006: Parameter 's' implicitly has an 'any' type.
+src/utils/image.ts: error TS2339: Property 'value' does not exist on type 'never'.
+src/utils/image.ts: error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string[] | PromiseLike<string[]>'.
+src/utils/image.ts: error TS2367: This comparison appears to be unintentional because the types '"rejected" | "fulfilled"' and '"success"' have no overlap.
+src/utils/image.ts: error TS2724: 'UniNamespace' has no exported member named 'GetImageInfoSuccessCallbackResult'. Did you mean 'GetFileInfoSuccessCallbackResult'?
+src/utils/request.ts: error TS18048: 'currentPage.route' is possibly 'undefined'.
+src/utils/request.ts: error TS2339: Property 'message' does not exist on type 'GeneralCallbackResult'.
+src/utils/router.ts: error TS2339: Property 'options' does not exist on type 'PageInstance<AnyObject, {}>'.
+src/utils/sensitive-word.ts: error TS2503: Cannot find namespace 'NodeJS'.
+src/utils/sensitive-word.ts: error TS2561: Object literal may only specify known properties, but 'headers' does not exist in type 'Partial<Omit<RequestOptions, "method">>'. Did you mean to write 'header'?
+src/utils/system-info.ts: error TS2304: Cannot find name 'wx'.
+src/utils/theme/theme-manager.ts: error TS18048: 'varsToInject' is possibly 'undefined'.
+src/utils/theme/theme-manager.ts: error TS2769: No overload matches this call.
+src/utils/transition.ts: error TS2724: 'UniNamespace' has no exported member named 'NavigateBackSuccessCallbackResult'. Did you mean 'GetSakSuccessCallbackResult'?
+src/utils/transition.ts: error TS2724: 'UniNamespace' has no exported member named 'NavigateToSuccessCallbackResult'. Did you mean 'WriteSuccessCallbackResult'?
+src/utils/transition.ts: error TS2724: 'UniNamespace' has no exported member named 'ReLaunchSuccessCallbackResult'. Did you mean 'ReadSuccessCallbackResult'?
+src/utils/transition.ts: error TS2724: 'UniNamespace' has no exported member named 'RedirectToSuccessCallbackResult'. Did you mean 'ReaddirSuccessCallbackResult'?
+src/utils/transition.ts: error TS2769: No overload matches this call.
+src/utils/websocket.ts: error TS2339: Property 'readyState' does not exist on type 'SocketTask'.
+src/utils/websocket.ts: error TS2554: Expected 1 arguments, but got 0.

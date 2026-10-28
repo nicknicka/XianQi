@@ -666,3 +666,36 @@ export default {
   ImageQuality,
   ImageSize
 }
+
+
+/**
+ * 归一化单个图片地址。非字符串输入返回空串。
+ */
+export function normalizeImageEntry(image: unknown): string {
+  if (typeof image !== 'string') return ''
+  return normalizeImageUrl(image)
+}
+
+/**
+ * 把图片列表归一化为字符串数组。
+ * 入参可能是数组、JSON 字符串，或单个地址；非法输入返回空数组。
+ */
+export function parseImageList(images: unknown): string[] {
+  if (Array.isArray(images)) {
+    return images.map(normalizeImageEntry).filter(Boolean)
+  }
+
+  if (typeof images === 'string') {
+    try {
+      const parsed = JSON.parse(images)
+      if (Array.isArray(parsed)) {
+        return parsed.map(normalizeImageEntry).filter(Boolean)
+      }
+    } catch {
+      const normalized = normalizeImageEntry(images)
+      return normalized ? [normalized] : []
+    }
+  }
+
+  return []
+}
