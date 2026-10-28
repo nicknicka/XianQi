@@ -59,6 +59,9 @@ class EntitySchemaColumnGuardIT {
     private static final Pattern TABLE_CONSTRAINT =
         Pattern.compile("(?i)^(PRIMARY|UNIQUE|KEY|INDEX|CONSTRAINT|FOREIGN)\\b.*");
 
+    /** 扫描全部带 @TableName 的实体的基础包（不限于 entity 子包）。 */
+    private static final String BASE_PACKAGE = "com.xx.xianqijava";
+
     @Test
     void everyEntityColumnExistsInSchema() throws IOException, ClassNotFoundException {
         Map<String, Set<String>> schema = parseSchema();
@@ -69,6 +72,12 @@ class EntitySchemaColumnGuardIT {
         List<Class<?>> entities = scanEntities();
         assertFalse(entities.isEmpty(),
             "未扫描到任何带 @TableName 的实体；守卫本身失去意义，需排查类路径。");
+        // 类路径扫描必须至少覆盖 MyBatis-Plus 已注册（带 Mapper）的实体；若退化为只覆盖后者，
+        // ConversationMember 这类无 Mapper 实体会再次漏检。
+        int registered = TableInfoHelper.getTableInfos().size();
+        assertTrue(entities.size() >= registered,
+            "类路径扫描得到的实体数 " + entities.size() + " 少于 MyBatis-Plus 已注册实体数 "
+                + registered + "；枚举逻辑可能退化。");
 
         MybatisConfiguration configuration = new MybatisConfiguration();
         MapperBuilderAssistant assistant = new MapperBuilderAssistant(configuration, "");
@@ -125,7 +134,7 @@ class EntitySchemaColumnGuardIT {
             new ClassPathScanningCandidateComponentProvider(false);
         scanner.addIncludeFilter(new AnnotationTypeFilter(TableName.class));
         List<Class<?>> entities = new ArrayList<>();
-        for (BeanDefinition candidate : scanner.findCandidateComponents("com.xx.xianqijava.entity")) {
+        for (BeanDefinition candidate : scanner.findCandidateComponents(BASE_PACKAGE)) {
             entities.add(Class.forName(candidate.getBeanClassName()));
         }
         entities.sort(Comparator.comparing(Class::getSimpleName));

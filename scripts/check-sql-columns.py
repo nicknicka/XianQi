@@ -138,14 +138,21 @@ def check_sql_statement(sql, origin, tables):
             continue
         candidates.add(token)
 
-    if single and single in tables:
-        known = tables[single]
-        # identifiers used as output aliases (e.g. `fsp.stock_count AS foo`) are not columns
+    # Unqualified identifiers can only be judged against the tables the statement
+    # actually references. With one table that is exact; with a JOIN, a token is
+    # only a definite error if NO referenced table has such a column (MySQL would
+    # reject it), which keeps the guard free of false positives on ambiguous JOINs.
+    ref_tables = [t for t in refs if t in tables]
+    if ref_tables:
+        known = set()
+        for table in ref_tables:
+            known |= tables[table]
         for token in candidates:
             if token in aliases_out:
                 continue
             if token not in known:
-                fail(f'{origin} -> 表 `{single}` 不存在列 `{token}`')
+                scope = '表 `%s`' % single if single else '或 '.join('`%s`' % t for t in ref_tables)
+                fail(f'{origin} -> {scope} 不存在列 `{token}`')
 
 
 def collect_java_annotation_sql(root):
@@ -178,11 +185,11 @@ def collect_xml_sql(root):
 
 
 def collect_java_string_columns(root, tables):
-    """Wrapper calls with a raw string column, attributed to the nearest QueryWrapper<E>."""
-    decl = re.compile(r'QueryWrapper<([A-Za-z0-9_]+)>')
+    """Wrapper calls with a raw string column, attributed to the nearest *QueryWrapper<E>."""
+    decl = re.compile(r'\b\w*QueryWrapper<([A-Za-z0-9_]+)>')
     call = re.compile(
         r'\.(' + '|'.join(STRING_COLUMN_CALLS) + r')\(\s*"([a-z_][a-z0-9_]*)"',
-        re.I,
+        re.I | re.S,
     )
     suffix_to_table = {}
     for entity_file in glob.glob(os.path.join(root, 'backend', 'src', 'main', 'java',
@@ -199,23 +206,28 @@ def collect_java_string_columns(root, tables):
         if os.sep + 'entity' + os.sep in path:
             continue
         with open(path, encoding='utf-8') as handle:
-            lines = handle.readlines()
+            source = handle.read()
         rel = os.path.relpath(path, root)
-        entity = None
-        for number, line in enumerate(lines, start=1):
-            decl_match = decl.search(line)
-            if decl_match:
-                entity = decl_match.group(1)
-            for call_match in call.finditer(line):
-                if entity is None:
-                    continue
-                table = suffix_to_table.get(entity)
-                if table is None or table not in tables:
-                    continue
-                column = call_match.group(2)
-                if column not in tables[table]:
-                    fail(f'{rel}:{number} (.{call_match.group(1)}) -> '
-                         f'表 `{table}` 不存在列 `{column}`')
+        # Track the most recent wrapper declaration; scan the whole file so calls
+        # split across lines or a chained builder still match.
+        entity_positions = [(m.start(), m.group(1)) for m in decl.finditer(source)]
+        for call_match in call.finditer(source):
+            entity = None
+            for position, name in entity_positions:
+                if position < call_match.start():
+                    entity = name
+                else:
+                    break
+            if entity is None:
+                continue
+            table = suffix_to_table.get(entity)
+            if table is None or table not in tables:
+                continue
+            column = call_match.group(2)
+            if column not in tables[table]:
+                line = source[:call_match.start()].count('\n') + 1
+                fail(f'{rel}:{line} (.{call_match.group(1)}) -> '
+                     f'表 `{table}` 不存在列 `{column}`')
 
 
 def main(argv):
