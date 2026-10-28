@@ -353,7 +353,6 @@ export interface Evaluation {
   tags?: string[]
   images?: string[]
   createdAt: string
-  productId?: string  // 后端可能不返回
 }
 
 // ==================== 消息相关类型 ====================
