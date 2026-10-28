@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.xx.xianqijava.annotation.OperationLog;
 import com.xx.xianqijava.common.Result;
 import com.xx.xianqijava.entity.Blacklist;
+import com.xx.xianqijava.vo.admin.BlacklistManageVO;
 import com.xx.xianqijava.service.BlacklistService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -34,7 +35,7 @@ public class BlacklistManageController {
      */
     @GetMapping("/list")
     @Operation(summary = "分页查询黑名单列表")
-    public Result<IPage<Blacklist>> getBlacklistList(
+    public Result<IPage<BlacklistManageVO>> getBlacklistList(
             @Parameter(description = "页码") @RequestParam(defaultValue = "1") Integer page,
             @Parameter(description = "每页数量") @RequestParam(defaultValue = "20") Integer size,
             @Parameter(description = "用户ID") @RequestParam(required = false) Long userId,
@@ -46,7 +47,7 @@ public class BlacklistManageController {
                 page, size, userId, blockedUserId);
 
         Page<Blacklist> pageParam = new Page<>(page, size);
-        IPage<Blacklist> result = blacklistService.getBlacklistList(
+        IPage<BlacklistManageVO> result = blacklistService.getBlacklistList(
                 pageParam, userId, blockedUserId, keyword, startTime, endTime);
 
         return Result.success(result);
@@ -57,14 +58,14 @@ public class BlacklistManageController {
      */
     @GetMapping("/{blacklistId}")
     @Operation(summary = "获取黑名单详情")
-    public Result<Blacklist> getBlacklistDetail(
+    public Result<BlacklistManageVO> getBlacklistDetail(
             @Parameter(description = "黑名单ID") @PathVariable("blacklistId") Long blacklistId) {
         log.info("查询黑名单详情, blacklistId={}", blacklistId);
-        Blacklist blacklist = blacklistService.getById(blacklistId);
-        if (blacklist == null) {
+        BlacklistManageVO vo = blacklistService.getBlacklistDetailForAdmin(blacklistId);
+        if (vo == null) {
             return Result.error("黑名单记录不存在");
         }
-        return Result.success(blacklist);
+        return Result.success(vo);
     }
 
     /**

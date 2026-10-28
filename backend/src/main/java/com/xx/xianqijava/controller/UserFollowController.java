@@ -6,7 +6,7 @@ import com.xx.xianqijava.common.Result;
 import com.xx.xianqijava.entity.UserFollow;
 import com.xx.xianqijava.service.UserFollowService;
 import com.xx.xianqijava.util.SecurityUtil;
-import com.xx.xianqijava.vo.UserInfoVO;
+import com.xx.xianqijava.vo.FollowUserVO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -70,7 +70,7 @@ public class UserFollowController {
      */
     @Operation(summary = "获取关注列表")
     @GetMapping("/following")
-    public Result<IPage<UserInfoVO>> getFollowingList(
+    public Result<IPage<FollowUserVO>> getFollowingList(
             @Parameter(description = "用户ID") @RequestParam(required = false) Long userId,
             @Parameter(description = "页码") @RequestParam(defaultValue = "1") Integer page,
             @Parameter(description = "页大小") @RequestParam(defaultValue = "20") Integer size) {
@@ -78,7 +78,7 @@ public class UserFollowController {
         log.info("获取关注列表请求, followerId={}, page={}, size={}", followerId, page, size);
 
         Page<UserFollow> pageParam = new Page<>(page, size);
-        IPage<UserInfoVO> result = userFollowService.getFollowingList(followerId, pageParam);
+        IPage<FollowUserVO> result = userFollowService.getFollowingList(followerId, pageParam);
         return Result.success(result);
     }
 
@@ -88,7 +88,7 @@ public class UserFollowController {
      */
     @Operation(summary = "获取粉丝列表")
     @GetMapping("/followers")
-    public Result<IPage<UserInfoVO>> getFollowerList(
+    public Result<IPage<FollowUserVO>> getFollowerList(
             @Parameter(description = "用户ID") @RequestParam(required = false) Long userId,
             @Parameter(description = "页码") @RequestParam(defaultValue = "1") Integer page,
             @Parameter(description = "页大小") @RequestParam(defaultValue = "20") Integer size) {
@@ -96,7 +96,7 @@ public class UserFollowController {
         log.info("获取粉丝列表请求, followingId={}, page={}, size={}", followingId, page, size);
 
         Page<UserFollow> pageParam = new Page<>(page, size);
-        IPage<UserInfoVO> result = userFollowService.getFollowerList(followingId, pageParam);
+        IPage<FollowUserVO> result = userFollowService.getFollowerList(followingId, pageParam);
         return Result.success(result);
     }
 }

@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.xx.xianqijava.entity.Blacklist;
 import com.xx.xianqijava.vo.UserInfoVO;
+import com.xx.xianqijava.vo.admin.BlacklistManageVO;
 
 /**
  * 黑名单服务接口
@@ -74,6 +75,14 @@ public interface BlacklistService extends IService<Blacklist> {
      * @param endTime      结束时间
      * @return 黑名单列表
      */
-    IPage<Blacklist> getBlacklistList(Page<Blacklist> page, Long userId, Long blockedUserId,
-                                       String keyword, String startTime, String endTime);
+    IPage<BlacklistManageVO> getBlacklistList(Page<Blacklist> page, Long userId, Long blockedUserId,
+                                               String keyword, String startTime, String endTime);
+
+    /**
+     * 查询单条黑名单记录（管理端），附带双方用户昵称与手机号。
+     *
+     * @param blacklistId 黑名单记录ID
+     * @return 管理端视图对象；记录不存在时返回 {@code null}
+     */
+    BlacklistManageVO getBlacklistDetailForAdmin(Long blacklistId);
 }

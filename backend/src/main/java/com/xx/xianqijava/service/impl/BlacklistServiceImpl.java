@@ -12,10 +12,14 @@ import com.xx.xianqijava.mapper.BlacklistMapper;
 import com.xx.xianqijava.mapper.UserMapper;
 import com.xx.xianqijava.service.BlacklistService;
 import com.xx.xianqijava.vo.UserInfoVO;
+import com.xx.xianqijava.vo.admin.BlacklistManageVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 黑名单服务实现类
@@ -160,8 +164,8 @@ public class BlacklistServiceImpl extends ServiceImpl<BlacklistMapper, Blacklist
     }
 
     @Override
-    public IPage<Blacklist> getBlacklistList(Page<Blacklist> page, Long userId, Long blockedUserId,
-                                             String keyword, String startTime, String endTime) {
+    public IPage<BlacklistManageVO> getBlacklistList(Page<Blacklist> page, Long userId, Long blockedUserId,
+                                                     String keyword, String startTime, String endTime) {
         log.info("查询黑名单列表（管理员）, userId={}, blockedUserId={}, keyword={}",
                 userId, blockedUserId, keyword);
 
@@ -188,6 +192,48 @@ public class BlacklistServiceImpl extends ServiceImpl<BlacklistMapper, Blacklist
 
         queryWrapper.orderByDesc(Blacklist::getCreatedAt);
 
-        return page(page, queryWrapper);
+        IPage<Blacklist> blacklistPage = page(page, queryWrapper);
+
+        // 转换为管理端视图对象，补充双方用户昵称与手机号
+        List<BlacklistManageVO> records = blacklistPage.getRecords().stream()
+                .map(this::convertToManageVO)
+                .collect(Collectors.toList());
+
+        IPage<BlacklistManageVO> resultPage =
+                new Page<>(blacklistPage.getCurrent(), blacklistPage.getSize(), blacklistPage.getTotal());
+        resultPage.setRecords(records);
+        return resultPage;
+    }
+
+    @Override
+    public BlacklistManageVO getBlacklistDetailForAdmin(Long blacklistId) {
+        Blacklist blacklist = getById(blacklistId);
+        return blacklist == null ? null : convertToManageVO(blacklist);
+    }
+
+    /**
+     * 转换为管理端视图对象，补充双方用户的昵称与手机号。
+     */
+    private BlacklistManageVO convertToManageVO(Blacklist blacklist) {
+        BlacklistManageVO vo = new BlacklistManageVO();
+        vo.setBlacklistId(String.valueOf(blacklist.getBlacklistId()));
+        vo.setUserId(String.valueOf(blacklist.getUserId()));
+        vo.setBlockedUserId(String.valueOf(blacklist.getBlockedUserId()));
+        vo.setReason(blacklist.getReason());
+        vo.setCreatedAt(blacklist.getCreatedAt());
+
+        User user = userMapper.selectById(blacklist.getUserId());
+        if (user != null) {
+            vo.setUserNickname(user.getNickname());
+            vo.setUserPhone(user.getPhone());
+        }
+
+        User blockedUser = userMapper.selectById(blacklist.getBlockedUserId());
+        if (blockedUser != null) {
+            vo.setBlockedUserNickname(blockedUser.getNickname());
+            vo.setBlockedUserPhone(blockedUser.getPhone());
+        }
+
+        return vo;
     }
 }

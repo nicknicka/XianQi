@@ -49,9 +49,9 @@
             </el-tag>
           </template>
         </el-table-column>
-        <el-table-column prop="reply" label="回复" min-width="150" show-overflow-tooltip>
+        <el-table-column prop="handleNote" label="回复" min-width="150" show-overflow-tooltip>
           <template #default="{ row }">
-            {{ row.reply || '-' }}
+            {{ row.handleNote || '-' }}
           </template>
         </el-table-column>
         <el-table-column label="提交时间" width="180">
@@ -63,7 +63,7 @@
           <template #default="{ row }">
             <el-button link type="primary" @click="openDetailDialog(row)">详情</el-button>
             <el-button link type="success" @click="openReplyDialog(row)">
-              {{ row.reply ? '修改回复' : '回复' }}
+              {{ row.handleNote ? '修改回复' : '回复' }}
             </el-button>
             <el-button link type="danger" @click="handleDelete(row)">删除</el-button>
           </template>
@@ -102,12 +102,12 @@
           </el-tag>
         </el-descriptions-item>
         <el-descriptions-item label="提交时间">{{ formatTime(currentFeedback.createdAt) }}</el-descriptions-item>
-        <el-descriptions-item v-if="currentFeedback.reply" label="回复" :span="2">{{ currentFeedback.reply }}</el-descriptions-item>
-        <el-descriptions-item v-if="currentFeedback.replyTime" label="回复时间" :span="2">{{ formatTime(currentFeedback.replyTime) }}</el-descriptions-item>
+        <el-descriptions-item v-if="currentFeedback.handleNote" label="回复" :span="2">{{ currentFeedback.handleNote }}</el-descriptions-item>
+        <el-descriptions-item v-if="currentFeedback.handleTime" label="回复时间" :span="2">{{ formatTime(currentFeedback.handleTime) }}</el-descriptions-item>
       </el-descriptions>
     </el-dialog>
 
-    <el-dialog v-model="replyDialogVisible" :title="currentFeedback?.reply ? '修改回复' : '回复反馈'" width="600px">
+    <el-dialog v-model="replyDialogVisible" :title="currentFeedback?.handleNote ? '修改回复' : '回复反馈'" width="600px">
       <el-form :model="replyForm" label-width="100px">
         <el-form-item label="回复内容">
           <el-input v-model="replyForm.reply" type="textarea" :rows="6" placeholder="请输入回复内容" />
@@ -216,7 +216,7 @@ const openDetailDialog = (row: UserFeedbackVO) => {
 
 const openReplyDialog = (row: UserFeedbackVO) => {
   currentFeedback.value = row
-  replyForm.value = { reply: row.reply || '' }
+  replyForm.value = { reply: row.handleNote || '' }
   replyDialogVisible.value = true
 }
 

@@ -156,7 +156,7 @@ const {
         condition: item.minAmount > 0 ? `满${item.minAmount}元可用` : '无门槛',
         status: mapBackendStatusToFrontend(item.status),
         validStart: formatDate(item.validFrom),
-        validEnd: formatDate(item.validTo),
+        validEnd: formatDate(item.expireTime),
         minAmount: String(item.minAmount),
         type: 'general' as const
       })),
