@@ -38,6 +38,9 @@ jobs:
       - name: Backend skip guard tests
         run: bash scripts/tests/check-backend-skips-test.bash
 
+      - name: Backend test entry self-tests
+        run: bash scripts/tests/backend-test-entry-test.bash
+
       - name: Handwritten SQL column guard
         run: |
           python3 scripts/check-sql-columns.py
