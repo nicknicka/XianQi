@@ -10,7 +10,7 @@ import com.xx.xianqijava.exception.BusinessException;
 import com.xx.xianqijava.mapper.UserFollowMapper;
 import com.xx.xianqijava.mapper.UserMapper;
 import com.xx.xianqijava.service.UserFollowService;
-import com.xx.xianqijava.vo.UserInfoVO;
+import com.xx.xianqijava.vo.FollowUserVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -103,70 +103,74 @@ public class UserFollowServiceImpl extends ServiceImpl<UserFollowMapper, UserFol
     }
 
     @Override
-    public IPage<UserInfoVO> getFollowingList(Long followerId, Page<UserFollow> page) {
+    public IPage<FollowUserVO> getFollowingList(Long followerId, Page<UserFollow> page) {
         // 查询关注记录
         IPage<UserFollow> followPage = baseMapper.selectPage(page,
                 new LambdaQueryWrapper<UserFollow>()
                         .eq(UserFollow::getFollowerId, followerId)
                         .orderByDesc(UserFollow::getCreatedAt));
 
-        // 转换为UserInfoVO，只返回基本信息
-        List<UserInfoVO> userInfoList = followPage.getRecords().stream()
+        // 转换为 FollowUserVO，携带该条关注关系的建立时间
+        List<FollowUserVO> userInfoList = followPage.getRecords().stream()
                 .map(follow -> {
                     User user = userMapper.selectById(follow.getFollowingId());
                     if (user == null) {
                         return null;
                     }
-                    return convertToSimpleUserInfoVO(user);
+                    return convertToFollowUserVO(user, follow.getCreatedAt());
                 })
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
 
         // 构建新的分页结果
-        IPage<UserInfoVO> resultPage = new Page<>(page.getCurrent(), page.getSize(), followPage.getTotal());
+        IPage<FollowUserVO> resultPage = new Page<>(page.getCurrent(), page.getSize(), followPage.getTotal());
         resultPage.setRecords(userInfoList);
         return resultPage;
     }
 
     @Override
-    public IPage<UserInfoVO> getFollowerList(Long followingId, Page<UserFollow> page) {
+    public IPage<FollowUserVO> getFollowerList(Long followingId, Page<UserFollow> page) {
         // 查询粉丝记录
         IPage<UserFollow> followPage = baseMapper.selectPage(page,
                 new LambdaQueryWrapper<UserFollow>()
                         .eq(UserFollow::getFollowingId, followingId)
                         .orderByDesc(UserFollow::getCreatedAt));
 
-        // 转换为UserInfoVO，只返回基本信息
-        List<UserInfoVO> userInfoList = followPage.getRecords().stream()
+        // 转换为 FollowUserVO，携带该条关注关系的建立时间
+        List<FollowUserVO> userInfoList = followPage.getRecords().stream()
                 .map(follow -> {
                     User user = userMapper.selectById(follow.getFollowerId());
                     if (user == null) {
                         return null;
                     }
-                    return convertToSimpleUserInfoVO(user);
+                    return convertToFollowUserVO(user, follow.getCreatedAt());
                 })
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
 
         // 构建新的分页结果
-        IPage<UserInfoVO> resultPage = new Page<>(page.getCurrent(), page.getSize(), followPage.getTotal());
+        IPage<FollowUserVO> resultPage = new Page<>(page.getCurrent(), page.getSize(), followPage.getTotal());
         resultPage.setRecords(userInfoList);
         return resultPage;
     }
 
     /**
-     * 转换为简化的用户信息VO（不包含敏感信息）
+     * 转换为关注列表用户视图对象。
+     *
+     * @param user       被关注/粉丝用户
+     * @param followTime 该条关注关系建立的时间（来自 UserFollow.createdAt）
      */
-    private UserInfoVO convertToSimpleUserInfoVO(User user) {
-        UserInfoVO userInfoVO = new UserInfoVO();
-        userInfoVO.setId(user.getUserId());
-        userInfoVO.setUsername(user.getUsername());
-        userInfoVO.setNickname(user.getNickname());
-        userInfoVO.setAvatar(user.getAvatar());
-        userInfoVO.setCreditScore(user.getCreditScore());
-        userInfoVO.setIsVerified(user.getIsVerified());
-        userInfoVO.setCollege(user.getCollege());
-        userInfoVO.setMajor(user.getMajor());
-        return userInfoVO;
+    private FollowUserVO convertToFollowUserVO(User user, java.time.LocalDateTime followTime) {
+        FollowUserVO vo = new FollowUserVO();
+        vo.setId(user.getUserId());
+        vo.setUsername(user.getUsername());
+        vo.setNickname(user.getNickname());
+        vo.setAvatar(user.getAvatar());
+        vo.setCreditScore(user.getCreditScore());
+        vo.setIsVerified(user.getIsVerified());
+        vo.setCollege(user.getCollege());
+        vo.setMajor(user.getMajor());
+        vo.setFollowTime(followTime == null ? null : followTime.toString());
+        return vo;
     }
 }

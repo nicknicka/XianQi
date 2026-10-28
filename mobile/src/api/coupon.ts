@@ -44,7 +44,7 @@ export interface UserCoupon {
   statusDesc: string
   usedTime: string
   validFrom: string
-  validTo: string
+  expireTime: string
   expiringSoon: boolean
 }
 

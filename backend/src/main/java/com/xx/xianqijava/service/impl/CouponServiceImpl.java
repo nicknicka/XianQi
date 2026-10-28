@@ -391,6 +391,10 @@ public class CouponServiceImpl extends ServiceImpl<CouponMapper, Coupon> impleme
         vo.setStatus(userCoupon.getStatus());
         vo.setStatusDesc(getUserCouponStatusDesc(userCoupon.getStatus()));
         vo.setUsedTime(userCoupon.getUsedTime());
+        // 生效开始时间取自优惠券本身（用户券只存了过期时间）
+        if (coupon != null) {
+            vo.setValidFrom(coupon.getValidFrom());
+        }
         vo.setExpireTime(userCoupon.getExpireTime());
 
         // 判断是否即将过期（3天内）

@@ -55,6 +55,9 @@ public class UserCouponVO {
     @Schema(description = "使用时间")
     private LocalDateTime usedTime;
 
+    @Schema(description = "生效开始时间")
+    private LocalDateTime validFrom;
+
     @Schema(description = "过期时间")
     private LocalDateTime expireTime;
 

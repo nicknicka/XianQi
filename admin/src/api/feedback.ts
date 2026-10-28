@@ -6,7 +6,7 @@ export interface UserFeedbackVO {
   feedbackId: string
   userId: string
   userNickname?: string
-  userPhone?: string
+  contact?: string // 联系方式
   type: FeedbackType // 1-功能建议，2-Bug反馈，3-投诉，4-其他
   title?: string // 反馈标题
   content: string
@@ -14,8 +14,7 @@ export interface UserFeedbackVO {
   images?: string[] // 或改为string类型后JSON.parse
   status: FeedbackStatus // 0-待处理，1-处理中，2-已处理，3-已驳回
   handlerId?: string // 处理人ID（管理员）
-  handleNote?: string // 处理备注
-  reply?: string
+  handleNote?: string // 处理备注（即回复内容）
   createdAt: string
   handleTime?: string
 }
