@@ -11,8 +11,13 @@ Scope — deliberately narrow:
 * Only API modules **without a field-mapping layer** are checked. A mapping layer
   (a ``normalize*`` / ``transform*`` function applied to the response) means the
   frontend type describes a *reshaped* object, not the backend payload, so a
-  direct comparison would be meaningless. Extending coverage to those modules is
-  tracked separately; this guard does not pretend to cover them.
+  direct comparison would be meaningless.
+
+  This is a principled boundary, not a TODO. Comparing the fields a normalizer
+  *reads* against the backend schema was evaluated and rejected: expressions like
+  ``data?.ownerId || data?.userId`` mix the backend name with the name the
+  adapter produces, so a script cannot tell them apart without flagging ordinary
+  adapter code. See ADR-0012 for the full reasoning.
 * Fields named in ``ALLOWED_EXTRA`` are tolerated (pagination envelopes, and
   fields the frontend computes rather than receives).
 

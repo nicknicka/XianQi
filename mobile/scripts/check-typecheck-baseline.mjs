@@ -2,8 +2,10 @@
 /**
  * 类型检查基线守卫。
  *
- * mobile 存在一批既存的 TypeScript 错误（组件声明缺失等），本次重构不负责
- * 修完它们。本脚本把「当前错误集合」与基线比对，只要求：**不新增错误**。
+ * 用 vue-tsc（而非 tsc）：tsc 不解析 .vue 单文件组件，会漏掉业务页面的
+ * 全部类型问题。vue-tsc 覆盖 .ts 与 .vue。
+ *
+ * mobile 存在一批既存类型错误，本守卫不负责修完它们，只要求：**不新增**。
  *
  * 基线已去除行号，因此代码挪动不会造成噪声；消息变化会被识别为新增。
  *
@@ -23,7 +25,7 @@ const baselinePath = path.join(here, 'typecheck-baseline.txt')
 function currentErrors() {
   let output = ''
   try {
-    output = execFileSync(path.join(root, 'node_modules/.bin/tsc'),
+    output = execFileSync(path.join(root, 'node_modules/.bin/vue-tsc'),
       ['--noEmit', '-p', 'tsconfig.json'], { cwd: root, encoding: 'utf8' })
   } catch (error) {
     // tsc 有错误时以非零码退出，错误内容在 stdout
@@ -32,9 +34,25 @@ function currentErrors() {
   const entries = []
   for (const line of output.split('\n')) {
     const match = line.match(/^([^(]+)\(\d+,\d+\): (error TS\d+: .*)$/)
-    if (match) entries.push(`${match[1]}: ${match[2]}`)
+    if (match) entries.push(normalizeEntry(`${match[1]}: ${match[2]}`))
   }
   return new Set(entries)
+}
+
+/**
+ * 规范化一条错误记录的文本。
+ *
+ * 关键：vue-tsc 的某些消息里**嵌了绝对路径**，例如
+ *   Argument of type 'Product' is not assignable to parameter of type
+ *   'import("/home/runner/work/XianQi/XianQi/mobile/src/types/index").Product'
+ * 若原样写进基线，则基线只在本机成立、在 CI 上必然被判定为「新增」。
+ * 这里把所有工作区绝对路径统一压成 <repo>。
+ */
+function normalizeEntry(entry) {
+  return entry
+    .replaceAll(root + path.sep, '<repo>/')
+    .replaceAll(root, '<repo>')
+    .replace(/\/(?:Users|home)\/[^"'\s]*?\/mobile\//g, '<repo>/mobile/')
 }
 
 function readBaseline() {
