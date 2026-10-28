@@ -158,7 +158,7 @@ import { onShow, onPullDownRefresh } from '@dcloudio/uni-app'
 import { useThemePage, useThemeStyle, useThemeColors } from '@/utils/theme'
 import { getRelativeTime } from '@/utils/date'
 import { checkAuth } from '@/utils/auth'
-import { messageApi } from '@/api/message'
+import { messageApi, type Conversation } from '@/api/message'
 import { notificationApi, NotificationType } from '@/api/notification'
 import { useAppStore } from '@/store/app'
 import { updateMessageBadge } from '@/utils/tabbar'
@@ -171,20 +171,6 @@ import CustomTabBar from '@/custom-tab-bar/index.vue'
 
 const { themeStyle } = useThemeStyle()
 const { primaryColor } = useThemeColors()
-
-interface Conversation {
-  conversationId: string
-  otherUserId?: string
-  otherUserNickname?: string
-  otherUserAvatar?: string
-  lastMessageContent?: string
-  lastMessageTime?: string
-  lastMessageType?: string // 消息类型：text、image、product、order等
-  unreadCount?: number
-  isTop?: number // 0-未置顶，1-已置顶（注意：后端使用isTop字段，不是isPinned）
-  relatedProductId?: string
-  relatedOrderId?: string
-}
 
 interface Notice {
   id: string
