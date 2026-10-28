@@ -26,7 +26,6 @@ import com.xx.xianqijava.mapper.UserMapper;
 import com.xx.xianqijava.service.ConversationService;
 import com.xx.xianqijava.service.ProductImageService;
 import com.xx.xianqijava.util.IdConverter;
-import com.xx.xianqijava.util.SecurityUtil;
 import com.xx.xianqijava.vo.ConversationVO;
 import com.xx.xianqijava.vo.MessageVO;
 import lombok.RequiredArgsConstructor;

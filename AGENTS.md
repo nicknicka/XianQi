@@ -12,4 +12,5 @@
 
 - **Track issues and operate on them:** [docs/agents/issue-tracker.md](docs/agents/issue-tracker.md) — GitHub 读写一律走 `scripts/gh-stable.sh`；裸 `gh` 会因代理超时失败。
 - **Apply triage labels by role:** [docs/agents/triage-labels.md](docs/agents/triage-labels.md).
+- **Run or add backend tests (unit vs real-DB naming, guards):** [docs/agents/backend-testing.md](docs/agents/backend-testing.md).
 - **Read domain vocabulary and decisions before exploring:** [GLOSSARY.md](GLOSSARY.md), [docs/adr/](docs/adr/), and [docs/agents/domain.md](docs/agents/domain.md).

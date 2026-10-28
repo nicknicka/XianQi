@@ -7,8 +7,6 @@ import com.xx.xianqijava.annotation.OperationLog;
 import com.xx.xianqijava.common.Result;
 import com.xx.xianqijava.entity.SystemNotification;
 import com.xx.xianqijava.service.SystemNotificationService;
-import com.xx.xianqijava.util.SecurityUtil;
-import com.xx.xianqijava.vo.SystemNotificationVO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;

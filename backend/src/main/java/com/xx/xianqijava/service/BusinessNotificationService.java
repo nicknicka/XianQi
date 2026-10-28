@@ -1,7 +1,5 @@
 package com.xx.xianqijava.service;
 
-import com.xx.xianqijava.entity.SystemNotification;
-
 /**
  * 业务通知服务接口
  * 用于发送各种业务相关的系统通知

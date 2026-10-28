@@ -1,6 +1,5 @@
 package com.xx.xianqijava.service;
 
-import com.xx.xianqijava.entity.Product;
 import com.xx.xianqijava.vo.ProductVO;
 
 import java.util.List;

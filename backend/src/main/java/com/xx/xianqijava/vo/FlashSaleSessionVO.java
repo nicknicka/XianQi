@@ -3,8 +3,6 @@ package com.xx.xianqijava.vo;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
-import java.time.LocalDateTime;
-
 /**
  * 秒杀场次 VO（已简化，合并了活动功能）
  */

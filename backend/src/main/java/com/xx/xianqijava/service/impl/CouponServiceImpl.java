@@ -1,12 +1,10 @@
 package com.xx.xianqijava.service.impl;
 
-import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -21,8 +19,6 @@ import com.xx.xianqijava.mapper.OrderMapper;
 import com.xx.xianqijava.mapper.ProductMapper;
 import com.xx.xianqijava.mapper.UserCouponMapper;
 import com.xx.xianqijava.service.CouponService;
-import com.xx.xianqijava.util.IdConverter;
-import com.xx.xianqijava.util.SecurityUtil;
 import com.xx.xianqijava.vo.CouponVO;
 import com.xx.xianqijava.vo.UserCouponVO;
 import lombok.RequiredArgsConstructor;
@@ -36,7 +32,6 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * 优惠券服务实现类

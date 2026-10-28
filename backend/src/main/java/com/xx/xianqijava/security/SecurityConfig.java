@@ -1,7 +1,5 @@
 package com.xx.xianqijava.security;
 
-import com.xx.xianqijava.security.AdminJwtAuthenticationFilter;
-import com.xx.xianqijava.security.JwtAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;

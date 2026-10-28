@@ -12,7 +12,6 @@ import com.xx.xianqijava.service.ProductService;
 import com.xx.xianqijava.service.ProductViewHistoryService;
 import com.xx.xianqijava.vo.ProductVO;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

@@ -2,11 +2,8 @@ package com.xx.xianqijava.service;
 
 import com.xx.xianqijava.entity.Product;
 import com.xx.xianqijava.vo.ProductVO;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.*;

@@ -17,7 +17,6 @@ import com.xx.xianqijava.mapper.OrderMapper;
 import com.xx.xianqijava.mapper.ProductImageMapper;
 import com.xx.xianqijava.mapper.ProductMapper;
 import com.xx.xianqijava.service.FlashSaleService;
-import com.xx.xianqijava.util.IdConverter;
 import com.xx.xianqijava.util.ProductConditionUtil;
 import com.xx.xianqijava.vo.FlashSaleProductVO;
 import com.xx.xianqijava.vo.FlashSaleSessionVO;

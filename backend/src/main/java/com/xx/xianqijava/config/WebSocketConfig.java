@@ -2,7 +2,6 @@ package com.xx.xianqijava.config;
 
 import com.xx.xianqijava.websocket.WebSocketHandler;
 import com.xx.xianqijava.websocket.WebSocketInterceptor;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;
 import org.springframework.web.socket.config.annotation.WebSocketConfigurer;

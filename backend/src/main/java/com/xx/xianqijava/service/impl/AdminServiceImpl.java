@@ -1,12 +1,10 @@
 package com.xx.xianqijava.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xx.xianqijava.dto.admin.AdminLoginDTO;
 import com.xx.xianqijava.entity.Admin;
 import com.xx.xianqijava.exception.BusinessException;
 import com.xx.xianqijava.mapper.AdminMapper;
-import com.xx.xianqijava.security.SecurityContextHolder;
 import com.xx.xianqijava.service.AdminService;
 import com.xx.xianqijava.util.AdminJwtUtil;
 import com.xx.xianqijava.vo.admin.AdminInfoVO;
