@@ -3,7 +3,7 @@
  */
 import { http } from '@/utils/request'
 
-interface Conversation {
+export interface Conversation {
   conversationId: string
   otherUserId?: string
   otherUserNickname?: string
