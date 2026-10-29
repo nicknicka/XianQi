@@ -12,7 +12,7 @@ interface CacheItem<T> {
 
 class RequestCache {
   private cache = new Map<string, CacheItem<any>>()
-  private timers = new Map<string, NodeJS.Timeout>()
+  private timers = new Map<string, number>()
 
   /**
    * 获取缓存数据

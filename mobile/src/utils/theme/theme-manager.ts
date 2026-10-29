@@ -226,15 +226,16 @@ class ThemeManager {
   injectCSSVarsToCurrentPage(cssVars?: Record<string, string>) {
     try {
       // 优先使用传入的 cssVars，否则从 storage 读取
-      let varsToInject = cssVars
+      let varsToInject: Record<string, string> | undefined = cssVars
       if (!varsToInject) {
         const varsStr = uni.getStorageSync('theme_css_vars')
         if (!varsStr) {
           console.log('[ThemeManager] injectCSSVarsToCurrentPage - storage为空，无CSS变量可注入')
           return
         }
-        varsToInject = JSON.parse(varsStr)
+        varsToInject = JSON.parse(varsStr) as Record<string, string>
       }
+      if (!varsToInject) return
 
       console.log(`[ThemeManager] injectCSSVarsToCurrentPage - 准备注入 ${Object.keys(varsToInject).length} 个CSS变量`)
       console.log(`[ThemeManager] 注入的关键变量: --primary-color=${varsToInject['--primary-color']}, --bg-color-page=${varsToInject['--bg-color-page']}`)

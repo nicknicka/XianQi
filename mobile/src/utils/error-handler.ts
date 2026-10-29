@@ -77,6 +77,19 @@ const ErrorMessages: Record<ErrorCode, string> = {
 }
 
 /**
+ * 按错误码取文案。
+ *
+ * 错误码来自运行时（后端响应或 catch 到的任意值），类型上是 any/number，
+ * 不能直接索引 Record<ErrorCode, string>。此处把「是否为已知错误码」的
+ * 判断集中在一处，避免在调用点散落类型断言。
+ */
+function lookupMessage(code: unknown): string | undefined {
+  if (typeof code !== 'number') return undefined
+  return ErrorMessages[code as ErrorCode]
+}
+
+
+/**
  * 错误处理类
  */
 class ErrorHandler {
@@ -93,13 +106,13 @@ class ErrorHandler {
     // 处理API响应错误（直接从后端返回的响应对象）
     if (error?.code !== undefined && error?.message) {
       errorCode = error.code
-      message = error.message || ErrorMessages[error.code] || message
+      message = error.message || lookupMessage(error.code) || message
     }
     // 处理axios风格的API错误
     else if (error?.response?.data) {
       const { code, message: msg } = error.response.data
       errorCode = code
-      message = msg || ErrorMessages[code] || message
+      message = msg || lookupMessage(code) || message
     }
     // 处理网络错误
     else if (error?.message?.includes('network')) {
@@ -112,9 +125,9 @@ class ErrorHandler {
       message = '请求超时，请稍后重试'
     }
     // 处理业务错误码
-    else if (typeof error === 'number' && ErrorMessages[error]) {
+    else if (typeof error === 'number' && lookupMessage(error)) {
       errorCode = error
-      message = ErrorMessages[error]
+      message = lookupMessage(error) || message
     }
     // 处理字符串错误
     else if (typeof error === 'string') {
@@ -190,7 +203,9 @@ export async function requestWithRetry<T>(
       lastError = error
 
       // 如果是业务错误，不重试
-      if (error?.response?.data?.code) {
+      // catch 到的值类型为 unknown，需先收窄再访问 response
+      const err = error as { response?: { data?: { code?: unknown } } } | undefined
+      if (err?.response?.data?.code) {
         throw error
       }
 
@@ -218,7 +233,7 @@ export function debounce<T extends (...args: any[]) => any>(
   fn: T,
   delay = 300
 ): (...args: Parameters<T>) => void {
-  let timer: NodeJS.Timeout | null = null
+  let timer: number | null = null
 
   return function (this: any, ...args: Parameters<T>) {
     if (timer) {
