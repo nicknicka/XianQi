@@ -5,7 +5,7 @@
       <scroll-view class="tabs-nav" :class="{ 'is-scrollable': scrollable }" scroll-x scroll-with-animation>
         <view class="tabs-list">
           <view
-            v-for="(tab, index) in tabList"
+            v-for="(tab, index) in tabs"
             :key="tab.id || index"
             class="tab-item"
             :class="{ 'is-active': activeIndex === index, 'is-disabled': tab.disabled }"
@@ -23,7 +23,7 @@
                 <text class="tab-title">{{ tab.title }}</text>
                 <!-- 关闭按钮 -->
                 <view
-                  v-if="tab.closable && !tab.disabled && tabList.length > 1"
+                  v-if="tab.closable && !tab.disabled && tabs.length > 1"
                   class="tab-close"
                   @click.stop="handleTabClose(index)"
                 >
@@ -44,7 +44,7 @@
         :duration="duration"
         @change="handleSwiperChange"
       >
-        <swiper-item v-for="(tab, index) in tabList" :key="tab.id || index">
+        <swiper-item v-for="(tab, index) in tabs" :key="tab.id || index">
           <view class="tab-pane">
             <slot :name="`pane-${index}`" :tab="tab" :index="index">
               <!-- 默认内容 -->
@@ -111,7 +111,7 @@ const emit = defineEmits<{
 const internalActive = ref(props.activeIndex)
 
 // 判断是否为点徽章
-function isDotBadge(badge: string | number): boolean {
+function isDotBadge(badge: string | number | boolean): boolean {
   return badge === 'dot' || badge === true
 }
 

@@ -3,8 +3,6 @@
 # 重构期间要求：不得新增此清单之外的错误。
 src/api/ai.ts: error TS18048: 'reader' is possibly 'undefined'.
 src/components/PageTransition.vue: error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
-src/components/action-list/action-list.vue: error TS1184: Modifiers cannot appear here.
-src/components/action-list/action-list.vue: error TS2769: No overload matches this call.
 src/components/chat-input/chat-input.vue: error TS2769: No overload matches this call.
 src/components/comment-list/comment-list.vue: error TS18048: 'comment.replyCount' is possibly 'undefined'.
 src/components/custom-nav-bar/custom-nav-bar.vue: error TS2345: Argument of type '{ class: { 'is-notch': boolean; 'avoid-capsule': boolean; }; style: { height: string; background: string; color: string; position: string; }; }' is not assignable to parameter of type 'SVGAttributes & ReservedProps & Record<string, unknown>'.
@@ -12,18 +10,11 @@ src/components/form/form.vue: error TS2339: Property 'formItems' does not exist 
 src/components/grid-menu/grid-menu.vue: error TS2769: No overload matches this call.
 src/components/image-uploader/image-uploader.vue: error TS2339: Property 'textColorTertiary' does not exist on type '{ primaryColor: string; primaryColorLight: string; primaryColorDark: string; secondaryColor: string; accentColor: string; successColor: "#7ED4A6"; warningColor: "#FFD666"; dangerColor: "#FF8A8A"; infoColor: "#9DC4FF"; }'.
 src/components/image-uploader/image-uploader.vue: error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string[]'.
-src/components/markdown-render/markdown-render.vue: error TS2345: Argument of type 'string | Promise<string>' is not assignable to parameter of type 'string'.
-src/components/markdown-render/markdown-render.vue: error TS2353: Object literal may only specify known properties, and 'headerIds' does not exist in type 'MarkedOptions<string, string>'.
-src/components/markdown-render/markdown-render.vue: error TS2769: No overload matches this call.
-src/components/notification-box/notification-box.vue: error TS2614: Module '"@/utils/notification"' has no exported member 'NoticeItem'. Did you mean to use 'import NoticeItem from "@/utils/notification"' instead?
-src/components/notification-box/notification-box.vue: error TS2614: Module '"@/utils/notification"' has no exported member 'typeIcons'. Did you mean to use 'import typeIcons from "@/utils/notification"' instead?
 src/components/product-preview/product-preview.vue: error TS2694: Namespace 'UniNamespace' has no exported member 'Popup'.
 src/components/product-preview/product-preview.vue: error TS2769: No overload matches this call.
 src/components/progress/progress.vue: error TS1184: Modifiers cannot appear here.
 src/components/segmented/segmented.vue: error TS1184: Modifiers cannot appear here.
 src/components/swiper/swiper.vue: error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string | number | boolean'.
-src/components/tabs/tabs.vue: error TS2339: Property 'tabList' does not exist on type '{ customClass: string | undefined; customStyle: string | Record<string, any> | undefined; tabs: TabItem[]; activeIndex: number; type: "line" | "card" | "segment"; ... 23 more ...; _pStores?: Record<...> | undefined; }'.
-src/components/tabs/tabs.vue: error TS2367: This comparison appears to be unintentional because the types 'string | number' and 'boolean' have no overlap.
 src/components/timeline/timeline.vue: error TS2724: '"@/utils/common"' has no exported member named 'formatDate'. Did you mean 'formatTime'?
 src/custom-tab-bar/svg-tab-bar.vue: error TS2304: Cannot find name 'themeManager'.
 src/custom-tab-bar/svg-tab-bar.vue: error TS2339: Property 'value' does not exist on type 'LegacyThemeConfig'.

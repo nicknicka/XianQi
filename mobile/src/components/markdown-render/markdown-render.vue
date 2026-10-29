@@ -75,12 +75,12 @@ async function renderMarkdownH5(content: string, options: any) {
     // 配置 marked
     marked.setOptions({
       breaks: options.breaks,
-      gfm: options.gfm,
-      headerIds: false,
-      mangle: false
+      gfm: options.gfm
     })
 
-    let html = marked.parse(content)
+    // marked.parse 的返回类型是 string | Promise<string>（配置异步扩展时会返回
+    // Promise）。此处未启用异步扩展，运行时必为 string，故显式收窄。
+    let html = marked.parse(content) as string
 
     // 清理 HTML
     if (options.sanitize) {
