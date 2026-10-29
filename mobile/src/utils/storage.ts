@@ -49,9 +49,9 @@ export default {
   /**
    * 获取数据
    */
-  get(key: string): any {
+  get<T = any>(key: string): T | null {
     try {
-      return uni.getStorageSync(key)
+      return uni.getStorageSync(key) as T
     } catch (e) {
       console.error('获取数据失败:', e)
       return null

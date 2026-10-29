@@ -69,7 +69,7 @@ import { useThemeStyle, useThemeColors } from '@/utils/theme'
 const { themeStyle } = useThemeStyle()
 const { primaryColor } = useThemeColors()
 
-export interface ActionListItem {
+interface ActionListItem {
   id?: string
   title: string
   description?: string
@@ -119,11 +119,12 @@ function handleClick(item: ActionListItem, index: number) {
 
   // 如果有 URL，跳转
   if (item.url) {
+    if (!item.url) return
     uni.navigateTo({
       url: item.url,
       fail: () => {
         uni.switchTab({
-          url: item.url
+          url: item.url as string
         })
       }
     })

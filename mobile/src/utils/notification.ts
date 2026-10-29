@@ -23,7 +23,7 @@ interface NoticeOptions {
   onClose?: () => void
 }
 
-interface NoticeItem extends NoticeOptions {
+export interface NoticeItem extends NoticeOptions {
   id: string
   timestamp: number
 }
@@ -154,7 +154,7 @@ class NotificationManager {
 export const notification = new NotificationManager()
 
 // 图标映射
-const typeIcons: Record<NoticeType, string> = {
+export const typeIcons: Record<NoticeType, string> = {
   success: '✓',
   warning: '⚠',
   error: '✕',

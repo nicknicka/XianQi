@@ -24,9 +24,25 @@ export enum TransitionType {
   FLIP_Y = 'fade-in',
 
   // 特殊效果
-  NONE = 'none',
-  ALPHA = 'alpha'
+  NONE = 'none'
 }
+
+/**
+ * uni.navigateTo 接受的 animationType 字面量联合（进入动画）。
+ *
+ * 库的声明用的是字符串字面量联合而非枚举，直接把 TransitionType 传过去
+ * 会因「枚举类型不等同于字面量联合」而报错，因此在此显式对齐。
+ */
+type NavigateToAnimationType =
+  | 'auto' | 'none'
+  | 'slide-in-right' | 'slide-in-left' | 'slide-in-top' | 'slide-in-bottom'
+  | 'fade-in' | 'zoom-out' | 'zoom-fade-out' | 'pop-in'
+
+/** uni.navigateBack 接受的 animationType 字面量联合（退出动画，取值不同）。 */
+type NavigateBackAnimationType =
+  | 'auto' | 'none'
+  | 'slide-out-right' | 'slide-out-left' | 'slide-out-top' | 'slide-out-bottom'
+  | 'fade-out' | 'zoom-in' | 'zoom-fade-in' | 'pop-out'
 
 /**
  * 页面过渡管理器
@@ -52,7 +68,7 @@ class TransitionManager {
     transitionType: TransitionType = TransitionType.SLIDE_IN_RIGHT,
     duration?: number,
     params?: Record<string, any>
-  ): Promise<UniApp.NavigateToSuccessCallbackResult> {
+  ) {
     // 拼接参数
     let finalUrl = url
     if (params) {
@@ -64,7 +80,7 @@ class TransitionManager {
 
     return uni.navigateTo({
       url: finalUrl,
-      animationType: transitionType,
+      animationType: transitionType as unknown as NavigateToAnimationType,
       animationDuration: duration || this.defaultDuration
     })
   }
@@ -76,10 +92,10 @@ class TransitionManager {
     delta = 1,
     transitionType: TransitionType = TransitionType.SLIDE_IN_LEFT,
     duration?: number
-  ): Promise<UniApp.NavigateBackSuccessCallbackResult> {
+  ) {
     return uni.navigateBack({
       delta,
-      animationType: transitionType,
+      animationType: transitionType as unknown as NavigateBackAnimationType,
       animationDuration: duration || this.defaultDuration
     })
   }
@@ -91,7 +107,7 @@ class TransitionManager {
     url: string,
     transitionType: TransitionType = TransitionType.FADE_IN,
     duration?: number
-  ): Promise<UniApp.NavigateToSuccessCallbackResult> {
+  ) {
     // switchTab 不支持 animationType，但我们可以预加载和添加过渡效果
     return uni.switchTab({
       url
@@ -106,7 +122,7 @@ class TransitionManager {
     transitionType: TransitionType = TransitionType.FADE_IN,
     duration?: number,
     params?: Record<string, any>
-  ): Promise<UniApp.RedirectToSuccessCallbackResult> {
+  ) {
     let finalUrl = url
     if (params) {
       const query = Object.keys(params)
@@ -126,7 +142,7 @@ class TransitionManager {
   reLaunch(
     url: string,
     params?: Record<string, any>
-  ): Promise<UniApp.ReLaunchSuccessCallbackResult> {
+  ) {
     let finalUrl = url
     if (params) {
       const query = Object.keys(params)

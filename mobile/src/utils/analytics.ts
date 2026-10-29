@@ -129,7 +129,7 @@ class Analytics {
     }
 
     // 开发环境打印日志
-    if (process.env.NODE_ENV === 'development') {
+    if (import.meta.env.DEV) {
       console.log('[Analytics]', eventData)
     }
 

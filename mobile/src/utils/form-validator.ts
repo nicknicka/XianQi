@@ -3,6 +3,7 @@
  * 提供常用的表单验证规则和验证器
  */
 
+import { ref } from 'vue'
 import { isValidPhone, isValidEmail, isValidIdCard } from './common'
 import { isEmpty } from './validator'
 

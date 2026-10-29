@@ -13,7 +13,7 @@
       "@/types/*": ["./src/types/*"]
     },
     "lib": ["esnext", "dom"],
-    "types": ["@dcloudio/types", "node"]
+    "types": ["@dcloudio/types"]
   },
   "include": ["**/*.ts", "**/*.tsx", "**/*.vue", "**/*.d.ts"],
   "exclude": ["node_modules", "unpackage", "dist"]

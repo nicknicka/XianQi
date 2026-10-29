@@ -26,7 +26,7 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
-import { themeManager } from '@/utils/theme'
+import { useTheme } from '@/utils/theme'
 const { theme } = useTheme()
 
 // 当前选中的索引

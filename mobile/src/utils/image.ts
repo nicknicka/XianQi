@@ -318,7 +318,9 @@ export function chooseImage(options: {
       sizeType: options.sizeType || ['compressed'],
       sourceType: options.sourceType || ['album', 'camera'],
       success: (res) => {
-        resolve(res.tempFilePaths)
+        // 库把 tempFilePaths 标成 string | string[]，但语义是路径列表
+        const paths = Array.isArray(res.tempFilePaths) ? res.tempFilePaths : [res.tempFilePaths]
+        resolve(paths)
       },
       fail: reject
     })
@@ -425,7 +427,7 @@ export function previewImage(urls: string[], current?: number | string): void {
 /**
  * 获取图片信息
  */
-export function getImageInfo(src: string): Promise<UniApp.GetImageInfoSuccessCallbackResult> {
+export function getImageInfo(src: string): Promise<UniApp.GetImageInfoSuccessData> {
   return new Promise((resolve, reject) => {
     uni.getImageInfo({
       src,
@@ -630,7 +632,7 @@ export class ImageLoader {
     const results = await Promise.allSettled(
       srcs.map(src => this.load(src))
     )
-    return results.map(r => r.status === 'success' ? r.value : false)
+    return results.map(r => (r.status === 'fulfilled' ? r.value : false))
   }
 
   /**
