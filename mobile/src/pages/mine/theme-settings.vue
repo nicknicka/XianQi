@@ -20,7 +20,7 @@
                   class="color-input"
                   type="text"
                   :value="preferences.primaryColor"
-                  @input="updateColor('primaryColor', $event.detail.value)"
+                  @input="updateColor('primaryColor', $event)"
                   placeholder="#8EC5E8"
                 />
                 <view
@@ -37,7 +37,7 @@
                   class="color-input"
                   type="text"
                   :value="preferences.primaryColorLight"
-                  @input="updateColor('primaryColorLight', $event.detail.value)"
+                  @input="updateColor('primaryColorLight', $event)"
                   placeholder="#B8D4E8"
                 />
                 <view
@@ -54,7 +54,7 @@
                   class="color-input"
                   type="text"
                   :value="preferences.primaryColorDark"
-                  @input="updateColor('primaryColorDark', $event.detail.value)"
+                  @input="updateColor('primaryColorDark', $event)"
                   placeholder="#6AA8CC"
                 />
                 <view
@@ -78,7 +78,7 @@
                   class="color-input"
                   type="text"
                   :value="preferences.secondaryColor"
-                  @input="updateColor('secondaryColor', $event.detail.value)"
+                  @input="updateColor('secondaryColor', $event)"
                   placeholder="#B8D4E8"
                 />
                 <view
@@ -95,7 +95,7 @@
                   class="color-input"
                   type="text"
                   :value="preferences.accentColor"
-                  @input="updateColor('accentColor', $event.detail.value)"
+                  @input="updateColor('accentColor', $event)"
                   placeholder="#FFD93D"
                 />
                 <view
@@ -119,7 +119,7 @@
                   class="color-input"
                   type="text"
                   :value="preferences.backgroundColor"
-                  @input="updateColor('backgroundColor', $event.detail.value)"
+                  @input="updateColor('backgroundColor', $event)"
                   placeholder="#F0F8FF"
                 />
                 <view
@@ -136,7 +136,7 @@
                   class="color-input"
                   type="text"
                   :value="preferences.bgCard"
-                  @input="updateColor('bgCard', $event.detail.value)"
+                  @input="updateColor('bgCard', $event)"
                   placeholder="#FFFFFF"
                 />
                 <view
@@ -160,7 +160,7 @@
                   class="color-input"
                   type="text"
                   :value="preferences.textPrimary"
-                  @input="updateColor('textPrimary', $event.detail.value)"
+                  @input="updateColor('textPrimary', $event)"
                   placeholder="#2D2D2D"
                 />
                 <view
@@ -177,7 +177,7 @@
                   class="color-input"
                   type="text"
                   :value="preferences.textSecondary"
-                  @input="updateColor('textSecondary', $event.detail.value)"
+                  @input="updateColor('textSecondary', $event)"
                   placeholder="#7A7A7A"
                 />
                 <view
@@ -313,7 +313,8 @@ onUnmounted(() => {
 })
 
 // 更新颜色
-function updateColor(key: keyof UserStylePreferences, value: string) {
+function updateColor(key: keyof UserStylePreferences, e: any) {
+  let value: string = e?.detail?.value ?? ''
   if (!value.startsWith('#')) {
     value = '#' + value.replace('#', '')
   }

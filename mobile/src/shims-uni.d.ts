@@ -3,6 +3,30 @@ export {};
 // 全局 require 函数声明（用于动态导入模块）
 declare function require(module: string): any;
 
+/**
+ * 微信小程序的全局对象。
+ *
+ * 仅在 `#ifdef MP-WEIXIN` 条件编译块内使用（H5 构建时整块被剔除），
+ * 但类型检查器会解析这些分支，因此需要声明。声明只覆盖项目实际用到的
+ * 四个方法，避免引入一份需要长期维护的完整微信 API 类型。
+ */
+declare global {
+  const wx: {
+    getDeviceInfo?: () => { model?: string; platform?: string; system?: string; brand?: string }
+    getWindowInfo?: () => {
+      platform?: string
+      statusBarHeight?: number
+      screenWidth?: number
+      screenHeight?: number
+      windowWidth?: number
+      windowHeight?: number
+      pixelRatio?: number
+    }
+    getAppBaseInfo?: () => { SDKVersion?: string; language?: string }
+    getMenuButtonBoundingClientRect: () => { top: number; height: number }
+  }
+}
+
 // 环境变量类型声明
 interface ImportMetaEnv {
   readonly VITE_USE_MOCK: string

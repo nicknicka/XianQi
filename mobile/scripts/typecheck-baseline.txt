@@ -8,7 +8,6 @@ src/components/action-list/action-list.vue: error TS2769: No overload matches th
 src/components/chat-input/chat-input.vue: error TS2769: No overload matches this call.
 src/components/comment-list/comment-list.vue: error TS18048: 'comment.replyCount' is possibly 'undefined'.
 src/components/custom-nav-bar/custom-nav-bar.vue: error TS2345: Argument of type '{ class: { 'is-notch': boolean; 'avoid-capsule': boolean; }; style: { height: string; background: string; color: string; position: string; }; }' is not assignable to parameter of type 'SVGAttributes & ReservedProps & Record<string, unknown>'.
-src/components/divider/divider.vue: error TS2304: Cannot find name 'computed'.
 src/components/form/form.vue: error TS2339: Property 'formItems' does not exist on type '{ items: FormItem[]; modelValue: Record<string, any>; labelPosition: FormLabelPosition; showLabel: boolean; showActions: boolean; submitText: string; ... 25 more ...; _pStores?: Record<...> | undefined; }'.
 src/components/grid-menu/grid-menu.vue: error TS2769: No overload matches this call.
 src/components/image-uploader/image-uploader.vue: error TS2339: Property 'textColorTertiary' does not exist on type '{ primaryColor: string; primaryColorLight: string; primaryColorDark: string; secondaryColor: string; accentColor: string; successColor: "#7ED4A6"; warningColor: "#FFD666"; dangerColor: "#FF8A8A"; infoColor: "#9DC4FF"; }'.
@@ -27,8 +26,8 @@ src/components/swiper/swiper.vue: error TS2345: Argument of type 'string | undef
 src/components/tabs/tabs.vue: error TS2339: Property 'tabList' does not exist on type '{ customClass: string | undefined; customStyle: string | Record<string, any> | undefined; tabs: TabItem[]; activeIndex: number; type: "line" | "card" | "segment"; ... 23 more ...; _pStores?: Record<...> | undefined; }'.
 src/components/tabs/tabs.vue: error TS2367: This comparison appears to be unintentional because the types 'string | number' and 'boolean' have no overlap.
 src/components/timeline/timeline.vue: error TS2724: '"@/utils/common"' has no exported member named 'formatDate'. Did you mean 'formatTime'?
-src/custom-tab-bar/svg-tab-bar.vue: error TS2304: Cannot find name 'useTheme'.
-src/custom-tab-bar/svg-tab-bar.vue: error TS2339: Property 'getCurrentPreset' does not exist on type 'ThemeManager'.
+src/custom-tab-bar/svg-tab-bar.vue: error TS2304: Cannot find name 'themeManager'.
+src/custom-tab-bar/svg-tab-bar.vue: error TS2339: Property 'value' does not exist on type 'LegacyThemeConfig'.
 src/hooks/usePageAnimation.ts: error TS2322: Type '(T | UnwrapRefSimple<T>)[]' is not assignable to type 'T[] | UnwrapRefSimple<T>[]'.
 src/pages/common/map.vue: error TS2322: Type 'number' is not assignable to type 'string'.
 src/pages/index/index.vue: error TS2322: Type 'Timeout' is not assignable to type 'number'.
@@ -51,7 +50,6 @@ src/pages/mine/security.vue: error TS2367: This comparison appears to be uninten
 src/pages/mine/security.vue: error TS7053: Element implicitly has an 'any' type because expression of type 'number' can't be used to index type '{ 0: string; 1: string; 2: string; }'.
 src/pages/mine/settings.vue: error TS2322: Type 'string' is not assignable to type 'LegacyThemeConfig | { primaryColor: string; fontSizeScale: number; isDark: boolean; borderRadiusSize: string; themeName: string; }'.
 src/pages/mine/theme-settings.vue: error TS2345: Argument of type 'string' is not assignable to parameter of type 'ThemeId'.
-src/pages/mine/theme-settings.vue: error TS2551: Property 'value' does not exist on type 'number'. Did you mean 'valueOf'?
 src/pages/mine/verification.vue: error TS2353: Object literal may only specify known properties, and 'studentId' does not exist in type '{ realName: string; idCard: string; }'.
 src/pages/order/evaluate.vue: error TS2339: Property 'data' does not exist on type 'Order'.
 src/pages/order/evaluate.vue: error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string[]'.
@@ -65,13 +63,11 @@ src/pages/share/booking-detail.vue: error TS18048: 'options' is possibly 'undefi
 src/pages/share/my-share.vue: error TS7006: Parameter 'item' implicitly has an 'any' type.
 src/pages/share/publish.vue: error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string[]'.
 src/pages/user/followers.vue: error TS2322: Type 'RequestResponse<boolean>' is not assignable to type 'boolean | undefined'.
-src/pages/user/home.vue: error TS2304: Cannot find name 'dangerColor'.
 src/pages/user/home.vue: error TS2365: Operator '<=' cannot be applied to types 'string' and 'number'.
 src/utils/auth.ts: error TS7053: Element implicitly has an 'any' type because expression of type 'any' can't be used to index type 'Record<UserRole, Permission[]>'.
 src/utils/error-handler.ts: error TS2339: Property 'response' does not exist on type '{}'.
 src/utils/error-handler.ts: error TS7053: Element implicitly has an 'any' type because expression of type 'any' can't be used to index type 'Record<ErrorCode, string>'.
 src/utils/error-handler.ts: error TS7053: Element implicitly has an 'any' type because expression of type 'number' can't be used to index type 'Record<ErrorCode, string>'.
-src/utils/form-validator.ts: error TS2304: Cannot find name 'ref'.
 src/utils/hot-search.ts: error TS2558: Expected 0 type arguments, but got 1.
 src/utils/hot-search.ts: error TS7006: Parameter 'a' implicitly has an 'any' type.
 src/utils/hot-search.ts: error TS7006: Parameter 'b' implicitly has an 'any' type.
@@ -86,7 +82,9 @@ src/utils/request.ts: error TS18048: 'currentPage.route' is possibly 'undefined'
 src/utils/request.ts: error TS2339: Property 'message' does not exist on type 'GeneralCallbackResult'.
 src/utils/router.ts: error TS2339: Property 'options' does not exist on type 'PageInstance<AnyObject, {}>'.
 src/utils/sensitive-word.ts: error TS2561: Object literal may only specify known properties, but 'headers' does not exist in type 'Partial<Omit<RequestOptions, "method">>'. Did you mean to write 'header'?
-src/utils/system-info.ts: error TS2304: Cannot find name 'wx'.
+src/utils/system-info.ts: error TS2339: Property 'bottom' does not exist on type '{ top: number; height: number; }'.
+src/utils/system-info.ts: error TS2339: Property 'right' does not exist on type '{ top: number; height: number; }'.
+src/utils/system-info.ts: error TS2339: Property 'width' does not exist on type '{ top: number; height: number; }'.
 src/utils/theme/theme-manager.ts: error TS18048: 'varsToInject' is possibly 'undefined'.
 src/utils/theme/theme-manager.ts: error TS2769: No overload matches this call.
 src/utils/transition.ts: error TS2724: 'UniNamespace' has no exported member named 'NavigateBackSuccessCallbackResult'. Did you mean 'GetSakSuccessCallbackResult'?

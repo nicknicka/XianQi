@@ -325,7 +325,7 @@ import { onShow } from '@dcloudio/uni-app'
 
 const userStore = useUserStore()
 const { themeStyle } = useThemeStyle()
-const { primaryColor } = useThemeColors()
+const { primaryColor, dangerColor } = useThemeColors()
 
 const userId = ref<string>('')
 const userInfo = ref<any>({})
