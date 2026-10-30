@@ -175,7 +175,7 @@
             :class="{ danger: item.danger }"
             @click="handleActionClick(item)"
           >
-            <uni-icons v-if="item.icon" :type="item.icon" size="18" :color="item.danger ? 'var(--error-color)' : '#333'" />
+            <uni-icons v-if="item.icon" :type="item.icon" size="18" :color="item.danger ? 'var(--danger-color)' : '#333'" />
             <text>{{ item.label }}</text>
           </view>
         </view>
@@ -1266,7 +1266,7 @@ function goUserProfile(userId: string) {
         }
 
         &.followed {
-          background: linear-gradient(135deg, var(--error-color) 0%, #FF7875 100%);
+          background: linear-gradient(135deg, var(--danger-color) 0%, #FF7875 100%);
           border-color: transparent;
           color: #fff;
         }
@@ -1541,7 +1541,7 @@ function goUserProfile(userId: string) {
 
         &.hot {
           right: 12rpx;
-          background: linear-gradient(135deg, var(--error-color) 0%, #FF7875 100%);
+          background: linear-gradient(135deg, var(--danger-color) 0%, #FF7875 100%);
         }
       }
     }
@@ -1570,7 +1570,7 @@ function goUserProfile(userId: string) {
         .price {
           font-size: var(--font-size-xl, 18px);
           font-weight: 600;
-          color: var(--error-color);
+          color: var(--danger-color);
 
           &::before {
             content: '¥';
@@ -1686,7 +1686,7 @@ function goUserProfile(userId: string) {
 
         &.rating-2,
         &.rating-1 {
-          background: linear-gradient(135deg, var(--error-color) 0%, #FF7875 100%);
+          background: linear-gradient(135deg, var(--danger-color) 0%, #FF7875 100%);
           color: #fff;
         }
       }
@@ -2097,7 +2097,7 @@ function goUserProfile(userId: string) {
 
   &.danger {
     text {
-      color: var(--error-color);
+      color: var(--danger-color);
     }
   }
 

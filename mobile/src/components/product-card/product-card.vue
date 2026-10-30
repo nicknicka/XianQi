@@ -292,15 +292,15 @@ export default {
 			color: var(--text-color-inverse);
 
 			&.active {
-				color: var(--error-color);
+				color: var(--danger-color);
 			}
 		}
 
 		&.favorite-btn {
 			background: linear-gradient(
 				135deg,
-				var(--error-color) 0%,
-				var(--error-color) 100%
+				var(--danger-color) 0%,
+				var(--danger-color) 100%
 			);
 			box-shadow: 0 4rpx 12rpx rgba(255, 138, 138, 0.3);
 
@@ -334,7 +334,7 @@ export default {
 	box-sizing: border-box;
 	background: var(--bg-color-card);
 	border: 2rpx solid rgba(255, 255, 255, 0.8);
-	border-radius: var(--radius-lg);
+	border-radius: var(--border-radius-lg);
 	overflow: hidden;
 	transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 	box-shadow: 8rpx 8rpx 16rpx rgba(0, 0, 0, 0.06),
@@ -384,8 +384,8 @@ export default {
 			&.hot {
 				background: linear-gradient(
 					135deg,
-					var(--error-color) 0%,
-					var(--error-color) 100%
+					var(--danger-color) 0%,
+					var(--danger-color) 100%
 				);
 				color: var(--text-color-inverse);
 				text-shadow: 0 1rpx 1rpx rgba(0, 0, 0, 0.2);
@@ -411,7 +411,7 @@ export default {
 		transform: translate(-50%, -50%);
 		background: rgba(0, 0, 0, 0.7);
 		padding: 16rpx 32rpx;
-		border-radius: var(--radius-xl);
+		border-radius: var(--border-radius-xl);
 		z-index: 3;
 		opacity: 0;
 		animation: fadeInOut 2s ease;
@@ -522,7 +522,7 @@ export default {
 				color: var(--text-color-secondary);
 				padding: 6rpx 12rpx;
 				background: var(--bg-color-card);
-				border-radius: var(--radius-pill);
+				border-radius: var(--border-radius-pill);
 				font-weight: 500;
 				border: 1px solid var(--border-color-light);
 				box-shadow: 0 2rpx 4rpx rgba(0, 0, 0, 0.05);
@@ -609,8 +609,8 @@ export default {
 				&.credit-poor {
 					background: linear-gradient(
 						135deg,
-						var(--error-color) 0%,
-						var(--error-color) 100%
+						var(--danger-color) 0%,
+						var(--danger-color) 100%
 					);
 				}
 			}

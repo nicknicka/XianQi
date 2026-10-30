@@ -518,7 +518,7 @@ export default {
     display: block;
     margin-top: 16rpx;
     font-size: 24rpx;
-    color: var(--error-color);
+    color: var(--danger-color);
     line-height: 1.4;
   }
 

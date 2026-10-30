@@ -636,14 +636,14 @@ onShow(() => {
 .danger-btn {
   padding: 24rpx 64rpx;
   background: var(--bg-color-card);
-  border: 2rpx solid var(--error-color);
+  border: 2rpx solid var(--danger-color);
   border-radius: 48rpx;
   margin-bottom: 16rpx;
 }
 
 .danger-text {
   font-size: 28rpx;
-  color: var(--error-color);
+  color: var(--danger-color);
   font-weight: 600;
 }
 

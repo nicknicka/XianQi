@@ -553,11 +553,11 @@ function previewImage(index: number) {
   &.amount {
     font-size: 36rpx;
     font-weight: bold;
-    color: var(--error-color);
+    color: var(--danger-color);
   }
 
   &.reject-reason {
-    color: var(--error-color);
+    color: var(--danger-color);
   }
 }
 
@@ -601,7 +601,7 @@ function previewImage(index: number) {
 .product-price {
   font-size: 36rpx;
   font-weight: bold;
-  color: var(--error-color);
+  color: var(--danger-color);
   align-self: flex-end;
 }
 
@@ -659,8 +659,8 @@ function previewImage(index: number) {
   }
 
   &.secondary {
-    border-color: var(--error-color);
-    color: var(--error-color);
+    border-color: var(--danger-color);
+    color: var(--danger-color);
   }
 }
 

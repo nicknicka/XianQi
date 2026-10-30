@@ -191,17 +191,6 @@ export function resolveTheme(
     }
   }
 
-  // === 6b. 兼容别名：保留旧命名并收敛到规范 Token ===
-  vars['--error-color'] = vars['--danger-color']
-  vars['--error-color-alpha-10'] = vars['--danger-color-alpha-10']
-  vars['--primary-alpha-10'] = vars['--primary-color-alpha-10']
-  vars['--radius-lg'] = vars['--border-radius-lg']
-  vars['--radius-xl'] = vars['--border-radius-xl']
-  vars['--radius-pill'] = vars['--border-radius-pill']
-  vars['--success-color-faded'] = vars['--success-color-bg']
-  vars['--warning-color-faded'] = vars['--warning-color-bg']
-  vars['--danger-color-faded'] = vars['--danger-color-bg']
-
   // === 7. 文字色 ===
   vars['--text-color-primary'] = isDark ? dark.textPrimary : shared.textPrimary
   vars['--text-color-secondary'] = isDark ? dark.textSecondary : shared.textSecondary

@@ -206,7 +206,7 @@ export default {
       }
 
       &.dot-error {
-        border-color: var(--error-color);
+        border-color: var(--danger-color);
         background: rgba(255, 77, 79, 0.1);
       }
 
@@ -288,7 +288,7 @@ export default {
 
             .tag-text {
               font-size: 20rpx;
-              color: var(--error-color);
+              color: var(--danger-color);
             }
           }
         }

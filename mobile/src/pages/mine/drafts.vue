@@ -928,7 +928,7 @@ function onScrollToLower() {
 
       .delete-text {
         font-size: 28rpx;
-        color: var(--error-color);
+        color: var(--danger-color);
         font-weight: 500;
       }
     }
@@ -1321,7 +1321,7 @@ function onScrollToLower() {
 
     &.high { background: var(--success-color); }
     &.medium { background: var(--warning-color); }
-    &.low { background: var(--error-color); }
+    &.low { background: var(--danger-color); }
 
     &.share-fill {
       &.high { background: #4CAF50; }
@@ -1580,7 +1580,7 @@ function onScrollToLower() {
 
       &.high { color: var(--success-color); }
       &.medium { color: var(--warning-color); }
-      &.low { color: var(--error-color); }
+      &.low { color: var(--danger-color); }
     }
   }
 
@@ -1610,7 +1610,7 @@ function onScrollToLower() {
 
   .completion-hint {
     font-size: 22rpx;
-    color: var(--error-color);
+    color: var(--danger-color);
     font-weight: 500;
   }
 }

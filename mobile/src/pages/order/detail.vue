@@ -655,7 +655,7 @@ function goUserHome(userId: string) {
     .product-price {
       font-size: var(--font-size-xl);
       font-weight: 600;
-      color: var(--error-color);
+      color: var(--danger-color);
     }
   }
 }

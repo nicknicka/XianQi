@@ -262,7 +262,7 @@ export default {
         align-items: center;
         justify-content: center;
         padding: 0 8rpx;
-        background: var(--error-color);
+        background: var(--danger-color);
         border-radius: 16rpx;
         font-size: 20rpx;
         color: var(--bg-color-card);

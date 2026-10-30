@@ -495,7 +495,7 @@ function deleteAddress(item: Address) {
 
   &.delete {
     .action-text {
-      color: var(--error-color);
+      color: var(--danger-color);
     }
   }
 }

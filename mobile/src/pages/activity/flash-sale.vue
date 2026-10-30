@@ -633,7 +633,7 @@ defineExpose({
 <style lang="scss" scoped>
 .flash-sale-container {
   min-height: 100vh;
-  background: linear-gradient(180deg, var(--error-color) 0%, var(--danger-color) 100%);
+  background: linear-gradient(180deg, var(--danger-color) 0%, var(--danger-color) 100%);
   padding-bottom: env(safe-area-inset-bottom);
 }
 
@@ -709,7 +709,7 @@ defineExpose({
     text-align: center;
     font-size: 32rpx;
     font-weight: bold;
-    color: var(--error-color);
+    color: var(--danger-color);
     background: var(--bg-color-card);
     border-radius: 8rpx;
     padding: 0 8rpx;
@@ -749,7 +749,7 @@ defineExpose({
     overflow: hidden;
 
     &.active {
-      background: linear-gradient(135deg, var(--error-color) 0%, var(--danger-color) 100%);
+      background: linear-gradient(135deg, var(--danger-color) 0%, var(--danger-color) 100%);
 
       .tab-time,
       .tab-status {
@@ -889,7 +889,7 @@ defineExpose({
       top: 16rpx;
       left: 16rpx;
       padding: 8rpx 16rpx;
-      background: linear-gradient(135deg, var(--error-color) 0%, var(--danger-color) 100%);
+      background: linear-gradient(135deg, var(--danger-color) 0%, var(--danger-color) 100%);
       color: #FFFFFF;
       font-size: 22rpx;
       font-weight: bold;
@@ -962,14 +962,14 @@ defineExpose({
 
         .currency {
           font-size: 22rpx;
-          color: var(--error-color);
+          color: var(--danger-color);
           font-weight: bold;
         }
 
         .price {
           font-size: 36rpx;
           font-weight: bold;
-          color: var(--error-color);
+          color: var(--danger-color);
         }
 
         .original-price {
@@ -981,7 +981,7 @@ defineExpose({
 
       .buy-btn {
         padding: 12rpx 24rpx;
-        background: linear-gradient(135deg, var(--error-color) 0%, var(--danger-color) 100%);
+        background: linear-gradient(135deg, var(--danger-color) 0%, var(--danger-color) 100%);
         color: #FFFFFF;
         font-size: 24rpx;
         font-weight: bold;
@@ -1029,7 +1029,7 @@ defineExpose({
       content: '⟳';
       position: absolute;
       font-size: 64rpx;
-      color: var(--error-color);
+      color: var(--danger-color);
       line-height: 1;
       animation: spin 1s linear infinite;
       /* 调整旋转中心到字符视觉中心 */
@@ -1159,7 +1159,7 @@ defineExpose({
       position: relative;
       width: 120rpx;
       height: 120rpx;
-      border: 4rpx solid var(--error-color);
+      border: 4rpx solid var(--danger-color);
       border-radius: 50%;
       display: flex;
       align-items: center;
@@ -1173,7 +1173,7 @@ defineExpose({
         transform: translateX(-50%);
         width: 6rpx;
         height: 36rpx;
-        background: var(--error-color);
+        background: var(--danger-color);
         border-radius: 3rpx;
       }
 
@@ -1184,7 +1184,7 @@ defineExpose({
         transform: translateX(-50%);
         width: 8rpx;
         height: 8rpx;
-        background: var(--error-color);
+        background: var(--danger-color);
         border-radius: 50%;
       }
     }
@@ -1211,7 +1211,7 @@ defineExpose({
     align-items: center;
     gap: 12rpx;
     padding: 20rpx 48rpx;
-    background: linear-gradient(135deg, var(--error-color) 0%, var(--danger-color) 100%);
+    background: linear-gradient(135deg, var(--danger-color) 0%, var(--danger-color) 100%);
     border-radius: 48rpx;
     box-shadow: 0 8rpx 24rpx var(--danger-color-alpha-30);
     transition: all 0.3s ease;
@@ -1349,7 +1349,7 @@ defineExpose({
     gap: 12rpx;
     padding: 20rpx 40rpx;
     background: var(--bg-color-card);
-    border: 2rpx solid var(--error-color);
+    border: 2rpx solid var(--danger-color);
     border-radius: 48rpx;
     transition: all 0.3s ease;
 
@@ -1367,7 +1367,7 @@ defineExpose({
 
       .refresh-arrow {
         font-size: 24rpx;
-        color: var(--error-color);
+        color: var(--danger-color);
         line-height: 1;
         display: inline-block;
         transform-origin: 48% 52%;
@@ -1376,7 +1376,7 @@ defineExpose({
 
     .action-text {
       font-size: 28rpx;
-      color: var(--error-color);
+      color: var(--danger-color);
       font-weight: 600;
     }
   }

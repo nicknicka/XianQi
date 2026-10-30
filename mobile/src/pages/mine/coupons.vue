@@ -405,7 +405,7 @@ onMounted(() => {
   min-width: 32rpx;
   height: 32rpx;
   padding: 0 8rpx;
-  background: var(--error-color);
+  background: var(--danger-color);
   border-radius: 16rpx;
   display: flex;
   align-items: center;

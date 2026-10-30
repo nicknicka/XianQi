@@ -633,7 +633,7 @@ function refreshList() {
       height: 32rpx;
       line-height: 32rpx;
       padding: 0 8rpx;
-      background: var(--error-color);
+      background: var(--danger-color);
       color: var(--bg-color-card);
       font-size: var(--font-size-xs);
       border-radius: 16rpx;

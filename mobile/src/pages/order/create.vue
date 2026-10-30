@@ -608,7 +608,7 @@ function submitOrder() {
   .product-price {
     font-size: 36rpx;
     font-weight: 600;
-    color: var(--error-color);
+    color: var(--danger-color);
   }
 
   .product-desc {
@@ -880,7 +880,7 @@ function submitOrder() {
 
     &.total-value {
       font-size: 40rpx;
-      color: var(--error-color);
+      color: var(--danger-color);
       font-weight: 600;
     }
   }
@@ -915,7 +915,7 @@ function submitOrder() {
     .total-amount {
       font-size: 40rpx;
       font-weight: 600;
-      color: var(--error-color);
+      color: var(--danger-color);
     }
   }
 

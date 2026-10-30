@@ -3,14 +3,12 @@ import { readFileSync } from 'node:fs'
 import path from 'node:path'
 import test from 'node:test'
 import {
-  COMPATIBLE_TOKEN_ALIASES,
   DESIGN_TOKEN_PAGE_PATHS,
   REQUIRED_TOKEN_CATEGORIES,
   findCriticalFallbackGaps,
   findFixedScssDefaults,
   findFixedTokenDefaults,
   findUnmigratedPageStyles,
-  findRuntimeAliasGaps,
   parseThemeTokens,
   scanDesignTokens
 } from '../scripts/check-design-tokens.mjs'
@@ -21,29 +19,28 @@ const deriveSource = readFileSync(
   'utf8'
 )
 
-test('rejects undeclared variables and unregistered compatible aliases', () => {
+test('rejects undeclared variables and compatibility aliases', () => {
   const findings = scanDesignTokens({
     'src/example.vue': [
       '.example {',
       '  color: var(--undeclared-color);',
-      '  background: var(--error-color-alpha-15);',
+      '  background: var(--error-color-alpha-10);',
+      '  border-radius: var(--radius-lg);',
+      '  border-color: var(--success-color-faded);',
       '}'
     ].join('\n')
   }, { globalTokens: parseThemeTokens(deriveSource) })
 
-  assert.deepEqual(findings.map(finding => finding.rule).sort(), [
-    'undeclared-css-variable',
-    'unregistered-compatible-alias'
-  ])
-  assert.deepEqual(findings.map(finding => finding.line).sort(), [2, 3])
+  assert.deepEqual(findings.map(finding => finding.rule), Array(4).fill('undeclared-css-variable'))
+  assert.deepEqual(findings.map(finding => finding.line).sort(), [2, 3, 4, 5])
 })
 
-test('accepts registered aliases, generated tokens, and component-local variables', () => {
+test('accepts canonical generated tokens and component-local variables', () => {
   const globalTokens = parseThemeTokens(deriveSource)
   const findings = scanDesignTokens({
     'src/example.vue': [
       '.example {',
-      '  color: var(--error-color);',
+      '  color: var(--danger-color);',
       '  background: var(--primary-color-alpha-10);',
       '  --local-accent: var(--text-color-secondary);',
       '  border-color: var(--local-accent);',
@@ -124,9 +121,28 @@ test('keeps market and publish pages on canonical design tokens', () => {
   assert.deepEqual(findFixedScssDefaults(sources), [])
 })
 
-test('keeps every registered compatible alias mapped by the runtime source', () => {
-  assert.equal(Object.keys(COMPATIBLE_TOKEN_ALIASES).length > 0, true)
-  assert.deepEqual(findRuntimeAliasGaps(deriveSource), [])
+test('documents canonical names and extension rules without compatibility aliases', () => {
+  const contractSource = readFileSync(
+    path.join(mobileDir, '..', 'docs/design/global-design-tokens.md'),
+    'utf8'
+  )
+
+  for (const alias of [
+    '--error-color',
+    '--primary-alpha-10',
+    '--radius-lg',
+    '--radius-xl',
+    '--radius-pill',
+    '--success-color-faded',
+    '--warning-color-faded',
+    '--danger-color-faded',
+  ]) {
+    assert.doesNotMatch(contractSource, new RegExp(alias.replaceAll('-', '\\-')))
+  }
+  assert.match(contractSource, /## 扩展规则/)
+  for (const token of ['--danger-color', '--primary-color-alpha-10', '--border-radius-lg', '--success-color-bg']) {
+    assert.match(contractSource, new RegExp(token.replaceAll('-', '\\-')))
+  }
 })
 
 test('covers every required global design token category', () => {

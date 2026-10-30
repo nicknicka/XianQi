@@ -1045,8 +1045,8 @@ function fillLogistics(item: RefundItem) {
 
   &.cancel {
     background: var(--bg-color-card);
-    border: 1px solid var(--error-color);
-    .btn-text { color: var(--error-color); }
+    border: 1px solid var(--danger-color);
+    .btn-text { color: var(--danger-color); }
   }
 
   &.ghost {

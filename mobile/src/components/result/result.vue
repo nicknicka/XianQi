@@ -226,7 +226,7 @@ export default {
 
   &.status-error {
     .result-icon .icon-emoji {
-      color: var(--error-color);
+      color: var(--danger-color);
     }
   }
 

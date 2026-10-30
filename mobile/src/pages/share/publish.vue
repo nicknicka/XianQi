@@ -2164,7 +2164,7 @@ async function handlePublish() {
       gap: 4rpx;
 
       .required-mark {
-        color: var(--error-color);
+        color: var(--danger-color);
         font-weight: 600;
       }
 

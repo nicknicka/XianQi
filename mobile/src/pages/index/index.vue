@@ -1945,7 +1945,7 @@ const goToDetail = (product: any) => {
 
 			.countdown {
 				padding: 8rpx 16rpx;
-				background: linear-gradient(135deg, var(--error-color) 0%, #ff7875 100%);
+				background: linear-gradient(135deg, var(--danger-color) 0%, #ff7875 100%);
 				border-radius: 24rpx;
 				border: 2rpx solid rgba(255, 255, 255, 0.6);
 				box-shadow: 3rpx 3rpx 8rpx rgba(0, 0, 0, 0.08),
@@ -2025,7 +2025,7 @@ const goToDetail = (product: any) => {
 				top: 12rpx;
 				left: 12rpx;
 				padding: 6rpx 12rpx;
-				background: linear-gradient(135deg, var(--error-color) 0%, #ff7875 100%);
+				background: linear-gradient(135deg, var(--danger-color) 0%, #ff7875 100%);
 				border-radius: 8rpx;
 				font-size: 20rpx;
 				color: #fff;
@@ -2060,7 +2060,7 @@ const goToDetail = (product: any) => {
 					.flash-price {
 						font-size: 32rpx;
 						font-weight: bold;
-						color: var(--error-color);
+						color: var(--danger-color);
 					}
 
 					.original-price {

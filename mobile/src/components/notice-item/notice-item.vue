@@ -93,7 +93,7 @@ const iconMap: Record<NoticeItemType, string> = {
 const iconColorMap: Record<NoticeItemType, string> = {
   system: 'var(--primary-color)',
   trade: 'var(--success-color)',
-  activity: 'var(--error-color)',
+  activity: 'var(--danger-color)',
   account: 'var(--info-color)',
   custom: 'var(--warning-color)'
 }
@@ -101,7 +101,7 @@ const iconColorMap: Record<NoticeItemType, string> = {
 const iconBgColorMap: Record<NoticeItemType, string> = {
   system: 'var(--primary-color-alpha-10)',
   trade: '#f6ffed',
-  activity: 'var(--error-color-alpha-10)',
+  activity: 'var(--danger-color-alpha-10)',
   account: '#e6f7ff',
   custom: '#fffbe6'
 }
@@ -207,7 +207,7 @@ export default {
 
   &.type-activity {
     &.unread::before {
-      background: var(--error-color);
+      background: var(--danger-color);
     }
   }
 
