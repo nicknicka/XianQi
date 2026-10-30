@@ -222,7 +222,7 @@ export function getTransitionForPage(pagePath: string): keyof typeof TransitionP
   const detailPages = ['detail', 'chat', 'evaluate']
   const formPages = ['publish', 'edit', 'create', 'feedback', 'report']
   const modalPages = ['quick-reply', 'map']
-  const settingsPages = ['settings', 'verification', 'security', 'theme-settings']
+  const settingsPages = ['settings', 'security', 'theme-settings']
   const profilePages = ['profile', 'user/home']
 
   if (detailPages.some(p => pagePath.includes(p))) return 'detail'

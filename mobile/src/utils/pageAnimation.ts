@@ -115,7 +115,9 @@ export const PageAnimationMap: Record<string, PageAnimationPreset> = {
   'pages/order/create': 'modal',
   'pages/order/evaluate': 'modal',
   'pages/mine/feedback': 'modal',
-  'pages/mine/verification': 'modal',
+  'pages/mine/auth-center': 'modal',
+  'pages/mine/real-name-auth': 'modal',
+  'pages/mine/student-auth': 'modal',
 
   // 设置类页面 - 淡入动画
   'pages/mine/settings': 'fade',
