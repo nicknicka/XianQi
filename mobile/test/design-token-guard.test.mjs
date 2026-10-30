@@ -6,6 +6,7 @@ import {
   COMPATIBLE_TOKEN_ALIASES,
   REQUIRED_TOKEN_CATEGORIES,
   findCriticalFallbackGaps,
+  findFixedTokenDefaults,
   findRuntimeAliasGaps,
   parseThemeTokens,
   scanDesignTokens
@@ -80,4 +81,27 @@ test('mobile lint runs the design token guard before the existing lint', () => {
 
   const ci = readFileSync(path.join(mobileDir, '..', '.github/workflows/ci.yml'), 'utf8')
   assert.match(ci, /- name: Lint\n\s+run: \|\n\s+cd mobile\n\s+npm run lint/)
+})
+
+test('rejects fixed SCSS token defaults in global and shared styles', () => {
+  const findings = findFixedTokenDefaults({
+    'src/styles/variables.scss': '$primary-color: #8EC5E8;',
+    'src/styles/common.scss': '.example { color: var(--primary-color, $primary-color); }',
+    'src/components/example/example.vue': [
+      '<style lang="scss">',
+      '.example {',
+      '  color: $primary-color;',
+      '}',
+      '</style>'
+    ].join('\n')
+  })
+
+  assert.deepEqual(findings.map(({ file, line, token }) => ({ file, line, token })), [
+    { file: 'src/styles/common.scss', line: 1, token: '--primary-color' },
+    { file: 'src/components/example/example.vue', line: 3, token: '--primary-color' }
+  ])
+  assert.deepEqual(findings.map(({ rule }) => rule), [
+    'fixed-scss-token-default',
+    'fixed-scss-token-default'
+  ])
 })

@@ -162,7 +162,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@use '@/styles/variables.scss' as *;
 .action-list {
   background: var(--bg-color-card);
 

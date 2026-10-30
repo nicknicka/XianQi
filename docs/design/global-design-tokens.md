@@ -44,5 +44,6 @@ node scripts/check-design-tokens.mjs
 3. 必需 Token 类别缺失。
 4. 页面根节点的关键 Token 缺少静态 fallback。
 5. 兼容别名是否在运行时真源中完成映射。
+6. 全局样式和共享组件是否引用固定 SCSS Token 默认值。
 
 `npm run lint` 会先执行该守卫，再运行现有只读 ESLint，因此移动端 CI 已经覆盖本契约。

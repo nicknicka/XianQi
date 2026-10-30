@@ -157,7 +157,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@use '@/styles/variables.scss' as *;
 .infinite-scroll-container {
   width: 100%;
 }
@@ -179,7 +178,7 @@ export default {
     width: 40rpx;
     height: 40rpx;
     border: 4rpx solid var(--border-color-light);
-    border-top-color: $primary-color;
+    border-top-color: var(--primary-color);
     border-radius: 50%;
     animation: spin 0.8s linear infinite;
   }
@@ -232,9 +231,9 @@ export default {
 
   .retry-text {
     font-size: 24rpx;
-    color: $primary-color;
+    color: var(--primary-color);
     padding: 8rpx 24rpx;
-    border: 1rpx solid $primary-color;
+    border: 1rpx solid var(--primary-color);
     border-radius: 24rpx;
   }
 }
