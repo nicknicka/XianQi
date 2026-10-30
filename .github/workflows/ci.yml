@@ -194,6 +194,22 @@ jobs:
           cd mobile
           node --test test/id-contract.test.mjs
 
+      - name: Mobile auth state tests
+        run: |
+          cd mobile
+          node --test test/auth-state.test.mjs
+
+      - name: Mobile auth routes tests
+        run: |
+          cd mobile
+          node --test test/auth-routes.test.mjs
+
+      - name: Mobile auth token guard
+        run: |
+          cd mobile
+          npm run check:auth-tokens
+          node --test test/auth-token-guard.test.mjs
+
       - name: Mobile typecheck
         run: |
           cd mobile

@@ -373,11 +373,6 @@ export const navigate = {
       url: '/pages/mine/evaluations'
     }),
 
-  toVerification: () =>
-    router.to({
-      url: '/pages/mine/verification'
-    }),
-
   toFeedback: () =>
     router.to({
       url: '/pages/mine/feedback',

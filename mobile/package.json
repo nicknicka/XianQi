@@ -23,6 +23,7 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "typecheck": "vue-tsc --noEmit -p tsconfig.json",
+    "check:auth-tokens": "node scripts/check-auth-tokens.mjs",
     "check:typecheck-baseline": "node scripts/check-typecheck-baseline.mjs",
     "build:custom": "uni build -p",
     "build:h5": "uni build",

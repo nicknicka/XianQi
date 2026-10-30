@@ -62,6 +62,7 @@ function getSeedColor(
 
 export const STATIC_VARS: Record<string, string> = {
   // 字体
+  '--auth-font-weight-semibold': '600',
   '--font-size-xs': '0.714em',
   '--font-size-sm': '0.857em',
   '--font-size-base': '1em',
@@ -88,6 +89,28 @@ export const STATIC_VARS: Record<string, string> = {
   '--border-radius-pill': '9999px',
   '--border-radius-card': '24rpx',
   '--border-radius-tab': '24rpx',
+  // 认证组件规格：先服务实名认证分页，后续认证页面复用同一组组件 token。
+  '--auth-page-min-height': '100vh',
+  '--auth-page-padding': '24rpx',
+  '--auth-card-padding': '32rpx',
+  '--auth-card-padding-lg': '48rpx',
+  '--auth-card-radius': '16rpx',
+  '--auth-control-radius': '12rpx',
+  '--auth-control-height': '88rpx',
+  '--auth-control-padding-x': '24rpx',
+  '--auth-section-gap': '24rpx',
+  '--auth-label-gap': '12rpx',
+  '--auth-tip-gap': '8rpx',
+  '--auth-upload-height': '400rpx',
+  '--auth-divider-width': '1px',
+  // 认证动效规格：不引入一次性 duration / easing。
+  '--motion-duration-fast': '200ms',
+  '--motion-duration-base': '400ms',
+  '--motion-duration-slow': '500ms',
+  '--motion-delay-fast': '50ms',
+  '--motion-delay-base': '100ms',
+  '--motion-distance-page': '40rpx',
+  '--motion-ease-standard': 'cubic-bezier(0.16, 1, 0.3, 1)',
   // z-index
   '--z-dropdown': '1000',
   '--z-sticky': '1020',
