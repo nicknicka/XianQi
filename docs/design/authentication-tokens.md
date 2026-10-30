@@ -44,6 +44,7 @@
 | `--auth-section-gap` | `24rpx` | 表单项、说明和安全提示之间的主间距 |
 | `--auth-label-gap` | `12rpx` | 标签到控件、状态标题到副文案的间距 |
 | `--auth-tip-gap` | `8rpx` | 图标和提示文字、提示组内间距 |
+| `--auth-upload-height` | `400rpx` | 学生证上传区和已认证证件图高度 |
 
 字号统一使用主题字体 token：`--font-size-sm`、`--font-size-base`、`--font-size-lg`、`--font-size-xl`。卡片阴影只在确实需要突出卡片时使用主题阴影 token；认证表单默认不额外添加阴影。
 
