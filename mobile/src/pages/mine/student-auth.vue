@@ -1,23 +1,32 @@
 <template>
-  <view class="student-auth-page page-animate" :class="{ 'animate-in': isAnimated }">
-    <!-- 学生认证表单 -->
-    <!-- TODO: 日后优化 -->
-    <!-- - 添加学号自动验证（对接教务系统API） -->
-    <!-- - 支持学生证正反面多图上传和预览 -->
-    <!-- - 添加图片压缩和裁剪功能 -->
-    <!-- - 支持学生证OCR识别自动填充信息 -->
-    <!-- - 添加认证进度实时查询 -->
-    <!-- - 支持校友身份认证扩展 -->
-    <!-- - 开发管理员系统进行认证审核（管理端审核界面、审核状态管理、审核通知推送） -->
-    <!-- 认证状态 -->
-    <view class="status-card" :class="'status-' + verificationStatus">
-      <uni-icons :type="statusIcon" size="48" :color="statusColor" />
-      <text class="status-text">{{ statusText }}</text>
-      <text class="status-desc">{{ statusDesc }}</text>
+  <view class="student-auth-page page-animate" :class="{ 'animate-in': isAnimated }" :style="themeStyle">
+    <!-- 正在确认实名前置条件时不渲染表单，避免直接访问短暂绕过守卫。 -->
+    <view v-if="statusLoading" class="status-card status-loading">
+      <uni-icons type="loop" size="48" :color="statusColor" />
+      <text class="status-text">正在校验</text>
+      <text class="status-desc">正在确认实名认证状态</text>
     </view>
 
-    <!-- 认证表单 -->
-    <view v-if="canEdit" class="form-section">
+    <!-- 直接访问学生认证页时的实名前置守卫。 -->
+    <view v-else-if="accessGuard.locked" class="status-card status-locked">
+      <uni-icons type="locked" size="48" :color="statusColor" />
+      <text class="status-text">{{ accessGuard.label }}</text>
+      <text class="status-desc">{{ accessGuard.description }}</text>
+      <view class="locked-action" @click="goToRealNameAuth">
+        <text>{{ accessGuard.actionLabel }}</text>
+        <uni-icons type="right" size="16" :color="bgColorCard" />
+      </view>
+    </view>
+
+    <!-- 学生认证状态：未认证、审核中、已认证、认证失败。 -->
+    <view v-else class="status-card" :class="'status-' + studentState.pageStatus">
+      <uni-icons :type="studentState.icon" size="48" :color="statusColor" />
+      <text class="status-text">{{ studentState.label }}</text>
+      <text class="status-desc">{{ studentState.description }}</text>
+    </view>
+
+    <!-- 学生认证表单 -->
+    <view v-if="!statusLoading && !accessGuard.locked && studentState.editable" class="form-section">
       <view class="form-title">学生认证信息</view>
       <view class="form-tip">请填写学生信息并上传学生证照片</view>
 
@@ -51,38 +60,55 @@
         />
       </view>
 
-      <view class="upload-section">
-        <text class="label">学生证正面</text>
-        <view class="upload-box" @click="uploadFront">
-          <image v-if="form.frontImage" class="preview-image" :src="form.frontImage" mode="aspectFit" />
+      <view
+        v-for="side in studentCardSides"
+        :key="side.key"
+        class="upload-section"
+      >
+        <text class="label">{{ side.label }}</text>
+        <view
+          class="upload-box"
+          :class="{ uploading: uploadingSide === side.key }"
+          @click="handleUploadBoxClick(side.key)"
+        >
+          <image
+            v-if="form[side.key]"
+            class="preview-image"
+            :src="form[side.key]"
+            mode="aspectFit"
+          />
           <view v-else class="upload-placeholder">
-            <uni-icons type="camera" size="40" color="#AAAAAA" />
-            <text class="upload-text">点击上传</text>
+            <uni-icons type="camera" size="40" :color="textColorTertiary" />
+            <text class="upload-text">{{ uploadingSide === side.key ? '上传中...' : '点击上传' }}</text>
           </view>
         </view>
-      </view>
-
-      <view class="upload-section">
-        <text class="label">学生证反面</text>
-        <view class="upload-box" @click="uploadBack">
-          <image v-if="form.backImage" class="preview-image" :src="form.backImage" mode="aspectFit" />
-          <view v-else class="upload-placeholder">
-            <uni-icons type="camera" size="40" color="#AAAAAA" />
-            <text class="upload-text">点击上传</text>
-          </view>
+        <view v-if="form[side.key]" class="upload-actions">
+          <view class="upload-action" @click.stop="uploadStudentCard(side.key)">替换</view>
+          <view class="upload-action delete-action" @click.stop="removeStudentCard(side.key)">删除</view>
         </view>
+        <text v-if="uploadError === side.key" class="upload-error">上传失败，请重试</text>
       </view>
 
-      <button class="submit-btn" @click="handleSubmit">提交认证</button>
+      <button
+        class="submit-btn"
+        :loading="submitting"
+        :disabled="submitting"
+        @click="handleSubmit"
+      >
+        {{ submitting ? '提交中...' : '提交认证' }}
+      </button>
 
       <view class="security-tip">
-        <uni-icons type="info" size="16" color="#AAAAAA" />
+        <uni-icons type="info" size="16" :color="textColorTertiary" />
         <text>请确保照片清晰，信息完整可见</text>
       </view>
     </view>
 
     <!-- 已认证信息 -->
-    <view v-else-if="verificationStatus === 'verified' && verifiedInfo" class="info-section">
+    <view
+      v-else-if="!statusLoading && !accessGuard.locked && studentState.pageStatus === 'verified' && verifiedInfo"
+      class="info-section"
+    >
       <view class="info-item">
         <text class="info-label">学号</text>
         <text class="info-value">{{ verifiedInfo.studentId }}</text>
@@ -99,6 +125,16 @@
         <text class="info-label">认证时间</text>
         <text class="info-value">{{ verifiedInfo.auditedAt || '-' }}</text>
       </view>
+      <view class="info-images">
+        <image
+          v-for="imageUrl in verifiedStudentCardImages"
+          :key="imageUrl"
+          class="info-image"
+          :src="imageUrl"
+          mode="aspectFit"
+          @click="previewImage([imageUrl], imageUrl)"
+        />
+      </view>
     </view>
   </view>
 </template>
@@ -110,19 +146,41 @@ import { userApi } from '@/api/user'
 import { useUserStore } from '@/store/user'
 import type { StudentAuth } from '@/types'
 import validator from '@/utils/validator'
-import { uploadImage as uploadImageFile } from '@/utils/image'
+import { chooseImage as chooseStudentCardImage, uploadImage as uploadImageFile, previewImage } from '@/utils/image'
 import { useServiceNavigation } from '@/composables/useServiceNavigation'
 import { onShow } from '@dcloudio/uni-app'
+import {
+  resolveAuthState,
+  resolveStudentAuthCenterState,
+  type AuthenticationState
+} from '@/utils/auth/auth-state'
+
+type StudentCardSide = 'frontImage' | 'backImage'
 
 const userStore = useUserStore()
 useServiceNavigation()
-const { primaryColor, successColor, dangerColor } = useThemeColors()
+const {
+  primaryColor,
+  successColor,
+  dangerColor,
+  infoColor,
+  textColorTertiary,
+  bgColorCard
+} = useThemeColors()
 const { themeStyle } = useThemeStyle()
 
-// 页面进入动画状态
-const isAnimated = ref(false)
+const studentCardSides = [
+  { key: 'frontImage' as const, label: '学生证正面' },
+  { key: 'backImage' as const, label: '学生证反面' }
+]
 
-const verificationStatus = ref<'unverified' | 'pending' | 'verified' | 'rejected'>('unverified')
+const isAnimated = ref(false)
+const statusLoading = ref(true)
+const submitting = ref(false)
+const uploadingSide = ref<StudentCardSide | null>(null)
+const uploadError = ref<StudentCardSide | null>(null)
+const realNameState = ref<AuthenticationState>(resolveAuthState())
+const studentState = ref<AuthenticationState>(resolveAuthState())
 const verifiedInfo = ref<StudentAuth | null>(null)
 
 const form = ref({
@@ -133,146 +191,162 @@ const form = ref({
   backImage: ''
 })
 
-const canEdit = computed(() => {
-  return verificationStatus.value === 'unverified' || verificationStatus.value === 'rejected'
-})
+/** 直接访问时复用认证中心的学生锁定模型，保证前置规则只有一处。 */
+const accessGuard = computed(() =>
+  resolveStudentAuthCenterState(studentState.value, realNameState.value)
+)
 
-const statusIcon = computed(() => {
-  const icons = {
-    unverified: 'info',
-    pending: 'clock',
-    verified: 'checkmarkempty',
-    rejected: 'closeempty'
-  }
-  return icons[verificationStatus.value]
-})
+const authSemanticColors = {
+  info: infoColor,
+  primary: primaryColor,
+  success: successColor,
+  danger: dangerColor,
+  neutral: textColorTertiary
+} as const
 
-const statusColor = computed(() => {
-  const colors = {
-    unverified: '#999',
-    pending: primaryColor,
-    verified: successColor,
-    rejected: dangerColor
-  }
-  return colors[verificationStatus.value]
-})
-
-const statusText = computed(() => {
-  const texts = {
-    unverified: '未认证',
-    pending: '审核中',
-    verified: '已认证',
-    rejected: '认证失败'
-  }
-  return texts[verificationStatus.value]
-})
-
-const statusDesc = computed(() => {
-  const descs = {
-    unverified: '完成学生认证，享受校园专属权益',
-    pending: '您的认证信息正在审核中',
-    verified: '学生认证已完成',
-    rejected: verifiedInfo.value?.rejectReason || '认证失败，请重新提交'
-  }
-  return descs[verificationStatus.value]
-})
+const statusColor = computed(() => authSemanticColors[accessGuard.value.semanticColor])
+const verifiedStudentCardImages = computed(() =>
+  [verifiedInfo.value?.studentCardImages?.[0], verifiedInfo.value?.studentCardImages?.[1]].filter(
+    (imageUrl): imageUrl is string => Boolean(imageUrl)
+  )
+)
 
 onShow(() => {
   useThemePage()
 })
 
-
 onMounted(() => {
   loadVerificationStatus()
 
-  // 触发页面进入动画
   setTimeout(() => {
     isAnimated.value = true
   }, 50)
 })
 
 async function loadVerificationStatus() {
-  try {
-    const res = await userApi.getStudentAuth()
-    if (res.data) {
-      const auth = res.data
-      if (auth.status === 2) {
-        verificationStatus.value = 'verified'
-        verifiedInfo.value = auth
+  statusLoading.value = true
 
-        // 审核通过后，刷新用户信息以获取最新的学号、学院、专业
-        await refreshUserInfo()
-      } else if (auth.status === 1) {
-        verificationStatus.value = 'pending'
-      } else if (auth.status === 3) {
-        verificationStatus.value = 'rejected'
-        verifiedInfo.value = auth
-      }
+  try {
+    const realNameRes = await userApi.getRealNameAuth()
+    realNameState.value = resolveAuthState(realNameRes.data?.status, {
+      rejectReason: realNameRes.data?.rejectReason
+    })
+  } catch (error) {
+    console.error('加载实名认证状态失败:', error)
+    realNameState.value = resolveAuthState()
+  }
+
+  if (realNameState.value.pageStatus !== 'verified') {
+    statusLoading.value = false
+    return
+  }
+
+  try {
+    const studentRes = await userApi.getStudentAuth()
+    const auth = studentRes.data
+    studentState.value = resolveAuthState(auth?.status, {
+      rejectReason: auth?.rejectReason
+    })
+    verifiedInfo.value = auth ?? null
+
+    if (auth?.status === 3) {
+      form.value.studentId = auth.studentId || ''
+      form.value.college = auth.college || ''
+      form.value.major = auth.major || ''
+      form.value.frontImage = auth.studentCardImages?.[0] || ''
+      form.value.backImage = auth.studentCardImages?.[1] || ''
+    }
+
+    if (studentState.value.pageStatus === 'verified') {
+      await refreshUserInfo()
     }
   } catch (error) {
-    console.error('加载认证状态失败:', error)
+    console.error('加载学生认证状态失败:', error)
+  } finally {
+    statusLoading.value = false
   }
 }
 
-// 上传学生证正面
-function uploadFront() {
-  uni.chooseImage({
-    count: 1,
-    sizeType: ['compressed'],
-    sourceType: ['album', 'camera'],
-    success: (res) => {
-      uploadImage(res.tempFilePaths[0], 'front')
-    }
-  })
+function goToRealNameAuth() {
+  uni.navigateTo({ url: '/pages/mine/real-name-auth' })
 }
 
-// 上传学生证反面
-function uploadBack() {
-  uni.chooseImage({
-    count: 1,
-    sizeType: ['compressed'],
-    sourceType: ['album', 'camera'],
-    success: (res) => {
-      uploadImage(res.tempFilePaths[0], 'back')
-    }
-  })
+function handleUploadBoxClick(side: StudentCardSide) {
+  if (uploadingSide.value) {
+    return
+  }
+
+  if (!form.value[side]) {
+    uploadStudentCard(side)
+    return
+  }
+
+  previewImage([form.value[side]], form.value[side])
 }
 
-// 上传图片
-async function uploadImage(filePath: string, type: 'front' | 'back') {
-  uni.showLoading({ title: '上传中...' })
+async function uploadStudentCard(side: StudentCardSide) {
+  if (uploadingSide.value) {
+    return
+  }
+
+  uploadingSide.value = side
+  uploadError.value = null
 
   try {
-    const result = await uploadImageFile(filePath)
-    if (type === 'front') {
-      form.value.frontImage = result.url
-    } else {
-      form.value.backImage = result.url
-    }
-    uni.hideLoading()
+    const paths = await chooseStudentCardImage({
+      count: 1,
+      sizeType: ['compressed'],
+      sourceType: ['album', 'camera']
+    })
+    const result = await uploadImageFile(paths[0])
+    form.value[side] = result.url
     uni.showToast({ title: '上传成功', icon: 'success' })
   } catch (error) {
-    uni.hideLoading()
-    uni.showToast({ title: '上传失败', icon: 'none' })
+    if (!isImageSelectionCancelled(error)) {
+      console.error('上传学生证图片失败:', error)
+      uploadError.value = side
+    }
+  } finally {
+    uploadingSide.value = null
   }
 }
 
-// 提交认证
+function removeStudentCard(side: StudentCardSide) {
+  form.value[side] = ''
+  uploadError.value = null
+}
+
+function isImageSelectionCancelled(error: unknown): boolean {
+  if (typeof error !== 'object' || error === null || !('errMsg' in error)) {
+    return false
+  }
+
+  const message = (error as { errMsg?: unknown }).errMsg
+  return typeof message === 'string' && message.includes('cancel')
+}
+
 async function handleSubmit() {
-  // 表单验证
-  if (!form.value.studentId) {
+  if (submitting.value || !studentState.value.editable || accessGuard.value.locked) {
+    return
+  }
+
+  const studentId = form.value.studentId.trim()
+  const college = form.value.college.trim()
+  const major = form.value.major.trim()
+
+  if (!studentId) {
     uni.showToast({ title: '请输入学号', icon: 'none' })
     return
   }
-  if (!validator.isStudentId(form.value.studentId)) {
+  if (!validator.isStudentId(studentId)) {
     uni.showToast({ title: '学号格式不正确', icon: 'none' })
     return
   }
-  if (!form.value.college) {
+  if (!college) {
     uni.showToast({ title: '请输入学院', icon: 'none' })
     return
   }
-  if (!form.value.major) {
+  if (!major) {
     uni.showToast({ title: '请输入专业', icon: 'none' })
     return
   }
@@ -285,34 +359,31 @@ async function handleSubmit() {
     return
   }
 
+  submitting.value = true
+
   try {
-    // 提交认证
     await userApi.verifyStudent({
-      studentId: form.value.studentId,
-      college: form.value.college,
-      major: form.value.major,
+      studentId,
+      college,
+      major,
       studentCardImages: [form.value.frontImage, form.value.backImage]
     })
 
-    verificationStatus.value = 'pending'
+    studentState.value = resolveAuthState(1)
+    verifiedInfo.value = null
     uni.showToast({ title: '提交成功，请等待审核', icon: 'success' })
-
-    // 刷新用户信息以获取最新的学号、学院、专业
     await refreshUserInfo()
   } catch (error) {
     console.error('[StudentAuth] 提交认证失败:', error)
+  } finally {
+    submitting.value = false
   }
 }
 
-/**
- * 刷新用户信息
- * 认证成功后，从后端获取最新的用户信息并更新到 store
- */
 async function refreshUserInfo() {
   try {
     const res = await userApi.getUserInfo()
     if (res.data) {
-      console.log('[StudentAuth] 刷新用户信息成功:', res.data)
       userStore.setUserInfo(res.data)
     }
   } catch (error) {
@@ -322,51 +393,51 @@ async function refreshUserInfo() {
 </script>
 
 <style lang="scss" scoped>
-// 页面进入动画关键帧
 @keyframes pageSlideInUp {
   from {
     opacity: 0;
-    transform: translateY(40rpx);
+    transform: translateY(var(--motion-distance-page));
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
   }
 }
 
-// 页面动画样式
 .page-animate {
   opacity: 0;
-  transform: translateY(40rpx);
+  transform: translateY(var(--motion-distance-page));
 
   &.animate-in {
-    animation: pageSlideInUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    animation: pageSlideInUp var(--motion-duration-base) var(--motion-ease-standard) forwards;
   }
 }
 
 .student-auth-page {
   min-height: 100vh;
   background: var(--bg-color-page);
-  padding: 24rpx;
+  padding: var(--auth-page-padding);
+  padding-bottom: calc(var(--auth-page-padding) + env(safe-area-inset-bottom));
 }
 
 .status-card {
-  animation: pageSlideInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  animation-delay: 0.05s;
+  animation: pageSlideInUp var(--motion-duration-slow) var(--motion-ease-standard) forwards;
+  animation-delay: var(--motion-delay-fast);
   opacity: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 48rpx;
+  padding: var(--auth-card-padding-lg);
   background: var(--bg-color-card);
-  border-radius: 16rpx;
-  margin-bottom: 24rpx;
+  border-radius: var(--auth-card-radius);
+  margin-bottom: var(--auth-section-gap);
 
   .status-text {
     font-size: var(--font-size-xl);
     font-weight: 600;
-    color: var(--text-color-primary);
-    margin: 24rpx 0 12rpx;
+    color: var(--auth-status-color);
+    margin: var(--auth-section-gap) 0 var(--auth-label-gap);
   }
 
   .status-desc {
@@ -376,59 +447,94 @@ async function refreshUserInfo() {
   }
 }
 
+.status-unverified {
+  --auth-status-color: var(--info-color);
+}
+
+.status-pending {
+  --auth-status-color: var(--primary-color);
+}
+
+.status-verified {
+  --auth-status-color: var(--success-color);
+}
+
+.status-rejected {
+  --auth-status-color: var(--danger-color);
+}
+
+.status-loading,
+.status-locked {
+  --auth-status-color: var(--text-color-tertiary);
+}
+
+.locked-action {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--auth-tip-gap);
+  width: 100%;
+  height: var(--auth-control-height);
+  margin-top: var(--auth-section-gap);
+  background: var(--primary-color);
+  color: var(--bg-color-card);
+  font-size: var(--font-size-base);
+  border-radius: var(--auth-control-radius);
+}
+
 .form-section {
   background: var(--bg-color-card);
-  border-radius: 16rpx;
-  padding: 32rpx;
+  border-radius: var(--auth-card-radius);
+  padding: var(--auth-card-padding);
 
   .form-title {
     font-size: var(--font-size-lg);
     font-weight: 600;
     color: var(--text-color-primary);
-    margin-bottom: 8rpx;
+    margin-bottom: var(--auth-tip-gap);
   }
 
   .form-tip {
     font-size: var(--font-size-sm);
     color: var(--text-color-tertiary);
-    margin-bottom: 24rpx;
+    margin-bottom: var(--auth-section-gap);
   }
 
   .form-item {
-    margin-bottom: 24rpx;
+    margin-bottom: var(--auth-section-gap);
 
     .label {
       display: block;
       font-size: var(--font-size-base);
       color: var(--text-color-primary);
-      margin-bottom: 12rpx;
+      margin-bottom: var(--auth-label-gap);
     }
 
     .input {
       width: 100%;
-      height: 88rpx;
-      padding: 0 24rpx;
+      height: var(--auth-control-height);
+      padding: 0 var(--auth-control-padding-x);
       background: var(--bg-color-page);
-      border-radius: 12rpx;
+      border-radius: var(--auth-control-radius);
       font-size: var(--font-size-base);
     }
   }
 
   .upload-section {
-    margin-bottom: 24rpx;
+    margin-bottom: var(--auth-section-gap);
 
     .label {
       display: block;
       font-size: var(--font-size-base);
       color: var(--text-color-primary);
-      margin-bottom: 12rpx;
+      margin-bottom: var(--auth-label-gap);
     }
 
     .upload-box {
       width: 100%;
-      height: 400rpx;
+      height: var(--auth-upload-height);
       background: var(--bg-color-page);
-      border-radius: 12rpx;
+      border-radius: var(--auth-control-radius);
       overflow: hidden;
 
       .preview-image {
@@ -446,29 +552,58 @@ async function refreshUserInfo() {
         .upload-text {
           font-size: var(--font-size-sm);
           color: var(--text-color-tertiary);
-          margin-top: 16rpx;
+          margin-top: var(--auth-label-gap);
         }
       }
+    }
+
+    .upload-actions {
+      display: flex;
+      gap: var(--auth-label-gap);
+      margin-top: var(--auth-label-gap);
+    }
+
+    .upload-action {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: var(--auth-control-height);
+      background: var(--bg-color-page);
+      color: var(--text-color-primary);
+      font-size: var(--font-size-sm);
+      border-radius: var(--auth-control-radius);
+    }
+
+    .delete-action {
+      color: var(--danger-color);
+    }
+
+    .upload-error {
+      display: block;
+      margin-top: var(--auth-tip-gap);
+      font-size: var(--font-size-sm);
+      color: var(--danger-color);
     }
   }
 
   .submit-btn {
     width: 100%;
-    height: 88rpx;
+    height: var(--auth-control-height);
     background: var(--primary-color);
     color: var(--bg-color-card);
     font-size: var(--font-size-lg);
-    border-radius: 12rpx;
+    border-radius: var(--auth-control-radius);
     border: none;
-    margin-top: 32rpx;
+    margin-top: var(--auth-card-padding);
   }
 
   .security-tip {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 8rpx;
-    margin-top: 24rpx;
+    gap: var(--auth-tip-gap);
+    margin-top: var(--auth-section-gap);
     font-size: var(--font-size-sm);
     color: var(--text-color-tertiary);
   }
@@ -476,13 +611,13 @@ async function refreshUserInfo() {
 
 .info-section {
   background: var(--bg-color-card);
-  border-radius: 16rpx;
-  padding: 32rpx;
+  border-radius: var(--auth-card-radius);
+  padding: var(--auth-card-padding);
 
   .info-item {
     display: flex;
     justify-content: space-between;
-    padding: 24rpx 0;
+    padding: var(--auth-section-gap) 0;
     border-bottom: 1px solid var(--border-color-light);
 
     &:last-child {
@@ -498,6 +633,19 @@ async function refreshUserInfo() {
       font-size: var(--font-size-base);
       color: var(--text-color-primary);
     }
+  }
+
+  .info-images {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--auth-label-gap);
+    padding-top: var(--auth-section-gap);
+  }
+
+  .info-image {
+    width: 100%;
+    height: var(--auth-upload-height);
+    border-radius: var(--auth-control-radius);
   }
 }
 </style>

@@ -99,6 +99,7 @@ export const STATIC_VARS: Record<string, string> = {
   '--auth-section-gap': '24rpx',
   '--auth-label-gap': '12rpx',
   '--auth-tip-gap': '8rpx',
+  '--auth-upload-height': '400rpx',
   // 认证动效规格：不引入一次性 duration / easing。
   '--motion-duration-fast': '200ms',
   '--motion-duration-base': '400ms',
