@@ -211,7 +211,7 @@ export default {
     }
 
     .star-background {
-      color: var(--rate-void-color);
+      color: var(--text-color-tertiary);
     }
 
     .star-foreground {
