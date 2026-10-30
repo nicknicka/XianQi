@@ -271,17 +271,13 @@ async function uploadStudentCard(
     return
   }
 
-  const requestToken = beginStudentCardUpload(uploadState.value, side, options)
+  const request = beginStudentCardUpload(uploadState.value, side, options)
   uploadError.value = null
 
   try {
-    const selection = await chooseStudentCardImage({
-      count: 1,
-      sizeType: ['compressed'],
-      sourceType: ['album', 'camera']
-    })
+    const selection = await chooseStudentCardImage()
 
-    if (!isCurrentStudentCardUpload(uploadState.value, side, requestToken)) {
+    if (!isCurrentStudentCardUpload(uploadState.value, request)) {
       return
     }
 
@@ -292,14 +288,14 @@ async function uploadStudentCard(
 
     const result = await uploadImageFile(selection.files[0].path)
 
-    if (!isCurrentStudentCardUpload(uploadState.value, side, requestToken)) {
+    if (!isCurrentStudentCardUpload(uploadState.value, request)) {
       return
     }
 
     form.value[side] = result.url
     uni.showToast({ title: '上传成功', icon: 'success' })
   } catch (error) {
-    if (!isCurrentStudentCardUpload(uploadState.value, side, requestToken)) {
+    if (!isCurrentStudentCardUpload(uploadState.value, request)) {
       return
     }
 
@@ -308,7 +304,7 @@ async function uploadStudentCard(
       uploadError.value = side
     }
   } finally {
-    if (isCurrentStudentCardUpload(uploadState.value, side, requestToken)) {
+    if (isCurrentStudentCardUpload(uploadState.value, request)) {
       uploadState.value.activeSide = null
     }
   }

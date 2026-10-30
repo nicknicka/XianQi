@@ -380,7 +380,7 @@ function goForgotPassword() {
   transition: all 0.3s;
 
   &.weak {
-    background: linear-gradient(90deg, var(--danger-color) 0%, #FF5722 100%);
+    background: linear-gradient(90deg, var(--danger-color) 0%, var(--danger-color-alpha-95) 100%);
   }
 
   &.medium {

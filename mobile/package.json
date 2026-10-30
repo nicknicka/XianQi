@@ -21,6 +21,7 @@
     "dev:quickapp-webview-huawei": "uni -p quickapp-webview-huawei",
     "dev:quickapp-webview-union": "uni -p quickapp-webview-union",
     "lint": "eslint .",
+    "test": "node --test test/*.test.mjs",
     "prelint": "node scripts/check-design-tokens.mjs",
     "lint:fix": "eslint . --fix",
     "typecheck": "vue-tsc --noEmit -p tsconfig.json",

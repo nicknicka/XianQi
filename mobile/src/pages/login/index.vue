@@ -1095,7 +1095,7 @@ onUnmounted(() => {
       width: 32rpx;
       height: 32rpx;
       border-radius: 6rpx;
-      border: 2rpx solid #d1d5db;
+      border: 2rpx solid var(--border-color-base);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -1147,7 +1147,7 @@ onUnmounted(() => {
       content: '';
       flex: 1;
       height: 1rpx;
-      background: #e8e8e8;
+      background: var(--border-color-base);
     }
 
     .divider-text {
@@ -1196,11 +1196,11 @@ onUnmounted(() => {
       border: 2rpx solid rgba(255, 255, 255, 0.6);
 
       &.wechat-icon {
-        background: linear-gradient(135deg, #07c160 0%, #06ae56 100%);
+        background: linear-gradient(135deg, var(--brand-wechat-color) 0%, var(--brand-wechat-color-dark) 100%);
       }
 
       &.qq-icon {
-        background: linear-gradient(135deg, #12b7f5 0%, #0099ff 100%);
+        background: linear-gradient(135deg, var(--brand-qq-color) 0%, var(--brand-qq-color-dark) 100%);
       }
     }
 

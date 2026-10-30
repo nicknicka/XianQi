@@ -10,22 +10,24 @@ import { SHARED_COLORS, SHARED_MASCOT_CHEEK } from './theme-registry'
 
 // ========== 工具函数 ==========
 
+function hexToRgbChannels(hex: string): [number, number, number] {
+  const clean = hex.replace('#', '')
+  return [
+    parseInt(clean.substring(0, 2), 16),
+    parseInt(clean.substring(2, 4), 16),
+    parseInt(clean.substring(4, 6), 16)
+  ]
+}
+
 /** hex 转 rgba */
 export function addAlpha(hex: string, alpha: number): string {
-  const clean = hex.replace('#', '')
-  const r = parseInt(clean.substring(0, 2), 16)
-  const g = parseInt(clean.substring(2, 4), 16)
-  const b = parseInt(clean.substring(4, 6), 16)
+  const [r, g, b] = hexToRgbChannels(hex)
   return `rgba(${r}, ${g}, ${b}, ${alpha})`
 }
 
 /** hex 转 rgb 通道值，供 rgba(var(--primary-color-rgb), alpha) 使用 */
 function hexToRgbTuple(hex: string): string {
-  const clean = hex.replace('#', '')
-  const r = parseInt(clean.substring(0, 2), 16)
-  const g = parseInt(clean.substring(2, 4), 16)
-  const b = parseInt(clean.substring(4, 6), 16)
-  return `${r}, ${g}, ${b}`
+  return hexToRgbChannels(hex).join(', ')
 }
 
 // ========== 声明式 Alpha 派生配置 ==========
@@ -72,6 +74,11 @@ function getSeedColor(
 export const STATIC_VARS: Record<string, string> = {
   // 字体
   '--auth-font-weight-semibold': '600',
+  // 第三方登录品牌色：语义复用，不作为通用主题色。
+  '--brand-wechat-color': '#07C160',
+  '--brand-wechat-color-dark': '#06AE56',
+  '--brand-qq-color': '#12B7F5',
+  '--brand-qq-color-dark': '#0099FF',
   '--font-size-xs': '0.714em',
   '--font-size-sm': '0.857em',
   '--font-size-base': '1em',

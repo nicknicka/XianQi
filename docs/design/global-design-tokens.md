@@ -40,7 +40,7 @@
 | 信息色 | `--info-color-alpha-10/20/30/40` |
 | 强调色 | `--accent-color-alpha-40` |
 
-运行时真源还可能声明特殊用途 Token；它们同样只能使用真源中的完整名称消费。
+运行时真源还可能声明特殊用途 Token；它们同样只能使用真源中的完整名称消费。当前特殊用途 Token 包括第三方登录品牌色：`--brand-wechat-color`、`--brand-wechat-color-dark`、`--brand-qq-color`、`--brand-qq-color-dark`。
 
 ## 扩展规则
 

@@ -31,44 +31,59 @@ const {
   validateStudentCardImage
 } = loadModule()
 
+test('rejects missing or unreadable student card image metadata', () => {
+  assert.equal(
+    validateStudentCardImage({ name: 'student-card.jpg' }),
+    '图片信息不可读，请重新选择'
+  )
+  assert.equal(
+    validateStudentCardImage({ name: 'student-card.jpg', size: Number.NaN }),
+    '图片信息不可读，请重新选择'
+  )
+  assert.equal(
+    validateStudentCardImage({ name: 'student-card.jpg', size: 1024 }),
+    '图片信息不可读，请重新选择'
+  )
+})
+
 test('rejects unsupported student card images before upload', () => {
   assert.equal(
-    validateStudentCardImage({ name: 'student-card.gif', size: 1024 }),
+    validateStudentCardImage({ name: 'student-card.gif', type: 'image/gif', size: 1024 }),
     '仅支持 JPG、JPEG、PNG 或 WEBP 格式图片'
   )
 })
 
 test('rejects oversized student card images before upload', () => {
   assert.equal(
-    validateStudentCardImage({ name: 'student-card.jpg', size: STUDENT_CARD_IMAGE_MAX_SIZE + 1 }),
+    validateStudentCardImage({ name: 'student-card.jpg', type: 'image/jpeg', size: STUDENT_CARD_IMAGE_MAX_SIZE + 1 }),
     '图片大小不能超过 5MB'
   )
 })
 
 test('accepts supported student card images within the backend limit', () => {
-  assert.equal(validateStudentCardImage({ name: 'student-card.webp', size: 5 * 1024 * 1024 }), null)
+  assert.equal(validateStudentCardImage({ name: 'student-card.webp', type: 'image/webp', size: 5 * 1024 * 1024 }), null)
 })
 
 test('cancels a pending student card upload so its callback cannot write', () => {
   const state = createStudentCardUploadState()
-  const requestToken = beginStudentCardUpload(state, 'frontImage')
+  const request = beginStudentCardUpload(state, 'frontImage')
 
-  assert.equal(isCurrentStudentCardUpload(state, 'frontImage', requestToken), true)
+  assert.equal(isCurrentStudentCardUpload(state, request), true)
 
-  cancelStudentCardUpload(state, 'frontImage')
+  cancelStudentCardUpload(state, request.side)
 
-  assert.equal(isCurrentStudentCardUpload(state, 'frontImage', requestToken), false)
+  assert.equal(isCurrentStudentCardUpload(state, request), false)
 })
 
 test('replacing a pending student card upload invalidates only that side', () => {
   const state = createStudentCardUploadState()
-  const frontRequestToken = beginStudentCardUpload(state, 'frontImage')
-  const backRequestToken = beginStudentCardUpload(state, 'backImage')
-  const replacementToken = beginStudentCardUpload(state, 'frontImage', { replace: true })
+  const frontRequest = beginStudentCardUpload(state, 'frontImage')
+  const backRequest = beginStudentCardUpload(state, 'backImage')
+  const replacementRequest = beginStudentCardUpload(state, 'frontImage', { replace: true })
 
-  assert.equal(isCurrentStudentCardUpload(state, 'frontImage', frontRequestToken), false)
-  assert.equal(isCurrentStudentCardUpload(state, 'frontImage', replacementToken), true)
-  assert.equal(isCurrentStudentCardUpload(state, 'backImage', backRequestToken), true)
+  assert.equal(isCurrentStudentCardUpload(state, frontRequest), false)
+  assert.equal(isCurrentStudentCardUpload(state, replacementRequest), true)
+  assert.equal(isCurrentStudentCardUpload(state, backRequest), true)
 })
 
 test('does not treat normal upload failures as cancelled selection', () => {
