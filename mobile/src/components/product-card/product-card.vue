@@ -272,7 +272,7 @@ export default {
 		justify-content: center;
 		box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.15);
 		animation: popIn 0.3s ease backwards;
-		transition: var(--transition);
+		transition: all var(--motion-duration-medium) var(--motion-ease-standard);
 		/* 使用 CSS 变量，主题中可覆盖 */
 		--action-shadow: rgba(0, 0, 0, 0.15);
 

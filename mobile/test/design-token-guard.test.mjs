@@ -1,0 +1,83 @@
+import assert from 'node:assert/strict'
+import { readFileSync } from 'node:fs'
+import path from 'node:path'
+import test from 'node:test'
+import {
+  COMPATIBLE_TOKEN_ALIASES,
+  REQUIRED_TOKEN_CATEGORIES,
+  findCriticalFallbackGaps,
+  findRuntimeAliasGaps,
+  parseThemeTokens,
+  scanDesignTokens
+} from '../scripts/check-design-tokens.mjs'
+
+const mobileDir = path.resolve(import.meta.dirname, '..')
+const deriveSource = readFileSync(
+  path.join(mobileDir, 'src/utils/theme/theme-derive.ts'),
+  'utf8'
+)
+
+test('rejects undeclared variables and unregistered compatible aliases', () => {
+  const findings = scanDesignTokens({
+    'src/example.vue': [
+      '.example {',
+      '  color: var(--undeclared-color);',
+      '  background: var(--error-color-alpha-15);',
+      '}'
+    ].join('\n')
+  }, { globalTokens: parseThemeTokens(deriveSource) })
+
+  assert.deepEqual(findings.map(finding => finding.rule).sort(), [
+    'undeclared-css-variable',
+    'unregistered-compatible-alias'
+  ])
+  assert.deepEqual(findings.map(finding => finding.line).sort(), [2, 3])
+})
+
+test('accepts registered aliases, generated tokens, and component-local variables', () => {
+  const globalTokens = parseThemeTokens(deriveSource)
+  const findings = scanDesignTokens({
+    'src/example.vue': [
+      '.example {',
+      '  color: var(--error-color);',
+      '  background: var(--primary-color-alpha-10);',
+      '  --local-accent: var(--text-color-secondary);',
+      '  border-color: var(--local-accent);',
+      '}'
+    ].join('\n')
+  }, { globalTokens })
+
+  assert.deepEqual(findings, [])
+})
+
+test('keeps every registered compatible alias mapped by the runtime source', () => {
+  assert.equal(Object.keys(COMPATIBLE_TOKEN_ALIASES).length > 0, true)
+  assert.deepEqual(findRuntimeAliasGaps(deriveSource), [])
+})
+
+test('covers every required global design token category', () => {
+  const tokens = parseThemeTokens(deriveSource)
+
+  for (const [category, expectedTokens] of Object.entries(REQUIRED_TOKEN_CATEGORIES)) {
+    assert.equal(expectedTokens.length > 0, true, `${category} must be specified`)
+    for (const token of expectedTokens) {
+      assert.equal(tokens.has(token), true, `${category} is missing ${token}`)
+    }
+  }
+})
+
+test('requires static fallbacks for critical root tokens', () => {
+  const gaps = findCriticalFallbackGaps(
+    'page { background: var(--bg-color-page); color: var(--text-color-primary, #2D2D2D); font-size: var(--font-base, 14px); }'
+  )
+
+  assert.deepEqual(gaps, [{ line: 1, token: '--bg-color-page' }])
+})
+
+test('mobile lint runs the design token guard before the existing lint', () => {
+  const packageJson = JSON.parse(readFileSync(path.join(mobileDir, 'package.json'), 'utf8'))
+  assert.equal(packageJson.scripts.prelint, 'node scripts/check-design-tokens.mjs')
+
+  const ci = readFileSync(path.join(mobileDir, '..', '.github/workflows/ci.yml'), 'utf8')
+  assert.match(ci, /- name: Lint\n\s+run: \|\n\s+cd mobile\n\s+npm run lint/)
+})
