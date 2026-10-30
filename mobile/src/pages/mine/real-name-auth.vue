@@ -217,6 +217,7 @@ function handleSubmit() {
   min-height: var(--auth-page-min-height);
   background: var(--bg-color-page);
   padding: var(--auth-page-padding);
+  padding-bottom: calc(var(--auth-page-padding) + env(safe-area-inset-bottom));
 }
 
 .page-status-panel {
