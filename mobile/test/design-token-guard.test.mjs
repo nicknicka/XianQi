@@ -6,6 +6,7 @@ import {
   COMPATIBLE_TOKEN_ALIASES,
   REQUIRED_TOKEN_CATEGORIES,
   findCriticalFallbackGaps,
+  findUnmigratedPageStyles,
   findRuntimeAliasGaps,
   parseThemeTokens,
   scanDesignTokens
@@ -72,6 +73,42 @@ test('requires static fallbacks for critical root tokens', () => {
   )
 
   assert.deepEqual(gaps, [{ line: 1, token: '--bg-color-page' }])
+})
+
+test('remaining business pages reject direct SCSS style defaults', () => {
+  const findings = findUnmigratedPageStyles({
+    'src/pages/mine/index.vue': [
+      '<template><text class="instance">$vm</text></template>',
+      '<style lang="scss" scoped>',
+      '.mine-page {',
+      '  color: $text-color-primary;',
+      '}',
+      '</style>'
+    ].join('\n')
+  })
+
+  assert.deepEqual(findings, [{
+    file: 'src/pages/mine/index.vue',
+    line: 4,
+    rule: 'unmigrated-page-style',
+    message: 'Use a registered global token instead of a direct SCSS default'
+  }])
+})
+
+test('page style guard ignores non-style SCSS usage and excluded pages', () => {
+  const findings = findUnmigratedPageStyles({
+    'src/pages/market/list.vue': '<style lang="scss">.market { color: $primary-color; }</style>',
+    'src/pages/mine/auth-center.vue': '<style lang="scss">.auth { color: $primary-color; }</style>',
+    'src/pages/message/chat.vue': 'const page = event.$vm',
+    'src/pages/user/home.vue': [
+      '<style lang="scss" scoped>',
+      '@for $i from 1 through 20 {',
+      '  &:nth-child(#{$i}) { animation-delay: 0.05s; }',
+      '}'
+    ].join('\n')
+  })
+
+  assert.deepEqual(findings, [])
 })
 
 test('mobile lint runs the design token guard before the existing lint', () => {
