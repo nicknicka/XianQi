@@ -450,7 +450,7 @@
 							:type="isFavorited ? 'heart-filled' : 'heart'"
 							size="24"
 							:color="
-								isFavorited ? 'var(--error-color)' : textColorSecondary
+								isFavorited ? 'var(--danger-color)' : textColorSecondary
 							"
 						/>
 					</view>
@@ -1623,7 +1623,7 @@ onShareTimeline(() => {
 		.price {
 			font-size: 28px;
 			font-weight: 600;
-			color: var(--error-color);
+			color: var(--danger-color);
 		}
 
 		.original-price {
@@ -1675,7 +1675,7 @@ onShareTimeline(() => {
 			padding: 6rpx 16rpx;
 			background: linear-gradient(
 				135deg,
-				var(--error-color) 0%,
+				var(--danger-color) 0%,
 				var(--danger-color) 100%
 			);
 			color: var(--text-color-inverse);
@@ -1693,14 +1693,14 @@ onShareTimeline(() => {
 
 			.currency {
 				font-size: 32rpx;
-				color: var(--error-color);
+				color: var(--danger-color);
 				font-weight: bold;
 			}
 
 			.price {
 				font-size: 56rpx;
 				font-weight: bold;
-				color: var(--error-color);
+				color: var(--danger-color);
 			}
 
 			.original-price {
@@ -1729,7 +1729,7 @@ onShareTimeline(() => {
 
 				.stock-text {
 					font-size: 24rpx;
-					color: var(--error-color);
+					color: var(--danger-color);
 					font-weight: bold;
 				}
 
@@ -1787,7 +1787,7 @@ onShareTimeline(() => {
 			padding: 8rpx 16rpx;
 			background: linear-gradient(
 				135deg,
-				var(--error-color) 0%,
+				var(--danger-color) 0%,
 				var(--danger-color) 100%
 			);
 			color: var(--text-color-inverse);
@@ -1805,7 +1805,7 @@ onShareTimeline(() => {
 		.price {
 			font-size: 28px;
 			font-weight: 600;
-			color: var(--error-color);
+			color: var(--danger-color);
 		}
 
 		.original-price {
@@ -2321,7 +2321,7 @@ onShareTimeline(() => {
 			height: 56rpx;
 			background: linear-gradient(
 				135deg,
-				var(--error-color) 0%,
+				var(--danger-color) 0%,
 				var(--danger-color) 100%
 			);
 			border-radius: 12rpx;
@@ -2454,7 +2454,7 @@ onShareTimeline(() => {
 			}
 
 			&.danger {
-				background: var(--error-color);
+				background: var(--danger-color);
 				color: var(--text-color-inverse);
 
 				&:active {
@@ -2544,7 +2544,7 @@ onShareTimeline(() => {
 		height: 64rpx;
 		background: linear-gradient(
 			135deg,
-			var(--error-color) 0%,
+			var(--danger-color) 0%,
 			var(--danger-color) 100%
 		);
 		color: var(--text-color-inverse);
@@ -2575,7 +2575,7 @@ onShareTimeline(() => {
 // 秒杀倒计时条
 .flash-countdown-bar {
 	padding: 20rpx var(--spacing-md);
-	background: linear-gradient(135deg, var(--error-color) 0%, var(--danger-color) 100%);
+	background: linear-gradient(135deg, var(--danger-color) 0%, var(--danger-color) 100%);
 	margin-bottom: var(--spacing-md);
 
 	.countdown-content {
@@ -2603,7 +2603,7 @@ onShareTimeline(() => {
 				text-align: center;
 				font-size: 28rpx;
 				font-weight: bold;
-				color: var(--error-color);
+				color: var(--danger-color);
 				background: var(--bg-color-card);
 				border-radius: 8rpx;
 				padding: 0 8rpx;
@@ -2671,7 +2671,7 @@ onShareTimeline(() => {
 				margin: 0 auto 16rpx;
 				background: linear-gradient(
 					135deg,
-					var(--error-color) 0%,
+					var(--danger-color) 0%,
 					var(--danger-color) 100%
 				);
 				border-radius: 50%;
@@ -2766,20 +2766,20 @@ onShareTimeline(() => {
 							var(--danger-color-alpha-5) 0%,
 							var(--bg-color-card) 100%
 						);
-						border-color: var(--error-color);
+						border-color: var(--danger-color);
 						box-shadow: 0 4rpx 16rpx var(--danger-color-alpha-20);
 
 						.reason-icon-wrapper {
 							background: linear-gradient(
 								135deg,
-								var(--error-color) 0%,
+								var(--danger-color) 0%,
 								var(--danger-color) 100%
 							);
 							box-shadow: 0 4rpx 12rpx var(--danger-color-alpha-30);
 						}
 
 						.reason-label {
-							color: var(--error-color);
+							color: var(--danger-color);
 							font-weight: 600;
 						}
 					}
@@ -2812,7 +2812,7 @@ onShareTimeline(() => {
 						right: 8rpx;
 						width: 32rpx;
 						height: 32rpx;
-						background: var(--error-color);
+						background: var(--danger-color);
 						border-radius: 50%;
 						display: flex;
 						align-items: center;
@@ -2861,7 +2861,7 @@ onShareTimeline(() => {
 
 				&:focus {
 					background: var(--bg-color-card);
-					border-color: var(--error-color);
+					border-color: var(--danger-color);
 					box-shadow: 0 0 0 4rpx var(--danger-color-alpha-10);
 				}
 			}
@@ -2904,7 +2904,7 @@ onShareTimeline(() => {
 			.action-btn-submit {
 				background: linear-gradient(
 					135deg,
-					var(--error-color) 0%,
+					var(--danger-color) 0%,
 					var(--danger-color) 100%
 				);
 				box-shadow: 0 4rpx 16rpx var(--danger-color-alpha-30);

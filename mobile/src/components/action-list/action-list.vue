@@ -227,7 +227,7 @@ export default {
 
         .title-badge {
           padding: 4rpx 12rpx;
-          background: var(--error-color);
+          background: var(--danger-color);
           border-radius: 16rpx;
 
           .badge-text {

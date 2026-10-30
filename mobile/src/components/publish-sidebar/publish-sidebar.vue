@@ -262,7 +262,7 @@ function formatTime(time?: string): string {
     min-width: 44rpx;
     height: 44rpx;
     padding: 0 10rpx;
-    background: var(--error-color);
+    background: var(--danger-color);
     border-radius: 22rpx;
     display: flex;
     align-items: center;
@@ -474,7 +474,7 @@ function formatTime(time?: string): string {
       flex-shrink: 0;
 
       &.market-icon {
-        background: linear-gradient(135deg, var(--bg-color-warm) 0%, var(--primary-alpha-10) 100%);
+        background: linear-gradient(135deg, var(--bg-color-warm) 0%, var(--primary-color-alpha-10) 100%);
       }
 
       &.share-icon {
@@ -550,7 +550,7 @@ function formatTime(time?: string): string {
       flex-shrink: 0;
 
       &.market {
-        background: linear-gradient(135deg, var(--bg-color-warm) 0%, var(--primary-alpha-10) 100%);
+        background: linear-gradient(135deg, var(--bg-color-warm) 0%, var(--primary-color-alpha-10) 100%);
       }
 
       &.share {

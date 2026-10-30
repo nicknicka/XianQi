@@ -434,7 +434,7 @@ onMounted(() => {
   }
 
   &.level-poor {
-    background: var(--error-color);
+    background: var(--danger-color);
   }
 }
 
@@ -521,7 +521,7 @@ onMounted(() => {
   }
 
   &.bad {
-    background: linear-gradient(135deg, var(--error-color) 0%, #CF1322 100%);
+    background: linear-gradient(135deg, var(--danger-color) 0%, #CF1322 100%);
   }
 
   &.transaction {
@@ -670,7 +670,7 @@ onMounted(() => {
   }
 
   &.negative {
-    color: var(--error-color);
+    color: var(--danger-color);
   }
 }
 
@@ -759,7 +759,7 @@ onMounted(() => {
   }
 
   &.negative {
-    color: var(--error-color);
+    color: var(--danger-color);
     background: var(--danger-color-alpha-10);
   }
 }

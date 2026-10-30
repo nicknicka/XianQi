@@ -495,7 +495,7 @@ export default {
         margin-bottom: 4rpx;
 
         &.active {
-          color: var(--error-color);
+          color: var(--danger-color);
         }
       }
 

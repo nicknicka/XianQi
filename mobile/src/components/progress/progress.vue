@@ -197,7 +197,7 @@ export default {
 
   &.status-exception {
     .progress-bar {
-      background: var(--error-color);
+      background: var(--danger-color);
     }
   }
 }

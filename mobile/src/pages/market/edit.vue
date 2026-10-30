@@ -1375,7 +1375,7 @@ $font-weight-semibold: 600;
 	width: 180rpx;
 
 	.required-mark {
-		color: var(--error-color);
+		color: var(--danger-color);
 		margin-left: 4rpx;
 	}
 }
@@ -1557,14 +1557,14 @@ $font-weight-semibold: 600;
 		color: var(--text-color-tertiary);
 
 		&.active {
-			color: var(--error-color);
+			color: var(--danger-color);
 		}
 	}
 
 	.flash-price-text {
 		font-size: var(--font-size-lg);
 		font-weight: $font-weight-semibold;
-		color: var(--error-color);
+		color: var(--danger-color);
 	}
 }
 
@@ -1959,7 +1959,7 @@ $font-weight-semibold: 600;
 
 			.clear-location-text {
 				font-size: var(--font-size-base);
-				color: var(--error-color);
+				color: var(--danger-color);
 			}
 		}
 	}
@@ -2158,7 +2158,7 @@ $font-weight-semibold: 600;
 			.flash-stock-unit {
 				font-size: var(--font-size-xl);
 				font-weight: $font-weight-semibold;
-				color: var(--error-color);
+				color: var(--danger-color);
 			}
 
 			.flash-price-input-field,
@@ -2178,7 +2178,7 @@ $font-weight-semibold: 600;
 }
 
 .required-mark {
-	color: var(--error-color);
+	color: var(--danger-color);
 }
 
 // 底部按钮

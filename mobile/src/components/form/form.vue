@@ -496,7 +496,7 @@ export default {
       }
 
       .label-required {
-        color: var(--error-color);
+        color: var(--danger-color);
         margin-left: 4rpx;
       }
     }
@@ -592,7 +592,7 @@ export default {
 
         .error-text {
           font-size: 24rpx;
-          color: var(--error-color);
+          color: var(--danger-color);
         }
       }
 

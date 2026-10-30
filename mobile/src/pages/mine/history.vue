@@ -481,7 +481,7 @@ function formatViewTime(time: string): string {
   }
 
   .danger-text {
-    color: var(--error-color);
+    color: var(--danger-color);
   }
 }
 
@@ -672,7 +672,7 @@ function formatViewTime(time: string): string {
     width: 48rpx;
     height: 48rpx;
     border-radius: 50%;
-    background: var(--error-color-alpha-10, rgba(255, 138, 138, 0.1));
+    background: var(--danger-color-alpha-10, rgba(255, 138, 138, 0.1));
     display: flex;
     align-items: center;
     justify-content: center;
@@ -680,13 +680,13 @@ function formatViewTime(time: string): string {
 
     &:active {
       transform: scale(0.85);
-      background: var(--error-color);
+      background: var(--danger-color);
     }
   }
 
   .action-icon {
     font-size: 22rpx;
-    color: var(--error-color);
+    color: var(--danger-color);
   }
 }
 
@@ -847,7 +847,7 @@ function formatViewTime(time: string): string {
   .delete-selected-btn {
     padding: 16rpx 40rpx;
     border-radius: 9999px;
-    background: var(--error-color);
+    background: var(--danger-color);
     transition: all 0.3s ease;
 
     &.disabled {

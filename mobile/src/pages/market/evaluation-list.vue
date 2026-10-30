@@ -299,7 +299,7 @@ function formatTime(time: string) {
     .average-rating {
       font-size: 64rpx;
       font-weight: 700;
-      color: var(--error-color);
+      color: var(--danger-color);
     }
 
     .stars {
@@ -449,7 +449,7 @@ function formatTime(time: string) {
 
         .product-price {
           font-size: var(--font-size-sm);
-          color: var(--error-color);
+          color: var(--danger-color);
           font-weight: 600;
         }
       }

@@ -397,7 +397,7 @@ function handleRemoveAll() {
 
     .remove-text {
       font-size: 20rpx;
-      color: var(--error-color);
+      color: var(--danger-color);
     }
 
     &:active {
@@ -445,7 +445,7 @@ function handleRemoveAll() {
     box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.08);
 
     &.danger-btn {
-      background: var(--error-color);
+      background: var(--danger-color);
       color: #fff;
     }
   }

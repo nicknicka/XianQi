@@ -115,7 +115,7 @@
 							size="18"
 							:color="
 								isFavorited
-									? 'var(--error-color)'
+									? 'var(--danger-color)'
 									: 'var(--text-color-secondary)'
 							"
 						/>
@@ -779,12 +779,12 @@ function goToTransfer() {
 		.rent {
 			font-size: var(--spacing-xxl);
 			font-weight: 600;
-			color: var(--error-color);
+			color: var(--danger-color);
 		}
 
 		.rent-unit {
 			font-size: var(--font-size-base);
-			color: var(--error-color);
+			color: var(--danger-color);
 		}
 
 		.deposit {
@@ -1182,7 +1182,7 @@ function goToTransfer() {
 			}
 
 			&.danger {
-				background: var(--error-color);
+				background: var(--danger-color);
 				color: var(--text-color-inverse);
 				border-color: transparent;
 			}
@@ -1288,7 +1288,7 @@ function goToTransfer() {
 					.cost-value {
 						font-size: var(--font-size-xxl);
 						font-weight: 600;
-						color: var(--error-color);
+						color: var(--danger-color);
 					}
 				}
 

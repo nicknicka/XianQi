@@ -420,11 +420,11 @@ export default {
 
             &.is-active {
               .btn-icon {
-                color: var(--error-color);
+                color: var(--danger-color);
               }
 
               .btn-text {
-                color: var(--error-color);
+                color: var(--danger-color);
               }
             }
           }

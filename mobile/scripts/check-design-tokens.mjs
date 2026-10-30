@@ -78,26 +78,6 @@ export const REQUIRED_TOKEN_CATEGORIES = {
   ]
 }
 
-/** Legacy names kept working through canonical runtime tokens. */
-export const COMPATIBLE_TOKEN_ALIASES = {
-  '--error-color': '--danger-color',
-  '--error-color-alpha-10': '--danger-color-alpha-10',
-  '--primary-alpha-10': '--primary-color-alpha-10',
-  '--radius-lg': '--border-radius-lg',
-  '--radius-xl': '--border-radius-xl',
-  '--radius-pill': '--border-radius-pill',
-  '--success-color-faded': '--success-color-bg',
-  '--warning-color-faded': '--warning-color-bg',
-  '--danger-color-faded': '--danger-color-bg'
-}
-
-const UNREGISTERED_ALIAS_PATTERNS = [
-  /^--error-color(?:-alpha-\d+)?$/,
-  /^--primary-alpha-\d+$/,
-  /^--radius-(?:sm|base|md|lg|xl|round|pill)$/,
-  /^--(?:success|warning|danger)-color-faded$/
-]
-
 const CRITICAL_ROOT_FALLBACKS = ['--bg-color-page', '--text-color-primary', '--font-base']
 const THEME_SOURCE_RELATIVE_PATH = 'src/utils/theme/theme-derive.ts'
 const GLOBAL_SHARED_STYLE_PATTERN = /^(?:src\/styles|src\/components)\//
@@ -360,13 +340,6 @@ export function findUnmigratedPageStyles(sources) {
   })
 }
 
-function classifyUndeclaredToken(token) {
-  if (UNREGISTERED_ALIAS_PATTERNS.some(pattern => pattern.test(token))) {
-    return 'unregistered-compatible-alias'
-  }
-  return 'undeclared-css-variable'
-}
-
 export function scanDesignTokens(
   sources,
   { globalTokens = new Set(), derivedSource = '' } = {}
@@ -382,8 +355,8 @@ export function scanDesignTokens(
         file: relativeFile,
         line: lineAt(source, use.index),
         token: use.token,
-        rule: classifyUndeclaredToken(use.token),
-        message: `Register ${use.token} or map it to a canonical design token`
+        rule: 'undeclared-css-variable',
+        message: `Use canonical ${use.token} or register it in theme-derive.ts`
       })
     }
   }
@@ -423,23 +396,6 @@ export function findFixedScssDefaults(sources) {
   )
 }
 
-export function findRuntimeAliasGaps(deriveSource) {
-  return Object.entries(COMPATIBLE_TOKEN_ALIASES)
-    .filter(([alias, canonical]) => {
-      const aliasPattern = new RegExp(
-        `vars\\['${escapeRegExp(alias)}'\\]\\s*=\\s*vars\\['${escapeRegExp(canonical)}'\\]`
-      )
-      return !aliasPattern.test(deriveSource)
-    })
-    .map(([alias, canonical]) => ({
-      file: THEME_SOURCE_RELATIVE_PATH,
-      line: 0,
-      token: alias,
-      rule: 'missing-runtime-alias',
-      message: `Map ${alias} to ${canonical} in theme-derive.ts`
-    }))
-}
-
 export function findCriticalFallbackGaps(source) {
   const findings = []
 
@@ -469,11 +425,9 @@ function findCategoryGaps(tokens) {
 
 function runCheck() {
   const sources = loadProjectSources()
-  const deriveSource = readFileSync(derivePath, 'utf8')
-  const tokens = parseThemeTokens(deriveSource)
+  const tokens = parseThemeTokens(readFileSync(derivePath, 'utf8'))
   const findings = [
     ...findCategoryGaps(tokens),
-    ...findRuntimeAliasGaps(deriveSource),
     ...scanDesignTokens(sources, { globalTokens: tokens }),
     ...findFixedScssDefaults(sources),
     ...findUnmigratedPageStyles(sources),

@@ -513,7 +513,7 @@ function refreshList() {
 
       &.required::before {
         content: '*';
-        color: var(--error-color);
+        color: var(--danger-color);
         margin-right: 4rpx;
       }
     }
@@ -623,7 +623,7 @@ function refreshList() {
 
       &.status-2 {
         background: var(--danger-color-alpha-10);
-        color: var(--error-color);
+        color: var(--danger-color);
       }
 
       &.status-3 {
