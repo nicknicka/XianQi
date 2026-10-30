@@ -113,7 +113,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
         Long userId = getUserIdFromSession(session);
         if (userId != null) {
-            USER_SESSIONS.remove(userId);
+            USER_SESSIONS.remove(userId, session);
             log.info("WebSocket 连接关闭: userId={}, status={}", userId, status);
         }
     }
@@ -131,7 +131,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
         }
 
         if (userId != null) {
-            USER_SESSIONS.remove(userId);
+            USER_SESSIONS.remove(userId, session);
         }
     }
 
