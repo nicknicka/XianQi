@@ -10,6 +10,7 @@ import { notificationApi } from '@/api/notification'
 import { userApi } from '@/api/user'
 import { useAppStore } from '@/store/app'
 import { updateMessageBadge } from '@/utils/tabbar'
+import { resolveWebSocketUrl } from '@/utils/websocket-url'
 
 // WebSocket 消息类型
 interface WSMessage {
@@ -84,37 +85,7 @@ class MessageService {
    * 设置 WebSocket
    */
   private setupWebSocket(): void {
-    // 从环境变量或配置中获取 WebSocket 地址
-    // #ifdef H5
-    const baseUrl = import.meta.env.VITE_API_BASE_URL || 'https://api.example.com'
-    this.wsUrl = baseUrl.replace('http', 'ws') + '/ws'
-    // #endif
-
-    // #ifdef MP-WEIXIN
-    // 微信小程序必须使用 wss:// 协议和备案域名
-    const wsUrl = import.meta.env.VITE_WS_BASE_URL
-    if (wsUrl) {
-      // 开发环境：保持 ws:// 协议（需要在开发者工具中勾选"不校验合法域名"）
-      // 生产环境：必须使用 wss:// + 备案域名
-      if (wsUrl.startsWith('ws://') && (wsUrl.includes('localhost') || wsUrl.includes('127.0.0.1') || wsUrl.match(/10\.|192\.168\.|172\./))) {
-        // 本地或内网地址，开发环境，保持 ws://
-        this.wsUrl = wsUrl
-      } else {
-        // 生产环境或外网地址，确保使用 wss://
-        this.wsUrl = wsUrl.replace('ws://', 'wss://').replace('http://', 'https://').replace('https://', 'wss://')
-      }
-    } else {
-      // 如果没有配置 WebSocket 地址，使用默认配置
-      const baseUrl = import.meta.env.VITE_API_BASE_URL || 'https://api.example.com'
-      this.wsUrl = baseUrl.replace('http://', 'wss://').replace('https://', 'wss://') + '/ws'
-    }
-
-    // 本地开发环境提示（仅在非生产环境输出）
-    const isLocalAddress = this.wsUrl.includes('localhost') || this.wsUrl.includes('127.0.0.1') || this.wsUrl.match(/10\.\d+\.\d+\.\d+/) || this.wsUrl.match(/192\.168\.\d+\.\d+/) || this.wsUrl.match(/172\.(1[6-9]|2\d|3[01])\.\d+\.\d+/)
-    if (isLocalAddress && import.meta.env.DEV) {
-      console.log('[MessageService] 开发环境使用本地 WebSocket 地址')
-    }
-    // #endif
+    this.wsUrl = resolveWebSocketUrl()
 
     console.log('[MessageService] WebSocket URL:', this.wsUrl)
 
