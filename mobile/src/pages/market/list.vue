@@ -815,7 +815,7 @@ function switchMode(mode: "trade" | "share") {
 
 		.search-input {
 			flex: 1;
-			font-size: $font-size-base;
+			font-size: var(--font-size-base);
 			color: var(--text-color-primary);
 		}
 
@@ -903,7 +903,7 @@ function switchMode(mode: "trade" | "share") {
 	display: flex;
 	height: 88rpx;
 	background: var(--bg-color-card);
-	border-bottom: 1px solid $border-color-light;
+	border-bottom: 1px solid var(--border-color-light);
 	// 确保与父容器在同一渲染层
 	position: relative;
 	transform: translate3d(0, 0, 0);
@@ -916,7 +916,7 @@ function switchMode(mode: "trade" | "share") {
 		justify-content: center;
 		gap: 8rpx;
 		position: relative;
-		transition: background $transition-fast;
+		transition: background var(--motion-duration-fast) var(--motion-ease-standard);
 
 		&:active {
 			background: var(--bg-color-page);
@@ -936,13 +936,13 @@ function switchMode(mode: "trade" | "share") {
 		.filter-text {
 			font-size: 26rpx;
 			color: var(--text-color-primary);
-			transition: color $transition-fast;
+			transition: color var(--motion-duration-fast) var(--motion-ease-standard);
 		}
 
 		.icon-arrow {
 			font-size: 20rpx;
 			color: var(--text-color-tertiary);
-			transition: transform $transition-fast, color $transition-fast;
+			transition: transform var(--motion-duration-fast) var(--motion-ease-standard), color var(--motion-duration-fast) var(--motion-ease-standard);
 
 			&.rotate {
 				transform: rotate(180deg);
@@ -968,7 +968,7 @@ function switchMode(mode: "trade" | "share") {
 			var(--primary-color-dark) 100%
 		);
 		border-radius: 20rpx;
-		transition: all $transition-fast;
+		transition: all var(--motion-duration-fast) var(--motion-ease-standard);
 
 		&:active {
 			transform: scale(0.95);
@@ -991,7 +991,7 @@ function switchMode(mode: "trade" | "share") {
 	padding: 16rpx 24rpx;
 	background: var(--bg-color-card);
 	gap: 16rpx;
-	border-bottom: 1px solid $border-color-light;
+	border-bottom: 1px solid var(--border-color-light);
 	// 确保标签区域也是整体的一部分
 	position: relative;
 	transform: translate3d(0, 0, 0);
@@ -1308,14 +1308,14 @@ function switchMode(mode: "trade" | "share") {
 	.search-history-content {
 		width: 650rpx;
 		background: var(--bg-color-card);
-		border-radius: $border-radius-xl;
+		border-radius: var(--border-radius-xl);
 		overflow: hidden;
-		box-shadow: $box-shadow-dark;
+		box-shadow: var(--box-shadow-base);
 
 		// 热门搜索区域
 		.hot-search-section {
 			padding: 24rpx;
-			border-bottom: 1px solid $border-color-light;
+			border-bottom: 1px solid var(--border-color-light);
 
 			.section-header {
 				display: flex;
@@ -1324,7 +1324,7 @@ function switchMode(mode: "trade" | "share") {
 				margin-bottom: 16rpx;
 
 				.section-title {
-					font-size: $font-size-base;
+					font-size: var(--font-size-base);
 					font-weight: $font-weight-medium;
 					color: var(--text-color-primary);
 				}
@@ -1339,8 +1339,8 @@ function switchMode(mode: "trade" | "share") {
 					display: flex;
 					align-items: center;
 					padding: 16rpx;
-					border-radius: $border-radius-sm;
-					transition: background $transition-fast;
+					border-radius: var(--border-radius-sm);
+					transition: background var(--motion-duration-fast) var(--motion-ease-standard);
 					gap: 12rpx;
 
 					&:active {
@@ -1389,7 +1389,7 @@ function switchMode(mode: "trade" | "share") {
 
 					.hot-keyword {
 						flex: 1;
-						font-size: $font-size-base;
+						font-size: var(--font-size-base);
 						color: var(--text-color-primary);
 					}
 
@@ -1405,20 +1405,20 @@ function switchMode(mode: "trade" | "share") {
 			align-items: center;
 			justify-content: space-between;
 			padding: 24rpx;
-			border-bottom: 1px solid $border-color-light;
+			border-bottom: 1px solid var(--border-color-light);
 
 			&.has-hot {
 				border-top: none;
 			}
 
 			.search-history-title {
-				font-size: $font-size-lg;
+				font-size: var(--font-size-lg);
 				font-weight: $font-weight-medium;
 				color: var(--text-color-primary);
 			}
 
 			.search-history-clear {
-				font-size: $font-size-base;
+				font-size: var(--font-size-base);
 				color: var(--primary-color);
 				padding: 8rpx 16rpx;
 			}
@@ -1432,9 +1432,9 @@ function switchMode(mode: "trade" | "share") {
 				display: flex;
 				align-items: center;
 				padding: 24rpx;
-				border-bottom: 1px solid $border-color-light;
+				border-bottom: 1px solid var(--border-color-light);
 				gap: 16rpx;
-				transition: background $transition-fast;
+				transition: background var(--motion-duration-fast) var(--motion-ease-standard);
 
 				&:last-child {
 					border-bottom: none;
@@ -1450,7 +1450,7 @@ function switchMode(mode: "trade" | "share") {
 
 				.search-history-text {
 					flex: 1;
-					font-size: $font-size-base;
+					font-size: var(--font-size-base);
 					color: var(--text-color-primary);
 				}
 
@@ -1475,7 +1475,7 @@ function switchMode(mode: "trade" | "share") {
 			}
 
 			.empty-text {
-				font-size: $font-size-base;
+				font-size: var(--font-size-base);
 				color: var(--text-color-tertiary);
 			}
 		}

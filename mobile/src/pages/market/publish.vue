@@ -2385,14 +2385,14 @@ async function handlePublish() {
 
 .section {
   background: var(--bg-color-card);
-  margin-bottom: $spacing-sm;
-  padding: $spacing-md;
+  margin-bottom: var(--spacing-sm);
+  padding: var(--spacing-md);
 
   .section-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: $spacing-sm;
+    margin-bottom: var(--spacing-sm);
 
     &.compact {
       margin-bottom: 8rpx;
@@ -2404,20 +2404,20 @@ async function handlePublish() {
   }
 
   .section-title {
-    font-size: $font-size-lg;
+    font-size: var(--font-size-lg);
     font-weight: $font-weight-medium;
-    color: $text-color-primary;
+    color: var(--text-color-primary);
   }
 
   .section-required {
-    font-size: $font-size-sm;
+    font-size: var(--font-size-sm);
     color: var(--danger-color);
   }
 
   // 折叠箭头
   .collapse-arrow {
     font-size: 32rpx;
-    color: $text-color-tertiary;
+    color: var(--text-color-tertiary);
     transition: transform 0.3s ease;
     transform: rotate(90deg);
 
@@ -2429,11 +2429,11 @@ async function handlePublish() {
 
 .form-item {
   position: relative;
-  padding: $spacing-md 0;
+  padding: var(--spacing-md) 0;
 
   &.vertical {
     .label {
-      margin-bottom: $spacing-sm;
+      margin-bottom: var(--spacing-sm);
     }
   }
 
@@ -2446,10 +2446,10 @@ async function handlePublish() {
   }
 
   .label {
-    font-size: $font-size-base;
-    color: $text-color-primary;
+    font-size: var(--font-size-base);
+    color: var(--text-color-primary);
     display: block;
-    margin-bottom: $spacing-sm;
+    margin-bottom: var(--spacing-sm);
 
     &.required::before {
       content: '*';
@@ -2461,27 +2461,27 @@ async function handlePublish() {
   .input {
     width: 100%;
     height: 80rpx;
-    font-size: $font-size-base;
-    color: $text-color-primary;
+    font-size: var(--font-size-base);
+    color: var(--text-color-primary);
   }
 
   .textarea {
     width: 100%;
     min-height: 180rpx;
-    padding: $spacing-sm;
+    padding: var(--spacing-sm);
     background: var(--bg-color-page);
-    border-radius: $border-radius-sm;
-    font-size: $font-size-base;
+    border-radius: var(--border-radius-sm);
+    font-size: var(--font-size-base);
     line-height: 1.6;
-    color: $text-color-primary;
+    color: var(--text-color-primary);
   }
 
   .count {
     position: absolute;
-    bottom: $spacing-md;
+    bottom: var(--spacing-md);
     right: 0;
-    font-size: $font-size-xs;
-    color: $text-color-tertiary;
+    font-size: var(--font-size-xs);
+    color: var(--text-color-tertiary);
 
     &.warning {
       color: var(--danger-color);
@@ -2494,17 +2494,17 @@ async function handlePublish() {
     justify-content: space-between;
 
     .value {
-      font-size: $font-size-base;
-      color: $text-color-primary;
+      font-size: var(--font-size-base);
+      color: var(--text-color-primary);
 
       &.placeholder {
-        color: $text-color-placeholder;
+        color: var(--text-color-placeholder);
       }
     }
 
     .arrow {
       font-size: 40rpx;
-      color: $text-color-tertiary;
+      color: var(--text-color-tertiary);
       font-weight: 300;
     }
   }
@@ -2512,7 +2512,7 @@ async function handlePublish() {
 
 .price-row {
   display: flex;
-  gap: $spacing-md;
+  gap: var(--spacing-md);
 
   .price-item {
     flex: 1;
@@ -2524,32 +2524,32 @@ async function handlePublish() {
   align-items: center;
   height: 80rpx;
   background: var(--bg-color-page);
-  border-radius: $border-radius-sm;
-  padding: 0 $spacing-sm;
+  border-radius: var(--border-radius-sm);
+  padding: 0 var(--spacing-sm);
 
   .price-symbol {
-    font-size: $font-size-xl;
+    font-size: var(--font-size-xl);
     font-weight: $font-weight-medium;
     color: var(--primary-color);
-    margin-right: $spacing-xs;
+    margin-right: var(--spacing-xs);
   }
 
   .price-input {
     flex: 1;
-    font-size: $font-size-xl;
+    font-size: var(--font-size-xl);
     font-weight: $font-weight-medium;
-    color: $text-color-primary;
+    color: var(--text-color-primary);
   }
 }
 
 .discount-tip {
-  margin-top: $spacing-sm;
-  padding: $spacing-sm $spacing-md;
+  margin-top: var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-md);
   background: var(--success-color-alpha-10);
-  border-radius: $border-radius-sm;
+  border-radius: var(--border-radius-sm);
 
   .discount-text {
-    font-size: $font-size-sm;
+    font-size: var(--font-size-sm);
     color: var(--success-color);
   }
 }
@@ -2557,15 +2557,15 @@ async function handlePublish() {
 .condition-tags {
   display: flex;
   flex-wrap: wrap;
-  gap: $spacing-sm;
+  gap: var(--spacing-sm);
 
   .condition-tag {
-    padding: $spacing-sm $spacing-md;
+    padding: var(--spacing-sm) var(--spacing-md);
     background: var(--bg-color-page);
-    color: $text-color-secondary;
-    font-size: $font-size-sm;
+    color: var(--text-color-secondary);
+    font-size: var(--font-size-sm);
     border-radius: 48rpx;
-    transition: all $transition-fast;
+    transition: all var(--motion-duration-fast) var(--motion-ease-standard);
     border: 2rpx solid transparent;
 
     &.active {
@@ -2578,14 +2578,14 @@ async function handlePublish() {
 }
 
 .location-detail {
-  padding: $spacing-sm;
+  padding: var(--spacing-sm);
   background: var(--bg-color-page);
-  border-radius: $border-radius-sm;
-  margin-top: $spacing-sm;
+  border-radius: var(--border-radius-sm);
+  margin-top: var(--spacing-sm);
 
   .location-detail-text {
-    font-size: $font-size-sm;
-    color: $text-color-secondary;
+    font-size: var(--font-size-sm);
+    color: var(--text-color-secondary);
   }
 }
 
@@ -2593,8 +2593,8 @@ async function handlePublish() {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: $spacing-md 0;
-  border-bottom: 1px solid $border-color-light;
+  padding: var(--spacing-md) 0;
+  border-bottom: 1px solid var(--border-color-light);
 
   &:last-child {
     border-bottom: none;
@@ -2606,13 +2606,13 @@ async function handlePublish() {
     gap: 4rpx;
 
     .option-label {
-      font-size: $font-size-base;
-      color: $text-color-primary;
+      font-size: var(--font-size-base);
+      color: var(--text-color-primary);
     }
 
     .option-desc {
-      font-size: $font-size-xs;
-      color: $text-color-tertiary;
+      font-size: var(--font-size-xs);
+      color: var(--text-color-tertiary);
     }
   }
 }
@@ -2622,7 +2622,7 @@ async function handlePublish() {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: $spacing-md;
+  margin-bottom: var(--spacing-md);
 
   .switch-wrapper {
     display: flex;
@@ -2630,16 +2630,16 @@ async function handlePublish() {
     gap: 12rpx;
 
     .switch-label {
-      font-size: $font-size-sm;
-      color: $text-color-tertiary;
+      font-size: var(--font-size-sm);
+      color: var(--text-color-tertiary);
     }
   }
 }
 
 .flash-config {
-  padding: $spacing-md;
+  padding: var(--spacing-md);
   background: linear-gradient(135deg, var(--danger-color-alpha-5) 0%, var(--danger-color-alpha-5) 100%);
-  border-radius: $border-radius-base;
+  border-radius: var(--border-radius-base);
   border: 1px solid var(--danger-color-alpha-10);
 
   .config-item {
@@ -2654,8 +2654,8 @@ async function handlePublish() {
 
     .config-label {
       width: 140rpx;
-      font-size: $font-size-base;
-      color: $text-color-primary;
+      font-size: var(--font-size-base);
+      color: var(--text-color-primary);
       flex-shrink: 0;
     }
 
@@ -2665,11 +2665,11 @@ async function handlePublish() {
       align-items: baseline;
       padding: 0 16rpx;
       background: var(--bg-color-page);
-      border-radius: $border-radius-sm;
+      border-radius: var(--border-radius-sm);
       height: 64rpx;
 
       .price-symbol {
-        font-size: $font-size-lg;
+        font-size: var(--font-size-lg);
         color: var(--danger-color);
         font-weight: bold;
       }
@@ -2677,8 +2677,8 @@ async function handlePublish() {
       .price-input {
         flex: 1;
         height: 100%;
-        font-size: $font-size-base;
-        color: $text-color-primary;
+        font-size: var(--font-size-base);
+        color: var(--text-color-primary);
         padding: 0 8rpx;
       }
     }
@@ -2688,23 +2688,23 @@ async function handlePublish() {
       padding: 0 16rpx;
       height: 64rpx;
       background: var(--bg-color-page);
-      border-radius: $border-radius-sm;
-      font-size: $font-size-base;
-      color: $text-color-primary;
+      border-radius: var(--border-radius-sm);
+      font-size: var(--font-size-base);
+      color: var(--text-color-primary);
       text-align: center;
     }
 
     .config-unit {
       margin-left: 12rpx;
-      font-size: $font-size-sm;
-      color: $text-color-tertiary;
+      font-size: var(--font-size-sm);
+      color: var(--text-color-tertiary);
       flex-shrink: 0;
     }
 
     .config-hint {
       margin-left: 12rpx;
-      font-size: $font-size-xs;
-      color: $text-color-tertiary;
+      font-size: var(--font-size-xs);
+      color: var(--text-color-tertiary);
     }
   }
 
@@ -2712,34 +2712,34 @@ async function handlePublish() {
     margin-top: 20rpx;
     padding: 20rpx;
     background: linear-gradient(135deg, var(--primary-color-alpha-8) 0%, var(--primary-color-alpha-15) 100%);
-    border-radius: $border-radius-base;
+    border-radius: var(--border-radius-base);
     text-align: center;
 
     .discount-text {
       display: block;
-      font-size: $font-size-lg;
+      font-size: var(--font-size-lg);
       font-weight: bold;
       color: var(--primary-color);
       margin-bottom: 8rpx;
     }
 
     .discount-sub {
-      font-size: $font-size-sm;
-      color: $text-color-secondary;
+      font-size: var(--font-size-sm);
+      color: var(--text-color-secondary);
     }
   }
 }
 
 .tips-section {
   background: linear-gradient(135deg, var(--primary-color-alpha-5) 0%, var(--primary-color-alpha-2) 100%);
-  padding: $spacing-md;
+  padding: var(--spacing-md);
 
   .tips-title {
-    font-size: $font-size-base;
+    font-size: var(--font-size-base);
     font-weight: $font-weight-medium;
-    color: $text-color-primary;
+    color: var(--text-color-primary);
     display: block;
-    margin-bottom: $spacing-sm;
+    margin-bottom: var(--spacing-sm);
   }
 
   .tips-list {
@@ -2748,8 +2748,8 @@ async function handlePublish() {
     gap: 8rpx;
 
     .tip-item {
-      font-size: $font-size-sm;
-      color: $text-color-secondary;
+      font-size: var(--font-size-sm);
+      color: var(--text-color-secondary);
       line-height: 1.6;
     }
   }
@@ -2761,7 +2761,7 @@ async function handlePublish() {
   border: 1px solid var(--success-color-alpha-30);
 
   .mail-hint-text {
-    font-size: $font-size-base;
+    font-size: var(--font-size-base);
     color: var(--success-color);
     font-weight: $font-weight-medium;
   }
@@ -2770,11 +2770,11 @@ async function handlePublish() {
 .bottom-bar {
   display: flex;
   flex-direction: column;
-  gap: $spacing-sm;
-  padding: $spacing-md;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-md);
   background: var(--bg-color-card);
-  border-top: 1px solid $border-color-light;
-  padding-bottom: calc($spacing-md + env(safe-area-inset-bottom));
+  border-top: 1px solid var(--border-color-light);
+  padding-bottom: calc(var(--spacing-md) + env(safe-area-inset-bottom));
 
   .bar-info {
     display: flex;
@@ -2783,12 +2783,12 @@ async function handlePublish() {
     gap: 8rpx;
 
     .bar-text {
-      font-size: $font-size-xs;
-      color: $text-color-tertiary;
+      font-size: var(--font-size-xs);
+      color: var(--text-color-tertiary);
     }
 
     .bar-link {
-      font-size: $font-size-xs;
+      font-size: var(--font-size-xs);
       color: var(--primary-color);
     }
   }
@@ -2798,14 +2798,14 @@ async function handlePublish() {
     height: 88rpx;
     background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-color-light) 100%);
     color: #fff;
-    font-size: $font-size-lg;
+    font-size: var(--font-size-lg);
     font-weight: $font-weight-medium;
-    border-radius: $border-radius-lg;
+    border-radius: var(--border-radius-lg);
     border: none;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: opacity $transition-fast;
+    transition: opacity var(--motion-duration-fast) var(--motion-ease-standard);
     box-shadow: 0 4rpx 16rpx var(--primary-color-alpha-30);
 
     &:active {
@@ -2847,7 +2847,7 @@ async function handlePublish() {
     width: 100%;
     max-height: 70vh;
     background: var(--bg-color-card);
-    border-radius: $border-radius-xl $border-radius-xl 0 0;
+    border-radius: var(--border-radius-xl) var(--border-radius-xl) 0 0;
     overflow: hidden;
     display: flex;
     flex-direction: column;
@@ -2856,32 +2856,32 @@ async function handlePublish() {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: $spacing-md;
-      border-bottom: 1px solid $border-color-light;
+      padding: var(--spacing-md);
+      border-bottom: 1px solid var(--border-color-light);
 
       .picker-title {
-        font-size: $font-size-lg;
+        font-size: var(--font-size-lg);
         font-weight: $font-weight-medium;
-        color: $text-color-primary;
+        color: var(--text-color-primary);
       }
 
       .picker-close {
         font-size: 48rpx;
-        color: $text-color-tertiary;
-        padding: $spacing-xs;
+        color: var(--text-color-tertiary);
+        padding: var(--spacing-xs);
       }
     }
 
     .category-list {
       flex: 1;
-      padding: $spacing-sm 0;
+      padding: var(--spacing-sm) 0;
 
       .category-item {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        padding: $spacing-md;
-        transition: background $transition-fast;
+        padding: var(--spacing-md);
+        transition: background var(--motion-duration-fast) var(--motion-ease-standard);
 
         &:active {
           background: var(--bg-color-page);
@@ -2897,12 +2897,12 @@ async function handlePublish() {
         }
 
         .category-name {
-          font-size: $font-size-base;
-          color: $text-color-primary;
+          font-size: var(--font-size-base);
+          color: var(--text-color-primary);
         }
 
         .category-check {
-          font-size: $font-size-xl;
+          font-size: var(--font-size-xl);
           color: var(--primary-color);
         }
       }
@@ -2911,7 +2911,7 @@ async function handlePublish() {
 }
 
 .placeholder {
-  color: $text-color-placeholder;
+  color: var(--text-color-placeholder);
 }
 
 // 草稿保存提示
@@ -2936,7 +2936,7 @@ async function handlePublish() {
       width: 28rpx;
       height: 28rpx;
       border: 3rpx solid rgba(255, 255, 255, 0.3);
-      border-top-color: $text-color-white;
+      border-top-color: var(--text-color-inverse);
       border-radius: 50%;
       animation: spin 0.8s linear infinite;
     }
@@ -2945,13 +2945,13 @@ async function handlePublish() {
   .draft-icon {
     .check-small {
       color: var(--success-color);
-      font-size: $font-size-lg;
+      font-size: var(--font-size-lg);
     }
   }
 
   .draft-text {
-    font-size: $font-size-sm;
-    color: $text-color-white;
+    font-size: var(--font-size-sm);
+    color: var(--text-color-inverse);
   }
 }
 
@@ -2966,10 +2966,10 @@ async function handlePublish() {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: $spacing-md;
+  margin-bottom: var(--spacing-md);
 
   .section-required {
-    font-size: $font-size-sm;
+    font-size: var(--font-size-sm);
     color: var(--danger-color);
   }
 }
@@ -2978,7 +2978,7 @@ async function handlePublish() {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: $spacing-md;
+  margin-bottom: var(--spacing-md);
 
   .section-title-wrapper {
     display: flex;
@@ -2986,7 +2986,7 @@ async function handlePublish() {
     gap: 8rpx;
 
     .section-icon {
-      font-size: $font-size-xl;
+      font-size: var(--font-size-xl);
     }
   }
 }
@@ -3012,15 +3012,15 @@ async function handlePublish() {
     height: 32rpx;
     border-radius: 50%;
     background: var(--danger-color);
-    color: $text-color-white;
-    font-size: $font-size-xs;
+    color: var(--text-color-inverse);
+    font-size: var(--font-size-xs);
     display: flex;
     align-items: center;
     justify-content: center;
   }
 
   .error-text {
-    font-size: $font-size-xs;
+    font-size: var(--font-size-xs);
     color: var(--danger-color);
   }
 }
@@ -3029,13 +3029,13 @@ async function handlePublish() {
   display: flex;
   align-items: center;
   gap: 8rpx;
-  padding: $spacing-sm $spacing-md;
+  padding: var(--spacing-sm) var(--spacing-md);
   background: var(--danger-color-alpha-8);
-  border-radius: $border-radius-sm;
-  margin-top: $spacing-sm;
+  border-radius: var(--border-radius-sm);
+  margin-top: var(--spacing-sm);
 
   .error-text {
-    font-size: $font-size-sm;
+    font-size: var(--font-size-sm);
     color: var(--danger-color);
   }
 }
@@ -3047,7 +3047,7 @@ async function handlePublish() {
   gap: 6rpx;
 
   .cover-icon {
-    font-size: $font-size-sm;
+    font-size: var(--font-size-sm);
   }
 }
 
@@ -3060,7 +3060,7 @@ async function handlePublish() {
 
     .upload-icon {
       font-size: 72rpx;
-      color: $text-color-placeholder;
+      color: var(--text-color-placeholder);
       line-height: 1;
     }
   }
@@ -3070,19 +3070,19 @@ async function handlePublish() {
     top: 55%;
     left: 50%;
     transform: translate(-50%, 20%);
-    font-size: $font-size-sm;
-    color: $text-color-tertiary;
+    font-size: var(--font-size-sm);
+    color: var(--text-color-tertiary);
   }
 
   .upload-count {
     position: absolute;
     bottom: 8rpx;
     right: 8rpx;
-    font-size: $font-size-xs;
-    color: $text-color-tertiary;
+    font-size: var(--font-size-xs);
+    color: var(--text-color-tertiary);
     background: rgba(0, 0, 0, 0.5);
     padding: 4rpx 8rpx;
-    border-radius: $border-radius-sm;
+    border-radius: var(--border-radius-sm);
   }
 }
 
@@ -3092,7 +3092,7 @@ async function handlePublish() {
   gap: 8rpx;
 
   .tip-icon {
-    font-size: $font-size-base;
+    font-size: var(--font-size-base);
     color: var(--primary-color);
   }
 }
@@ -3104,7 +3104,7 @@ async function handlePublish() {
   gap: 8rpx;
 
   .discount-icon {
-    font-size: $font-size-lg;
+    font-size: var(--font-size-lg);
     color: var(--success-color);
   }
 }
@@ -3116,7 +3116,7 @@ async function handlePublish() {
   gap: 8rpx;
 
   .location-icon {
-    font-size: $font-size-lg;
+    font-size: var(--font-size-lg);
     color: var(--primary-color);
   }
 }
@@ -3126,12 +3126,12 @@ async function handlePublish() {
   .option-info {
     flex-direction: row;
     align-items: center;
-    gap: $spacing-md;
+    gap: var(--spacing-md);
 
     .option-icon-wrapper {
       width: 64rpx;
       height: 64rpx;
-      border-radius: $border-radius-md;
+      border-radius: var(--border-radius-base);
       background: var(--bg-color-page);
       display: flex;
       align-items: center;
@@ -3152,7 +3152,7 @@ async function handlePublish() {
 
 // 预览按钮
 .preview-section {
-  padding: $spacing-md;
+  padding: var(--spacing-md);
   background: transparent;
 
   .preview-btn {
@@ -3160,7 +3160,7 @@ async function handlePublish() {
     height: 88rpx;
     background: linear-gradient(135deg, var(--primary-color-alpha-10) 0%, var(--primary-color-alpha-5) 100%);
     border: 2rpx solid var(--primary-color-alpha-30);
-    border-radius: $border-radius-lg;
+    border-radius: var(--border-radius-lg);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -3173,12 +3173,12 @@ async function handlePublish() {
     }
 
     .preview-icon {
-      font-size: $font-size-xl;
+      font-size: var(--font-size-xl);
       color: var(--primary-color);
     }
 
     .preview-text {
-      font-size: $font-size-base;
+      font-size: var(--font-size-base);
       color: var(--primary-color);
       font-weight: $font-weight-medium;
     }
@@ -3213,20 +3213,20 @@ async function handlePublish() {
         justify-content: space-between;
         padding: 16rpx;
         background: var(--bg-color-page);
-        border-radius: $border-radius-sm;
+        border-radius: var(--border-radius-sm);
 
         .session-value {
-          font-size: $font-size-base;
-          color: $text-color-primary;
+          font-size: var(--font-size-base);
+          color: var(--text-color-primary);
 
           &.placeholder {
-            color: $text-color-placeholder;
+            color: var(--text-color-placeholder);
           }
         }
 
         .selector-arrow {
           font-size: 40rpx;
-          color: $text-color-tertiary;
+          color: var(--text-color-tertiary);
         }
       }
     }
@@ -3249,15 +3249,15 @@ async function handlePublish() {
 .bottom-bar {
   .bar-actions {
     display: flex;
-    gap: $spacing-md;
-    margin-bottom: $spacing-sm;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-sm);
 
     .draft-btn {
       flex: 1;
       height: 88rpx;
       background: var(--bg-color-page);
-      border: 2rpx solid $border-color-base;
-      border-radius: $border-radius-lg;
+      border: 2rpx solid var(--border-color-base);
+      border-radius: var(--border-radius-lg);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -3268,8 +3268,8 @@ async function handlePublish() {
       }
 
       .draft-btn-text {
-        font-size: $font-size-base;
-        color: $text-color-secondary;
+        font-size: var(--font-size-base);
+        color: var(--text-color-secondary);
       }
     }
 
@@ -3296,7 +3296,7 @@ async function handlePublish() {
     max-height: 70vh;
     height: 60vh;
     background: var(--bg-color-card);
-    border-radius: $border-radius-xl $border-radius-xl 0 0;
+    border-radius: var(--border-radius-xl) var(--border-radius-xl) 0 0;
     overflow: hidden;
     display: flex;
     flex-direction: column;
@@ -3305,26 +3305,26 @@ async function handlePublish() {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: $spacing-md;
-      border-bottom: 1px solid $border-color-light;
+      padding: var(--spacing-md);
+      border-bottom: 1px solid var(--border-color-light);
 
       .picker-title {
-        font-size: $font-size-lg;
+        font-size: var(--font-size-lg);
         font-weight: $font-weight-medium;
-        color: $text-color-primary;
+        color: var(--text-color-primary);
       }
 
       .picker-close {
         font-size: 48rpx;
-        color: $text-color-tertiary;
-        padding: $spacing-xs;
+        color: var(--text-color-tertiary);
+        padding: var(--spacing-xs);
       }
     }
 
     .picker-list {
       flex: 1;
       min-height: 0;
-      padding: $spacing-sm 0;
+      padding: var(--spacing-sm) 0;
 
       .picker-empty {
         display: flex;
@@ -3334,7 +3334,7 @@ async function handlePublish() {
 
         .empty-text {
           font-size: 28rpx;
-          color: $text-color-tertiary;
+          color: var(--text-color-tertiary);
         }
       }
 
@@ -3342,8 +3342,8 @@ async function handlePublish() {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        padding: $spacing-md;
-        transition: background $transition-fast;
+        padding: var(--spacing-md);
+        transition: background var(--motion-duration-fast) var(--motion-ease-standard);
 
         &:active {
           background: var(--bg-color-page);
@@ -3360,12 +3360,12 @@ async function handlePublish() {
         }
 
         .picker-item-name {
-          font-size: $font-size-base;
-          color: $text-color-primary;
+          font-size: var(--font-size-base);
+          color: var(--text-color-primary);
         }
 
         .picker-item-check {
-          font-size: $font-size-xl;
+          font-size: var(--font-size-xl);
           color: var(--primary-color);
         }
 
@@ -3376,14 +3376,14 @@ async function handlePublish() {
             gap: 8rpx;
 
             .session-time {
-              font-size: $font-size-lg;
+              font-size: var(--font-size-lg);
               font-weight: $font-weight-medium;
-              color: $text-color-primary;
+              color: var(--text-color-primary);
             }
 
             .session-period {
-              font-size: $font-size-sm;
-              color: $text-color-tertiary;
+              font-size: var(--font-size-sm);
+              color: var(--text-color-tertiary);
             }
           }
         }
@@ -3402,7 +3402,7 @@ async function handlePublish() {
     width: 640rpx;
     max-height: 80vh;
     background: var(--bg-color-card);
-    border-radius: $border-radius-xl;
+    border-radius: var(--border-radius-xl);
     overflow: hidden;
     display: flex;
     flex-direction: column;
@@ -3412,25 +3412,25 @@ async function handlePublish() {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: $spacing-md;
-      border-bottom: 1px solid $border-color-light;
+      padding: var(--spacing-md);
+      border-bottom: 1px solid var(--border-color-light);
 
       .preview-title {
-        font-size: $font-size-lg;
+        font-size: var(--font-size-lg);
         font-weight: $font-weight-medium;
-        color: $text-color-primary;
+        color: var(--text-color-primary);
       }
 
       .preview-close {
         font-size: 48rpx;
-        color: $text-color-tertiary;
-        padding: $spacing-xs;
+        color: var(--text-color-tertiary);
+        padding: var(--spacing-xs);
       }
     }
 
     .preview-content {
       flex: 1;
-      padding: $spacing-md;
+      padding: var(--spacing-md);
     }
   }
 }
@@ -3440,7 +3440,7 @@ async function handlePublish() {
     position: relative;
     width: 100%;
     padding-bottom: 100%;
-    border-radius: $border-radius-lg;
+    border-radius: var(--border-radius-lg);
     overflow: hidden;
     background: var(--bg-color-page);
 
@@ -3454,24 +3454,24 @@ async function handlePublish() {
 
     .flash-tag {
       position: absolute;
-      top: $spacing-sm;
-      left: $spacing-sm;
+      top: var(--spacing-sm);
+      left: var(--spacing-sm);
       padding: 8rpx 20rpx;
       background: linear-gradient(135deg, var(--danger-color) 0%, var(--danger-color) 100%);
-      color: $text-color-white;
-      font-size: $font-size-xs;
+      color: var(--text-color-inverse);
+      font-size: var(--font-size-xs);
       font-weight: $font-weight-medium;
-      border-radius: $border-radius-sm;
+      border-radius: var(--border-radius-sm);
     }
   }
 
   .preview-info {
-    padding: $spacing-md 0;
+    padding: var(--spacing-md) 0;
 
     .preview-title-text {
-      font-size: $font-size-lg;
+      font-size: var(--font-size-lg);
       font-weight: $font-weight-medium;
-      color: $text-color-primary;
+      color: var(--text-color-primary);
       line-height: 1.4;
       display: -webkit-box;
       -webkit-line-clamp: 2;
@@ -3483,7 +3483,7 @@ async function handlePublish() {
       display: flex;
       align-items: baseline;
       gap: 12rpx;
-      margin-top: $spacing-sm;
+      margin-top: var(--spacing-sm);
 
       .preview-price {
         font-size: 36rpx;
@@ -3492,37 +3492,37 @@ async function handlePublish() {
       }
 
       .preview-original {
-        font-size: $font-size-sm;
-        color: $text-color-tertiary;
+        font-size: var(--font-size-sm);
+        color: var(--text-color-tertiary);
         text-decoration: line-through;
       }
 
       .preview-discount {
         padding: 4rpx 12rpx;
         background: linear-gradient(135deg, var(--danger-color) 0%, var(--danger-color) 100%);
-        color: $text-color-white;
-        font-size: $font-size-xs;
-        border-radius: $border-radius-sm;
+        color: var(--text-color-inverse);
+        font-size: var(--font-size-xs);
+        border-radius: var(--border-radius-sm);
       }
     }
 
     .preview-meta {
       display: flex;
       align-items: center;
-      gap: $spacing-md;
-      margin-top: $spacing-sm;
+      gap: var(--spacing-md);
+      margin-top: var(--spacing-sm);
 
       .preview-condition {
         padding: 6rpx 16rpx;
         background: var(--primary-color-alpha-10);
         color: var(--primary-color);
-        font-size: $font-size-xs;
-        border-radius: $border-radius-sm;
+        font-size: var(--font-size-xs);
+        border-radius: var(--border-radius-sm);
       }
 
       .preview-location {
-        font-size: $font-size-xs;
-        color: $text-color-tertiary;
+        font-size: var(--font-size-xs);
+        color: var(--text-color-tertiary);
       }
     }
   }
@@ -3531,11 +3531,11 @@ async function handlePublish() {
 // 发布提示优化
 .tips-section {
   .tips-title {
-    font-size: $font-size-base;
+    font-size: var(--font-size-base);
     font-weight: $font-weight-medium;
-    color: $text-color-primary;
+    color: var(--text-color-primary);
     display: block;
-    margin-bottom: $spacing-sm;
+    margin-bottom: var(--spacing-sm);
   }
 }
 
@@ -3543,11 +3543,11 @@ async function handlePublish() {
 
 // 紧凑section
 .compact-section {
-  padding: $spacing-sm $spacing-md !important;
+  padding: var(--spacing-sm) var(--spacing-md) !important;
   margin-bottom: 8rpx !important;
 
   .section-header {
-    margin-bottom: $spacing-sm !important;
+    margin-bottom: var(--spacing-sm) !important;
   }
 }
 
@@ -3555,24 +3555,24 @@ async function handlePublish() {
 .compact-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: $spacing-sm;
+  gap: var(--spacing-sm);
 
   .form-item {
-    padding: $spacing-sm 0 !important;
+    padding: var(--spacing-sm) 0 !important;
   }
 }
 
 // 紧凑价格输入
 .price-input-wrapper.compact {
-  padding: 0 $spacing-xs !important;
+  padding: 0 var(--spacing-xs) !important;
   height: 64rpx !important;
 
   .price-input {
-    font-size: $font-size-base !important;
+    font-size: var(--font-size-base) !important;
   }
 
   .price-symbol {
-    font-size: $font-size-lg !important;
+    font-size: var(--font-size-lg) !important;
   }
 }
 
@@ -3581,11 +3581,11 @@ async function handlePublish() {
   margin-top: 8rpx;
   padding: 4rpx 12rpx;
   background: linear-gradient(135deg, var(--success-color-alpha-15) 0%, var(--success-color-alpha-8) 100%);
-  border-radius: $border-radius-sm;
+  border-radius: var(--border-radius-sm);
   text-align: center;
 
   .discount-text {
-    font-size: $font-size-xs;
+    font-size: var(--font-size-xs);
     color: var(--success-color);
     font-weight: $font-weight-medium;
   }
@@ -3593,7 +3593,7 @@ async function handlePublish() {
 
 // 紧凑表单项
 .form-item.compact {
-  padding: $spacing-xs 0 !important;
+  padding: var(--spacing-xs) 0 !important;
 }
 
 .field-error.compact {
@@ -3616,10 +3616,10 @@ async function handlePublish() {
     display: inline-block;
     padding: 8rpx 20rpx;
     background: var(--bg-color-page);
-    color: $text-color-secondary;
-    font-size: $font-size-sm;
+    color: var(--text-color-secondary);
+    font-size: var(--font-size-sm);
     border-radius: 48rpx;
-    transition: all $transition-fast;
+    transition: all var(--motion-duration-fast) var(--motion-ease-standard);
     border: 2rpx solid transparent;
     white-space: nowrap;
 
@@ -3637,8 +3637,8 @@ async function handlePublish() {
   width: 88rpx;
   height: 88rpx;
   background: var(--bg-color-page);
-  border: 2rpx solid $border-color-base;
-  border-radius: $border-radius-lg;
+  border: 2rpx solid var(--border-color-base);
+  border-radius: var(--border-radius-lg);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -3661,7 +3661,7 @@ async function handlePublish() {
 .bottom-bar {
   .bar-actions {
     display: flex;
-    gap: $spacing-sm;
+    gap: var(--spacing-sm);
     align-items: center;
 
     .icon-btn {
@@ -3693,7 +3693,7 @@ async function handlePublish() {
       height: 0;
       border-left: 8rpx solid transparent;
       border-right: 8rpx solid transparent;
-      border-top: 8rpx solid $text-color-tertiary;
+      border-top: 8rpx solid var(--text-color-tertiary);
       transition: transform 0.3s ease;
     }
 
@@ -3862,7 +3862,7 @@ async function handlePublish() {
     .popup-title {
       font-size: 32rpx;
       font-weight: 600;
-      color: $text-color-primary;
+      color: var(--text-color-primary);
     }
 
     .close-btn {
@@ -3886,7 +3886,7 @@ async function handlePublish() {
 
       .amount-symbol {
         font-size: 36rpx;
-        color: $text-color-primary;
+        color: var(--text-color-primary);
         font-weight: 600;
         margin-right: 8rpx;
       }
@@ -3894,7 +3894,7 @@ async function handlePublish() {
       .amount-input {
         flex: 1;
         font-size: 36rpx;
-        color: $text-color-primary;
+        color: var(--text-color-primary);
         font-weight: 600;
       }
     }
@@ -3927,7 +3927,7 @@ async function handlePublish() {
 
         .amount-item-text {
           font-size: 26rpx;
-          color: $text-color-secondary;
+          color: var(--text-color-secondary);
         }
       }
     }
@@ -3950,7 +3950,7 @@ async function handlePublish() {
 
       &.cancel-btn {
         background: var(--bg-color-disabled);
-        color: $text-color-secondary;
+        color: var(--text-color-secondary);
       }
 
       &.confirm-btn {
@@ -3972,13 +3972,13 @@ async function handlePublish() {
 
   .price-text {
     font-size: 32rpx;
-    color: $text-color-primary;
+    color: var(--text-color-primary);
     font-weight: 600;
   }
 
   .price-placeholder {
     font-size: 28rpx;
-    color: $text-color-tertiary;
+    color: var(--text-color-tertiary);
   }
 }
 
@@ -4012,12 +4012,12 @@ async function handlePublish() {
     .card-title {
       font-size: 32rpx;
       font-weight: 600;
-      color: $text-color-primary;
+      color: var(--text-color-primary);
     }
 
     .card-required {
       font-size: 22rpx;
-      color: $text-color-tertiary;
+      color: var(--text-color-tertiary);
     }
   }
 }
@@ -4036,7 +4036,7 @@ async function handlePublish() {
       flex-shrink: 0;
       width: 180rpx;
       font-size: 28rpx;
-      color: $text-color-primary;
+      color: var(--text-color-primary);
       font-weight: 500;
       display: flex;
       align-items: center;
@@ -4058,12 +4058,12 @@ async function handlePublish() {
 
       .value-text {
         font-size: 28rpx;
-        color: $text-color-primary;
+        color: var(--text-color-primary);
       }
 
       .value-placeholder {
         font-size: 28rpx;
-        color: $text-color-tertiary;
+        color: var(--text-color-tertiary);
       }
     }
   }
@@ -4071,7 +4071,7 @@ async function handlePublish() {
   &.vertical {
     .form-label {
       font-size: 28rpx;
-      color: $text-color-primary;
+      color: var(--text-color-primary);
       font-weight: 500;
       margin-bottom: 16rpx;
     }
@@ -4112,7 +4112,7 @@ async function handlePublish() {
     .popup-title {
       font-size: 32rpx;
       font-weight: 600;
-      color: $text-color-primary;
+      color: var(--text-color-primary);
     }
 
     .close-btn {
@@ -4132,7 +4132,7 @@ async function handlePublish() {
       align-items: center;
       justify-content: space-between;
       padding: 24rpx 0;
-      border-bottom: 1px solid $border-color-light;
+      border-bottom: 1px solid var(--border-color-light);
       transition: background 0.2s;
 
       &:last-child {
@@ -4152,7 +4152,7 @@ async function handlePublish() {
 
       .condition-name {
         font-size: 28rpx;
-        color: $text-color-primary;
+        color: var(--text-color-primary);
       }
 
       .condition-check {
@@ -4188,7 +4188,7 @@ async function handlePublish() {
     .popup-title {
       font-size: 32rpx;
       font-weight: 600;
-      color: $text-color-primary;
+      color: var(--text-color-primary);
     }
 
     .close-btn {
@@ -4215,7 +4215,7 @@ async function handlePublish() {
     .location-section-title {
       display: block;
       font-size: 26rpx;
-      color: $text-color-tertiary;
+      color: var(--text-color-tertiary);
       margin-bottom: 16rpx;
       padding-left: 4rpx;
     }
@@ -4234,7 +4234,7 @@ async function handlePublish() {
       padding: 20rpx 24rpx;
       background: var(--bg-color-page);
       border-radius: 12rpx;
-      border: 1px solid $border-color-base;
+      border: 1px solid var(--border-color-base);
       transition: all 0.3s;
 
       &:focus-within {
@@ -4246,7 +4246,7 @@ async function handlePublish() {
       .custom-input {
         flex: 1;
         font-size: 28rpx;
-        color: $text-color-primary;
+        color: var(--text-color-primary);
         margin-left: 12rpx;
       }
 
@@ -4265,7 +4265,7 @@ async function handlePublish() {
       height: auto;
       padding: 20rpx 0;
       background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-color-dark) 100%);
-      color: $text-color-white;
+      color: var(--text-color-inverse);
       font-size: 28rpx;
       font-weight: 600;
       border-radius: 12rpx;
@@ -4281,8 +4281,8 @@ async function handlePublish() {
       }
 
       &.disabled {
-        background: $border-color-base;
-        color: $text-color-tertiary;
+        background: var(--border-color-base);
+        color: var(--text-color-tertiary);
       }
     }
   }
@@ -4298,7 +4298,7 @@ async function handlePublish() {
       padding: 24rpx 20rpx;
       background: var(--bg-color-card);
       transition: background 0.2s;
-      border-bottom: 1px solid $border-color-light;
+      border-bottom: 1px solid var(--border-color-light);
 
       &:last-child {
         border-bottom: none;
@@ -4334,12 +4334,12 @@ async function handlePublish() {
 
         .location-item-name {
           font-size: 28rpx;
-          color: $text-color-primary;
+          color: var(--text-color-primary);
         }
 
         .location-item-desc {
           font-size: 24rpx;
-          color: $text-color-tertiary;
+          color: var(--text-color-tertiary);
         }
       }
 
@@ -4386,13 +4386,13 @@ async function handlePublish() {
 
         .map-option-title {
           font-size: 28rpx;
-          color: $text-color-primary;
+          color: var(--text-color-primary);
           font-weight: 500;
         }
 
         .map-option-desc {
           font-size: 24rpx;
-          color: $text-color-tertiary;
+          color: var(--text-color-tertiary);
         }
       }
 
@@ -4438,13 +4438,13 @@ async function handlePublish() {
     align-items: center;
     justify-content: center;
     height: 88rpx;
-    border-bottom: 1px solid $border-color-light;
+    border-bottom: 1px solid var(--border-color-light);
     position: relative;
 
     .map-popup-title {
       font-size: 32rpx;
       font-weight: 600;
-      color: $text-color-primary;
+      color: var(--text-color-primary);
     }
 
     .map-close-btn {
@@ -4472,7 +4472,7 @@ async function handlePublish() {
     align-items: center;
     padding: 20rpx 24rpx;
     background: var(--bg-color-page);
-    border-top: 1px solid $border-color-light;
+    border-top: 1px solid var(--border-color-light);
 
     .location-info-icon {
       width: 48rpx;
@@ -4493,13 +4493,13 @@ async function handlePublish() {
 
       .location-info-name {
         font-size: 28rpx;
-        color: $text-color-primary;
+        color: var(--text-color-primary);
         font-weight: 500;
       }
 
       .location-info-address {
         font-size: 24rpx;
-        color: $text-color-tertiary;
+        color: var(--text-color-tertiary);
       }
     }
   }
@@ -4509,7 +4509,7 @@ async function handlePublish() {
     gap: 16rpx;
     padding: 20rpx 24rpx;
     padding-bottom: calc(20rpx + env(safe-area-inset-bottom));
-    border-top: 1px solid $border-color-light;
+    border-top: 1px solid var(--border-color-light);
 
     .map-btn {
       flex: 1;
@@ -4529,7 +4529,7 @@ async function handlePublish() {
 
     .cancel-map-btn {
       background: var(--bg-color-disabled);
-      color: $text-color-secondary;
+      color: var(--text-color-secondary);
     }
 
     .confirm-map-btn {
@@ -4567,7 +4567,7 @@ async function handlePublish() {
     .popup-title {
       font-size: 32rpx;
       font-weight: 600;
-      color: $text-color-primary;
+      color: var(--text-color-primary);
     }
 
     .close-btn {
@@ -4605,9 +4605,9 @@ async function handlePublish() {
       bottom: 12rpx;
       right: 12rpx;
       font-size: 22rpx;
-      color: $text-color-tertiary;
+      color: var(--text-color-tertiary);
       background: rgba(0, 0, 0, 0.5);
-      color: $text-color-white;
+      color: var(--text-color-inverse);
       padding: 4rpx 8rpx;
       border-radius: 8rpx;
     }
@@ -4630,7 +4630,7 @@ async function handlePublish() {
 
       &.cancel-btn {
         background: var(--bg-color-disabled);
-        color: $text-color-secondary;
+        color: var(--text-color-secondary);
       }
 
       &.confirm-btn {
@@ -4656,14 +4656,14 @@ async function handlePublish() {
   .condition-name-text,
   .category-name-text {
     font-size: 28rpx;
-    color: $text-color-primary;
+    color: var(--text-color-primary);
   }
 
   .title-placeholder-inline,
   .condition-placeholder-inline,
   .category-placeholder-inline {
     font-size: 28rpx;
-    color: $text-color-tertiary;
+    color: var(--text-color-tertiary);
   }
 }
 
@@ -4716,7 +4716,7 @@ async function handlePublish() {
         left: 8rpx;
         padding: 4rpx 10rpx;
         background: var(--primary-color-alpha-95);
-        color: $text-color-white;
+        color: var(--text-color-inverse);
         font-size: 20rpx;
         border-radius: 8rpx;
         font-weight: 600;
@@ -4730,14 +4730,14 @@ async function handlePublish() {
       aspect-ratio: 1;
       background: var(--bg-color-disabled);
       border-radius: 16rpx;
-      border: 2rpx dashed $border-color-base;
+      border: 2rpx dashed var(--border-color-base);
       display: flex;
       align-items: center;
       justify-content: center;
       transition: all 0.2s;
 
       &:active {
-        background: $border-color-light;
+        background: var(--border-color-light);
       }
     }
   }
@@ -4745,7 +4745,7 @@ async function handlePublish() {
   .upload-tip {
     display: block;
     font-size: 22rpx;
-    color: $text-color-tertiary;
+    color: var(--text-color-tertiary);
     padding: 0 4rpx;
     margin-top: 12rpx;
   }
@@ -4777,7 +4777,7 @@ async function handlePublish() {
     bottom: 8rpx;
     right: 8rpx;
     background: rgba(0, 0, 0, 0.5);
-    color: $text-color-white;
+    color: var(--text-color-inverse);
     padding: 4rpx 8rpx;
     font-size: 20rpx;
     border-radius: 8rpx;
@@ -4806,7 +4806,7 @@ async function handlePublish() {
     .popup-title {
       font-size: 32rpx;
       font-weight: 600;
-      color: $text-color-primary;
+      color: var(--text-color-primary);
     }
 
     .close-btn {
@@ -4826,7 +4826,7 @@ async function handlePublish() {
       align-items: center;
       justify-content: space-between;
       padding: 24rpx 0;
-      border-bottom: 1px solid $border-color-light;
+      border-bottom: 1px solid var(--border-color-light);
 
       .flash-toggle-info {
         display: flex;
@@ -4843,13 +4843,13 @@ async function handlePublish() {
 
           .flash-toggle-label {
             font-size: 28rpx;
-            color: $text-color-primary;
+            color: var(--text-color-primary);
             font-weight: 500;
           }
 
           .flash-toggle-desc {
             font-size: 22rpx;
-            color: $text-color-tertiary;
+            color: var(--text-color-tertiary);
             margin-top: 4rpx;
           }
         }
@@ -4858,7 +4858,7 @@ async function handlePublish() {
 
     .flash-config-item {
       padding: 24rpx 0;
-      border-bottom: 1px solid $border-color-light;
+      border-bottom: 1px solid var(--border-color-light);
 
       &.clickable {
         &:active {
@@ -4868,7 +4868,7 @@ async function handlePublish() {
 
       .flash-config-label {
         font-size: 28rpx;
-        color: $text-color-primary;
+        color: var(--text-color-primary);
         font-weight: 500;
         display: block;
         margin-bottom: 16rpx;
@@ -4885,10 +4885,10 @@ async function handlePublish() {
 
         text {
           font-size: 28rpx;
-          color: $text-color-primary;
+          color: var(--text-color-primary);
 
           &.placeholder {
-            color: $text-color-tertiary;
+            color: var(--text-color-tertiary);
           }
         }
       }
@@ -4903,7 +4903,7 @@ async function handlePublish() {
 
         .flash-price-symbol {
           font-size: 32rpx;
-          color: $text-color-primary;
+          color: var(--text-color-primary);
           font-weight: 600;
         }
 
@@ -4912,12 +4912,12 @@ async function handlePublish() {
           flex: 1;
           height: 72rpx;
           font-size: 28rpx;
-          color: $text-color-primary;
+          color: var(--text-color-primary);
         }
 
         .flash-stock-unit {
           font-size: 24rpx;
-          color: $text-color-tertiary;
+          color: var(--text-color-tertiary);
           margin-left: 8rpx;
         }
       }
@@ -4949,18 +4949,18 @@ async function handlePublish() {
           }
 
           &:active {
-            background: $border-color-base;
+            background: var(--border-color-base);
           }
 
           .repeat-option-text {
             font-size: 26rpx;
-            color: $text-color-primary;
+            color: var(--text-color-primary);
             font-weight: 500;
           }
 
           .repeat-option-desc {
             font-size: 22rpx;
-            color: $text-color-tertiary;
+            color: var(--text-color-tertiary);
           }
         }
       }
@@ -4977,10 +4977,10 @@ async function handlePublish() {
 
         text {
           font-size: 28rpx;
-          color: $text-color-primary;
+          color: var(--text-color-primary);
 
           &.date-placeholder {
-            color: $text-color-tertiary;
+            color: var(--text-color-tertiary);
           }
         }
       }
@@ -5031,12 +5031,12 @@ async function handlePublish() {
 
       &.cancel-btn {
         background: var(--bg-color-disabled);
-        color: $text-color-secondary;
+        color: var(--text-color-secondary);
       }
 
       &.confirm-btn {
         background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-color-dark) 100%);
-        color: $text-color-white;
+        color: var(--text-color-inverse);
       }
     }
   }
@@ -5050,18 +5050,18 @@ async function handlePublish() {
 
   .price-main-text {
     font-size: 32rpx;
-    color: $text-color-primary;
+    color: var(--text-color-primary);
     font-weight: 600;
   }
 
   .price-placeholder-text {
     font-size: 28rpx;
-    color: $text-color-tertiary;
+    color: var(--text-color-tertiary);
   }
 
   .price-discount-text {
     font-size: 22rpx;
-    color: $text-color-tertiary;
+    color: var(--text-color-tertiary);
   }
 }
 
@@ -5073,7 +5073,7 @@ async function handlePublish() {
 
   .flash-status-text {
     font-size: 26rpx;
-    color: $text-color-tertiary;
+    color: var(--text-color-tertiary);
 
     &.active {
       color: var(--danger-color);
@@ -5107,7 +5107,7 @@ async function handlePublish() {
     .popup-title {
       font-size: 32rpx;
       font-weight: 600;
-      color: $text-color-primary;
+      color: var(--text-color-primary);
     }
 
     .close-btn {
@@ -5128,7 +5128,7 @@ async function handlePublish() {
       align-items: center;
       justify-content: space-between;
       padding: 24rpx 0;
-      border-bottom: 1px solid $border-color-light;
+      border-bottom: 1px solid var(--border-color-light);
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       position: relative;
       overflow: hidden;
@@ -5196,14 +5196,14 @@ async function handlePublish() {
 
           .delivery-option-title {
             font-size: 28rpx;
-            color: $text-color-primary;
+            color: var(--text-color-primary);
             font-weight: 500;
             transition: all 0.3s;
           }
 
           .delivery-option-desc {
             font-size: 22rpx;
-            color: $text-color-tertiary;
+            color: var(--text-color-tertiary);
             margin-top: 4rpx;
             transition: all 0.3s;
           }
@@ -5236,7 +5236,7 @@ async function handlePublish() {
 
       .delivery-fee-label {
         font-size: 26rpx;
-        color: $text-color-secondary;
+        color: var(--text-color-secondary);
         margin-right: 12rpx;
       }
 
@@ -5258,19 +5258,19 @@ async function handlePublish() {
 
         .fee-symbol {
           font-size: 24rpx;
-          color: $text-color-primary;
+          color: var(--text-color-primary);
         }
 
         .fee-input {
           flex: 1;
           font-size: 26rpx;
-          color: $text-color-primary;
+          color: var(--text-color-primary);
         }
       }
 
       .fee-unit {
         font-size: 22rpx;
-        color: $text-color-tertiary;
+        color: var(--text-color-tertiary);
         margin-left: 8rpx;
       }
     }
@@ -5284,7 +5284,7 @@ async function handlePublish() {
 
   .delivery-text {
     font-size: 28rpx;
-    color: $text-color-primary;
+    color: var(--text-color-primary);
   }
 }
 </style>
