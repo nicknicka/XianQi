@@ -192,6 +192,7 @@ const isLoading = ref(false)
 const loadingText = ref('AI 正在思考')
 let loadingTextTimer: number | null = null
 const isGenerating = ref(false) // 标记是否已经开始生成内容
+const wsUnsubscribers: Array<() => void> = []
 
 const quickQuestions = ref([
   '如何发布商品？',
@@ -221,24 +222,24 @@ onMounted(() => {
 function setupWebSocket() {
   const wsUrl = resolveWebSocketUrl()
 
-  // 连接 WebSocket
-  wsClient.connect(wsUrl)
-
   // 监听消息
-  wsClient.on('message', handleWebSocketMessage)
+  wsUnsubscribers.push(wsClient.on('message', handleWebSocketMessage))
 
   // 监听连接状态
-  wsClient.on('open', () => {
+  wsUnsubscribers.push(wsClient.on('open', () => {
     console.log('[AI Chat] WebSocket 已连接')
-  })
+  }))
 
-  wsClient.on('error', (error) => {
+  wsUnsubscribers.push(wsClient.on('error', (error) => {
     console.error('[AI Chat] WebSocket 错误:', error)
-  })
+  }))
 
-  wsClient.on('close', () => {
+  wsUnsubscribers.push(wsClient.on('close', () => {
     console.log('[AI Chat] WebSocket 已断开')
-  })
+  }))
+
+  // 连接 WebSocket；连接客户端会复用已有连接。
+  wsClient.connect(wsUrl)
 }
 
 // 处理 WebSocket 消息
@@ -438,20 +439,32 @@ async function getAIResponse(question: string) {
         message: question
       }
     }
-    wsClient.send(wsMessage)
-    console.log('[AI Chat] 已通过 WebSocket 发送消息:', wsMessage)
+    if (wsClient.send(wsMessage)) {
+      console.log('[AI Chat] 已通过 WebSocket 发送消息:', wsMessage)
 
-    // 设置超时检测，如果 30 秒没有响应，提示用户
-    setTimeout(() => {
-      if (isLoading.value) {
-        console.warn('[AI Chat] AI 响应超时，请检查后端服务')
-        uni.showToast({
-          title: 'AI 响应超时，请重试',
-          icon: 'none',
-          duration: 2000
-        })
-      }
-    }, 30000)
+      // 设置超时检测，如果 30 秒没有响应，提示用户
+      setTimeout(() => {
+        if (isLoading.value) {
+          console.warn('[AI Chat] AI 响应超时，请检查后端服务')
+          uni.showToast({
+            title: 'AI 响应超时，请重试',
+            icon: 'none',
+            duration: 2000
+          })
+        }
+      }, 30000)
+    } else {
+      isLoading.value = false
+      isGenerating.value = false
+      stopLoadingAnimation()
+      aiMessage.content = '消息发送失败，请重试。'
+      saveChatHistory()
+      uni.showToast({
+        title: '发送失败，请重试',
+        icon: 'none',
+        duration: 2000
+      })
+    }
   } else {
     // WebSocket 未连接，降级为 HTTP 请求
     console.log('[AI Chat] WebSocket 未连接，降级为 HTTP 请求')
@@ -616,10 +629,8 @@ onUnmounted(() => {
   // 清理加载动画定时器
   stopLoadingAnimation()
 
-  // 注意：这里不关闭连接，因为 WebSocket 是全局单例
-  // 其他页面可能也在使用
-  // 如果需要关闭，可以调用 wsClient.close()
-  // wsClient.close()
+  // 只移除当前页面的订阅，不关闭全局连接。
+  wsUnsubscribers.splice(0).forEach(unsubscribe => unsubscribe())
 })
 </script>
 
