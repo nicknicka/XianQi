@@ -3,7 +3,7 @@
  * 前端页面状态只消费这里的语义结果，避免各页面重复解释后端状态码。
  */
 
-export type AuthenticationBackendStatus = 0 | 1 | 2 | 3
+export type AuthenticationKind = 'real-name' | 'student'
 
 export type AuthenticationPageStatus = 'unverified' | 'pending' | 'verified' | 'rejected'
 
@@ -74,11 +74,19 @@ const AUTH_STATUS_META: Record<
   }
 }
 
-const DEFAULT_DESCRIPTIONS: Record<AuthenticationPageStatus, string> = {
-  unverified: '完成实名认证，提高账户安全性',
-  pending: '您的认证信息正在审核中',
-  verified: '实名认证已完成',
-  rejected: '认证失败，请重新提交'
+const DEFAULT_DESCRIPTIONS: Record<AuthenticationKind, Record<AuthenticationPageStatus, string>> = {
+  'real-name': {
+    unverified: '完成实名认证，提高账户安全性',
+    pending: '您的实名认证信息正在审核中',
+    verified: '实名认证已完成',
+    rejected: '认证失败，请重新提交'
+  },
+  student: {
+    unverified: '完成学生认证，解锁学生权益',
+    pending: '您的学生认证信息正在审核中',
+    verified: '学生认证已完成',
+    rejected: '认证失败，请重新提交'
+  }
 }
 
 /** 认证中心锁定态使用中性文本色，不再复用认证状态语义色。 */
@@ -98,7 +106,7 @@ export interface AuthenticationCenterStudentState {
   target: 'student' | 'real-name'
 }
 
-export function resolveStudentAuthCenterState(
+export function resolveStudentAuthAccessState(
   studentState: AuthenticationState,
   realNameState: AuthenticationState
 ): AuthenticationCenterStudentState {
@@ -118,6 +126,7 @@ export function resolveStudentAuthCenterState(
 }
 
 export function resolveAuthState(
+  kind: AuthenticationKind,
   status?: number | null,
   options: ResolveAuthStateOptions = {}
 ): AuthenticationState {
@@ -137,6 +146,6 @@ export function resolveAuthState(
     description:
       pageStatus === 'rejected' && options.rejectReason
         ? options.rejectReason
-        : DEFAULT_DESCRIPTIONS[pageStatus]
+        : DEFAULT_DESCRIPTIONS[kind][pageStatus]
   }
 }

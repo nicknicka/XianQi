@@ -44,3 +44,35 @@ test('requires the token document to list every guarded auth token', () => {
 
   assert.deepEqual(findMissingTokenDocumentation(doc), [])
 })
+
+test('guards auth navigation entries and shared auth component sources', async () => {
+  const tokenScript = await import('../scripts/check-auth-tokens.mjs')
+
+  for (const relativePath of [
+    'src/components/auth/AuthStatusPanel.vue',
+    'src/components/auth/AuthFormField.vue',
+    'src/components/auth/AuthStudentCardUpload.vue'
+  ]) {
+    assert.equal(AUTH_SOURCE_FILES.includes(relativePath), true)
+  }
+
+  const pagesJson = JSON.parse(readFileSync(path.join(mobileDir, 'src/pages.json'), 'utf8'))
+  assert.deepEqual(tokenScript.findAuthPageStyleFindings(pagesJson), [])
+})
+
+test('rejects an undocumented auth navigation color drift', async () => {
+  const tokenScript = await import('../scripts/check-auth-tokens.mjs')
+  const findings = tokenScript.findAuthPageStyleFindings({
+    pages: [
+      {
+        path: 'pages/mine/auth-center',
+        style: { navigationBarBackgroundColor: '#123456', navigationBarTextStyle: 'white' }
+      }
+    ]
+  })
+
+  assert.deepEqual(
+    findings.filter(finding => finding.rule === 'raw-color'),
+    [{ file: 'src/pages.json', rule: 'raw-color', message: 'Use documented #8EC5E8', line: 0 }]
+  )
+})

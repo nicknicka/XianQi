@@ -1,93 +1,74 @@
 <template>
   <view class="student-auth-page page-animate" :class="{ 'animate-in': isAnimated }" :style="themeStyle">
     <!-- 正在确认实名前置条件时不渲染表单，避免直接访问短暂绕过守卫。 -->
-    <view v-if="statusLoading" class="status-card status-loading">
-      <uni-icons type="loop" :size="AUTH_ICON_SIZES.status" :color="statusColor" />
-      <text class="status-text">正在校验</text>
-      <text class="status-desc">正在确认实名认证状态</text>
-    </view>
+    <AuthStatusPanel
+      v-if="statusLoading"
+      class="page-status-panel"
+      icon="loop"
+      label="正在校验"
+      description="正在确认实名认证状态"
+      semantic-color="neutral"
+    />
 
     <!-- 直接访问学生认证页时的实名前置守卫。 -->
-    <view v-else-if="accessGuard.locked" class="status-card status-locked">
-      <uni-icons type="locked" :size="AUTH_ICON_SIZES.status" :color="statusColor" />
-      <text class="status-text">{{ accessGuard.label }}</text>
-      <text class="status-desc">{{ accessGuard.description }}</text>
+    <AuthStatusPanel
+      v-else-if="accessGuard.locked"
+      class="page-status-panel"
+      :icon="accessGuard.icon"
+      :label="accessGuard.label"
+      :description="accessGuard.description"
+      :semantic-color="accessGuard.semanticColor"
+    >
       <view class="locked-action" @click="goToRealNameAuth">
         <text>{{ accessGuard.actionLabel }}</text>
         <uni-icons type="right" :size="AUTH_ICON_SIZES.inline" :color="bgColorCard" />
       </view>
-    </view>
+    </AuthStatusPanel>
 
     <!-- 学生认证状态：未认证、审核中、已认证、认证失败。 -->
-    <view v-else class="status-card" :class="'status-' + studentState.pageStatus">
-      <uni-icons :type="studentState.icon" :size="AUTH_ICON_SIZES.status" :color="statusColor" />
-      <text class="status-text">{{ studentState.label }}</text>
-      <text class="status-desc">{{ studentState.description }}</text>
-    </view>
+    <AuthStatusPanel
+      v-else
+      class="page-status-panel"
+      :icon="studentState.icon"
+      :label="studentState.label"
+      :description="studentState.description"
+      :semantic-color="studentState.semanticColor"
+    />
 
     <!-- 学生认证表单 -->
     <view v-if="!statusLoading && !accessGuard.locked && studentState.editable" class="form-section">
       <view class="form-title">学生认证信息</view>
       <view class="form-tip">请填写学生信息并上传学生证照片</view>
 
-      <view class="form-item">
-        <text class="label">学号</text>
-        <input
-          class="input"
-          v-model="form.studentId"
-          placeholder="请输入学号"
-          placeholder-style="color: var(--text-color-tertiary)"
-        />
-      </view>
+      <AuthFormField
+        v-model="form.studentId"
+        label="学号"
+        placeholder="请输入学号"
+      />
 
-      <view class="form-item">
-        <text class="label">学院</text>
-        <input
-          class="input"
-          v-model="form.college"
-          placeholder="请输入学院"
-          placeholder-style="color: var(--text-color-tertiary)"
-        />
-      </view>
+      <AuthFormField
+        v-model="form.college"
+        label="学院"
+        placeholder="请输入学院"
+      />
 
-      <view class="form-item">
-        <text class="label">专业</text>
-        <input
-          class="input"
-          v-model="form.major"
-          placeholder="请输入专业"
-          placeholder-style="color: var(--text-color-tertiary)"
-        />
-      </view>
+      <AuthFormField
+        v-model="form.major"
+        label="专业"
+        placeholder="请输入专业"
+      />
 
-      <view
+      <AuthStudentCardUpload
         v-for="side in studentCardSides"
         :key="side.key"
-        class="upload-section"
-      >
-        <text class="label">{{ side.label }}</text>
-        <view
-          class="upload-box"
-          :class="{ uploading: uploadingSide === side.key }"
-          @click="handleUploadBoxClick(side.key)"
-        >
-          <image
-            v-if="form[side.key]"
-            class="preview-image"
-            :src="form[side.key]"
-            mode="aspectFit"
-          />
-          <view v-else class="upload-placeholder">
-            <uni-icons type="camera" :size="AUTH_ICON_SIZES.upload" :color="textColorTertiary" />
-            <text class="upload-text">{{ uploadingSide === side.key ? '上传中...' : '点击上传' }}</text>
-          </view>
-        </view>
-        <view v-if="form[side.key]" class="upload-actions">
-          <view class="upload-action" @click.stop="uploadStudentCard(side.key)">替换</view>
-          <view class="upload-action delete-action" @click.stop="removeStudentCard(side.key)">删除</view>
-        </view>
-        <text v-if="uploadError === side.key" class="upload-error">上传失败，请重试</text>
-      </view>
+        v-model="form[side.key]"
+        :label="side.label"
+        :uploading="uploadingSide === side.key"
+        :error="uploadError === side.key"
+        @activate="handleUploadBoxClick(side.key)"
+        @replace="uploadStudentCard(side.key)"
+        @remove="removeStudentCard(side.key)"
+      />
 
       <button
         class="submit-btn"
@@ -151,9 +132,12 @@ import { useServiceNavigation } from '@/composables/useServiceNavigation'
 import { onShow } from '@dcloudio/uni-app'
 import {
   resolveAuthState,
-  resolveStudentAuthCenterState,
+  resolveStudentAuthAccessState,
   type AuthenticationState
 } from '@/utils/auth/auth-state'
+import AuthStatusPanel from '@/components/auth/AuthStatusPanel.vue'
+import AuthFormField from '@/components/auth/AuthFormField.vue'
+import AuthStudentCardUpload from '@/components/auth/AuthStudentCardUpload.vue'
 import {
   AUTH_ICON_SIZES,
   AUTH_PAGE_ANIMATION_DELAY_MS
@@ -163,14 +147,7 @@ type StudentCardSide = 'frontImage' | 'backImage'
 
 const userStore = useUserStore()
 useServiceNavigation()
-const {
-  primaryColor,
-  successColor,
-  dangerColor,
-  infoColor,
-  textColorTertiary,
-  bgColorCard
-} = useThemeColors()
+const { textColorTertiary, bgColorCard } = useThemeColors()
 const { themeStyle } = useThemeStyle()
 
 const studentCardSides = [
@@ -183,8 +160,8 @@ const statusLoading = ref(true)
 const submitting = ref(false)
 const uploadingSide = ref<StudentCardSide | null>(null)
 const uploadError = ref<StudentCardSide | null>(null)
-const realNameState = ref<AuthenticationState>(resolveAuthState())
-const studentState = ref<AuthenticationState>(resolveAuthState())
+const realNameState = ref<AuthenticationState>(resolveAuthState('real-name'))
+const studentState = ref<AuthenticationState>(resolveAuthState('student'))
 const verifiedInfo = ref<StudentAuth | null>(null)
 
 const form = ref({
@@ -195,20 +172,11 @@ const form = ref({
   backImage: ''
 })
 
-/** 直接访问时复用认证中心的学生锁定模型，保证前置规则只有一处。 */
+/** 直接访问和认证中心都复用同一学生锁定模型，保证前置规则只有一处。 */
 const accessGuard = computed(() =>
-  resolveStudentAuthCenterState(studentState.value, realNameState.value)
+  resolveStudentAuthAccessState(studentState.value, realNameState.value)
 )
 
-const authSemanticColors = {
-  info: infoColor,
-  primary: primaryColor,
-  success: successColor,
-  danger: dangerColor,
-  neutral: textColorTertiary
-} as const
-
-const statusColor = computed(() => authSemanticColors[accessGuard.value.semanticColor])
 const verifiedStudentCardImages = computed(() =>
   [verifiedInfo.value?.studentCardImages?.[0], verifiedInfo.value?.studentCardImages?.[1]].filter(
     (imageUrl): imageUrl is string => Boolean(imageUrl)
@@ -232,12 +200,12 @@ async function loadVerificationStatus() {
 
   try {
     const realNameRes = await userApi.getRealNameAuth()
-    realNameState.value = resolveAuthState(realNameRes.data?.status, {
+    realNameState.value = resolveAuthState('real-name', realNameRes.data?.status, {
       rejectReason: realNameRes.data?.rejectReason
     })
   } catch (error) {
     console.error('加载实名认证状态失败:', error)
-    realNameState.value = resolveAuthState()
+    realNameState.value = resolveAuthState('real-name')
   }
 
   if (realNameState.value.pageStatus !== 'verified') {
@@ -248,7 +216,7 @@ async function loadVerificationStatus() {
   try {
     const studentRes = await userApi.getStudentAuth()
     const auth = studentRes.data
-    studentState.value = resolveAuthState(auth?.status, {
+    studentState.value = resolveAuthState('student', auth?.status, {
       rejectReason: auth?.rejectReason
     })
     verifiedInfo.value = auth ?? null
@@ -373,7 +341,7 @@ async function handleSubmit() {
       studentCardImages: [form.value.frontImage, form.value.backImage]
     })
 
-    studentState.value = resolveAuthState(1)
+    studentState.value = resolveAuthState('student', 1)
     verifiedInfo.value = null
     uni.showToast({ title: '提交成功，请等待审核', icon: 'success' })
     await refreshUserInfo()
@@ -425,51 +393,10 @@ async function refreshUserInfo() {
   padding-bottom: calc(var(--auth-page-padding) + env(safe-area-inset-bottom));
 }
 
-.status-card {
+.page-status-panel {
   animation: pageSlideInUp var(--motion-duration-slow) var(--motion-ease-standard) forwards;
   animation-delay: var(--motion-delay-fast);
   opacity: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: var(--auth-card-padding-lg);
-  background: var(--bg-color-card);
-  border-radius: var(--auth-card-radius);
-  margin-bottom: var(--auth-section-gap);
-
-  .status-text {
-    font-size: var(--font-size-xl);
-    font-weight: var(--auth-font-weight-semibold);
-    color: var(--auth-status-color);
-    margin: var(--auth-section-gap) 0 var(--auth-label-gap);
-  }
-
-  .status-desc {
-    font-size: var(--font-size-base);
-    color: var(--text-color-tertiary);
-    text-align: center;
-  }
-}
-
-.status-unverified {
-  --auth-status-color: var(--info-color);
-}
-
-.status-pending {
-  --auth-status-color: var(--primary-color);
-}
-
-.status-verified {
-  --auth-status-color: var(--success-color);
-}
-
-.status-rejected {
-  --auth-status-color: var(--danger-color);
-}
-
-.status-loading,
-.status-locked {
-  --auth-status-color: var(--text-color-tertiary);
 }
 
 .locked-action {
@@ -504,92 +431,6 @@ async function refreshUserInfo() {
     margin-bottom: var(--auth-section-gap);
   }
 
-  .form-item {
-    margin-bottom: var(--auth-section-gap);
-
-    .label {
-      display: block;
-      font-size: var(--font-size-base);
-      color: var(--text-color-primary);
-      margin-bottom: var(--auth-label-gap);
-    }
-
-    .input {
-      width: 100%;
-      height: var(--auth-control-height);
-      padding: 0 var(--auth-control-padding-x);
-      background: var(--bg-color-page);
-      border-radius: var(--auth-control-radius);
-      font-size: var(--font-size-base);
-    }
-  }
-
-  .upload-section {
-    margin-bottom: var(--auth-section-gap);
-
-    .label {
-      display: block;
-      font-size: var(--font-size-base);
-      color: var(--text-color-primary);
-      margin-bottom: var(--auth-label-gap);
-    }
-
-    .upload-box {
-      width: 100%;
-      height: var(--auth-upload-height);
-      background: var(--bg-color-page);
-      border-radius: var(--auth-control-radius);
-      overflow: hidden;
-
-      .preview-image {
-        width: 100%;
-        height: 100%;
-      }
-
-      .upload-placeholder {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        height: 100%;
-
-        .upload-text {
-          font-size: var(--font-size-sm);
-          color: var(--text-color-tertiary);
-          margin-top: var(--auth-label-gap);
-        }
-      }
-    }
-
-    .upload-actions {
-      display: flex;
-      gap: var(--auth-label-gap);
-      margin-top: var(--auth-label-gap);
-    }
-
-    .upload-action {
-      flex: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: var(--auth-control-height);
-      background: var(--bg-color-page);
-      color: var(--text-color-primary);
-      font-size: var(--font-size-sm);
-      border-radius: var(--auth-control-radius);
-    }
-
-    .delete-action {
-      color: var(--danger-color);
-    }
-
-    .upload-error {
-      display: block;
-      margin-top: var(--auth-tip-gap);
-      font-size: var(--font-size-sm);
-      color: var(--danger-color);
-    }
-  }
 
   .submit-btn {
     width: 100%;
