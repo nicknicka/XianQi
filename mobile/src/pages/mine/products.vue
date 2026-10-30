@@ -72,16 +72,7 @@ import { onShow } from "@dcloudio/uni-app";
 import { productApi } from "@/api/product";
 import { shareManager } from "@/utils/share";
 import ProductListItem from "@/components/product-list-item/product-list-item.vue";
-
-interface Product {
-	id: string;
-	title: string;
-	coverImage: string;
-	price: number;
-	status: number;
-	viewCount: number;
-	favoriteCount: number;
-}
+import type { Product } from "@/types";
 
 const { themeStyle } = useThemeStyle();
 
@@ -182,7 +173,7 @@ function loadProducts(refresh = false) {
 			// 只显示有效商品：0=下架, 1=在售, 2=已售
 			const beforeFilterCount = list.length;
 			list = list.filter((item: Product) => {
-				const validStatuses = [0, 1, 2];
+				const validStatuses: Product['status'][] = [0, 1, 2];
 				return validStatuses.includes(item.status);
 			});
 			console.log("   过滤后商品数量:", list.length);
@@ -263,8 +254,8 @@ function onRefresh() {
 	loadProducts(true);
 }
 
-function getStatusText(status: number) {
-	const map: Record<number, string> = {
+function getStatusText(status: Product['status']) {
+	const map: Record<string, string> = {
 		0: "下架",
 		1: "在售",
 		2: "已售",

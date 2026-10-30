@@ -47,7 +47,7 @@ export const sensitiveWordApi = {
    */
   async filter(content: string) {
     return http.post<string>('/sensitive-word/filter', content, {
-      headers: {
+      header: {
         'Content-Type': 'text/plain'
       }
     })

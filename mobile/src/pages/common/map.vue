@@ -14,7 +14,7 @@
       >
         <marker
           v-if="selectedLocation"
-          :id="1"
+          :id="'1'"
           :longitude="selectedLocation.longitude"
           :latitude="selectedLocation.latitude"
           :icon-path="selectedLocation.iconPath"
@@ -90,7 +90,7 @@ const searchResults = ref<any[]>([])
 
 const markers = ref([
   {
-    id: 1,
+    id: '1',
     longitude: longitude.value,
     latitude: latitude.value,
     iconPath: '/static/icons/marker.png',
@@ -131,7 +131,7 @@ function relocate() {
 function updateMarker(lng: number, lat: number, name = '', address = '') {
   markers.value = [
     {
-      id: 1,
+      id: '1',
       longitude: lng,
       latitude: lat,
       iconPath: '/static/icons/marker.png',

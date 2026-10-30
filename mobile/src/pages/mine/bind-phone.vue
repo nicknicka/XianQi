@@ -166,7 +166,10 @@ async function handleSubmit() {
     })
 
     // 更新用户信息
-    await userStore.fetchUserInfo()
+    const res = await userApi.getUserInfo()
+    if (res.data) {
+      userStore.setUserInfo(res.data)
+    }
 
     // 延迟返回
     setTimeout(() => {

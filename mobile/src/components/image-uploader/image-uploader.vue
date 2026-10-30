@@ -59,7 +59,8 @@ function chooseImage() {
     sizeType: ['compressed'],
     sourceType: ['album', 'camera'],
     success: (res) => {
-      uploadImages(res.tempFilePaths)
+      const filePaths = Array.isArray(res.tempFilePaths) ? res.tempFilePaths : [res.tempFilePaths]
+      uploadImages(filePaths)
     }
   })
 }

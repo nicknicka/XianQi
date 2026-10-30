@@ -113,7 +113,7 @@ const { pageAnimationStyle, isItemVisible, getItemStyle } = usePageAnimation()
 const pageType = ref<'following' | 'followers'>('following')
 
 // Tab 配置
-const tabs = computed(() => [
+const tabs = computed<Array<{ label: string; value: 'following' | 'followers' }>>(() => [
   { label: '我的关注', value: 'following' },
   { label: '我的粉丝', value: 'followers' }
 ])
@@ -146,7 +146,7 @@ const currentPage = ref(1)
 const pageSize = 20
 
 // 格式化时间
-function formatTime(time: string) {
+function formatTime(time?: string) {
   if (!time) return ''
   const date = new Date(time)
   const now = new Date()

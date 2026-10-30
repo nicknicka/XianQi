@@ -69,11 +69,11 @@ const baseline = readBaseline()
 
 if (process.argv.includes('--update')) {
   const sorted = [...current].sort()
-  writeFileSync(baselinePath,
-    '# mobile 既存 TypeScript 错误基线（行号已去除，避免代码挪动造成噪声）。\n' +
+  const header = '# mobile 既存 TypeScript 错误基线（行号已去除，避免代码挪动造成噪声）。\n' +
     '# 每行格式：<文件>: error TSxxxx: <消息>\n' +
-    '# 重构期间要求：不得新增此清单之外的错误。\n' +
-    sorted.join('\n') + '\n')
+    '# 重构期间要求：不得新增此清单之外的错误。'
+  const entries = sorted.length ? `\n\n${sorted.join('\n')}` : ''
+  writeFileSync(baselinePath, `${header}${entries}\n`)
   console.log(`基线已更新：${sorted.length} 条`)
   process.exit(0)
 }

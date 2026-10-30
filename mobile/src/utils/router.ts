@@ -270,7 +270,8 @@ class Router {
   getPageParams<T = any>(): T {
     const pages = getCurrentPages()
     const currentPage = pages[pages.length - 1]
-    return currentPage?.options as any || {}
+    const pageWithOptions = currentPage as typeof currentPage & { options?: Record<string, unknown> }
+    return (pageWithOptions.options || {}) as T
   }
 }
 

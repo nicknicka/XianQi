@@ -2,7 +2,7 @@
  * 页面入场动画 Composable
  * 为子页面提供统一的入场动画效果
  */
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 
 export interface PageAnimationOptions {
   // 动画延迟时间（毫秒）
@@ -100,13 +100,13 @@ export function usePageAnimation(options: PageAnimationOptions = {}) {
   /**
    * 获取动画样式
    */
-  const pageStyle = {
-    opacity: contentOpacity,
-    transform: contentTransform,
+  const pageAnimationStyle = computed(() => ({
+    opacity: contentOpacity.value,
+    transform: `translateY(${contentTransform.value}rpx)`,
     transition: pageVisible.value
       ? `opacity ${duration}ms ease-out, transform ${duration}ms cubic-bezier(0.34, 1.56, 0.64, 1)`
       : 'none'
-  }
+  }))
 
   /**
    * 获取列表项样式
@@ -143,7 +143,7 @@ export function usePageAnimation(options: PageAnimationOptions = {}) {
     isItemVisible,
 
     // 样式
-    pageStyle,
+    pageAnimationStyle,
     getItemStyle
   }
 }

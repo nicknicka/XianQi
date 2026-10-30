@@ -178,6 +178,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { orderApi } from '@/api/order'
+import { refundApi } from '@/api/refund'
 import LazyImage from '@/components/lazy-image/lazy-image.vue'
 import {useThemeStyle, useThemeColors, useThemePage} from '@/utils/theme'
 import { onShow } from '@dcloudio/uni-app'
@@ -248,9 +249,9 @@ function loadOrderInfo() {
 }
 
 function loadRefundRecords() {
-  orderApi.getRefundList({
+  refundApi.getBuyerRefundList({
     page: page.value,
-    pageSize: pageSize.value
+    size: pageSize.value
   }).then((res: any) => {
     const data = res.data || {}
     if (page.value === 1) {
@@ -271,9 +272,12 @@ function loadMore() {
 }
 
 function onReasonChange(e: any) {
-  const index = e.detail.value
-  selectedReason.value = refundReasons.value[index].label
-  refundForm.value.reason = refundReasons.value[index].value
+  const index = Number(e.detail.value)
+  const picked = refundReasons.value[index]
+  if (!picked) return
+  selectedReason.value = picked.label
+  // 后端 refundReason 是字符串（见 RefundCreateDTO），传可读文案而非内部数字
+  refundForm.value.reason = picked.label
 }
 
 function submitRefund() {
@@ -287,14 +291,18 @@ function submitRefund() {
     content: `申请退款金额 ¥${orderInfo.value?.totalAmount || 0}，提交后商家将进行处理`,
     success: (res) => {
       if (res.confirm) {
+        // 页面目前没有退款金额与退款类型的输入项（见 issue 记录的功能缺口），
+        // 先按「订单总额 + 仅退款」提交，使该入口可用。
         const submitData = {
           orderId: orderId.value,
-          reason: refundForm.value.reason,
-          description: refundForm.value.description,
-          images: refundForm.value.images
+          refundAmount: Number(orderInfo.value?.totalAmount || 0),
+          refundReason: refundForm.value.reason,
+          refundType: 1, // 1-仅退款
+          evidenceImages: refundForm.value.images,
+          remark: refundForm.value.description
         }
 
-        orderApi.applyRefund(submitData).then(() => {
+        refundApi.createRefund(submitData).then(() => {
           uni.showToast({ title: '退款申请已提交', icon: 'success' })
           setTimeout(() => {
             uni.navigateBack()
@@ -313,7 +321,7 @@ function cancelRefund(refundId: string) {
     content: '确定要撤销退款申请吗？',
     success: (res) => {
       if (res.confirm) {
-        orderApi.cancelRefund(refundId).then(() => {
+        refundApi.cancelRefund(refundId).then(() => {
           uni.showToast({ title: '已撤销退款申请', icon: 'success' })
           refreshList()
         }).catch(() => {

@@ -189,7 +189,8 @@ export function checkPermission(permission: Permission | string): boolean {
   }
 
   // 获取用户角色（默认为普通用户）
-  const userRole = (userStore.userInfo as any).role || UserRole.USER
+  const rawRole: unknown = (userStore.userInfo as { role?: unknown }).role
+  const userRole = Object.values(UserRole).find(role => role === rawRole) || UserRole.USER
 
   // 超级管理员拥有所有权限
   if (userRole === UserRole.SUPER_ADMIN) {

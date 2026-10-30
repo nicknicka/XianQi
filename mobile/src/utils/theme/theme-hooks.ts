@@ -8,6 +8,7 @@ import { computed } from 'vue'
 import type { ThemeId, ThemeRegistration } from './theme-seed'
 import { themeManager, reactiveCSSVars } from './theme-manager'
 import { getTheme, getThemeList, SHARED_COLORS } from './theme-registry'
+import { resolveTheme } from './theme-derive'
 
 /**
  * 主题操作 hook
@@ -129,6 +130,10 @@ export const useThemeStyle = () => {
       bgColorCard: vars['--bg-color-card'] || '#ffffff',
       textColorPrimary: vars['--text-color-primary'] || '#333333',
       textColorSecondary: vars['--text-color-secondary'] || '#666666',
+      // 以下两项由 theme-derive 生成为 CSS 变量，此前未在此处暴露，
+      // 导致页面解构后拿到 undefined（图标颜色/边框色失效）。
+      textColorTertiary: vars['--text-color-tertiary'] || '#999999',
+      borderColorBase: vars['--border-color-base'] || '#E8E8E8',
     }
     console.log(`[Theme] themeColors computed - bgColorPage: ${colors.bgColorPage}`)
     return colors
@@ -144,6 +149,7 @@ export const useThemeStyle = () => {
 export const useThemeColors = () => {
   const registration = themeManager.getCurrentRegistration()
   const seed = registration.light
+  const vars = resolveTheme(registration, themeManager.getIsDark(), themeManager.getFontSizeScale())
   console.log(`[Theme] useThemeColors 加载颜色: primaryColor=${seed.primaryColor}, accentColor=${seed.accentColor}, backgroundColor=${seed.backgroundColor}`)
   return {
     primaryColor: seed.primaryColor,
@@ -155,5 +161,11 @@ export const useThemeColors = () => {
     warningColor: SHARED_COLORS.warningColor,
     dangerColor: SHARED_COLORS.dangerColor,
     infoColor: SHARED_COLORS.infoColor,
+    // 页面（图标/边框/卡片背景）需要用到的语义色。
+    // 这些值由派生层生成，不能从只有种子色的 light 对象读取。
+    bgColorCard: vars['--bg-color-card'],
+    textColorPrimary: vars['--text-color-primary'],
+    textColorTertiary: vars['--text-color-tertiary'],
+    borderColorBase: vars['--border-color-base'],
   }
 }

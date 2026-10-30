@@ -2,7 +2,7 @@
   <view class="form" :class="[`label-${labelPosition}`, customClass]" :style="customStyle">
     <!-- 表单项 -->
     <view
-      v-for="(item, index) in formItems"
+      v-for="(item, index) in items"
       :key="item.prop || index"
       class="form-item"
       :class="{

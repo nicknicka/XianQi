@@ -36,9 +36,9 @@ import { useThemeStyle, useThemeColors } from '@/utils/theme'
 const { themeStyle } = useThemeStyle()
 const { primaryColor } = useThemeColors()
 
-export type SegmentedSize = 'small' | 'medium' | 'large'
+type SegmentedSize = 'small' | 'medium' | 'large'
 
-export interface SegmentedOption {
+interface SegmentedOption {
   label: string
   value: string | number
   icon?: string

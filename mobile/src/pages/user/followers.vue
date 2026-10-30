@@ -216,7 +216,7 @@ async function checkFollowStatusForUsers(users: UserInfo[]) {
       // 找到对应的用户并更新状态
       const targetUser = userList.value.find((u) => u.id === user.id)
       if (targetUser) {
-        targetUser.isFollowing = isFollowing
+        targetUser.isFollowing = isFollowing.data
       }
     } catch (error) {
       console.error(`检查用户 ${user.id} 关注状态失败:`, error)
