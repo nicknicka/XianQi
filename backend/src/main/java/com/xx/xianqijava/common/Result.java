@@ -82,6 +82,13 @@ public class Result<T> implements Serializable {
     }
 
     /**
+     * 失败响应（自定义错误码和结构化数据）
+     */
+    public static <T> Result<T> error(Integer code, String message, T data) {
+        return new Result<>(code, message, data);
+    }
+
+    /**
      * 失败响应（业务错误码）
      */
     public static <T> Result<T> error(ErrorCode errorCode) {

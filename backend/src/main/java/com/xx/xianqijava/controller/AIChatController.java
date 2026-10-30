@@ -1,10 +1,13 @@
 package com.xx.xianqijava.controller;
 
 import com.xx.xianqijava.ai.AiChatOutcome;
+import com.xx.xianqijava.ai.AiChatErrorCode;
+import com.xx.xianqijava.ai.AiChatException;
 import com.xx.xianqijava.ai.AiChatService;
 import com.xx.xianqijava.ai.config.AiProperties;
 import com.xx.xianqijava.common.Result;
 import com.xx.xianqijava.dto.AIChatHistoryVO;
+import com.xx.xianqijava.dto.AIChatErrorDTO;
 import com.xx.xianqijava.dto.AIChatRequest;
 import com.xx.xianqijava.dto.AIConfigDTO;
 import com.xx.xianqijava.service.AIChatHistoryService;
@@ -50,7 +53,7 @@ public class AIChatController {
      */
     @PostMapping("/chat")
     @Operation(summary = "AI聊天", description = "与AI助手对话，自动识别意图并路由到对应Agent（非流式）")
-    public Result<String> chat(@RequestBody AIChatRequest request) {
+    public Result<?> chat(@RequestBody AIChatRequest request) {
         long startTime = System.currentTimeMillis();
         log.info("收到 AI 聊天请求：userId={}", request.getUserId());
         try {
@@ -59,9 +62,15 @@ public class AIChatController {
             log.info("AI 聊天完成：userId={}，intent={}，耗时={}ms",
                     request.getUserId(), outcome.intent(), System.currentTimeMillis() - startTime);
             return Result.success("AI回复成功", outcome.response());
+        } catch (AiChatException e) {
+            log.warn("AI 聊天未完成：userId={}，type={}，message={}",
+                    request.getUserId(), e.getErrorCode(), e.getMessage());
+            AIChatErrorDTO error = AIChatErrorDTO.from(e);
+            return Result.error(error.getCode(), error.getMessage(), error);
         } catch (Exception e) {
             log.error("AI 聊天失败：userId={}", request.getUserId(), e);
-            throw e;
+            AIChatErrorDTO error = AIChatErrorDTO.from(e);
+            return Result.error(error.getCode(), error.getMessage(), error);
         }
     }
 
@@ -99,23 +108,28 @@ public class AIChatController {
                         },
                         error -> {
                             log.error("AI 流式聊天失败：userId={}", userId, error);
-                            try {
-                                emitter.send(SseEmitter.event().data("抱歉，AI助手暂时无法回复，请稍后再试。"));
-                                emitter.complete();
-                            } catch (IOException e) {
-                                emitter.completeWithError(error);
-                            }
+                            sendError(emitter, error);
                         }
                 );
             } catch (Exception e) {
                 log.error("AI 流式聊天处理失败：userId={}", userId, e);
-                emitter.completeWithError(e);
+                sendError(emitter, e);
             }
         });
 
-        emitter.onTimeout(emitter::complete);
+        emitter.onTimeout(() -> sendError(emitter, new AiChatException(AiChatErrorCode.AI_STREAM_INTERRUPTED)));
         emitter.onError(error -> log.error("AI SSE 连接错误：userId={}", request.getUserId(), error));
         return emitter;
+    }
+
+    private void sendError(SseEmitter emitter, Throwable error) {
+        AIChatErrorDTO payload = AIChatErrorDTO.from(error);
+        try {
+            emitter.send(SseEmitter.event().name("error").data(payload));
+            emitter.complete();
+        } catch (Exception e) {
+            emitter.completeWithError(error);
+        }
     }
 
     /**

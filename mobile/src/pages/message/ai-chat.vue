@@ -11,7 +11,7 @@
           <view class="ai-avatar">🤖</view>
           <view class="ai-text">
             <text class="name">AI 助手</text>
-            <text class="status">在线</text>
+            <text class="status">{{ aiStatusText }}</text>
           </view>
         </view>
       </template>
@@ -115,6 +115,7 @@
             v-for="(question, index) in quickQuestions"
             :key="index"
             class="quick-chip"
+            :class="{ disabled: isSendBlocked }"
             @click="sendQuickQuestion(question)"
           >
             <uni-icons type="help-filled" size="14" :color="primaryColor" />
@@ -125,24 +126,31 @@
     </view>
 
     <!-- 输入区域 -->
-    <view class="input-area" :class="{ 'input-focused': inputFocused }">
+    <view
+      class="input-area"
+      :class="{ 'input-focused': inputFocused, disabled: isSendBlocked }"
+    >
+      <text v-if="aiAvailability === 'disabled'" class="ai-unavailable-tip">
+        AI 助手暂不可用，请稍后再试
+      </text>
       <view class="input-bar">
         <textarea
           class="message-input"
           v-model="inputText"
-          placeholder="有问题尽管问我..."
+          :placeholder="inputPlaceholder"
           placeholder-style="color: var(--text-color-tertiary)"
           :auto-height="true"
           :maxlength="500"
+          :disabled="isSendBlocked"
           @focus="inputFocused = true"
           @blur="inputFocused = false"
         />
         <view
           class="send-btn"
-          :class="{ disabled: !inputText.trim() || isLoading, active: inputText.trim() && !isLoading }"
+          :class="{ disabled: !canSend, active: canSend }"
           @click="sendMessage"
         >
-          <uni-icons type="paperplane" size="20" :color="inputText.trim() && !isLoading ? '#fff' : '#999'" />
+          <uni-icons type="paperplane" size="20" :color="canSend ? '#fff' : '#999'" />
         </view>
       </view>
     </view>
@@ -159,6 +167,7 @@ import MarkdownRender from '@/components/markdown-render/markdown-render.vue'
 import { useUserStore } from '@/store/user'
 import { aiApi } from '@/api/ai'
 import { wsClient } from '@/utils/websocket'
+import { resolveWebSocketUrl } from '@/utils/websocket-url'
 import type { AIChatMessage } from '@/api/ai'
 import { normalizeId } from '@/utils/id'
 
@@ -173,7 +182,10 @@ interface AIMessage {
   showTime?: boolean
   isNew?: boolean
   isTyping?: boolean
+  isError?: boolean
 }
+
+type AIAvailability = 'checking' | 'available' | 'disabled' | 'unknown'
 
 // 获取用户信息
 const userStore = useUserStore()
@@ -190,7 +202,35 @@ const inputFocused = ref(false)
 const isLoading = ref(false)
 const loadingText = ref('AI 正在思考')
 let loadingTextTimer: number | null = null
+let requestTimeout: number | null = null
+let pendingAssistantMessage: AIMessage | null = null
 const isGenerating = ref(false) // 标记是否已经开始生成内容
+const wsUnsubscribers: Array<() => void> = []
+const aiAvailability = ref<AIAvailability>('checking')
+
+const aiStatusText = computed(() => {
+  switch (aiAvailability.value) {
+    case 'available':
+      return '在线'
+    case 'disabled':
+      return '暂不可用'
+    case 'unknown':
+      return '状态未知'
+    default:
+      return '检查中...'
+  }
+})
+
+const isSendBlocked = computed(() =>
+  aiAvailability.value === 'checking' ||
+  aiAvailability.value === 'disabled' ||
+  isLoading.value
+)
+
+const canSend = computed(() => !!inputText.value.trim() && !isSendBlocked.value)
+const inputPlaceholder = computed(() =>
+  aiAvailability.value === 'disabled' ? 'AI 助手暂不可用' : '有问题尽管问我...'
+)
 
 const quickQuestions = ref([
   '如何发布商品？',
@@ -212,34 +252,44 @@ onMounted(() => {
     return
   }
 
+  void loadAIConfig()
   loadChatHistory()
   setupWebSocket()
 })
 
+async function loadAIConfig() {
+  aiAvailability.value = 'checking'
+  try {
+    const res = await aiApi.getConfig()
+    aiAvailability.value = res.data?.enabled ? 'available' : 'disabled'
+  } catch (error) {
+    console.warn('[AI Chat] 获取 AI 可用状态失败:', error)
+    aiAvailability.value = 'unknown'
+  }
+}
+
 // 设置 WebSocket 连接和消息监听
 function setupWebSocket() {
-  // 从环境变量或配置中获取 WebSocket URL
-  // 注意：.env.development 中定义的是 VITE_WS_BASE_URL
-  const wsUrl = import.meta.env.VITE_WS_BASE_URL || 'ws://localhost:8080/ws'
-
-  // 连接 WebSocket
-  wsClient.connect(wsUrl)
+  const wsUrl = resolveWebSocketUrl()
 
   // 监听消息
-  wsClient.on('message', handleWebSocketMessage)
+  wsUnsubscribers.push(wsClient.on('message', handleWebSocketMessage))
 
   // 监听连接状态
-  wsClient.on('open', () => {
+  wsUnsubscribers.push(wsClient.on('open', () => {
     console.log('[AI Chat] WebSocket 已连接')
-  })
+  }))
 
-  wsClient.on('error', (error) => {
+  wsUnsubscribers.push(wsClient.on('error', (error) => {
     console.error('[AI Chat] WebSocket 错误:', error)
-  })
+  }))
 
-  wsClient.on('close', () => {
+  wsUnsubscribers.push(wsClient.on('close', () => {
     console.log('[AI Chat] WebSocket 已断开')
-  })
+  }))
+
+  // 连接 WebSocket；连接客户端会复用已有连接。
+  wsClient.connect(wsUrl)
 }
 
 // 处理 WebSocket 消息
@@ -267,10 +317,8 @@ function handleWebSocketMessage(data: any) {
         }
 
         const chunk = data.data.content
-        // 追加到最后一条 AI 消息
-        const lastMessage = messages.value[messages.value.length - 1]
-        if (lastMessage && lastMessage.role === 'assistant' && !lastMessage.isTyping) {
-          lastMessage.content += chunk
+        if (pendingAssistantMessage) {
+          pendingAssistantMessage.content += chunk
           scrollToBottom()
         }
       }
@@ -279,22 +327,15 @@ function handleWebSocketMessage(data: any) {
     case 'ai_complete': {
       // AI 响应完成
       console.log('[AI Chat] AI 响应完成:', data.data)
-      isLoading.value = false
-      isGenerating.value = false
-      stopLoadingAnimation()
-      saveChatHistory()
+      const hasTechnicalError = pendingAssistantMessage &&
+        (pendingAssistantMessage.content.includes('Exception') ||
+          pendingAssistantMessage.content.includes('NullPointerException') ||
+          pendingAssistantMessage.content.includes('SQLException'))
 
-      // 检查是否有技术错误
-      const lastMessage = messages.value[messages.value.length - 1]
-      if (lastMessage && lastMessage.role === 'assistant') {
-        const hasTechnicalError = lastMessage.content.includes('Exception') ||
-          lastMessage.content.includes('NullPointerException') ||
-          lastMessage.content.includes('SQLException')
-
-        if (hasTechnicalError) {
-          lastMessage.content = '抱歉，AI助手遇到了一些问题，请稍后再试。'
-          saveChatHistory()
-        }
+      if (!pendingAssistantMessage?.content.trim() || hasTechnicalError) {
+        failPendingMessage('抱歉，AI助手遇到了一些问题，请稍后再试。')
+      } else {
+        finishPendingMessage()
       }
       break
     }
@@ -302,27 +343,7 @@ function handleWebSocketMessage(data: any) {
     case 'error': {
       // 错误消息
       console.error('[AI Chat] 收到错误消息:', data.data)
-      isLoading.value = false
-      isGenerating.value = false
-      stopLoadingAnimation()
-
-      const errorMessage: AIMessage = {
-        id: Date.now().toString(),
-        role: 'assistant',
-        content: data.data?.message || '抱歉，AI助手暂时无法回复，请稍后再试。',
-        timestamp: new Date().toISOString(),
-        showTime: shouldShowTime(),
-        isNew: true
-      }
-      messages.value.push(errorMessage)
-      saveChatHistory()
-      scrollToBottom()
-
-      uni.showToast({
-        title: 'AI 请求失败',
-        icon: 'none',
-        duration: 2000
-      })
+      failPendingMessage(data.data?.message || '抱歉，AI助手暂时无法回复，请稍后再试。')
       break
     }
 
@@ -387,7 +408,7 @@ async function loadChatHistory() {
 
 function sendMessage() {
   const content = inputText.value.trim()
-  if (!content || isLoading.value) return
+  if (!content || isSendBlocked.value) return
 
   // 添加用户消息
   const userMessage: AIMessage = {
@@ -409,11 +430,13 @@ function sendMessage() {
 }
 
 function sendQuickQuestion(question: string) {
+  if (isSendBlocked.value) return
+
   inputText.value = question
   sendMessage()
 }
 
-async function getAIResponse(question: string) {
+function getAIResponse(question: string) {
   isLoading.value = true
   startLoadingAnimation()
 
@@ -427,6 +450,8 @@ async function getAIResponse(question: string) {
     isNew: true
   }
   messages.value.push(aiMessage)
+  // 保留数组中的响应式对象，确保流式追加能触发界面更新。
+  pendingAssistantMessage = messages.value[messages.value.length - 1]
   scrollToBottom()
 
   // 使用 WebSocket 发送消息
@@ -439,26 +464,19 @@ async function getAIResponse(question: string) {
         message: question
       }
     }
-    wsClient.send(wsMessage)
-    console.log('[AI Chat] 已通过 WebSocket 发送消息:', wsMessage)
-
-    // 设置超时检测，如果 30 秒没有响应，提示用户
-    setTimeout(() => {
-      if (isLoading.value) {
-        console.warn('[AI Chat] AI 响应超时，请检查后端服务')
-        uni.showToast({
-          title: 'AI 响应超时，请重试',
-          icon: 'none',
-          duration: 2000
-        })
-      }
-    }, 30000)
+    if (wsClient.send(wsMessage)) {
+      console.log('[AI Chat] 已通过 WebSocket 发送消息:', wsMessage)
+      startRequestTimeout()
+    } else {
+      failPendingMessage('消息发送失败，请重试。', '发送失败，请重试')
+    }
   } else {
     // WebSocket 未连接，降级为 HTTP 请求
     console.log('[AI Chat] WebSocket 未连接，降级为 HTTP 请求')
     try {
       let fullResponse = ''
 
+      startRequestTimeout()
       aiApi.chatStream(
         {
           userId: currentUser.value.id,
@@ -480,42 +498,99 @@ async function getAIResponse(question: string) {
           }
 
           fullResponse += chunk
-          aiMessage.content = fullResponse
+          if (pendingAssistantMessage) {
+            pendingAssistantMessage.content = fullResponse
+          }
           scrollToBottom()
         },
         (error: any) => {
-          isLoading.value = false
-          isGenerating.value = false
-          stopLoadingAnimation()
-          aiMessage.content = '抱歉，AI助手暂时无法回复，请稍后再试。'
-          saveChatHistory()
-          uni.showToast({
-            title: 'AI 请求失败',
-            icon: 'none',
-            duration: 2000
-          })
+          failPendingMessage(error?.message || '抱歉，AI助手暂时无法回复，请稍后再试。')
         },
         () => {
-          isLoading.value = false
-          isGenerating.value = false
-          stopLoadingAnimation()
           if (!fullResponse || fullResponse.trim().length === 0) {
-            aiMessage.content = '抱歉，AI助手暂时无法回复，请稍后再试。'
-            saveChatHistory()
+            failPendingMessage('抱歉，AI助手暂时无法回复，请稍后再试。')
             return
           }
-          saveChatHistory()
+          finishPendingMessage()
         }
       )
     } catch (error: any) {
-      isLoading.value = false
-      isGenerating.value = false
-      stopLoadingAnimation()
-      aiMessage.content = '抱歉，AI助手暂时无法回复，请稍后再试。'
-      saveChatHistory()
-      scrollToBottom()
+      failPendingMessage(error?.message || '抱歉，AI助手暂时无法回复，请稍后再试。')
     }
   }
+}
+
+function startRequestTimeout() {
+  clearRequestTimeout()
+  requestTimeout = setTimeout(() => {
+    if (!isLoading.value) return
+
+    console.warn('[AI Chat] AI 响应超时，请检查后端服务')
+    failPendingMessage('AI 响应超时，请重试。', 'AI 响应超时')
+  }, 30000) as unknown as number
+}
+
+function clearRequestTimeout() {
+  if (!requestTimeout) return
+
+  clearTimeout(requestTimeout)
+  requestTimeout = null
+}
+
+function finishPendingMessage() {
+  clearRequestTimeout()
+  isLoading.value = false
+  isGenerating.value = false
+  stopLoadingAnimation()
+  pendingAssistantMessage = null
+  saveChatHistory()
+}
+
+function failPendingMessage(message: string, toastTitle = 'AI 请求失败') {
+  clearRequestTimeout()
+  isLoading.value = false
+  isGenerating.value = false
+  stopLoadingAnimation()
+
+  const target = pendingAssistantMessage || findEmptyAssistantMessage()
+  if (target) {
+    target.content = message
+    target.isError = true
+  } else {
+    const lastMessage = messages.value[messages.value.length - 1]
+    if (lastMessage?.role === 'assistant' && lastMessage.isError) {
+      lastMessage.content = message
+      saveChatHistory()
+      return
+    }
+
+    messages.value.push({
+      id: Date.now().toString(),
+      role: 'assistant',
+      content: message,
+      timestamp: new Date().toISOString(),
+      showTime: shouldShowTime(),
+      isNew: true,
+      isError: true
+    })
+  }
+
+  pendingAssistantMessage = null
+  saveChatHistory()
+  scrollToBottom()
+
+  uni.showToast({
+    title: toastTitle,
+    icon: 'none',
+    duration: 2000
+  })
+}
+
+function findEmptyAssistantMessage(): AIMessage | null {
+  const lastMessage = messages.value[messages.value.length - 1]
+  return lastMessage?.role === 'assistant' && !lastMessage.content.trim()
+    ? lastMessage
+    : null
 }
 
 function shouldShowTime(): boolean {
@@ -555,6 +630,11 @@ async function clearChat() {
           await aiApi.clearHistory(currentUser.value.id)
 
           // 清空本地消息
+          clearRequestTimeout()
+          pendingAssistantMessage = null
+          isLoading.value = false
+          isGenerating.value = false
+          stopLoadingAnimation()
           messages.value = []
           uni.removeStorageSync('ai_chat_history')
 
@@ -616,11 +696,11 @@ function stopLoadingAnimation() {
 onUnmounted(() => {
   // 清理加载动画定时器
   stopLoadingAnimation()
+  clearRequestTimeout()
+  pendingAssistantMessage = null
 
-  // 注意：这里不关闭连接，因为 WebSocket 是全局单例
-  // 其他页面可能也在使用
-  // 如果需要关闭，可以调用 wsClient.close()
-  // wsClient.close()
+  // 只移除当前页面的订阅，不关闭全局连接。
+  wsUnsubscribers.splice(0).forEach(unsubscribe => unsubscribe())
 })
 </script>
 
@@ -928,6 +1008,11 @@ onUnmounted(() => {
       background: linear-gradient(135deg, #fff5eb 0%, #fffbf7 100%);
     }
 
+    &.disabled {
+      opacity: 0.5;
+      pointer-events: none;
+    }
+
     .quick-chip-text {
       font-size: var(--font-size-sm);
       color: var(--text-color-primary);
@@ -1016,6 +1101,20 @@ onUnmounted(() => {
   border-top: 1px solid var(--border-color-base);
   padding: 16rpx 24rpx;
   padding-bottom: calc(16rpx + env(safe-area-inset-bottom));
+
+  .ai-unavailable-tip {
+    display: block;
+    margin-bottom: 12rpx;
+    color: var(--danger-color);
+    font-size: var(--font-size-sm);
+    text-align: center;
+  }
+
+  &.disabled {
+    .message-input {
+      opacity: 0.6;
+    }
+  }
 
   .input-bar {
     display: flex;

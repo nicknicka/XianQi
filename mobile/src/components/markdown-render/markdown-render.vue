@@ -15,7 +15,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref, watch } from 'vue'
 
 interface Props {
   content: string
@@ -35,26 +35,36 @@ const props = withDefaults(defineProps<Props>(), {
   })
 })
 
-// 渲染 Markdown 为 HTML
-const renderedHtml = computed(() => {
-  if (!props.content) return ''
+// 渲染 Markdown 为 HTML。H5 的动态导入必须异步等待，不能把 Promise 直接交给 v-html。
+const renderedHtml = ref('')
+let renderVersion = 0
 
-  // #ifdef H5
-  try {
-    // H5 平台：动态导入 marked 和 DOMPurify
-    return renderMarkdownH5(props.content, props.options)
-  } catch (error) {
-    console.error('[Markdown Render] H5 渲染失败:', error)
-    return simpleRenderMarkdown(props.content)
-  }
-  // #endif
+watch(
+  () => [props.content, props.options.breaks, props.options.gfm, props.options.sanitize] as const,
+  async ([content, breaks, gfm, sanitize]) => {
+    const version = ++renderVersion
+    if (!content) {
+      renderedHtml.value = ''
+      return
+    }
 
-  // #ifndef H5
-  // 小程序平台：使用纯 JavaScript 实现
-  // eslint-disable-next-line no-unreachable -- UniApp 条件编译在 lint 阶段不会剔除 H5 分支
-  return simpleRenderMarkdown(props.content)
-  // #endif
-})
+    // 小程序平台直接使用纯 JavaScript 实现；H5 分支会在下面尝试替换为完整渲染结果。
+    let html = simpleRenderMarkdown(content)
+
+    // #ifdef H5
+    try {
+      html = await renderMarkdownH5(content, { breaks, gfm, sanitize })
+    } catch (error) {
+      console.error('[Markdown Render] H5 渲染失败:', error)
+    }
+    // #endif
+
+    if (version === renderVersion) {
+      renderedHtml.value = html
+    }
+  },
+  { immediate: true }
+)
 
 // 小程序平台的节点数组
 const renderedNodes = computed(() => {
@@ -103,7 +113,8 @@ async function renderMarkdownH5(content: string, options: any) {
           ]
         })
       } catch (e) {
-        console.warn('[Markdown Render] DOMPurify 失败，跳过清理')
+        console.warn('[Markdown Render] DOMPurify 失败，使用简化版渲染')
+        return simpleRenderMarkdown(content)
       }
     }
 

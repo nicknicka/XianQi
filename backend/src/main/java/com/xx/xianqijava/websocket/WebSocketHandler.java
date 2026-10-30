@@ -2,7 +2,9 @@ package com.xx.xianqijava.websocket;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.xx.xianqijava.ai.AiChatOutcome;
+import com.xx.xianqijava.ai.AiChatErrorCode;
 import com.xx.xianqijava.ai.AiChatService;
+import com.xx.xianqijava.dto.AIChatErrorDTO;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -113,7 +115,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
         Long userId = getUserIdFromSession(session);
         if (userId != null) {
-            USER_SESSIONS.remove(userId);
+            USER_SESSIONS.remove(userId, session);
             log.info("WebSocket 连接关闭: userId={}, status={}", userId, status);
         }
     }
@@ -131,7 +133,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
         }
 
         if (userId != null) {
-            USER_SESSIONS.remove(userId);
+            USER_SESSIONS.remove(userId, session);
         }
     }
 
@@ -201,10 +203,8 @@ public class WebSocketHandler extends TextWebSocketHandler {
             } else {
                 log.warn("⚠️ [WS-AI聊天] 请求格式错误 | 用户ID: {} | 数据类型: {}",
                         userId, data == null ? "null" : data.getClass());
-                sendMessageToSession(session, createMessage("error", Map.of(
-                        "code", "INVALID_REQUEST",
-                        "message", "请求格式错误"
-                )));
+                sendMessageToSession(session, createMessage("error",
+                        AIChatErrorDTO.from(AiChatErrorCode.AI_INVALID_REQUEST)));
                 return;
             }
 
@@ -212,10 +212,8 @@ public class WebSocketHandler extends TextWebSocketHandler {
             String message = (String) requestData.get("message");
             if (message == null || message.trim().isEmpty()) {
                 log.warn("⚠️ [WS-AI聊天] 消息为空 | 用户ID: {}", userId);
-                sendMessageToSession(session, createMessage("error", Map.of(
-                        "code", "EMPTY_MESSAGE",
-                        "message", "消息不能为空"
-                )));
+                sendMessageToSession(session, createMessage("error",
+                        AIChatErrorDTO.from(AiChatErrorCode.AI_EMPTY_MESSAGE)));
                 return;
             }
 
@@ -276,19 +274,14 @@ public class WebSocketHandler extends TextWebSocketHandler {
                     long errorTime = System.currentTimeMillis() - startTime;
                     log.error("❌ [WS-AI聊天] 处理被中断 | 用户ID: {} | 耗时: {}ms", userId, errorTime, e);
 
-                    sendMessageToSession(session, createMessage("error", Map.of(
-                            "code", "PROCESS_INTERRUPTED",
-                            "message", "AI 处理被中断"
-                    )));
+                    sendMessageToSession(session, createMessage("error",
+                            AIChatErrorDTO.from(AiChatErrorCode.AI_PROCESS_INTERRUPTED)));
                 } catch (Exception e) {
                     long errorTime = System.currentTimeMillis() - startTime;
                     log.error("❌ [WS-AI聊天] 处理失败 | 用户ID: {} | 耗时: {}ms | 错误: {}",
                             userId, errorTime, e.getMessage(), e);
 
-                    sendMessageToSession(session, createMessage("error", Map.of(
-                            "code", "AI_SERVICE_ERROR",
-                            "message", "⚠️ 抱歉，AI助手暂时无法回复，请稍后再试。"
-                    )));
+                    sendMessageToSession(session, createMessage("error", AIChatErrorDTO.from(e)));
                 }
             });
 
@@ -297,10 +290,8 @@ public class WebSocketHandler extends TextWebSocketHandler {
             log.error("❌ [WS-AI聊天] 事件处理失败 | 用户ID: {} | 耗时: {}ms", userId, errorTime, e);
 
             try {
-                sendMessageToSession(session, createMessage("error", Map.of(
-                        "code", "EVENT_HANDLER_ERROR",
-                        "message", "事件处理失败"
-                )));
+                sendMessageToSession(session, createMessage("error",
+                        AIChatErrorDTO.from(AiChatErrorCode.AI_EVENT_HANDLER_ERROR)));
             } catch (Exception ex) {
                 log.error("❌ [WS-AI聊天] 发送错误消息失败", ex);
             }
