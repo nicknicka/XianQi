@@ -6,6 +6,8 @@
       v-model="fieldValue"
       :placeholder="placeholder"
       :maxlength="maxlength"
+      :adjust-position="true"
+      :cursor-spacing="AUTH_INPUT_CURSOR_SPACING_PX"
       placeholder-style="color: var(--text-color-tertiary)"
       @blur="emit('blur')"
     />
@@ -16,6 +18,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
+import { AUTH_INPUT_CURSOR_SPACING_PX } from '@/utils/auth/auth-tokens'
 
 interface Props {
   modelValue: string

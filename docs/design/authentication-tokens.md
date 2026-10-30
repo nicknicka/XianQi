@@ -90,6 +90,7 @@
 | `AUTH_ICON_SIZES.inline` | `16` | 徽标、提示和跳转小图标 |
 | `AUTH_ICON_SIZES.upload` | `40` | 上传占位图标 |
 | `AUTH_PAGE_ANIMATION_DELAY_MS` | `50` | 页面进入动画的 JS 启动延迟 |
+| `AUTH_INPUT_CURSOR_SPACING_PX` | `16` | 输入框与键盘保持的安全距离 |
 
 新增运行时尺寸前，先判断是否可复用上表；确需新增时必须先更新本规格和 token 模块。
 
