@@ -22,6 +22,13 @@ export interface AIChatMessage {
   createdAt: string
 }
 
+export interface AIChatError {
+  type: string
+  code: number
+  message: string
+  retryable: boolean
+}
+
 interface AIConfig {
   enabled: boolean
   model: string
@@ -46,7 +53,7 @@ export const aiApi = {
    * 发送聊天消息并获取 AI 回复（流式模式，使用 SSE）
    * 注意：仅在 H5 平台支持真正的流式传输，其他平台会降级为普通请求
    */
-  chatStream(data: AIChatRequest, onMessage: (chunk: string) => void, onError?: (error: any) => void, onComplete?: () => void) {
+  chatStream(data: AIChatRequest, onMessage: (chunk: string) => void, onError?: (error: AIChatError | Error) => void, onComplete?: () => void) {
     // #ifdef H5
     // H5 平台使用 fetch API 实现真正的流式传输
     const token = uni.getStorageSync('token')
@@ -72,6 +79,7 @@ export const aiApi = {
 
       const decoder = new TextDecoder()
       let buffer = ''
+      let currentEvent = 'message'
 
       // 读取流式数据
       function readStream(): Promise<void> {
@@ -91,8 +99,14 @@ export const aiApi = {
           for (const line of lines) {
             const trimmedLine = line.trim()
 
-            // 跳过空行和event行
-            if (!trimmedLine || trimmedLine.startsWith('event:')) {
+            // 空行分隔一个 SSE event，之后重新回到默认 message 类型
+            if (!trimmedLine) {
+              currentEvent = 'message'
+              continue
+            }
+
+            if (trimmedLine.startsWith('event:')) {
+              currentEvent = trimmedLine.slice(6).trim() || 'message'
               continue
             }
 
@@ -102,6 +116,15 @@ export const aiApi = {
 
               if (data === '[DONE]') {
                 onComplete?.()
+                return Promise.resolve()
+              }
+
+              if (currentEvent === 'error') {
+                try {
+                  onError?.(JSON.parse(data) as AIChatError)
+                } catch {
+                  onError?.(new Error(data || 'AI 请求失败'))
+                }
                 return Promise.resolve()
               }
 

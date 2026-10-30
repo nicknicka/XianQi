@@ -499,7 +499,7 @@ async function getAIResponse(question: string) {
           isLoading.value = false
           isGenerating.value = false
           stopLoadingAnimation()
-          aiMessage.content = '抱歉，AI助手暂时无法回复，请稍后再试。'
+          aiMessage.content = error?.message || '抱歉，AI助手暂时无法回复，请稍后再试。'
           saveChatHistory()
           uni.showToast({
             title: 'AI 请求失败',
