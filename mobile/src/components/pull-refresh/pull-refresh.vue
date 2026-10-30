@@ -204,7 +204,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@use '@/styles/variables.scss' as *;
 .pull-refresh-container {
   width: 100%;
   height: 100%;
@@ -253,7 +252,7 @@ export default {
         width: 48rpx;
         height: 48rpx;
         border: 4rpx solid var(--border-color-light);
-        border-top-color: $primary-color;
+        border-top-color: var(--primary-color);
         border-radius: 50%;
         animation: spin 0.8s linear infinite;
       }

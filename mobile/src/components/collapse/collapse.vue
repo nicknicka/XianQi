@@ -205,7 +205,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@use '@/styles/variables.scss' as *;
 .collapse {
   width: 100%;
   background: var(--bg-color-card);
@@ -257,12 +256,12 @@ export default {
 
         .title-badge {
           padding: 4rpx 12rpx;
-          background: rgba($primary-color, 0.1);
+          background: var(--primary-color-alpha-10);
           border-radius: 8rpx;
 
           .badge-text {
             font-size: 20rpx;
-            color: $primary-color;
+            color: var(--primary-color);
             transform: scale(0.9);
           }
         }

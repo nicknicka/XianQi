@@ -210,7 +210,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@use '@/styles/variables.scss' as *;
 .drawer-wrapper {
   position: relative;
   z-index: 1000;
@@ -350,7 +349,7 @@ export default {
         }
 
         &.confirm-btn {
-          background: $primary-color;
+          background: var(--primary-color);
 
           .btn-text {
             color: var(--bg-color-card);

@@ -288,7 +288,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@use '@/styles/variables.scss' as *;
 .comment-list {
   width: 100%;
 

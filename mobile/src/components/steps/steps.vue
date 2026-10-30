@@ -83,7 +83,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@use '@/styles/variables.scss' as *;
 .steps {
   display: flex;
 
@@ -110,7 +109,7 @@ export default {
           .line-inner {
             width: 0;
             height: 100%;
-            background: $primary-color;
+            background: var(--primary-color);
             transition: width 0.3s;
           }
 
@@ -151,7 +150,7 @@ export default {
           .line-inner {
             width: 100%;
             height: 0;
-            background: $primary-color;
+            background: var(--primary-color);
             transition: height 0.3s;
           }
 
@@ -265,8 +264,8 @@ export default {
 
     &.is-process {
       .step-icon.active-icon {
-        background: $primary-color;
-        border-color: $primary-color;
+        background: var(--primary-color);
+        border-color: var(--primary-color);
 
         .icon-text,
         .icon-number {
@@ -275,15 +274,15 @@ export default {
       }
 
       .step-title {
-        color: $primary-color;
+        color: var(--primary-color);
         font-weight: 600;
       }
     }
 
     &.is-finished {
       .step-icon {
-        background: $primary-color;
-        border-color: $primary-color;
+        background: var(--primary-color);
+        border-color: var(--primary-color);
 
         .icon-text {
           color: var(--text-color-inverse);

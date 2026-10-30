@@ -173,7 +173,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@use '@/styles/variables.scss' as *;
 .index-list {
   position: relative;
   width: 100%;
@@ -261,7 +260,7 @@ export default {
 
       &.is-active {
         .index-text {
-          color: $primary-color;
+          color: var(--primary-color);
           font-weight: 600;
         }
       }

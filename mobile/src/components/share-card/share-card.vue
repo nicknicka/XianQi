@@ -76,7 +76,6 @@ export default {
  * 采用 Claymorphism 设计风格
  */
 
-@use '@/styles/variables.scss' as vars;
 
 // ========== 主容器 ==========
 .share-card-wrapper {
