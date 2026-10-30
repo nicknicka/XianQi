@@ -81,6 +81,42 @@ const DEFAULT_DESCRIPTIONS: Record<AuthenticationPageStatus, string> = {
   rejected: '认证失败，请重新提交'
 }
 
+/** 认证中心锁定态使用中性文本色，不再复用认证状态语义色。 */
+export type AuthenticationCenterColorToken = AuthenticationColorToken | '--text-color-tertiary'
+export type AuthenticationCenterSemanticColor = AuthenticationSemanticColor | 'neutral'
+
+/** 认证中心学生卡展示模型，保留底层状态并集中表达实名前置锁定。 */
+export interface AuthenticationCenterStudentState {
+  status: AuthenticationState
+  locked: boolean
+  label: string
+  actionLabel: string
+  description: string
+  icon: 'locked' | AuthenticationState['icon']
+  colorToken: AuthenticationCenterColorToken
+  semanticColor: AuthenticationCenterSemanticColor
+  target: 'student' | 'real-name'
+}
+
+export function resolveStudentAuthCenterState(
+  studentState: AuthenticationState,
+  realNameState: AuthenticationState
+): AuthenticationCenterStudentState {
+  const locked = realNameState.pageStatus !== 'verified'
+
+  return {
+    status: studentState,
+    locked,
+    label: locked ? '未解锁' : studentState.label,
+    actionLabel: locked ? '去实名认证' : studentState.actionLabel,
+    description: locked ? '实名认证通过后才能进行学生认证' : studentState.description,
+    icon: locked ? 'locked' : studentState.icon,
+    colorToken: locked ? '--text-color-tertiary' : studentState.colorToken,
+    semanticColor: locked ? 'neutral' : studentState.semanticColor,
+    target: locked ? 'real-name' : 'student'
+  }
+}
+
 export function resolveAuthState(
   status?: number | null,
   options: ResolveAuthStateOptions = {}
