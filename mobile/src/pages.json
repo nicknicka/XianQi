@@ -160,14 +160,6 @@
       }
     },
     {
-      "path": "pages/mine/verification",
-      "style": {
-        "navigationBarTitleText": "实名认证",
-        "navigationBarBackgroundColor": "#8EC5E8",
-        "navigationBarTextStyle": "white"
-      }
-    },
-    {
       "path": "pages/mine/auth-center",
       "style": {
         "navigationBarTitleText": "身份认证",

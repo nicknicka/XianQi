@@ -297,7 +297,7 @@ function editPhone() {
 // 编辑学号
 function editStudentId() {
   uni.navigateTo({
-    url: '/pages/mine/student-auth'
+    url: '/pages/mine/auth-center'
   })
 }
 
