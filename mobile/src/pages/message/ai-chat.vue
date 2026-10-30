@@ -159,6 +159,7 @@ import MarkdownRender from '@/components/markdown-render/markdown-render.vue'
 import { useUserStore } from '@/store/user'
 import { aiApi } from '@/api/ai'
 import { wsClient } from '@/utils/websocket'
+import { resolveWebSocketUrl } from '@/utils/websocket-url'
 import type { AIChatMessage } from '@/api/ai'
 import { normalizeId } from '@/utils/id'
 
@@ -218,9 +219,7 @@ onMounted(() => {
 
 // 设置 WebSocket 连接和消息监听
 function setupWebSocket() {
-  // 从环境变量或配置中获取 WebSocket URL
-  // 注意：.env.development 中定义的是 VITE_WS_BASE_URL
-  const wsUrl = import.meta.env.VITE_WS_BASE_URL || 'ws://localhost:8080/ws'
+  const wsUrl = resolveWebSocketUrl()
 
   // 连接 WebSocket
   wsClient.connect(wsUrl)
