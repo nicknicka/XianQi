@@ -1035,7 +1035,6 @@ function goUserProfile(userId: string) {
 </script>
 
 <style lang="scss" scoped>
-@use '@/styles/variables.scss' as *;
 
 .user-home-page {
   min-height: 100vh;
@@ -1082,7 +1081,7 @@ function goUserProfile(userId: string) {
         padding: 8rpx;
         border-radius: 50%;
         background: #fff;
-        box-shadow: $box-shadow-base;
+        box-shadow: var(--box-shadow-base, 0 8rpx 24rpx rgba(0, 0, 0, 0.08));
         display: flex;
         align-items: center;
         justify-content: center;
@@ -1121,9 +1120,9 @@ function goUserProfile(userId: string) {
         margin-bottom: 12rpx;
 
         .nickname {
-          font-size: $font-size-xxl;
-          font-weight: $font-weight-semibold;
-          color: $text-color-primary;
+          font-size: var(--font-size-xxl, 20px);
+          font-weight: 600;
+          color: var(--text-color-primary, #2D2D2D);
         }
 
         .credit-level {
@@ -1132,7 +1131,7 @@ function goUserProfile(userId: string) {
           gap: 4rpx;
           padding: 4rpx 12rpx;
           border-radius: 20rpx;
-          font-size: $font-size-sm;
+          font-size: var(--font-size-sm, 12px);
 
           &.level-excellent {
             background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
@@ -1150,8 +1149,8 @@ function goUserProfile(userId: string) {
           }
 
           &.level-normal {
-            background: $border-color-light;
-            color: $text-color-secondary;
+            background: var(--border-color-light, #F0F0F0);
+            color: var(--text-color-secondary, #7A7A7A);
           }
         }
       }
@@ -1169,7 +1168,7 @@ function goUserProfile(userId: string) {
           padding: 4rpx 12rpx;
           background: var(--info-color-alpha-10);
           border-radius: 4rpx;
-          font-size: $font-size-xs;
+          font-size: var(--font-size-xs, 10px);
           color: var(--info-color);
         }
       }
@@ -1187,21 +1186,21 @@ function goUserProfile(userId: string) {
           gap: 6rpx;
 
           .score-value {
-            font-size: $font-size-xl;
-            font-weight: $font-weight-semibold;
-            color: $primary-color;
+            font-size: var(--font-size-xl, 18px);
+            font-weight: 600;
+            color: var(--primary-color, #8EC5E8);
           }
 
           .score-label {
-            font-size: $font-size-sm;
-            color: $text-color-tertiary;
+            font-size: var(--font-size-sm, 12px);
+            color: var(--text-color-tertiary, #AAAAAA);
           }
         }
 
         .divider {
           width: 1px;
           height: 24rpx;
-          background: $border-color-light;
+          background: var(--border-color-light, #F0F0F0);
         }
 
         .good-rate-info {
@@ -1210,14 +1209,14 @@ function goUserProfile(userId: string) {
           align-items: center;
 
           .rate-value {
-            font-size: $font-size-lg;
-            font-weight: $font-weight-semibold;
-            color: $success-color;
+            font-size: var(--font-size-lg, 16px);
+            font-weight: 600;
+            color: var(--success-color, #7ED4A6);
           }
 
           .rate-label {
-            font-size: $font-size-xs;
-            color: $text-color-tertiary;
+            font-size: var(--font-size-xs, 10px);
+            color: var(--text-color-tertiary, #AAAAAA);
           }
         }
       }
@@ -1225,8 +1224,8 @@ function goUserProfile(userId: string) {
 
     .bio {
       text-align: center;
-      font-size: $font-size-base;
-      color: $text-color-secondary;
+      font-size: var(--font-size-base, 14px);
+      color: var(--text-color-secondary, #7A7A7A);
       margin-bottom: 24rpx;
       line-height: 1.6;
       padding: 0 32rpx;
@@ -1253,14 +1252,14 @@ function goUserProfile(userId: string) {
         padding: 0 28rpx;
         height: 72rpx;
         background: var(--bg-color-card);
-        border: 2rpx solid $border-color-light;
+        border: 2rpx solid var(--border-color-light, #F0F0F0);
         border-radius: 36rpx;
-        font-size: $font-size-base;
-        color: $primary-color;
-        transition: $transition-base;
+        font-size: var(--font-size-base, 14px);
+        color: var(--primary-color, #8EC5E8);
+        transition: all 0.25s ease;
 
         &.primary {
-          background: linear-gradient(135deg, $primary-color 0%, var(--primary-color-light) 100%);
+          background: linear-gradient(135deg, var(--primary-color, #8EC5E8) 0%, var(--primary-color-light) 100%);
           border-color: transparent;
           color: #fff;
           box-shadow: 0 4rpx 12rpx var(--primary-color-alpha-30);
@@ -1304,22 +1303,22 @@ function goUserProfile(userId: string) {
     padding: 8rpx 0;
 
     .stat-num {
-      font-size: $font-size-xxl;
-      font-weight: $font-weight-semibold;
-      color: $text-color-primary;
+      font-size: var(--font-size-xxl, 20px);
+      font-weight: 600;
+      color: var(--text-color-primary, #2D2D2D);
       margin-bottom: 6rpx;
     }
 
     .stat-label {
-      font-size: $font-size-sm;
-      color: $text-color-tertiary;
+      font-size: var(--font-size-sm, 12px);
+      color: var(--text-color-tertiary, #AAAAAA);
     }
   }
 
   .social-stat-divider {
     width: 1px;
     height: 40rpx;
-    background: $border-color-light;
+    background: var(--border-color-light, #F0F0F0);
   }
 }
 
@@ -1339,17 +1338,17 @@ function goUserProfile(userId: string) {
       display: flex;
       align-items: center;
       gap: 8rpx;
-      font-size: $font-size-lg;
-      font-weight: $font-weight-medium;
-      color: $text-color-primary;
+      font-size: var(--font-size-lg, 16px);
+      font-weight: 500;
+      color: var(--text-color-primary, #2D2D2D);
     }
 
     .credit-detail {
       display: flex;
       align-items: center;
       gap: 4rpx;
-      font-size: $font-size-sm;
-      color: $text-color-tertiary;
+      font-size: var(--font-size-sm, 12px);
+      color: var(--text-color-tertiary, #AAAAAA);
     }
   }
 
@@ -1386,21 +1385,21 @@ function goUserProfile(userId: string) {
           position: relative;
           z-index: 1;
           font-size: 36rpx;
-          font-weight: $font-weight-bold;
-          color: $success-color;
+          font-weight: 700;
+          color: var(--success-color, #7ED4A6);
         }
 
         .rate-circle-unit {
           position: relative;
           z-index: 1;
-          font-size: $font-size-sm;
-          color: $text-color-tertiary;
+          font-size: var(--font-size-sm, 12px);
+          color: var(--text-color-tertiary, #AAAAAA);
         }
       }
 
       .rate-circle-label {
-        font-size: $font-size-sm;
-        color: $text-color-tertiary;
+        font-size: var(--font-size-sm, 12px);
+        color: var(--text-color-tertiary, #AAAAAA);
       }
     }
 
@@ -1417,8 +1416,8 @@ function goUserProfile(userId: string) {
         justify-content: space-between;
 
         .detail-label {
-          font-size: $font-size-base;
-          color: $text-color-secondary;
+          font-size: var(--font-size-base, 14px);
+          color: var(--text-color-secondary, #7A7A7A);
         }
 
         .star-rating {
@@ -1427,12 +1426,12 @@ function goUserProfile(userId: string) {
         }
 
         .detail-value {
-          font-size: $font-size-base;
-          font-weight: $font-weight-medium;
-          color: $text-color-primary;
+          font-size: var(--font-size-base, 14px);
+          font-weight: 500;
+          color: var(--text-color-primary, #2D2D2D);
 
           &.credit-level-text {
-            color: $primary-color;
+            color: var(--primary-color, #8EC5E8);
           }
         }
       }
@@ -1445,8 +1444,8 @@ function goUserProfile(userId: string) {
   background: var(--bg-color-card);
   position: sticky;
   top: 0;
-  z-index: $z-index-sticky;
-  transition: $transition-base;
+  z-index: var(--z-sticky, 1020);
+  transition: all 0.25s ease;
 
   &.has-popup {
     opacity: 0.3;
@@ -1455,20 +1454,20 @@ function goUserProfile(userId: string) {
 
 .tabs {
   display: flex;
-  border-bottom: 1px solid $border-color-light;
+  border-bottom: 1px solid var(--border-color-light, #F0F0F0);
 
   .tab-item {
     flex: 1;
     text-align: center;
     padding: 28rpx 0;
-    font-size: $font-size-base;
-    color: $text-color-secondary;
+    font-size: var(--font-size-base, 14px);
+    color: var(--text-color-secondary, #7A7A7A);
     position: relative;
-    transition: $transition-base;
+    transition: all 0.25s ease;
 
     &.active {
-      color: $primary-color;
-      font-weight: $font-weight-semibold;
+      color: var(--primary-color, #8EC5E8);
+      font-weight: 600;
     }
 
     .tab-indicator {
@@ -1478,7 +1477,7 @@ function goUserProfile(userId: string) {
       transform: translateX(-50%);
       width: 64rpx;
       height: 6rpx;
-      background: linear-gradient(90deg, $primary-color 0%, var(--primary-color-light) 100%);
+      background: linear-gradient(90deg, var(--primary-color, #8EC5E8) 0%, var(--primary-color-light) 100%);
       border-radius: 3rpx;
     }
   }
@@ -1503,10 +1502,10 @@ function goUserProfile(userId: string) {
 
   .product-card {
     background: var(--bg-color-card);
-    border-radius: $border-radius-lg;
+    border-radius: var(--border-radius-lg, 24px);
     overflow: hidden;
-    box-shadow: $box-shadow-light;
-    transition: $transition-base;
+    box-shadow: var(--box-shadow-xs, 0 2rpx 8rpx rgba(0, 0, 0, 0.04));
+    transition: all 0.25s ease;
 
     &:active {
       transform: scale(0.98);
@@ -1531,9 +1530,9 @@ function goUserProfile(userId: string) {
         top: 12rpx;
         padding: 4rpx 12rpx;
         border-radius: 4rpx;
-        font-size: $font-size-xs;
+        font-size: var(--font-size-xs, 10px);
         color: #fff;
-        font-weight: $font-weight-medium;
+        font-weight: 500;
 
         &.new {
           left: 12rpx;
@@ -1555,8 +1554,8 @@ function goUserProfile(userId: string) {
         -webkit-box-orient: vertical;
         -webkit-line-clamp: 2;
         overflow: hidden;
-        font-size: $font-size-base;
-        color: $text-color-primary;
+        font-size: var(--font-size-base, 14px);
+        color: var(--text-color-primary, #2D2D2D);
         line-height: 1.4;
         height: 40rpx;
         margin-bottom: 12rpx;
@@ -1569,20 +1568,20 @@ function goUserProfile(userId: string) {
         margin-bottom: 8rpx;
 
         .price {
-          font-size: $font-size-xl;
-          font-weight: $font-weight-semibold;
+          font-size: var(--font-size-xl, 18px);
+          font-weight: 600;
           color: var(--error-color);
 
           &::before {
             content: '¥';
-            font-size: $font-size-base;
+            font-size: var(--font-size-base, 14px);
             margin-right: 2rpx;
           }
         }
 
         .condition {
-          font-size: $font-size-xs;
-          color: $text-color-tertiary;
+          font-size: var(--font-size-xs, 10px);
+          color: var(--text-color-tertiary, #AAAAAA);
           background: var(--bg-color-page);
           padding: 4rpx 8rpx;
           border-radius: 4rpx;
@@ -1595,16 +1594,16 @@ function goUserProfile(userId: string) {
         justify-content: space-between;
 
         .publish-time {
-          font-size: $font-size-xs;
-          color: $text-color-tertiary;
+          font-size: var(--font-size-xs, 10px);
+          color: var(--text-color-tertiary, #AAAAAA);
         }
 
         .product-stats {
           display: flex;
           align-items: center;
           gap: 4rpx;
-          font-size: $font-size-xs;
-          color: $text-color-tertiary;
+          font-size: var(--font-size-xs, 10px);
+          color: var(--text-color-tertiary, #AAAAAA);
         }
       }
     }
@@ -1621,10 +1620,10 @@ function goUserProfile(userId: string) {
 
   .evaluation-card {
     background: var(--bg-color-card);
-    border-radius: $border-radius-lg;
+    border-radius: var(--border-radius-lg, 24px);
     padding: 24rpx;
     margin-bottom: 16rpx;
-    box-shadow: $box-shadow-light;
+    box-shadow: var(--box-shadow-xs, 0 2rpx 8rpx rgba(0, 0, 0, 0.04));
 
     .eval-header {
       display: flex;
@@ -1640,9 +1639,9 @@ function goUserProfile(userId: string) {
         flex: 1;
 
         .eval-name {
-          font-size: $font-size-lg;
-          font-weight: $font-weight-medium;
-          color: $text-color-primary;
+          font-size: var(--font-size-lg, 16px);
+          font-weight: 500;
+          color: var(--text-color-primary, #2D2D2D);
           display: block;
           margin-bottom: 8rpx;
         }
@@ -1658,8 +1657,8 @@ function goUserProfile(userId: string) {
           }
 
           .eval-time {
-            font-size: $font-size-xs;
-            color: $text-color-tertiary;
+            font-size: var(--font-size-xs, 10px);
+            color: var(--text-color-tertiary, #AAAAAA);
           }
         }
       }
@@ -1667,8 +1666,8 @@ function goUserProfile(userId: string) {
       .eval-rating-badge {
         padding: 8rpx 16rpx;
         border-radius: 20rpx;
-        font-size: $font-size-lg;
-        font-weight: $font-weight-semibold;
+        font-size: var(--font-size-lg, 16px);
+        font-weight: 600;
 
         &.rating-5 {
           background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
@@ -1706,14 +1705,14 @@ function goUserProfile(userId: string) {
         padding: 6rpx 12rpx;
         background: var(--success-color-alpha-10);
         color: var(--success-color);
-        font-size: $font-size-sm;
+        font-size: var(--font-size-sm, 12px);
         border-radius: 4rpx;
       }
     }
 
     .eval-content {
-      font-size: $font-size-base;
-      color: $text-color-secondary;
+      font-size: var(--font-size-base, 14px);
+      color: var(--text-color-secondary, #7A7A7A);
       line-height: 1.6;
       margin-bottom: 16rpx;
     }
@@ -1724,18 +1723,18 @@ function goUserProfile(userId: string) {
       gap: 12rpx;
       padding: 12rpx;
       background: var(--bg-color-page);
-      border-radius: $border-radius-base;
+      border-radius: var(--border-radius-base, 20px);
 
       .eval-product-img {
         width: 80rpx;
         height: 80rpx;
-        border-radius: $border-radius-base;
+        border-radius: var(--border-radius-base, 20px);
       }
 
       .eval-product-name {
         flex: 1;
-        font-size: $font-size-sm;
-        color: $text-color-secondary;
+        font-size: var(--font-size-sm, 12px);
+        color: var(--text-color-secondary, #7A7A7A);
         display: -webkit-box;
         -webkit-box-orient: vertical;
         -webkit-line-clamp: 1;
@@ -1787,14 +1786,14 @@ function goUserProfile(userId: string) {
   }
 
   .empty-text {
-    font-size: $font-size-lg;
-    color: $text-color-tertiary;
+    font-size: var(--font-size-lg, 16px);
+    color: var(--text-color-tertiary, #AAAAAA);
     margin: 24rpx 0 8rpx;
   }
 
   .empty-hint {
-    font-size: $font-size-sm;
-    color: $text-color-placeholder;
+    font-size: var(--font-size-sm, 12px);
+    color: var(--text-color-placeholder, #CCCCCC);
   }
 }
 
@@ -1836,8 +1835,8 @@ function goUserProfile(userId: string) {
 
   .loading-text {
     margin-left: 16rpx;
-    font-size: $font-size-sm;
-    color: $text-color-tertiary;
+    font-size: var(--font-size-sm, 12px);
+    color: var(--text-color-tertiary, #AAAAAA);
   }
 }
 
@@ -1854,8 +1853,8 @@ function goUserProfile(userId: string) {
 .no-more {
   text-align: center;
   padding: 32rpx;
-  font-size: $font-size-sm;
-  color: $text-color-tertiary;
+  font-size: var(--font-size-sm, 12px);
+  color: var(--text-color-tertiary, #AAAAAA);
   position: relative;
 
   &::before,
@@ -1865,7 +1864,7 @@ function goUserProfile(userId: string) {
     top: 50%;
     width: 80rpx;
     height: 1px;
-    background: $border-color-light;
+    background: var(--border-color-light, #F0F0F0);
   }
 
   &::before {
@@ -2023,7 +2022,7 @@ function goUserProfile(userId: string) {
   right: 0;
   bottom: 0;
   background: rgba(0, 0, 0, 0.5);
-  z-index: $z-index-modal + 100;
+  z-index: calc(var(--z-modal, 1050) + 100);
   display: flex;
   align-items: flex-end;
   animation: fadeIn 0.2s ease;
@@ -2060,12 +2059,12 @@ function goUserProfile(userId: string) {
   align-items: center;
   justify-content: space-between;
   padding: 24rpx 32rpx;
-  border-bottom: 1px solid $border-color-light;
+  border-bottom: 1px solid var(--border-color-light, #F0F0F0);
 
   .action-popup-title {
-    font-size: $font-size-lg;
-    font-weight: $font-weight-semibold;
-    color: $text-color-primary;
+    font-size: var(--font-size-lg, 16px);
+    font-weight: 600;
+    color: var(--text-color-primary, #2D2D2D);
   }
 
   .action-popup-close {
@@ -2090,7 +2089,7 @@ function goUserProfile(userId: string) {
   align-items: center;
   gap: 16rpx;
   padding: 24rpx 32rpx;
-  transition: $transition-fast;
+  transition: all 0.15s ease;
 
   &:active {
     background: var(--bg-color-page);
@@ -2103,14 +2102,14 @@ function goUserProfile(userId: string) {
   }
 
   text {
-    font-size: $font-size-base;
-    color: $text-color-primary;
+    font-size: var(--font-size-base, 14px);
+    color: var(--text-color-primary, #2D2D2D);
   }
 }
 
 .action-popup-footer {
   padding: 16rpx 32rpx;
-  border-top: 1px solid $border-color-light;
+  border-top: 1px solid var(--border-color-light, #F0F0F0);
 }
 
 .action-popup-cancel {
@@ -2121,16 +2120,16 @@ function goUserProfile(userId: string) {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: $transition-fast;
+  transition: all 0.15s ease;
 
   &:active {
     opacity: 0.7;
   }
 
   text {
-    font-size: $font-size-base;
-    font-weight: $font-weight-medium;
-    color: $text-color-primary;
+    font-size: var(--font-size-base, 14px);
+    font-weight: 500;
+    color: var(--text-color-primary, #2D2D2D);
   }
 }
 </style>

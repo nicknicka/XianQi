@@ -3,9 +3,8 @@
  * 默认值取自默认主题预设 "海盐芝士" (sea-salt-cheese)
  * 运行时由 theme.ts 注入 CSS 变量覆盖，切换为用户选择的主题
  *
- * 使用方式：var(--primary-color, $primary-color)
- *   - 已注入 CSS 变量 → 使用用户选择的主题色
- *   - 未注入时 → fallback 到默认主题色值
+ * 运行时样式请直接使用规范 CSS Token；这里的 SCSS 变量只保留给存量页面
+ * 和编译期兜底使用，不得在全局样式或共享组件中新增引用。
  */
 
 // ========== 主题色 (默认主题: 海盐芝士) ==========
@@ -123,24 +122,24 @@ $z-index-toast: 1080;
 
 // 胶囊按钮 (Claymorphism)
 @mixin pill-button {
-  border-radius: $border-radius-pill;
+  border-radius: var(--border-radius-pill);
   padding: 16rpx 48rpx;
-  font-weight: $font-weight-medium;
+  font-weight: 500;
   border: 2rpx solid rgba(255, 255, 255, 0.5);
-  box-shadow: $clay-shadow-btn;
-  transition: $transition-bounce;
+  box-shadow: var(--clay-shadow-btn);
+  transition: all var(--motion-duration-base) var(--motion-ease-standard);
 
   &:active {
     transform: scale(0.95);
-    box-shadow: $clay-shadow-card-pressed;
+    box-shadow: var(--clay-shadow-card-pressed);
   }
 }
 
 // 软萌卡片 (Claymorphism)
 @mixin cute-card {
-  background: $bg-color-card;
-  border-radius: 24rpx;
-  padding: $spacing-md;
+  background: var(--bg-color-card);
+  border-radius: var(--border-radius-card);
+  padding: var(--spacing-md);
   border: 2rpx solid rgba(255, 255, 255, 0.8);
-  box-shadow: $clay-shadow-card;
+  box-shadow: var(--clay-shadow-card);
 }

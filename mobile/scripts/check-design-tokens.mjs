@@ -100,6 +100,81 @@ const UNREGISTERED_ALIAS_PATTERNS = [
 
 const CRITICAL_ROOT_FALLBACKS = ['--bg-color-page', '--text-color-primary', '--font-base']
 const THEME_SOURCE_RELATIVE_PATH = 'src/utils/theme/theme-derive.ts'
+const GLOBAL_SHARED_STYLE_PATTERN = /^(?:src\/styles|src\/components)\//
+const LEGACY_SCSS_DECLARATIONS_PATH = 'src/styles/variables.scss'
+
+/** SCSS defaults whose behavior is owned by a runtime global token. */
+export const FIXED_SCSS_TOKEN_ALIASES = {
+  '$primary-color': '--primary-color',
+  '$primary-color-light': '--primary-color-light',
+  '$primary-color-dark': '--primary-color-dark',
+  '$secondary-color': '--secondary-color',
+  '$accent-color': '--accent-color',
+  '$success-color': '--success-color',
+  '$warning-color': '--warning-color',
+  '$error-color': '--danger-color',
+  '$info-color': '--info-color',
+  '$text-color-primary': '--text-color-primary',
+  '$text-color-secondary': '--text-color-secondary',
+  '$text-color-tertiary': '--text-color-tertiary',
+  '$text-color-placeholder': '--text-color-placeholder',
+  '$text-color-white': '--text-color-inverse',
+  '$bg-color-page': '--bg-color-page',
+  '$bg-color-card': '--bg-color-card',
+  '$bg-color-warm': '--bg-color-warm',
+  '$bg-color-disabled': '--bg-color-disabled',
+  '$border-color-light': '--border-color-light',
+  '$border-color-base': '--border-color-base',
+  '$border-color-dark': '--border-color-dark',
+  '$spacing-xs': '--spacing-xs',
+  '$spacing-sm': '--spacing-sm',
+  '$spacing-md': '--spacing-md',
+  '$spacing-lg': '--spacing-lg',
+  '$spacing-xl': '--spacing-xl',
+  '$font-size-xs': '--font-size-xs',
+  '$font-size-sm': '--font-size-sm',
+  '$font-size-base': '--font-size-base',
+  '$font-size-lg': '--font-size-lg',
+  '$font-size-xl': '--font-size-xl',
+  '$font-size-xxl': '--font-size-xxl',
+  '$border-radius-sm': '--border-radius-sm',
+  '$border-radius-base': '--border-radius-base',
+  '$border-radius-md': '--border-radius-base',
+  '$border-radius-lg': '--border-radius-lg',
+  '$border-radius-xl': '--border-radius-xl',
+  '$border-radius-round': '--border-radius-round',
+  '$border-radius-pill': '--border-radius-pill',
+  '$box-shadow-light': '--box-shadow-xs',
+  '$box-shadow-base': '--box-shadow-base',
+  '$box-shadow-dark': '--box-shadow-primary',
+  '$box-shadow-primary': '--box-shadow-primary',
+  '$box-shadow-card': '--box-shadow-card',
+  '$clay-shadow-card': '--clay-shadow-card',
+  '$clay-shadow-card-pressed': '--clay-shadow-card-pressed',
+  '$clay-shadow-btn': '--clay-shadow-btn',
+  '$clay-shadow-input': '--clay-shadow-input',
+  '$clay-shadow-tag': '--clay-shadow-tag',
+  '$transition-base': '--motion-duration-base',
+  '$transition-fast': '--motion-duration-fast',
+  '$transition-bounce': '--motion-duration-base',
+  '$z-index-dropdown': '--z-dropdown',
+  '$z-index-sticky': '--z-sticky',
+  '$z-index-fixed': '--z-fixed',
+  '$z-index-modal-backdrop': '--z-modal-backdrop',
+  '$z-index-modal': '--z-modal',
+  '$z-index-popover': '--z-popover',
+  '$z-index-tooltip': '--z-tooltip'
+}
+
+const EXCLUDED_PAGE_STYLE_PATHS = [
+  'src/pages/market/',
+  'src/pages/publish/',
+  'src/pages/mine/auth-center.vue',
+  'src/pages/mine/real-name-auth.vue',
+  'src/pages/mine/student-auth.vue'
+]
+const PAGE_STYLE_BLOCK_PATTERN = /<style[^>]*>\s*([\s\S]*?)<\/style>/g
+const PAGE_STYLE_SCSS_DECLARATION_PATTERN = /\b[a-z][a-z0-9-]*(?:\s+[a-z0-9-]+)*\s*:\s*[^;{}]*\$[a-zA-Z][a-zA-Z0-9-]*/
 
 /** Market, product publishing, and product editing pages covered by issue #108. */
 export const DESIGN_TOKEN_PAGE_PATHS = [
@@ -142,9 +217,9 @@ function collectSourceFiles(directory, relativeDirectory = '') {
 function loadProjectSources() {
   const sourceDir = path.join(mobileDir, 'src')
   return Object.fromEntries(
-    collectSourceFiles(sourceDir).map(relativePath => [
-      relativePath,
-      readFileSync(path.join(sourceDir, relativePath), 'utf8')
+    collectSourceFiles(sourceDir).map(relativeSourcePath => [
+      `src/${relativeSourcePath}`,
+      readFileSync(path.join(sourceDir, relativeSourcePath), 'utf8')
     ])
   )
 }
@@ -194,6 +269,53 @@ function findLocalTokenDefinitions(source) {
   return definitions
 }
 
+function* extractVueStyleBlocks(source) {
+  const stylePattern = /<style[^>]*>([\s\S]*?)<\/style>/g
+  for (const match of source.matchAll(stylePattern)) {
+    const beforeStyle = source.slice(0, match.index)
+    yield {
+      source: match[1],
+      lineOffset: beforeStyle.split(/\r?\n/).length - 1
+    }
+  }
+}
+
+function* findFixedScssTokenUses(relativeFile, source) {
+  if (!GLOBAL_SHARED_STYLE_PATTERN.test(relativeFile)) return
+  if (relativeFile === LEGACY_SCSS_DECLARATIONS_PATH) return
+
+  const styleBlocks = relativeFile.endsWith('.vue')
+    ? [...extractVueStyleBlocks(source)]
+    : [{ source, lineOffset: 0 }]
+
+  for (const { source: styleSource, lineOffset } of styleBlocks) {
+    for (const [scssToken, cssToken] of Object.entries(FIXED_SCSS_TOKEN_ALIASES)) {
+      for (const match of styleSource.matchAll(
+        new RegExp(`(?<![\\w-])${escapeRegExp(scssToken)}(?![\\w-])`, 'g')
+      )) {
+        yield {
+          token: cssToken,
+          scssToken,
+          line: lineOffset + lineAt(styleSource, match.index)
+        }
+      }
+    }
+  }
+}
+
+export function findFixedTokenDefaults(sources) {
+  return Object.entries(sources).flatMap(([relativeFile, source]) =>
+    [...findFixedScssTokenUses(relativeFile, source)].map(use => ({
+      file: relativeFile,
+      line: use.line,
+      token: use.token,
+      variable: use.scssToken,
+      rule: 'fixed-scss-token-default',
+      message: `Use ${use.token} instead of the fixed ${use.scssToken} default`
+    }))
+  )
+}
+
 function lineAt(source, index) {
   return source.slice(0, index).split(/\r?\n/).length
 }
@@ -202,6 +324,40 @@ function* findTokenUses(source) {
   for (const match of source.matchAll(/var\(\s*(--[a-zA-Z][a-zA-Z0-9-]*)/g)) {
     yield { token: match[1], index: match.index }
   }
+}
+
+function isRemainingPagePath(relativeFile) {
+  const sourcePath = relativeFile.startsWith('src/') ? relativeFile : `src/${relativeFile}`
+
+  return sourcePath.startsWith('src/pages/') &&
+    !EXCLUDED_PAGE_STYLE_PATHS.some(excluded => sourcePath.startsWith(excluded) || sourcePath === excluded)
+}
+
+/** Detect page-scoped style declarations that still compile directly from SCSS defaults. */
+export function findUnmigratedPageStyles(sources) {
+  return Object.entries(sources).flatMap(([relativeFile, source]) => {
+    if (!isRemainingPagePath(relativeFile)) return []
+
+    const findings = []
+    for (const styleMatch of source.matchAll(PAGE_STYLE_BLOCK_PATTERN)) {
+      const contentStart = styleMatch.index + styleMatch[0].length - styleMatch[1].length
+      const startLine = lineAt(source, contentStart)
+
+      for (const [blockIndex, sourceLine] of styleMatch[1].split(/\r?\n/).entries()) {
+        const declaration = sourceLine.replace(/#\{[^}]*\}/g, '')
+
+        if (PAGE_STYLE_SCSS_DECLARATION_PATTERN.test(declaration)) {
+          findings.push({
+            file: relativeFile,
+            line: startLine + blockIndex,
+            rule: 'unmigrated-page-style',
+            message: 'Use a registered global token instead of a direct SCSS default'
+          })
+        }
+      }
+    }
+    return findings
+  })
 }
 
 function classifyUndeclaredToken(token) {
@@ -320,6 +476,8 @@ function runCheck() {
     ...findRuntimeAliasGaps(deriveSource),
     ...scanDesignTokens(sources, { globalTokens: tokens }),
     ...findFixedScssDefaults(sources),
+    ...findUnmigratedPageStyles(sources),
+    ...findFixedTokenDefaults(sources),
     ...Object.entries(sources)
       .filter(([relativeFile]) => relativeFile === 'src/App.vue')
       .flatMap(([relativeFile, source]) =>

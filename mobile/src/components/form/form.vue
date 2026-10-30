@@ -439,7 +439,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@use '@/styles/variables.scss' as *;
 .form {
   width: 100%;
 
@@ -636,7 +635,7 @@ export default {
       }
 
       &.submit-btn {
-        background: $primary-color;
+        background: var(--primary-color);
 
         .btn-text {
           color: var(--bg-color-card);

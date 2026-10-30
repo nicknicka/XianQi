@@ -177,7 +177,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@use '@/styles/variables.scss' as *;
 .search-bar {
   display: flex;
   align-items: center;
@@ -253,7 +252,7 @@ export default {
       background: var(--bg-color-card);
 
       @if props.shape === 'square' {
-        border-color: $primary-color;
+        border-color: var(--primary-color);
       }
     }
 
@@ -311,7 +310,7 @@ export default {
 
       .action-text {
         font-size: 28rpx;
-        color: $primary-color;
+        color: var(--primary-color);
       }
     }
   }

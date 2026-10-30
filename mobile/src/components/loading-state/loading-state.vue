@@ -133,7 +133,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@use '@/styles/variables.scss' as *;
 .loading-state {
   display: flex;
   align-items: center;
@@ -163,7 +162,7 @@ export default {
       height: 12rpx;
       margin: -6rpx 0 0 -6rpx;
       border-radius: 50%;
-      background: $primary-color;
+      background: var(--primary-color);
       animation: spinnerFade 1.2s linear infinite;
     }
   }
@@ -231,7 +230,7 @@ export default {
   .empty-action {
     margin-top: 16rpx;
     padding: 16rpx 48rpx;
-    background: $primary-color;
+    background: var(--primary-color);
     border-radius: 48rpx;
 
     .action-text {
@@ -274,12 +273,12 @@ export default {
   .error-action {
     margin-top: 16rpx;
     padding: 16rpx 48rpx;
-    border: 1rpx solid $primary-color;
+    border: 1rpx solid var(--primary-color);
     border-radius: 48rpx;
 
     .action-text {
       font-size: 28rpx;
-      color: $primary-color;
+      color: var(--primary-color);
     }
   }
 }
@@ -311,7 +310,7 @@ export default {
   .success-action {
     margin-top: 16rpx;
     padding: 16rpx 48rpx;
-    background: $primary-color;
+    background: var(--primary-color);
     border-radius: 48rpx;
 
     .action-text {
@@ -348,7 +347,7 @@ export default {
   .network-action {
     margin-top: 16rpx;
     padding: 16rpx 48rpx;
-    background: $primary-color;
+    background: var(--primary-color);
     border-radius: 48rpx;
 
     .action-text {

@@ -300,7 +300,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@use '@/styles/variables.scss' as *;
 .filter-bar {
   display: flex;
   align-items: center;
@@ -339,14 +338,14 @@ export default {
       }
 
       &.is-active {
-        background: rgba($primary-color, 0.1);
+        background: var(--primary-color-alpha-10);
 
         .filter-text {
-          color: $primary-color;
+          color: var(--primary-color);
         }
 
         .sort-icon {
-          color: $primary-color;
+          color: var(--primary-color);
         }
       }
 
@@ -410,7 +409,7 @@ export default {
 
     .header-btn {
       font-size: 28rpx;
-      color: $primary-color;
+      color: var(--primary-color);
     }
   }
 
@@ -449,11 +448,11 @@ export default {
           }
 
           &.is-active {
-            background: rgba($primary-color, 0.1);
-            border-color: $primary-color;
+            background: var(--primary-color-alpha-10);
+            border-color: var(--primary-color);
 
             .option-text {
-              color: $primary-color;
+              color: var(--primary-color);
             }
           }
 
@@ -464,7 +463,7 @@ export default {
 
           .option-check {
             font-size: 24rpx;
-            color: $primary-color;
+            color: var(--primary-color);
             margin-left: 8rpx;
           }
         }
@@ -496,7 +495,7 @@ export default {
       }
 
       &.confirm-btn {
-        background: $primary-color;
+        background: var(--primary-color);
 
         .btn-text {
           color: #fff;

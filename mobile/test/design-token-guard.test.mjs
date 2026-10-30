@@ -8,6 +8,8 @@ import {
   REQUIRED_TOKEN_CATEGORIES,
   findCriticalFallbackGaps,
   findFixedScssDefaults,
+  findFixedTokenDefaults,
+  findUnmigratedPageStyles,
   findRuntimeAliasGaps,
   parseThemeTokens,
   scanDesignTokens
@@ -146,10 +148,69 @@ test('requires static fallbacks for critical root tokens', () => {
   assert.deepEqual(gaps, [{ line: 1, token: '--bg-color-page' }])
 })
 
+test('remaining business pages reject direct SCSS style defaults', () => {
+  const findings = findUnmigratedPageStyles({
+    'src/pages/mine/index.vue': [
+      '<template><text class="instance">$vm</text></template>',
+      '<style lang="scss" scoped>',
+      '.mine-page {',
+      '  color: $text-color-primary;',
+      '}',
+      '</style>'
+    ].join('\n')
+  })
+
+  assert.deepEqual(findings, [{
+    file: 'src/pages/mine/index.vue',
+    line: 4,
+    rule: 'unmigrated-page-style',
+    message: 'Use a registered global token instead of a direct SCSS default'
+  }])
+})
+
+test('page style guard ignores non-style SCSS usage and excluded pages', () => {
+  const findings = findUnmigratedPageStyles({
+    'src/pages/market/list.vue': '<style lang="scss">.market { color: $primary-color; }</style>',
+    'src/pages/mine/auth-center.vue': '<style lang="scss">.auth { color: $primary-color; }</style>',
+    'src/pages/message/chat.vue': 'const page = event.$vm',
+    'src/pages/user/home.vue': [
+      '<style lang="scss" scoped>',
+      '@for $i from 1 through 20 {',
+      '  &:nth-child(#{$i}) { animation-delay: 0.05s; }',
+      '}'
+    ].join('\n')
+  })
+
+  assert.deepEqual(findings, [])
+})
+
 test('mobile lint runs the design token guard before the existing lint', () => {
   const packageJson = JSON.parse(readFileSync(path.join(mobileDir, 'package.json'), 'utf8'))
   assert.equal(packageJson.scripts.prelint, 'node scripts/check-design-tokens.mjs')
 
   const ci = readFileSync(path.join(mobileDir, '..', '.github/workflows/ci.yml'), 'utf8')
   assert.match(ci, /- name: Lint\n\s+run: \|\n\s+cd mobile\n\s+npm run lint/)
+})
+
+test('rejects fixed SCSS token defaults in global and shared styles', () => {
+  const findings = findFixedTokenDefaults({
+    'src/styles/variables.scss': '$primary-color: #8EC5E8;',
+    'src/styles/common.scss': '.example { color: var(--primary-color, $primary-color); }',
+    'src/components/example/example.vue': [
+      '<style lang="scss">',
+      '.example {',
+      '  color: $primary-color;',
+      '}',
+      '</style>'
+    ].join('\n')
+  })
+
+  assert.deepEqual(findings.map(({ file, line, token }) => ({ file, line, token })), [
+    { file: 'src/styles/common.scss', line: 1, token: '--primary-color' },
+    { file: 'src/components/example/example.vue', line: 3, token: '--primary-color' }
+  ])
+  assert.deepEqual(findings.map(({ rule }) => rule), [
+    'fixed-scss-token-default',
+    'fixed-scss-token-default'
+  ])
 })
