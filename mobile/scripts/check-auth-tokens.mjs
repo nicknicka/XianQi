@@ -13,6 +13,7 @@ export const AUTH_SOURCE_FILES = [
   'src/utils/auth/auth-state.ts',
   'src/utils/auth/auth-theme.ts',
   'src/utils/auth/auth-tokens.ts',
+  'src/utils/auth/student-card-image.ts',
   'src/utils/auth/real-name-validation.ts'
 ]
 
@@ -35,6 +36,7 @@ const GUARDED_AUTH_TOKENS = [
   'AUTH_ICON_SIZES.status',
   'AUTH_ICON_SIZES.upload',
   'AUTH_PAGE_ANIMATION_DELAY_MS',
+  'AUTH_INPUT_CURSOR_SPACING_PX',
   'AUTH_NAVIGATION_BAR_BACKGROUND',
   '--auth-page-min-height'
 ]

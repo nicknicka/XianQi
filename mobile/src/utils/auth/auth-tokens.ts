@@ -12,3 +12,4 @@ export const AUTH_ICON_SIZES = {
 } as const
 
 export const AUTH_PAGE_ANIMATION_DELAY_MS = 50
+export const AUTH_INPUT_CURSOR_SPACING_PX = 16
