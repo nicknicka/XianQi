@@ -166,6 +166,16 @@ export const FIXED_SCSS_TOKEN_ALIASES = {
   '$z-index-tooltip': '--z-tooltip'
 }
 
+const EXCLUDED_PAGE_STYLE_PATHS = [
+  'src/pages/market/',
+  'src/pages/publish/',
+  'src/pages/mine/auth-center.vue',
+  'src/pages/mine/real-name-auth.vue',
+  'src/pages/mine/student-auth.vue'
+]
+const PAGE_STYLE_BLOCK_PATTERN = /<style[^>]*>\s*([\s\S]*?)<\/style>/g
+const PAGE_STYLE_SCSS_DECLARATION_PATTERN = /\b[a-z][a-z0-9-]*(?:\s+[a-z0-9-]+)*\s*:\s*[^;{}]*\$[a-zA-Z][a-zA-Z0-9-]*/
+
 function collectSourceFiles(directory, relativeDirectory = '') {
   const files = []
   for (const entry of readdirSync(directory, { withFileTypes: true })) {
@@ -291,6 +301,40 @@ function* findTokenUses(source) {
   }
 }
 
+function isRemainingPagePath(relativeFile) {
+  const sourcePath = relativeFile.startsWith('src/') ? relativeFile : `src/${relativeFile}`
+
+  return sourcePath.startsWith('src/pages/') &&
+    !EXCLUDED_PAGE_STYLE_PATHS.some(excluded => sourcePath.startsWith(excluded) || sourcePath === excluded)
+}
+
+/** Detect page-scoped style declarations that still compile directly from SCSS defaults. */
+export function findUnmigratedPageStyles(sources) {
+  return Object.entries(sources).flatMap(([relativeFile, source]) => {
+    if (!isRemainingPagePath(relativeFile)) return []
+
+    const findings = []
+    for (const styleMatch of source.matchAll(PAGE_STYLE_BLOCK_PATTERN)) {
+      const contentStart = styleMatch.index + styleMatch[0].length - styleMatch[1].length
+      const startLine = lineAt(source, contentStart)
+
+      for (const [blockIndex, sourceLine] of styleMatch[1].split(/\r?\n/).entries()) {
+        const declaration = sourceLine.replace(/#\{[^}]*\}/g, '')
+
+        if (PAGE_STYLE_SCSS_DECLARATION_PATTERN.test(declaration)) {
+          findings.push({
+            file: relativeFile,
+            line: startLine + blockIndex,
+            rule: 'unmigrated-page-style',
+            message: 'Use a registered global token instead of a direct SCSS default'
+          })
+        }
+      }
+    }
+    return findings
+  })
+}
+
 function classifyUndeclaredToken(token) {
   if (UNREGISTERED_ALIAS_PATTERNS.some(pattern => pattern.test(token))) {
     return 'unregistered-compatible-alias'
@@ -374,6 +418,7 @@ function runCheck() {
     ...findCategoryGaps(tokens),
     ...findRuntimeAliasGaps(deriveSource),
     ...scanDesignTokens(sources, { globalTokens: tokens }),
+    ...findUnmigratedPageStyles(sources),
     ...findFixedTokenDefaults(sources),
     ...Object.entries(sources)
       .filter(([relativeFile]) => relativeFile === 'src/App.vue')
