@@ -4,8 +4,10 @@ import path from 'node:path'
 import test from 'node:test'
 import {
   COMPATIBLE_TOKEN_ALIASES,
+  DESIGN_TOKEN_PAGE_PATHS,
   REQUIRED_TOKEN_CATEGORIES,
   findCriticalFallbackGaps,
+  findFixedScssDefaults,
   findRuntimeAliasGaps,
   parseThemeTokens,
   scanDesignTokens
@@ -48,6 +50,76 @@ test('accepts registered aliases, generated tokens, and component-local variable
   }, { globalTokens })
 
   assert.deepEqual(findings, [])
+})
+
+test('rejects fixed SCSS defaults in the scoped market and publish pages', () => {
+  const findings = findFixedScssDefaults({
+    'src/pages/market/edit.vue': [
+      '<style lang="scss" scoped>',
+      '.example {',
+      '  color: $text-color-primary;',
+      '  padding: $spacing-md;',
+      '  font-size: $font-size-base;',
+      '  border-radius: $border-radius-sm;',
+      '}',
+      '</style>'
+    ].join('\n'),
+    'src/pages/publish/index.vue': [
+      '<style lang="scss" scoped>',
+      '.example { color: #333; }'
+    ].join('\n')
+  })
+
+  assert.deepEqual(findings.map(finding => [finding.file, finding.rule, finding.token]), [
+    ['src/pages/market/edit.vue', 'fixed-scss-default', '$text-color-primary'],
+    ['src/pages/market/edit.vue', 'fixed-scss-default', '$spacing-md'],
+    ['src/pages/market/edit.vue', 'fixed-scss-default', '$font-size-base'],
+    ['src/pages/market/edit.vue', 'fixed-scss-default', '$border-radius-sm'],
+  ])
+})
+
+test('does not reject scoped page content outside its style block', () => {
+  const findings = findFixedScssDefaults({
+    'src/pages/market/list.vue': [
+      '<script setup lang="ts">',
+      'const $spacing-md = "not scss"',
+      '</script>',
+      '<style lang="scss" scoped>',
+      '.example { gap: var(--spacing-md); }',
+      '</style>'
+    ].join('\n')
+  })
+
+  assert.deepEqual(findings, [])
+})
+
+test('publish center avoids fixed critical style defaults', () => {
+  const source = readFileSync(path.join(mobileDir, 'src/pages/publish/index.vue'), 'utf8')
+
+  for (const pattern of [
+    /#(?:333333|AAAAAA|4CAF50|66BB6A|f8f8f8)/i,
+    /(?:font-size|padding|border-radius|box-shadow|transition):(?!\s*var\()/,
+  ]) {
+    assert.doesNotMatch(source, pattern)
+  }
+})
+
+test('keeps market and publish pages on canonical design tokens', () => {
+  assert.deepEqual(DESIGN_TOKEN_PAGE_PATHS, [
+    'src/pages/market/list.vue',
+    'src/pages/market/publish.vue',
+    'src/pages/market/edit.vue',
+    'src/pages/publish/index.vue'
+  ])
+
+  const sources = Object.fromEntries(
+    DESIGN_TOKEN_PAGE_PATHS.map(page => [
+      page,
+      readFileSync(path.join(mobileDir, page), 'utf8')
+    ])
+  )
+
+  assert.deepEqual(findFixedScssDefaults(sources), [])
 })
 
 test('keeps every registered compatible alias mapped by the runtime source', () => {

@@ -101,6 +101,31 @@ const UNREGISTERED_ALIAS_PATTERNS = [
 const CRITICAL_ROOT_FALLBACKS = ['--bg-color-page', '--text-color-primary', '--font-base']
 const THEME_SOURCE_RELATIVE_PATH = 'src/utils/theme/theme-derive.ts'
 
+/** Market, product publishing, and product editing pages covered by issue #108. */
+export const DESIGN_TOKEN_PAGE_PATHS = [
+  'src/pages/market/list.vue',
+  'src/pages/market/publish.vue',
+  'src/pages/market/edit.vue',
+  'src/pages/publish/index.vue',
+]
+
+const FIXED_SCSS_DEFAULT_PATTERNS = [
+  /\$(?:bg|text|border)-color-[a-z0-9-]+/g,
+  /\$(?:primary|secondary|accent|success|warning|error|danger|info)-color(?:-[a-z0-9-]+)?/g,
+  /\$font-size-[a-z0-9-]+/g,
+  /\$spacing-[a-z0-9-]+/g,
+  /\$(?:border-radius|radius)-[a-z0-9-]+/g,
+  /\$(?:box|clay)-shadow-[a-z0-9-]+/g,
+  /\$transition-[a-z0-9-]+/g,
+]
+
+function* extractStyleBlocks(source) {
+  for (const match of source.matchAll(/<style\b[^>]*>([\s\S]*?)<\/style>/g)) {
+    const offset = match.index + match[0].indexOf(match[1])
+    yield { source: match[1], offset }
+  }
+}
+
 function collectSourceFiles(directory, relativeDirectory = '') {
   const files = []
   for (const entry of readdirSync(directory, { withFileTypes: true })) {
@@ -210,6 +235,38 @@ export function scanDesignTokens(
   return findings
 }
 
+export function findFixedScssDefaults(sources) {
+  const findings = []
+
+  for (const [relativeFile, source] of Object.entries(sources)) {
+    if (!DESIGN_TOKEN_PAGE_PATHS.includes(relativeFile)) continue
+
+    for (const style of extractStyleBlocks(source)) {
+      const seen = new Set()
+      for (const pattern of FIXED_SCSS_DEFAULT_PATTERNS) {
+        const scopedPattern = new RegExp(pattern.source, pattern.flags)
+        for (const match of style.source.matchAll(scopedPattern)) {
+          const index = style.offset + match.index
+          const key = `${match[0]}:${index}`
+          if (seen.has(key)) continue
+          seen.add(key)
+          findings.push({
+            file: relativeFile,
+            line: lineAt(source, index),
+            token: match[0],
+            rule: 'fixed-scss-default',
+            message: `Replace ${match[0]} with a canonical CSS design token`,
+          })
+        }
+      }
+    }
+  }
+
+  return findings.sort((left, right) =>
+    left.file.localeCompare(right.file) || left.line - right.line || left.token.localeCompare(right.token)
+  )
+}
+
 export function findRuntimeAliasGaps(deriveSource) {
   return Object.entries(COMPATIBLE_TOKEN_ALIASES)
     .filter(([alias, canonical]) => {
@@ -262,6 +319,7 @@ function runCheck() {
     ...findCategoryGaps(tokens),
     ...findRuntimeAliasGaps(deriveSource),
     ...scanDesignTokens(sources, { globalTokens: tokens }),
+    ...findFixedScssDefaults(sources),
     ...Object.entries(sources)
       .filter(([relativeFile]) => relativeFile === 'src/App.vue')
       .flatMap(([relativeFile, source]) =>
