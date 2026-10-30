@@ -8,12 +8,12 @@
     <view class="auth-card card-clickable" @click="goToRealNameAuth">
       <view class="card-header">
         <view class="header-left">
-          <uni-icons type="person" size="24" :color="primaryColor" />
+          <uni-icons type="person" :size="AUTH_ICON_SIZES.card" :color="primaryColor" />
           <text class="card-title">实名认证</text>
         </view>
         <view class="status-badge" :class="'status-' + realNameState.pageStatus">
           <text class="status-text">{{ realNameState.actionLabel }}</text>
-          <uni-icons type="right" size="16" :color="textColorTertiary" />
+          <uni-icons type="right" :size="AUTH_ICON_SIZES.inline" :color="textColorTertiary" />
         </view>
       </view>
       <view class="card-content">
@@ -36,7 +36,7 @@
     <view class="auth-card card-clickable" :class="{ 'card-locked': studentCard.locked }" @click="handleStudentCardClick">
       <view class="card-header">
         <view class="header-left">
-          <uni-icons :type="studentCard.icon" size="24" :color="studentStatusColor" />
+          <uni-icons :type="studentCard.icon" :size="AUTH_ICON_SIZES.card" :color="studentStatusColor" />
           <text class="card-title">学生认证</text>
         </view>
         <view
@@ -44,7 +44,7 @@
           :class="studentCard.locked ? 'status-locked' : 'status-' + studentCard.status.pageStatus"
         >
           <text class="status-text">{{ studentCard.actionLabel }}</text>
-          <uni-icons :type="studentCard.locked ? 'locked' : 'right'" size="16" :color="studentStatusColor" />
+          <uni-icons :type="studentCard.locked ? 'locked' : 'right'" :size="AUTH_ICON_SIZES.inline" :color="studentStatusColor" />
         </view>
       </view>
       <view class="card-content">
@@ -70,20 +70,20 @@
 
     <view class="benefits-section">
       <view class="section-title">
-        <uni-icons type="gift" size="20" :color="primaryColor" />
+        <uni-icons type="gift" :size="AUTH_ICON_SIZES.section" :color="primaryColor" />
         <text>认证权益</text>
       </view>
       <view class="benefit-list">
         <view class="benefit-item">
-          <uni-icons type="checkmarkempty" size="18" :color="successColor" />
+          <uni-icons type="checkmarkempty" :size="AUTH_ICON_SIZES.benefit" :color="successColor" />
           <text>实名认证：提高账户安全性，支持发布商品</text>
         </view>
         <view class="benefit-item">
-          <uni-icons type="checkmarkempty" size="18" :color="successColor" />
+          <uni-icons type="checkmarkempty" :size="AUTH_ICON_SIZES.benefit" :color="successColor" />
           <text>学生认证：享受学生专属优惠和活动</text>
         </view>
         <view class="benefit-item">
-          <uni-icons type="checkmarkempty" size="18" :color="successColor" />
+          <uni-icons type="checkmarkempty" :size="AUTH_ICON_SIZES.benefit" :color="successColor" />
           <text>双认证完成：提升信用等级，增加交易信任</text>
         </view>
       </view>
@@ -98,6 +98,7 @@ import { userApi } from '@/api/user'
 import type { RealNameAuth, StudentAuth } from '@/types'
 import { useServiceNavigation } from '@/composables/useServiceNavigation'
 import { useThemeColors, useThemePage, useThemeStyle } from '@/utils/theme'
+import { AUTH_ICON_SIZES } from '@/utils/auth/auth-tokens'
 import {
   resolveAuthState,
   resolveStudentAuthCenterState,
@@ -231,7 +232,7 @@ function maskIdCard(idCard: string) {
 }
 
 .auth-center-page {
-  min-height: 100vh;
+  min-height: var(--auth-page-min-height);
   background: var(--bg-color-page);
   padding: var(--auth-page-padding);
   padding-bottom: calc(var(--auth-page-padding) + env(safe-area-inset-bottom));
@@ -285,7 +286,7 @@ function maskIdCard(idCard: string) {
 
     .card-title {
       font-size: var(--font-size-lg);
-      font-weight: 600;
+      font-weight: var(--auth-font-weight-semibold);
       color: var(--text-color-primary);
     }
   }
@@ -356,7 +357,7 @@ function maskIdCard(idCard: string) {
     align-items: center;
     gap: var(--auth-tip-gap);
     font-size: var(--font-size-lg);
-    font-weight: 600;
+    font-weight: var(--auth-font-weight-semibold);
     color: var(--text-color-primary);
     margin-bottom: var(--auth-section-gap);
   }

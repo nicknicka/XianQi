@@ -2,25 +2,25 @@
   <view class="student-auth-page page-animate" :class="{ 'animate-in': isAnimated }" :style="themeStyle">
     <!-- 正在确认实名前置条件时不渲染表单，避免直接访问短暂绕过守卫。 -->
     <view v-if="statusLoading" class="status-card status-loading">
-      <uni-icons type="loop" size="48" :color="statusColor" />
+      <uni-icons type="loop" :size="AUTH_ICON_SIZES.status" :color="statusColor" />
       <text class="status-text">正在校验</text>
       <text class="status-desc">正在确认实名认证状态</text>
     </view>
 
     <!-- 直接访问学生认证页时的实名前置守卫。 -->
     <view v-else-if="accessGuard.locked" class="status-card status-locked">
-      <uni-icons type="locked" size="48" :color="statusColor" />
+      <uni-icons type="locked" :size="AUTH_ICON_SIZES.status" :color="statusColor" />
       <text class="status-text">{{ accessGuard.label }}</text>
       <text class="status-desc">{{ accessGuard.description }}</text>
       <view class="locked-action" @click="goToRealNameAuth">
         <text>{{ accessGuard.actionLabel }}</text>
-        <uni-icons type="right" size="16" :color="bgColorCard" />
+        <uni-icons type="right" :size="AUTH_ICON_SIZES.inline" :color="bgColorCard" />
       </view>
     </view>
 
     <!-- 学生认证状态：未认证、审核中、已认证、认证失败。 -->
     <view v-else class="status-card" :class="'status-' + studentState.pageStatus">
-      <uni-icons :type="studentState.icon" size="48" :color="statusColor" />
+      <uni-icons :type="studentState.icon" :size="AUTH_ICON_SIZES.status" :color="statusColor" />
       <text class="status-text">{{ studentState.label }}</text>
       <text class="status-desc">{{ studentState.description }}</text>
     </view>
@@ -78,7 +78,7 @@
             mode="aspectFit"
           />
           <view v-else class="upload-placeholder">
-            <uni-icons type="camera" size="40" :color="textColorTertiary" />
+            <uni-icons type="camera" :size="AUTH_ICON_SIZES.upload" :color="textColorTertiary" />
             <text class="upload-text">{{ uploadingSide === side.key ? '上传中...' : '点击上传' }}</text>
           </view>
         </view>
@@ -99,7 +99,7 @@
       </button>
 
       <view class="security-tip">
-        <uni-icons type="info" size="16" :color="textColorTertiary" />
+        <uni-icons type="info" :size="AUTH_ICON_SIZES.inline" :color="textColorTertiary" />
         <text>请确保照片清晰，信息完整可见</text>
       </view>
     </view>
@@ -154,6 +154,10 @@ import {
   resolveStudentAuthCenterState,
   type AuthenticationState
 } from '@/utils/auth/auth-state'
+import {
+  AUTH_ICON_SIZES,
+  AUTH_PAGE_ANIMATION_DELAY_MS
+} from '@/utils/auth/auth-tokens'
 
 type StudentCardSide = 'frontImage' | 'backImage'
 
@@ -220,7 +224,7 @@ onMounted(() => {
 
   setTimeout(() => {
     isAnimated.value = true
-  }, 50)
+  }, AUTH_PAGE_ANIMATION_DELAY_MS)
 })
 
 async function loadVerificationStatus() {
@@ -415,7 +419,7 @@ async function refreshUserInfo() {
 }
 
 .student-auth-page {
-  min-height: 100vh;
+  min-height: var(--auth-page-min-height);
   background: var(--bg-color-page);
   padding: var(--auth-page-padding);
   padding-bottom: calc(var(--auth-page-padding) + env(safe-area-inset-bottom));
@@ -435,7 +439,7 @@ async function refreshUserInfo() {
 
   .status-text {
     font-size: var(--font-size-xl);
-    font-weight: 600;
+    font-weight: var(--auth-font-weight-semibold);
     color: var(--auth-status-color);
     margin: var(--auth-section-gap) 0 var(--auth-label-gap);
   }
@@ -489,7 +493,7 @@ async function refreshUserInfo() {
 
   .form-title {
     font-size: var(--font-size-lg);
-    font-weight: 600;
+    font-weight: var(--auth-font-weight-semibold);
     color: var(--text-color-primary);
     margin-bottom: var(--auth-tip-gap);
   }
@@ -618,7 +622,7 @@ async function refreshUserInfo() {
     display: flex;
     justify-content: space-between;
     padding: var(--auth-section-gap) 0;
-    border-bottom: 1px solid var(--border-color-light);
+    border-bottom: var(--auth-divider-width) solid var(--border-color-light);
 
     &:last-child {
       border-bottom: none;
