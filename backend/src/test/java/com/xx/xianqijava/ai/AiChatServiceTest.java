@@ -1,7 +1,6 @@
 package com.xx.xianqijava.ai;
 
 import com.xx.xianqijava.ai.config.AiProperties;
-import com.xx.xianqijava.exception.BusinessException;
 import com.xx.xianqijava.service.AIChatHistoryService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.ObjectProvider;
@@ -27,11 +26,12 @@ class AiChatServiceTest {
                 provider()
         );
 
-        BusinessException error = assertThrows(BusinessException.class,
+        AiChatException error = assertThrows(AiChatException.class,
                 () -> service.chat(1L, "你好"));
 
         assertEquals(503, error.getCode());
         assertEquals("AI 功能未启用", error.getMessage());
+        assertEquals(AiChatErrorCode.AI_DISABLED, error.getErrorCode());
     }
 
     @SuppressWarnings("unchecked")

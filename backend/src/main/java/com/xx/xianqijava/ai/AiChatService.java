@@ -3,8 +3,6 @@ package com.xx.xianqijava.ai;
 import com.xx.xianqijava.agent.context.AIContext;
 import com.xx.xianqijava.agent.service.IntentClassifierService;
 import com.xx.xianqijava.ai.config.AiProperties;
-import com.xx.xianqijava.common.ErrorCode;
-import com.xx.xianqijava.exception.BusinessException;
 import com.xx.xianqijava.service.AIChatHistoryService;
 import dev.langchain4j.data.message.AiMessage;
 import dev.langchain4j.data.message.ChatMessage;
@@ -143,7 +141,7 @@ public class AiChatService {
     private String route(Long userId, String intent, String message) {
         AiAgents agents = agentsProvider.getIfAvailable();
         if (agents == null) {
-            throw new BusinessException(ErrorCode.SERVICE_UNAVAILABLE, "AI 服务未就绪");
+            throw new AiChatException(AiChatErrorCode.AI_NOT_READY);
         }
         String memoryId = String.valueOf(userId);
         return switch (intent) {
@@ -168,7 +166,7 @@ public class AiChatService {
 
     private void ensureEnabled() {
         if (!properties.isEnabled()) {
-            throw new BusinessException(ErrorCode.SERVICE_UNAVAILABLE, "AI 功能未启用");
+            throw new AiChatException(AiChatErrorCode.AI_DISABLED);
         }
     }
 }
