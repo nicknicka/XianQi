@@ -8,7 +8,7 @@
     <!-- - 支持修改已认证信息的申请流程 -->
     <!-- 认证状态 -->
     <view class="status-card" :class="'status-' + authState.pageStatus">
-      <uni-icons :type="authState.icon" size="48" :color="statusColor" />
+      <uni-icons :type="authState.icon" :size="AUTH_ICON_SIZES.status" :color="statusColor" />
       <text class="status-text">{{ authState.label }}</text>
       <text class="status-desc">{{ authState.description }}</text>
     </view>
@@ -42,7 +42,7 @@
       <button class="submit-btn" @click="handleSubmit">提交认证</button>
 
       <view class="security-tip">
-        <uni-icons type="info" size="16" :color="textColorTertiary" />
+        <uni-icons type="info" :size="AUTH_ICON_SIZES.inline" :color="textColorTertiary" />
         <text>您的信息将加密存储，仅用于身份验证</text>
       </view>
     </view>
@@ -69,6 +69,10 @@
 import { useThemeColors, useThemePage } from '@/utils/theme'
 import { ref, computed, onMounted } from 'vue'
 import { userApi } from '@/api/user'
+import {
+  AUTH_ICON_SIZES,
+  AUTH_PAGE_ANIMATION_DELAY_MS
+} from '@/utils/auth/auth-tokens'
 import type { RealNameAuth } from '@/types'
 import validator from '@/utils/validator'
 import { useServiceNavigation } from '@/composables/useServiceNavigation'
@@ -109,7 +113,7 @@ onMounted(() => {
   // 触发页面进入动画
   setTimeout(() => {
     isAnimated.value = true
-  }, 50)
+  }, AUTH_PAGE_ANIMATION_DELAY_MS)
 })
 
 async function loadVerificationStatus() {
@@ -200,7 +204,7 @@ function handleSubmit() {
 }
 
 .real-name-auth-page {
-  min-height: 100vh;
+  min-height: var(--auth-page-min-height);
   background: var(--bg-color-page);
   padding: var(--auth-page-padding);
 }
@@ -219,7 +223,7 @@ function handleSubmit() {
 
   .status-text {
     font-size: var(--font-size-xl);
-    font-weight: 600;
+    font-weight: var(--auth-font-weight-semibold);
     color: var(--auth-status-color);
     margin: var(--auth-section-gap) 0 var(--auth-label-gap);
   }
@@ -254,7 +258,7 @@ function handleSubmit() {
 
   .form-title {
     font-size: var(--font-size-lg);
-    font-weight: 600;
+    font-weight: var(--auth-font-weight-semibold);
     color: var(--text-color-primary);
     margin-bottom: var(--auth-tip-gap);
   }
@@ -316,7 +320,7 @@ function handleSubmit() {
     display: flex;
     justify-content: space-between;
     padding: var(--auth-section-gap) 0;
-    border-bottom: 1px solid var(--border-color-light);
+    border-bottom: var(--auth-divider-width) solid var(--border-color-light);
 
     &:last-child {
       border-bottom: none;

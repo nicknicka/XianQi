@@ -199,6 +199,12 @@ jobs:
           cd mobile
           node --test test/auth-state.test.mjs
 
+      - name: Mobile auth token guard
+        run: |
+          cd mobile
+          npm run check:auth-tokens
+          node --test test/auth-token-guard.test.mjs
+
       - name: Mobile typecheck
         run: |
           cd mobile
