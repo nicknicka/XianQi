@@ -8,6 +8,7 @@ import {
   findCriticalFallbackGaps,
   findFixedScssDefaults,
   findFixedTokenDefaults,
+  findPageStaticFallbacks,
   findUnmigratedPageStyles,
   parseThemeTokens,
   scanDesignTokens
@@ -105,9 +106,12 @@ test('publish center avoids fixed critical style defaults', () => {
 
 test('keeps market and publish pages on canonical design tokens', () => {
   assert.deepEqual(DESIGN_TOKEN_PAGE_PATHS, [
-    'src/pages/market/list.vue',
-    'src/pages/market/publish.vue',
+    'src/pages/market/detail.vue',
     'src/pages/market/edit.vue',
+    'src/pages/market/evaluation-list.vue',
+    'src/pages/market/list.vue',
+    'src/pages/market/publish-with-sidebar.vue',
+    'src/pages/market/publish.vue',
     'src/pages/publish/index.vue'
   ])
 
@@ -208,6 +212,52 @@ test('mobile lint runs the design token guard before the existing lint', () => {
   assert.match(ci, /- name: Lint\n\s+run: \|\n\s+cd mobile\n\s+npm run lint/)
 })
 
+test('rejects page-level static fallbacks without rejecting critical App fallbacks', () => {
+  const findings = findPageStaticFallbacks({
+    'src/App.vue': 'page { background: var(--bg-color-page, #F0F8FF); }',
+    'src/pages/example.vue': 'page { color: var(--text-color-primary, #2D2D2D); }'
+  })
+
+  assert.deepEqual(findings, [{
+    file: 'src/pages/example.vue',
+    line: 1,
+    token: '--text-color-primary',
+    rule: 'page-static-fallback',
+    message: 'Remove the page-level fallback and consume the canonical token directly'
+  }])
+})
+
+test('market token coverage includes every market source page', () => {
+  const sources = Object.fromEntries(
+    DESIGN_TOKEN_PAGE_PATHS
+      .filter(file => file.startsWith('src/pages/market/'))
+      .map(page => [page, readFileSync(path.join(mobileDir, page), 'utf8')])
+  )
+
+  assert.equal(Object.keys(sources).length, 6)
+  assert.deepEqual(findFixedScssDefaults(sources), [])
+})
+
+test('removes the review-listed page one-off values', () => {
+  const cases = [
+    ['src/pages/user/home.vue', [/#333/, /var\(--box-shadow-base,/, /var\(--font-size-sm,/, /var\(--text-color-primary,/, /transition:\s*all\s*0\.25s/]],
+    ['src/pages/index/index.vue', [/#ff7875/i]],
+    ['src/pages/mine/change-password.vue', [/#FF5722/]],
+    ['src/pages/mine/credit-detail.vue', [/var\(--border-color-light,/]],
+    ['src/pages/mine/history.vue', [/rgba\(255,\s*138,\s*138/]],
+    ['src/pages/mine/index.vue', [/#ff6b7a/i]],
+    ['src/pages/login/index.vue', [/#d1d5db/, /#e8e8e8/, /#07c160/, /#06ae56/, /#12b7f5/, /#0099ff/]],
+    ['src/components/chat-input/chat-input.vue', [/transition:\s*background\s*0\.2s/, /transition:\s*all\s*0\.2s/]]
+  ]
+
+  const violations = cases.flatMap(([file, patterns]) =>
+    patterns
+      .filter(pattern => pattern.test(readFileSync(path.join(mobileDir, file), 'utf8')))
+      .map(pattern => `${file}: ${pattern}`)
+  )
+  assert.deepEqual(violations, [])
+})
+
 test('rejects fixed SCSS token defaults in global and shared styles', () => {
   const findings = findFixedTokenDefaults({
     'src/styles/variables.scss': '$primary-color: #8EC5E8;',
@@ -222,8 +272,8 @@ test('rejects fixed SCSS token defaults in global and shared styles', () => {
   })
 
   assert.deepEqual(findings.map(({ file, line, token }) => ({ file, line, token })), [
-    { file: 'src/styles/common.scss', line: 1, token: '--primary-color' },
-    { file: 'src/components/example/example.vue', line: 3, token: '--primary-color' }
+    { file: 'src/styles/common.scss', line: 1, token: '$primary-color' },
+    { file: 'src/components/example/example.vue', line: 3, token: '$primary-color' }
   ])
   assert.deepEqual(findings.map(({ rule }) => rule), [
     'fixed-scss-token-default',

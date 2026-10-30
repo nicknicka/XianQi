@@ -1131,7 +1131,7 @@ function handleLogout() {
 	width: 100%;
 	height: 100%;
 	border-radius: 50%;
-	background: radial-gradient(circle at 30% 30%, #ff6b7a, var(--danger-color));
+	background: radial-gradient(circle at 30% 30%, var(--danger-color-alpha-95), var(--danger-color));
 }
 
 /* 通用淡入动画 */
@@ -1154,7 +1154,7 @@ function handleLogout() {
 	min-width: 32rpx;
 	height: 32rpx;
 	padding: 0 6rpx;
-	background: linear-gradient(135deg, var(--danger-color) 0%, #ff6b7a 100%);
+	background: linear-gradient(135deg, var(--danger-color) 0%, var(--danger-color-alpha-95) 100%);
 	border-radius: 16rpx;
 	display: flex;
 	align-items: center;

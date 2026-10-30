@@ -672,7 +672,7 @@ function formatViewTime(time: string): string {
     width: 48rpx;
     height: 48rpx;
     border-radius: 50%;
-    background: var(--danger-color-alpha-10, rgba(255, 138, 138, 0.1));
+    background: var(--danger-color-alpha-10);
     display: flex;
     align-items: center;
     justify-content: center;

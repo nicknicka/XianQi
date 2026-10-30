@@ -8,7 +8,7 @@ const ALLOWED_IMAGE_EXTENSIONS = ['jpg', 'jpeg', 'png', 'webp'] as const
 export interface StudentCardImageFile {
   path: string
   name: string
-  type: string
+  type?: string
   size?: number
 }
 
@@ -17,13 +17,26 @@ export interface StudentCardImageSelection {
   validationError: string | null
 }
 
+export interface StudentCardUploadRequest {
+  side: StudentCardSide
+  generation: number
+}
+
 export interface StudentCardUploadState {
   activeSide: StudentCardSide | null
-  requestTokens: Record<StudentCardSide, number>
+  requestGenerations: Record<StudentCardSide, number>
 }
 
 export function validateStudentCardImage(file: StudentCardImageFile): string | null {
-  if (typeof file.size === 'number' && file.size > STUDENT_CARD_IMAGE_MAX_SIZE) {
+  const size = file.size
+  if (typeof size !== 'number' || !Number.isFinite(size) || size < 0) {
+    return '图片信息不可读，请重新选择'
+  }
+  if (typeof file.type !== 'string' || !file.type) {
+    return '图片信息不可读，请重新选择'
+  }
+
+  if (size > STUDENT_CARD_IMAGE_MAX_SIZE) {
     return '图片大小不能超过 5MB'
   }
 
@@ -38,35 +51,33 @@ export function validateStudentCardImage(file: StudentCardImageFile): string | n
 export function createStudentCardUploadState(): StudentCardUploadState {
   return {
     activeSide: null,
-    requestTokens: {
+    requestGenerations: {
       frontImage: 0,
       backImage: 0
     }
   }
 }
 
+function invalidateStudentCardUpload(state: StudentCardUploadState, side: StudentCardSide): number {
+  state.requestGenerations[side] += 1
+  return state.requestGenerations[side]
+}
+
 export function beginStudentCardUpload(
   state: StudentCardUploadState,
   side: StudentCardSide,
   options: { replace?: boolean } = {}
-): number {
+): StudentCardUploadRequest {
   if (options.replace) {
     cancelStudentCardUpload(state, side)
   }
 
   state.activeSide = side
-  state.requestTokens = {
-    ...state.requestTokens,
-    [side]: state.requestTokens[side] + 1
-  }
-  return state.requestTokens[side]
+  return { side, generation: invalidateStudentCardUpload(state, side) }
 }
 
 export function cancelStudentCardUpload(state: StudentCardUploadState, side: StudentCardSide): void {
-  state.requestTokens = {
-    ...state.requestTokens,
-    [side]: state.requestTokens[side] + 1
-  }
+  invalidateStudentCardUpload(state, side)
 
   if (state.activeSide === side) {
     state.activeSide = null
@@ -75,10 +86,9 @@ export function cancelStudentCardUpload(state: StudentCardUploadState, side: Stu
 
 export function isCurrentStudentCardUpload(
   state: StudentCardUploadState,
-  side: StudentCardSide,
-  requestToken: number
+  request: StudentCardUploadRequest
 ): boolean {
-  return state.requestTokens[side] === requestToken
+  return state.requestGenerations[request.side] === request.generation
 }
 
 export function isImageSelectionCancelled(error: unknown): boolean {
@@ -90,16 +100,12 @@ export function isImageSelectionCancelled(error: unknown): boolean {
   return typeof message === 'string' && message.includes('cancel')
 }
 
-export function chooseStudentCardImage(options: {
-  count?: number
-  sizeType?: Array<'original' | 'compressed'>
-  sourceType?: Array<'album' | 'camera'>
-}): Promise<StudentCardImageSelection> {
+export function chooseStudentCardImage(): Promise<StudentCardImageSelection> {
   return new Promise((resolve, reject) => {
     uni.chooseImage({
-      count: options.count ?? 1,
-      sizeType: options.sizeType ?? ['compressed'],
-      sourceType: options.sourceType ?? ['album', 'camera'],
+      count: 1,
+      sizeType: ['compressed'],
+      sourceType: ['album', 'camera'],
       success: res => {
         const paths = Array.isArray(res.tempFilePaths) ? res.tempFilePaths : [res.tempFilePaths]
         const sourceFiles = Array.isArray(res.tempFiles) ? res.tempFiles : [res.tempFiles]
@@ -129,14 +135,13 @@ function normalizeStudentCardImageFile(source: unknown, fallbackPath: string): S
   if (typeof source === 'string') {
     return {
       path: source || fallbackPath,
-      name: source || fallbackPath,
-      type: ''
+      name: source || fallbackPath
     }
   }
 
   if (typeof source !== 'object' || source === null) {
     return fallbackPath
-      ? { path: fallbackPath, name: fallbackPath, type: '' }
+      ? { path: fallbackPath, name: fallbackPath }
       : null
   }
 
@@ -151,7 +156,7 @@ function normalizeStudentCardImageFile(source: unknown, fallbackPath: string): S
   return {
     path,
     name,
-    type: typeof record.type === 'string' ? record.type : '',
+    type: typeof record.type === 'string' ? record.type : undefined,
     size: typeof record.size === 'number' ? record.size : undefined
   }
 }

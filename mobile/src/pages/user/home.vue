@@ -175,7 +175,7 @@
             :class="{ danger: item.danger }"
             @click="handleActionClick(item)"
           >
-            <uni-icons v-if="item.icon" :type="item.icon" size="18" :color="item.danger ? 'var(--danger-color)' : '#333'" />
+            <uni-icons v-if="item.icon" :type="item.icon" size="18" :color="item.danger ? 'var(--danger-color)' : textColorPrimary" />
             <text>{{ item.label }}</text>
           </view>
         </view>
@@ -325,7 +325,7 @@ import { onShow } from '@dcloudio/uni-app'
 
 const userStore = useUserStore()
 const { themeStyle } = useThemeStyle()
-const { primaryColor, dangerColor } = useThemeColors()
+const { primaryColor, dangerColor, textColorPrimary } = useThemeColors()
 
 const userId = ref<string>('')
 const userInfo = ref<any>({})
@@ -1081,7 +1081,7 @@ function goUserProfile(userId: string) {
         padding: 8rpx;
         border-radius: 50%;
         background: #fff;
-        box-shadow: var(--box-shadow-base, 0 8rpx 24rpx rgba(0, 0, 0, 0.08));
+        box-shadow: var(--box-shadow-base);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -1120,9 +1120,9 @@ function goUserProfile(userId: string) {
         margin-bottom: 12rpx;
 
         .nickname {
-          font-size: var(--font-size-xxl, 20px);
+          font-size: var(--font-size-xxl);
           font-weight: 600;
-          color: var(--text-color-primary, #2D2D2D);
+          color: var(--text-color-primary);
         }
 
         .credit-level {
@@ -1131,7 +1131,7 @@ function goUserProfile(userId: string) {
           gap: 4rpx;
           padding: 4rpx 12rpx;
           border-radius: 20rpx;
-          font-size: var(--font-size-sm, 12px);
+          font-size: var(--font-size-sm);
 
           &.level-excellent {
             background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
@@ -1149,8 +1149,8 @@ function goUserProfile(userId: string) {
           }
 
           &.level-normal {
-            background: var(--border-color-light, #F0F0F0);
-            color: var(--text-color-secondary, #7A7A7A);
+            background: var(--border-color-light);
+            color: var(--text-color-secondary);
           }
         }
       }
@@ -1168,7 +1168,7 @@ function goUserProfile(userId: string) {
           padding: 4rpx 12rpx;
           background: var(--info-color-alpha-10);
           border-radius: 4rpx;
-          font-size: var(--font-size-xs, 10px);
+          font-size: var(--font-size-xs);
           color: var(--info-color);
         }
       }
@@ -1186,21 +1186,21 @@ function goUserProfile(userId: string) {
           gap: 6rpx;
 
           .score-value {
-            font-size: var(--font-size-xl, 18px);
+            font-size: var(--font-size-xl);
             font-weight: 600;
-            color: var(--primary-color, #8EC5E8);
+            color: var(--primary-color);
           }
 
           .score-label {
-            font-size: var(--font-size-sm, 12px);
-            color: var(--text-color-tertiary, #AAAAAA);
+            font-size: var(--font-size-sm);
+            color: var(--text-color-tertiary);
           }
         }
 
         .divider {
           width: 1px;
           height: 24rpx;
-          background: var(--border-color-light, #F0F0F0);
+          background: var(--border-color-light);
         }
 
         .good-rate-info {
@@ -1209,14 +1209,14 @@ function goUserProfile(userId: string) {
           align-items: center;
 
           .rate-value {
-            font-size: var(--font-size-lg, 16px);
+            font-size: var(--font-size-lg);
             font-weight: 600;
-            color: var(--success-color, #7ED4A6);
+            color: var(--success-color);
           }
 
           .rate-label {
-            font-size: var(--font-size-xs, 10px);
-            color: var(--text-color-tertiary, #AAAAAA);
+            font-size: var(--font-size-xs);
+            color: var(--text-color-tertiary);
           }
         }
       }
@@ -1224,8 +1224,8 @@ function goUserProfile(userId: string) {
 
     .bio {
       text-align: center;
-      font-size: var(--font-size-base, 14px);
-      color: var(--text-color-secondary, #7A7A7A);
+      font-size: var(--font-size-base);
+      color: var(--text-color-secondary);
       margin-bottom: 24rpx;
       line-height: 1.6;
       padding: 0 32rpx;
@@ -1252,14 +1252,14 @@ function goUserProfile(userId: string) {
         padding: 0 28rpx;
         height: 72rpx;
         background: var(--bg-color-card);
-        border: 2rpx solid var(--border-color-light, #F0F0F0);
+        border: 2rpx solid var(--border-color-light);
         border-radius: 36rpx;
-        font-size: var(--font-size-base, 14px);
-        color: var(--primary-color, #8EC5E8);
-        transition: all 0.25s ease;
+        font-size: var(--font-size-base);
+        color: var(--primary-color);
+        transition: all var(--motion-duration-medium) var(--motion-ease-standard);
 
         &.primary {
-          background: linear-gradient(135deg, var(--primary-color, #8EC5E8) 0%, var(--primary-color-light) 100%);
+          background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-color-light) 100%);
           border-color: transparent;
           color: #fff;
           box-shadow: 0 4rpx 12rpx var(--primary-color-alpha-30);
@@ -1303,22 +1303,22 @@ function goUserProfile(userId: string) {
     padding: 8rpx 0;
 
     .stat-num {
-      font-size: var(--font-size-xxl, 20px);
+      font-size: var(--font-size-xxl);
       font-weight: 600;
-      color: var(--text-color-primary, #2D2D2D);
+      color: var(--text-color-primary);
       margin-bottom: 6rpx;
     }
 
     .stat-label {
-      font-size: var(--font-size-sm, 12px);
-      color: var(--text-color-tertiary, #AAAAAA);
+      font-size: var(--font-size-sm);
+      color: var(--text-color-tertiary);
     }
   }
 
   .social-stat-divider {
     width: 1px;
     height: 40rpx;
-    background: var(--border-color-light, #F0F0F0);
+    background: var(--border-color-light);
   }
 }
 
@@ -1338,17 +1338,17 @@ function goUserProfile(userId: string) {
       display: flex;
       align-items: center;
       gap: 8rpx;
-      font-size: var(--font-size-lg, 16px);
+      font-size: var(--font-size-lg);
       font-weight: 500;
-      color: var(--text-color-primary, #2D2D2D);
+      color: var(--text-color-primary);
     }
 
     .credit-detail {
       display: flex;
       align-items: center;
       gap: 4rpx;
-      font-size: var(--font-size-sm, 12px);
-      color: var(--text-color-tertiary, #AAAAAA);
+      font-size: var(--font-size-sm);
+      color: var(--text-color-tertiary);
     }
   }
 
@@ -1386,20 +1386,20 @@ function goUserProfile(userId: string) {
           z-index: 1;
           font-size: 36rpx;
           font-weight: 700;
-          color: var(--success-color, #7ED4A6);
+          color: var(--success-color);
         }
 
         .rate-circle-unit {
           position: relative;
           z-index: 1;
-          font-size: var(--font-size-sm, 12px);
-          color: var(--text-color-tertiary, #AAAAAA);
+          font-size: var(--font-size-sm);
+          color: var(--text-color-tertiary);
         }
       }
 
       .rate-circle-label {
-        font-size: var(--font-size-sm, 12px);
-        color: var(--text-color-tertiary, #AAAAAA);
+        font-size: var(--font-size-sm);
+        color: var(--text-color-tertiary);
       }
     }
 
@@ -1416,8 +1416,8 @@ function goUserProfile(userId: string) {
         justify-content: space-between;
 
         .detail-label {
-          font-size: var(--font-size-base, 14px);
-          color: var(--text-color-secondary, #7A7A7A);
+          font-size: var(--font-size-base);
+          color: var(--text-color-secondary);
         }
 
         .star-rating {
@@ -1426,12 +1426,12 @@ function goUserProfile(userId: string) {
         }
 
         .detail-value {
-          font-size: var(--font-size-base, 14px);
+          font-size: var(--font-size-base);
           font-weight: 500;
-          color: var(--text-color-primary, #2D2D2D);
+          color: var(--text-color-primary);
 
           &.credit-level-text {
-            color: var(--primary-color, #8EC5E8);
+            color: var(--primary-color);
           }
         }
       }
@@ -1444,8 +1444,8 @@ function goUserProfile(userId: string) {
   background: var(--bg-color-card);
   position: sticky;
   top: 0;
-  z-index: var(--z-sticky, 1020);
-  transition: all 0.25s ease;
+  z-index: var(--z-sticky);
+  transition: all var(--motion-duration-medium) var(--motion-ease-standard);
 
   &.has-popup {
     opacity: 0.3;
@@ -1454,19 +1454,19 @@ function goUserProfile(userId: string) {
 
 .tabs {
   display: flex;
-  border-bottom: 1px solid var(--border-color-light, #F0F0F0);
+  border-bottom: 1px solid var(--border-color-light);
 
   .tab-item {
     flex: 1;
     text-align: center;
     padding: 28rpx 0;
-    font-size: var(--font-size-base, 14px);
-    color: var(--text-color-secondary, #7A7A7A);
+    font-size: var(--font-size-base);
+    color: var(--text-color-secondary);
     position: relative;
-    transition: all 0.25s ease;
+    transition: all var(--motion-duration-medium) var(--motion-ease-standard);
 
     &.active {
-      color: var(--primary-color, #8EC5E8);
+      color: var(--primary-color);
       font-weight: 600;
     }
 
@@ -1477,7 +1477,7 @@ function goUserProfile(userId: string) {
       transform: translateX(-50%);
       width: 64rpx;
       height: 6rpx;
-      background: linear-gradient(90deg, var(--primary-color, #8EC5E8) 0%, var(--primary-color-light) 100%);
+      background: linear-gradient(90deg, var(--primary-color) 0%, var(--primary-color-light) 100%);
       border-radius: 3rpx;
     }
   }
@@ -1502,10 +1502,10 @@ function goUserProfile(userId: string) {
 
   .product-card {
     background: var(--bg-color-card);
-    border-radius: var(--border-radius-lg, 24px);
+    border-radius: var(--border-radius-lg);
     overflow: hidden;
-    box-shadow: var(--box-shadow-xs, 0 2rpx 8rpx rgba(0, 0, 0, 0.04));
-    transition: all 0.25s ease;
+    box-shadow: var(--box-shadow-xs);
+    transition: all var(--motion-duration-medium) var(--motion-ease-standard);
 
     &:active {
       transform: scale(0.98);
@@ -1530,7 +1530,7 @@ function goUserProfile(userId: string) {
         top: 12rpx;
         padding: 4rpx 12rpx;
         border-radius: 4rpx;
-        font-size: var(--font-size-xs, 10px);
+        font-size: var(--font-size-xs);
         color: #fff;
         font-weight: 500;
 
@@ -1554,8 +1554,8 @@ function goUserProfile(userId: string) {
         -webkit-box-orient: vertical;
         -webkit-line-clamp: 2;
         overflow: hidden;
-        font-size: var(--font-size-base, 14px);
-        color: var(--text-color-primary, #2D2D2D);
+        font-size: var(--font-size-base);
+        color: var(--text-color-primary);
         line-height: 1.4;
         height: 40rpx;
         margin-bottom: 12rpx;
@@ -1568,20 +1568,20 @@ function goUserProfile(userId: string) {
         margin-bottom: 8rpx;
 
         .price {
-          font-size: var(--font-size-xl, 18px);
+          font-size: var(--font-size-xl);
           font-weight: 600;
           color: var(--danger-color);
 
           &::before {
             content: '¥';
-            font-size: var(--font-size-base, 14px);
+            font-size: var(--font-size-base);
             margin-right: 2rpx;
           }
         }
 
         .condition {
-          font-size: var(--font-size-xs, 10px);
-          color: var(--text-color-tertiary, #AAAAAA);
+          font-size: var(--font-size-xs);
+          color: var(--text-color-tertiary);
           background: var(--bg-color-page);
           padding: 4rpx 8rpx;
           border-radius: 4rpx;
@@ -1594,16 +1594,16 @@ function goUserProfile(userId: string) {
         justify-content: space-between;
 
         .publish-time {
-          font-size: var(--font-size-xs, 10px);
-          color: var(--text-color-tertiary, #AAAAAA);
+          font-size: var(--font-size-xs);
+          color: var(--text-color-tertiary);
         }
 
         .product-stats {
           display: flex;
           align-items: center;
           gap: 4rpx;
-          font-size: var(--font-size-xs, 10px);
-          color: var(--text-color-tertiary, #AAAAAA);
+          font-size: var(--font-size-xs);
+          color: var(--text-color-tertiary);
         }
       }
     }
@@ -1620,10 +1620,10 @@ function goUserProfile(userId: string) {
 
   .evaluation-card {
     background: var(--bg-color-card);
-    border-radius: var(--border-radius-lg, 24px);
+    border-radius: var(--border-radius-lg);
     padding: 24rpx;
     margin-bottom: 16rpx;
-    box-shadow: var(--box-shadow-xs, 0 2rpx 8rpx rgba(0, 0, 0, 0.04));
+    box-shadow: var(--box-shadow-xs);
 
     .eval-header {
       display: flex;
@@ -1639,9 +1639,9 @@ function goUserProfile(userId: string) {
         flex: 1;
 
         .eval-name {
-          font-size: var(--font-size-lg, 16px);
+          font-size: var(--font-size-lg);
           font-weight: 500;
-          color: var(--text-color-primary, #2D2D2D);
+          color: var(--text-color-primary);
           display: block;
           margin-bottom: 8rpx;
         }
@@ -1657,8 +1657,8 @@ function goUserProfile(userId: string) {
           }
 
           .eval-time {
-            font-size: var(--font-size-xs, 10px);
-            color: var(--text-color-tertiary, #AAAAAA);
+            font-size: var(--font-size-xs);
+            color: var(--text-color-tertiary);
           }
         }
       }
@@ -1666,7 +1666,7 @@ function goUserProfile(userId: string) {
       .eval-rating-badge {
         padding: 8rpx 16rpx;
         border-radius: 20rpx;
-        font-size: var(--font-size-lg, 16px);
+        font-size: var(--font-size-lg);
         font-weight: 600;
 
         &.rating-5 {
@@ -1705,14 +1705,14 @@ function goUserProfile(userId: string) {
         padding: 6rpx 12rpx;
         background: var(--success-color-alpha-10);
         color: var(--success-color);
-        font-size: var(--font-size-sm, 12px);
+        font-size: var(--font-size-sm);
         border-radius: 4rpx;
       }
     }
 
     .eval-content {
-      font-size: var(--font-size-base, 14px);
-      color: var(--text-color-secondary, #7A7A7A);
+      font-size: var(--font-size-base);
+      color: var(--text-color-secondary);
       line-height: 1.6;
       margin-bottom: 16rpx;
     }
@@ -1723,18 +1723,18 @@ function goUserProfile(userId: string) {
       gap: 12rpx;
       padding: 12rpx;
       background: var(--bg-color-page);
-      border-radius: var(--border-radius-base, 20px);
+      border-radius: var(--border-radius-base);
 
       .eval-product-img {
         width: 80rpx;
         height: 80rpx;
-        border-radius: var(--border-radius-base, 20px);
+        border-radius: var(--border-radius-base);
       }
 
       .eval-product-name {
         flex: 1;
-        font-size: var(--font-size-sm, 12px);
-        color: var(--text-color-secondary, #7A7A7A);
+        font-size: var(--font-size-sm);
+        color: var(--text-color-secondary);
         display: -webkit-box;
         -webkit-box-orient: vertical;
         -webkit-line-clamp: 1;
@@ -1786,14 +1786,14 @@ function goUserProfile(userId: string) {
   }
 
   .empty-text {
-    font-size: var(--font-size-lg, 16px);
-    color: var(--text-color-tertiary, #AAAAAA);
+    font-size: var(--font-size-lg);
+    color: var(--text-color-tertiary);
     margin: 24rpx 0 8rpx;
   }
 
   .empty-hint {
-    font-size: var(--font-size-sm, 12px);
-    color: var(--text-color-placeholder, #CCCCCC);
+    font-size: var(--font-size-sm);
+    color: var(--text-color-placeholder);
   }
 }
 
@@ -1835,8 +1835,8 @@ function goUserProfile(userId: string) {
 
   .loading-text {
     margin-left: 16rpx;
-    font-size: var(--font-size-sm, 12px);
-    color: var(--text-color-tertiary, #AAAAAA);
+    font-size: var(--font-size-sm);
+    color: var(--text-color-tertiary);
   }
 }
 
@@ -1853,8 +1853,8 @@ function goUserProfile(userId: string) {
 .no-more {
   text-align: center;
   padding: 32rpx;
-  font-size: var(--font-size-sm, 12px);
-  color: var(--text-color-tertiary, #AAAAAA);
+  font-size: var(--font-size-sm);
+  color: var(--text-color-tertiary);
   position: relative;
 
   &::before,
@@ -1864,7 +1864,7 @@ function goUserProfile(userId: string) {
     top: 50%;
     width: 80rpx;
     height: 1px;
-    background: var(--border-color-light, #F0F0F0);
+    background: var(--border-color-light);
   }
 
   &::before {
@@ -2022,7 +2022,7 @@ function goUserProfile(userId: string) {
   right: 0;
   bottom: 0;
   background: rgba(0, 0, 0, 0.5);
-  z-index: calc(var(--z-modal, 1050) + 100);
+  z-index: calc(var(--z-modal) + 100);
   display: flex;
   align-items: flex-end;
   animation: fadeIn 0.2s ease;
@@ -2059,12 +2059,12 @@ function goUserProfile(userId: string) {
   align-items: center;
   justify-content: space-between;
   padding: 24rpx 32rpx;
-  border-bottom: 1px solid var(--border-color-light, #F0F0F0);
+  border-bottom: 1px solid var(--border-color-light);
 
   .action-popup-title {
-    font-size: var(--font-size-lg, 16px);
+    font-size: var(--font-size-lg);
     font-weight: 600;
-    color: var(--text-color-primary, #2D2D2D);
+    color: var(--text-color-primary);
   }
 
   .action-popup-close {
@@ -2102,14 +2102,14 @@ function goUserProfile(userId: string) {
   }
 
   text {
-    font-size: var(--font-size-base, 14px);
-    color: var(--text-color-primary, #2D2D2D);
+    font-size: var(--font-size-base);
+    color: var(--text-color-primary);
   }
 }
 
 .action-popup-footer {
   padding: 16rpx 32rpx;
-  border-top: 1px solid var(--border-color-light, #F0F0F0);
+  border-top: 1px solid var(--border-color-light);
 }
 
 .action-popup-cancel {
@@ -2127,9 +2127,9 @@ function goUserProfile(userId: string) {
   }
 
   text {
-    font-size: var(--font-size-base, 14px);
+    font-size: var(--font-size-base);
     font-weight: 500;
-    color: var(--text-color-primary, #2D2D2D);
+    color: var(--text-color-primary);
   }
 }
 </style>

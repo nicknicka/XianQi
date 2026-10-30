@@ -363,7 +363,7 @@ export default {
         justify-content: center;
         border-radius: 50%;
         background: var(--bg-color-disabled);
-        transition: background 0.2s;
+        transition: background var(--motion-duration-fast);
 
         &:active {
           background: var(--border-color-base);
@@ -423,7 +423,7 @@ export default {
       justify-content: center;
       border-radius: 50%;
       background: var(--primary-color);
-      transition: all 0.2s;
+      transition: all var(--motion-duration-fast);
 
       &.is-disabled {
         background: var(--border-color-base);
