@@ -4,12 +4,25 @@ import { fileURLToPath, pathToFileURL } from 'node:url'
 
 const mobileDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 export const AUTH_SOURCE_FILES = [
+  'src/components/auth/AuthStatusPanel.vue',
+  'src/components/auth/AuthFormField.vue',
+  'src/components/auth/AuthStudentCardUpload.vue',
   'src/pages/mine/auth-center.vue',
   'src/pages/mine/real-name-auth.vue',
   'src/pages/mine/student-auth.vue',
   'src/utils/auth/auth-state.ts',
-  'src/utils/auth/auth-tokens.ts'
+  'src/utils/auth/auth-theme.ts',
+  'src/utils/auth/auth-tokens.ts',
+  'src/utils/auth/real-name-validation.ts'
 ]
+
+export const AUTH_PAGE_PATHS = [
+  'pages/mine/auth-center',
+  'pages/mine/real-name-auth',
+  'pages/mine/student-auth'
+]
+
+export const AUTH_NAVIGATION_BAR_BACKGROUND = '#8EC5E8'
 
 const TOKEN_DOC_PATH = '../docs/design/authentication-tokens.md'
 const GUARDED_AUTH_TOKENS = [
@@ -22,6 +35,7 @@ const GUARDED_AUTH_TOKENS = [
   'AUTH_ICON_SIZES.status',
   'AUTH_ICON_SIZES.upload',
   'AUTH_PAGE_ANIMATION_DELAY_MS',
+  'AUTH_NAVIGATION_BAR_BACKGROUND',
   '--auth-page-min-height'
 ]
 
@@ -80,6 +94,24 @@ export function scanAuthTokens(relativeFile, lines) {
     }
 
     return findings
+  })
+}
+
+export function findAuthPageStyleFindings(pagesDocument) {
+  const pages = Array.isArray(pagesDocument?.pages) ? pagesDocument.pages : []
+
+  return AUTH_PAGE_PATHS.flatMap(authPath => {
+    const page = pages.find(item => item?.path === authPath)
+    if (!page) {
+      return [makeFinding('src/pages.json', 'missing-page', `Register auth page ${authPath}`, 0)]
+    }
+
+    const color = page.style?.navigationBarBackgroundColor
+    if (color !== AUTH_NAVIGATION_BAR_BACKGROUND) {
+      return [makeFinding('src/pages.json', 'raw-color', `Use documented ${AUTH_NAVIGATION_BAR_BACKGROUND}`, 0)]
+    }
+
+    return []
   })
 }
 

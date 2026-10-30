@@ -199,6 +199,11 @@ jobs:
           cd mobile
           node --test test/auth-state.test.mjs
 
+      - name: Mobile auth routes tests
+        run: |
+          cd mobile
+          node --test test/auth-routes.test.mjs
+
       - name: Mobile auth token guard
         run: |
           cd mobile

@@ -6,38 +6,37 @@
     <!-- - 支持从相册选择身份证照片自动填充 -->
     <!-- - 添加认证历史记录查看 -->
     <!-- - 支持修改已认证信息的申请流程 -->
-    <!-- 认证状态 -->
-    <view class="status-card" :class="'status-' + authState.pageStatus">
-      <uni-icons :type="authState.icon" :size="AUTH_ICON_SIZES.status" :color="statusColor" />
-      <text class="status-text">{{ authState.label }}</text>
-      <text class="status-desc">{{ authState.description }}</text>
-    </view>
+    <AuthStatusPanel
+      class="page-status-panel"
+      :icon="authState.icon"
+      :label="authState.label"
+      :description="authState.description"
+      :semantic-color="authState.semanticColor"
+    />
 
     <!-- 认证表单 -->
     <view v-if="authState.editable" class="form-section">
       <view class="form-title">实名认证信息</view>
       <view class="form-tip">请填写真实身份信息，确保与身份证一致</view>
 
-      <view class="form-item">
-        <text class="label">真实姓名</text>
-        <input
-          class="input"
-          v-model="form.realName"
-          placeholder="请输入真实姓名"
-          placeholder-style="color: var(--text-color-tertiary)"
-        />
-      </view>
+      <AuthFormField
+        v-model="form.realName"
+        label="真实姓名"
+        placeholder="请输入真实姓名"
+        :error="visibleFieldErrors.realName"
+        :success="fieldValidationState('realName') === 'success' ? '格式正确' : undefined"
+        @blur="markFieldTouched('realName')"
+      />
 
-      <view class="form-item">
-        <text class="label">身份证号</text>
-        <input
-          class="input"
-          v-model="form.idCard"
-          placeholder="请输入身份证号"
-          placeholder-style="color: var(--text-color-tertiary)"
-          maxlength="18"
-        />
-      </view>
+      <AuthFormField
+        v-model="form.idCard"
+        label="身份证号"
+        placeholder="请输入身份证号"
+        :maxlength="18"
+        :error="visibleFieldErrors.idCard"
+        :success="fieldValidationState('idCard') === 'success' ? '格式正确' : undefined"
+        @blur="markFieldTouched('idCard')"
+      />
 
       <button class="submit-btn" @click="handleSubmit">提交认证</button>
 
@@ -74,18 +73,20 @@ import {
   AUTH_PAGE_ANIMATION_DELAY_MS
 } from '@/utils/auth/auth-tokens'
 import type { RealNameAuth } from '@/types'
-import validator from '@/utils/validator'
 import { useServiceNavigation } from '@/composables/useServiceNavigation'
 import { onShow } from '@dcloudio/uni-app'
 import { resolveAuthState, type AuthenticationState } from '@/utils/auth/auth-state'
+import { getRealNameFieldError, type RealNameFormField } from '@/utils/auth/real-name-validation'
+import AuthStatusPanel from '@/components/auth/AuthStatusPanel.vue'
+import AuthFormField from '@/components/auth/AuthFormField.vue'
 
 useServiceNavigation()
-const { primaryColor, successColor, dangerColor, infoColor, textColorTertiary } = useThemeColors()
+const { textColorTertiary } = useThemeColors()
 
 // 页面进入动画状态
 const isAnimated = ref(false)
 
-const authState = ref<AuthenticationState>(resolveAuthState())
+const authState = ref<AuthenticationState>(resolveAuthState('real-name'))
 const verifiedInfo = ref<RealNameAuth | null>(null)
 
 const form = ref({
@@ -93,15 +94,29 @@ const form = ref({
   idCard: ''
 })
 
-const statusColor = computed(() => {
-  const semanticColors = {
-    info: infoColor,
-    primary: primaryColor,
-    success: successColor,
-    danger: dangerColor
-  } as const
-  return semanticColors[authState.value.semanticColor]
+const touchedFields = ref<Record<RealNameFormField, boolean>>({
+  realName: false,
+  idCard: false
 })
+
+const fieldErrors = computed<Record<RealNameFormField, string | null>>(() => ({
+  realName: getRealNameFieldError('realName', form.value.realName),
+  idCard: getRealNameFieldError('idCard', form.value.idCard)
+}))
+
+const visibleFieldErrors = computed<Record<RealNameFormField, string | undefined>>(() => ({
+  realName: touchedFields.value.realName ? fieldErrors.value.realName || undefined : undefined,
+  idCard: touchedFields.value.idCard ? fieldErrors.value.idCard || undefined : undefined
+}))
+
+function fieldValidationState(field: RealNameFormField): 'error' | 'success' | undefined {
+  if (!touchedFields.value[field]) return undefined
+  return fieldErrors.value[field] ? 'error' : 'success'
+}
+
+function markFieldTouched(field: RealNameFormField) {
+  touchedFields.value[field] = true
+}
 
 onShow(() => {
   useThemePage()
@@ -120,7 +135,7 @@ async function loadVerificationStatus() {
   try {
     const res = await userApi.getRealNameAuth()
     const auth = res.data
-    authState.value = resolveAuthState(auth?.status, {
+    authState.value = resolveAuthState('real-name', auth?.status, {
       rejectReason: auth?.rejectReason
     })
     if (authState.value.pageStatus === 'verified') {
@@ -151,17 +166,12 @@ function handleSubmit() {
     return
   }
 
-  // 表单验证
-  if (!form.value.realName) {
-    uni.showToast({ title: '请输入真实姓名', icon: 'none' })
-    return
+  touchedFields.value = {
+    realName: true,
+    idCard: true
   }
-  if (!validator.isRealName(form.value.realName)) {
-    uni.showToast({ title: '姓名格式不正确', icon: 'none' })
-    return
-  }
-  if (!validator.isIdCard(form.value.idCard)) {
-    uni.showToast({ title: '身份证号格式不正确', icon: 'none' })
+
+  if (fieldErrors.value.realName || fieldErrors.value.idCard) {
     return
   }
 
@@ -172,7 +182,7 @@ function handleSubmit() {
       idCard: form.value.idCard
     })
     .then(() => {
-      authState.value = resolveAuthState(1)
+      authState.value = resolveAuthState('real-name', 1)
       verifiedInfo.value = null
       uni.showToast({ title: '提交成功，请等待审核', icon: 'success' })
     })
@@ -209,46 +219,10 @@ function handleSubmit() {
   padding: var(--auth-page-padding);
 }
 
-.status-card {
+.page-status-panel {
   animation: pageSlideInUp var(--motion-duration-slow) var(--motion-ease-standard) forwards;
   animation-delay: var(--motion-delay-fast);
   opacity: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: var(--auth-card-padding-lg);
-  background: var(--bg-color-card);
-  border-radius: var(--auth-card-radius);
-  margin-bottom: var(--auth-section-gap);
-
-  .status-text {
-    font-size: var(--font-size-xl);
-    font-weight: var(--auth-font-weight-semibold);
-    color: var(--auth-status-color);
-    margin: var(--auth-section-gap) 0 var(--auth-label-gap);
-  }
-
-  .status-desc {
-    font-size: var(--font-size-base);
-    color: var(--text-color-tertiary);
-    text-align: center;
-  }
-}
-
-.status-unverified {
-  --auth-status-color: var(--info-color);
-}
-
-.status-pending {
-  --auth-status-color: var(--primary-color);
-}
-
-.status-verified {
-  --auth-status-color: var(--success-color);
-}
-
-.status-rejected {
-  --auth-status-color: var(--danger-color);
 }
 
 .form-section {
@@ -267,26 +241,6 @@ function handleSubmit() {
     font-size: var(--font-size-sm);
     color: var(--text-color-tertiary);
     margin-bottom: var(--auth-section-gap);
-  }
-
-  .form-item {
-    margin-bottom: var(--auth-section-gap);
-
-    .label {
-      display: block;
-      font-size: var(--font-size-base);
-      color: var(--text-color-primary);
-      margin-bottom: var(--auth-label-gap);
-    }
-
-    .input {
-      width: 100%;
-      height: var(--auth-control-height);
-      padding: 0 var(--auth-control-padding-x);
-      background: var(--bg-color-page);
-      border-radius: var(--auth-control-radius);
-      font-size: var(--font-size-base);
-    }
   }
 
   .submit-btn {

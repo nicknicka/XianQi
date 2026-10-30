@@ -18,15 +18,23 @@
       </view>
       <view class="card-content">
         <text class="card-desc">{{ realNameState.description }}</text>
-        <view class="info-row" v-if="realNameAuthInfo?.realName">
+        <view class="info-row" v-if="showVerifiedRealNameInfo && realNameAuthInfo?.realName">
           <text class="info-label">已认证姓名</text>
           <text class="info-value">{{ maskName(realNameAuthInfo.realName) }}</text>
         </view>
-        <view class="info-row" v-if="realNameAuthInfo?.idCard">
+        <view class="info-row" v-if="showSubmittedRealNameInfo && realNameAuthInfo?.realName">
+          <text class="info-label">已提交姓名</text>
+          <text class="info-value">{{ maskName(realNameAuthInfo.realName) }}</text>
+        </view>
+        <view class="info-row" v-if="showVerifiedRealNameInfo && realNameAuthInfo?.idCard">
           <text class="info-label">身份证号</text>
           <text class="info-value">{{ maskIdCard(realNameAuthInfo.idCard) }}</text>
         </view>
-        <view class="info-row" v-if="realNameAuthInfo?.auditedAt">
+        <view class="info-row" v-if="showSubmittedRealNameInfo && realNameAuthInfo?.idCard">
+          <text class="info-label">已提交身份证号</text>
+          <text class="info-value">{{ maskIdCard(realNameAuthInfo.idCard) }}</text>
+        </view>
+        <view class="info-row" v-if="showVerifiedRealNameInfo && realNameAuthInfo?.auditedAt">
           <text class="info-label">认证时间</text>
           <text class="info-value">{{ realNameAuthInfo.auditedAt }}</text>
         </view>
@@ -49,19 +57,23 @@
       </view>
       <view class="card-content">
         <text class="card-desc">{{ studentCard.description }}</text>
-        <view class="info-row" v-if="studentAuthInfo?.studentId">
+        <view class="info-row" v-if="showVerifiedStudentInfo && studentAuthInfo?.studentId">
           <text class="info-label">已认证学号</text>
           <text class="info-value">{{ studentAuthInfo.studentId }}</text>
         </view>
-        <view class="info-row" v-if="studentAuthInfo?.college">
+        <view class="info-row" v-if="showSubmittedStudentInfo && studentAuthInfo?.studentId">
+          <text class="info-label">已提交学号</text>
+          <text class="info-value">{{ studentAuthInfo.studentId }}</text>
+        </view>
+        <view class="info-row" v-if="studentAuthInfo?.college && isStudentDataVisible">
           <text class="info-label">学院</text>
           <text class="info-value">{{ studentAuthInfo.college }}</text>
         </view>
-        <view class="info-row" v-if="studentAuthInfo?.major">
+        <view class="info-row" v-if="studentAuthInfo?.major && isStudentDataVisible">
           <text class="info-label">专业</text>
           <text class="info-value">{{ studentAuthInfo.major }}</text>
         </view>
-        <view class="info-row" v-if="studentAuthInfo?.auditedAt">
+        <view class="info-row" v-if="showVerifiedStudentInfo && studentAuthInfo?.auditedAt">
           <text class="info-label">认证时间</text>
           <text class="info-value">{{ studentAuthInfo.auditedAt }}</text>
         </view>
@@ -101,13 +113,14 @@ import { useThemeColors, useThemePage, useThemeStyle } from '@/utils/theme'
 import { AUTH_ICON_SIZES } from '@/utils/auth/auth-tokens'
 import {
   resolveAuthState,
-  resolveStudentAuthCenterState,
+  resolveStudentAuthAccessState,
   type AuthenticationState
 } from '@/utils/auth/auth-state'
+import { useAuthSemanticColors } from '@/utils/auth/auth-theme'
 
 useServiceNavigation()
 
-const { primaryColor, successColor, dangerColor, infoColor, textColorTertiary } = useThemeColors()
+const { primaryColor, successColor, textColorTertiary } = useThemeColors()
 const { themeStyle } = useThemeStyle()
 
 const isAnimated = ref(false)
@@ -115,28 +128,32 @@ const realNameAuthInfo = ref<RealNameAuth | null>(null)
 const studentAuthInfo = ref<StudentAuth | null>(null)
 
 const realNameState = computed<AuthenticationState>(() =>
-  resolveAuthState(realNameAuthInfo.value?.status, {
+  resolveAuthState('real-name', realNameAuthInfo.value?.status, {
     rejectReason: realNameAuthInfo.value?.rejectReason
   })
 )
 const studentState = computed<AuthenticationState>(() =>
-  resolveAuthState(studentAuthInfo.value?.status, {
+  resolveAuthState('student', studentAuthInfo.value?.status, {
     rejectReason: studentAuthInfo.value?.rejectReason
   })
 )
 const studentCard = computed(() =>
-  resolveStudentAuthCenterState(studentState.value, realNameState.value)
+  resolveStudentAuthAccessState(studentState.value, realNameState.value)
 )
 
-const authSemanticColors = {
-  info: infoColor,
-  primary: primaryColor,
-  success: successColor,
-  danger: dangerColor,
-  neutral: textColorTertiary
-} as const
-
-const studentStatusColor = computed(() => authSemanticColors[studentCard.value.semanticColor])
+const semanticColors = useAuthSemanticColors()
+const studentStatusColor = computed(() => semanticColors[studentCard.value.semanticColor])
+const showVerifiedRealNameInfo = computed(() => realNameState.value.pageStatus === 'verified')
+const showSubmittedRealNameInfo = computed(
+  () => realNameState.value.pageStatus === 'pending' || realNameState.value.pageStatus === 'rejected'
+)
+const showVerifiedStudentInfo = computed(() => studentState.value.pageStatus === 'verified')
+const showSubmittedStudentInfo = computed(
+  () => studentState.value.pageStatus === 'pending' || studentState.value.pageStatus === 'rejected'
+)
+const isStudentDataVisible = computed(
+  () => showVerifiedStudentInfo.value || showSubmittedStudentInfo.value
+)
 
 onShow(() => {
   useThemePage()
