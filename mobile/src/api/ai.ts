@@ -69,13 +69,14 @@ export const aiApi = {
       if (!reader) {
         throw new Error('无法获取响应流')
       }
+      const streamReader = reader
 
       const decoder = new TextDecoder()
       let buffer = ''
 
       // 读取流式数据
       function readStream(): Promise<void> {
-        return reader.read().then(({ done, value }) => {
+        return streamReader.read().then(({ done, value }) => {
           if (done) {
             onComplete?.()
             return Promise.resolve()

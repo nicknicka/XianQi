@@ -177,9 +177,9 @@ const emit = defineEmits<{
   'blur': [e: any]
   'input': [value: string]
   'confirm': [value: string]
-  'choose-image': []
-  'choose-camera': []
-  'choose-location': []
+  'choose-image': [filePaths: string[]]
+  'choose-camera': [filePaths: string[]]
+  'choose-location': [location: UniNamespace.ChooseLocationSuccess]
   'choose-file': []
   'choose-card': []
   'select-emoji': [emoji: string]
@@ -253,7 +253,8 @@ function handleChooseImage() {
     count: 9,
     sizeType: ['compressed'],
     success: (res) => {
-      emit('choose-image', res.tempFilePaths)
+      const filePaths = Array.isArray(res.tempFilePaths) ? res.tempFilePaths : [res.tempFilePaths]
+      emit('choose-image', filePaths)
     }
   })
 }
@@ -263,8 +264,9 @@ function handleChooseCamera() {
   uni.chooseImage({
     count: 1,
     sourceType: ['camera'],
-    success: (  res) => {
-      emit('choose-camera', res.tempFilePaths)
+    success: (res) => {
+      const filePaths = Array.isArray(res.tempFilePaths) ? res.tempFilePaths : [res.tempFilePaths]
+      emit('choose-camera', filePaths)
     }
   })
 }

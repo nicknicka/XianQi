@@ -129,7 +129,10 @@ export const orderApi = {
    * 获取订单详情
    */
   getOrderDetail(id: string) {
-    return http.get<Order>(`/order/${id}`).then(normalizeOrder)
+    return http.get<Order>(`/order/${id}`).then(res => ({
+      ...res,
+      data: normalizeOrder(res.data)
+    }))
   },
 
   /**

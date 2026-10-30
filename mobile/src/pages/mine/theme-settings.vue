@@ -274,14 +274,15 @@
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
-import { themeManager, useThemeStyle, useThemePage } from '@/utils/theme'
+import { themeManager, useThemeStyle, useThemePage, type ThemeId } from '@/utils/theme'
 import { cuteThemePresetList } from '@/utils/theme-presets'
+import type { CuteThemePreset } from '@/utils/theme-types'
 import { useReactiveUserPreferences } from '@/utils/user-preferences'
 import type { UserStylePreferences } from '@/utils/user-preferences'
 import { onShow } from '@dcloudio/uni-app'
 
 const fontSizeScale = ref(1.0)
-const pendingPresetId = ref<string | null>(null)
+const pendingPresetId = ref<ThemeId | null>(null)
 const presetList = cuteThemePresetList
 
 const fontSizeOptions = ref([
@@ -331,7 +332,7 @@ function showColorPicker(key: keyof UserStylePreferences) {
 }
 
 // 应用预设主题
-function applyPreset(preset: any, immediate = false) {
+function applyPreset(preset: CuteThemePreset, immediate = false) {
   pendingPresetId.value = preset.id
 
   // 保存用户偏好（供主题设置页面回显）

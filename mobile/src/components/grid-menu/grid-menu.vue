@@ -110,13 +110,14 @@ function handleClick(item: GridMenuItem, index: number) {
   emit('click', item, index)
 
   // 如果有 URL，跳转
-  if (item.url) {
+  const url = item.url
+  if (url) {
     uni.navigateTo({
-      url: item.url,
+      url,
       fail: () => {
         // 如果 navigateTo 失败，尝试 switchTab
         uni.switchTab({
-          url: item.url
+          url
         })
       }
     })

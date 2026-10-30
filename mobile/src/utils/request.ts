@@ -448,7 +448,7 @@ function executeRequest<T>(options: {
         }
 
         // 提供更有意义的错误信息
-        const errorMessage = err?.errMsg || err?.message || '网络请求失败，请检查网络连接'
+        const errorMessage = err?.errMsg || '网络请求失败，请检查网络连接'
         reject(new Error(errorMessage))
       }
     })
@@ -478,7 +478,7 @@ function handleTokenExpired() {
   const currentPage = pages[pages.length - 1]
 
   // 如果当前不是登录页，才跳转
-  if (currentPage && !currentPage.route.includes('login')) {
+  if (currentPage?.route && !currentPage.route.includes('login')) {
     uni.showModal({
       title: '提示',
       content: '登录已过期，请重新登录',

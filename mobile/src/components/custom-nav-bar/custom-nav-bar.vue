@@ -85,7 +85,7 @@ const navBarStyle = computed(() => ({
   // 使用 background 代替 backgroundColor，支持渐变色（纯色也兼容）
   background: props.backgroundColor,
   color: props.textColor,
-  position: props.fixed ? 'fixed' : 'relative'
+  position: props.fixed ? ('fixed' as const) : ('relative' as const)
 }))
 
 const navContentStyle = computed(() => {

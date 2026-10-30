@@ -130,12 +130,12 @@ const props = defineProps<Props>()
 const emit = defineEmits<{
   favorite: [product: Product]
   unfavorite: [product: Product]
-  report: [product: Product]
+  report: [product: Product & { reportReason: string }]
   goToDetail: [product: Product]
   goToUser: [user: { id: string; name: string; avatar: string }]
 }>()
 
-const popupRef = ref<UniApp.Popup>()
+const popupRef = ref<{ open: () => void; close: () => void }>()
 const isFavorited = ref(false)
 
 // 打开预览

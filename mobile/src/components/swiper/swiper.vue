@@ -202,13 +202,14 @@ function handleImageTap(item: SwiperItem, index: number) {
   emit('image-tap', item, index)
 
   // 如果有链接，跳转
-  if (item.link) {
+  const link = item.link
+  if (link) {
     uni.navigateTo({
-      url: item.link,
+      url: link,
       fail: () => {
         // 跳转失败，尝试 webview
         uni.navigateTo({
-          url: `/pages/webview/index?url=${encodeURIComponent(item.link)}`
+          url: `/pages/webview/index?url=${encodeURIComponent(link)}`
         })
       }
     })

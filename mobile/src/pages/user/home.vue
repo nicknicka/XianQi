@@ -754,7 +754,7 @@ function goMessages() {
   }
 
   // 判断 userId 是否有效
-  if (!userId.value || userId.value <= 0) {
+  if (!userId.value) {
     uni.showToast({
       title: '用户信息异常，请稍后重试',
       icon: 'none'

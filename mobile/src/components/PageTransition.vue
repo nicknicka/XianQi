@@ -9,7 +9,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, nextTick } from 'vue'
+import { ref, computed, onMounted, nextTick, getCurrentInstance } from 'vue'
 
 interface Props {
   // 动画类型
@@ -48,6 +48,7 @@ const emit = defineEmits<{
 
 const isPlaying = ref(false)
 const childrenElements = ref<any[]>([])
+const instance = getCurrentInstance()
 
 const transitionClass = computed(() => {
   if (!isPlaying.value) return ''
@@ -77,7 +78,10 @@ async function play() {
   // 处理子元素交错动画
   if (props.stagger) {
     await nextTick()
-    const query = uni.createSelectorQuery().in(this as any)
+    const query = uni.createSelectorQuery()
+    if (instance?.proxy) {
+      query.in(instance.proxy)
+    }
     query.selectAll('.stagger-item').boundingClientRect()
     query.exec((res) => {
       if (res && res[0]) {

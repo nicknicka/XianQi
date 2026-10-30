@@ -2,7 +2,7 @@
  * 页面动画组合式函数
  * 用于统一管理页面入场动画和加载状态
  */
-import { ref, onMounted, nextTick } from 'vue'
+import { ref, onMounted, nextTick, type Ref } from 'vue'
 
 export interface PageAnimationOptions {
   // 入场动画类型
@@ -176,7 +176,7 @@ export function useListData<T>(
 
   const pageAnimation = usePageAnimation(animationOptions)
 
-  const list = ref<T[]>([])
+  const list = ref<T[]>([]) as Ref<T[]>
   const total = ref(0)
   const currentPage = ref(initialPage)
   const hasMore = ref(true)

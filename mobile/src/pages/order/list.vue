@@ -201,6 +201,7 @@ interface Order {
 	price: number;
 	status: number;
 	location: string;
+	address?: string;
 	isBuyer: boolean;
 	isSeller?: boolean;
 	buyerId?: string;

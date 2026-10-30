@@ -194,10 +194,10 @@ jobs:
           cd mobile
           node --test test/id-contract.test.mjs
 
-      - name: Mobile typecheck baseline
+      - name: Mobile typecheck
         run: |
           cd mobile
-          npm run check:typecheck-baseline
+          npm run typecheck
 
       - name: Lint gate self-test
         run: |

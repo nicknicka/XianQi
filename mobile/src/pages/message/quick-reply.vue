@@ -153,14 +153,14 @@ interface QuickReply {
 const isAnimated = ref(false)
 
 const systemReplies = ref<QuickReply[]>([
-  { id: 1, content: '好的，请问还在吗？', isSystem: true },
-  { id: 2, content: '感兴趣，可以详细介绍一下吗？', isSystem: true },
-  { id: 3, content: '价格可以商量吗？', isSystem: true },
-  { id: 4, content: '可以便宜点吗？', isSystem: true },
-  { id: 5, content: '我可能需要一些时间考虑', isSystem: true },
-  { id: 6, content: '好的，我想要了', isSystem: true },
-  { id: 7, content: '不好意思，不需要了', isSystem: true },
-  { id: 8, content: '可以见面交易吗？', isSystem: true }
+  { id: '1', content: '好的，请问还在吗？', isSystem: true },
+  { id: '2', content: '感兴趣，可以详细介绍一下吗？', isSystem: true },
+  { id: '3', content: '价格可以商量吗？', isSystem: true },
+  { id: '4', content: '可以便宜点吗？', isSystem: true },
+  { id: '5', content: '我可能需要一些时间考虑', isSystem: true },
+  { id: '6', content: '好的，我想要了', isSystem: true },
+  { id: '7', content: '不好意思，不需要了', isSystem: true },
+  { id: '8', content: '可以见面交易吗？', isSystem: true }
 ])
 
 const myReplies = ref<QuickReply[]>([])

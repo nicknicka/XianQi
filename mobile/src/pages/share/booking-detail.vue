@@ -283,7 +283,7 @@ onShow(() => {
 })
 
 onLoad(async (options) => {
-  bookingId.value = options.id || options.bookingId || ''
+  bookingId.value = options?.id || options?.bookingId || ''
 
   if (bookingId.value) {
     await loadBookingDetail()

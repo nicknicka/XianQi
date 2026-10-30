@@ -263,10 +263,11 @@ function goToProduct(id: string) {
   })
 }
 
-function previewImages(images: string[], index: number) {
+function previewImages(images: string[], index: string | number) {
   uni.previewImage({
     urls: images,
-    current: index
+    // v-for 的下标在部分模板中会被推断为 string | number，这里统一为数字
+    current: Number(index)
   })
 }
 

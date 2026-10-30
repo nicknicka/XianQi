@@ -89,7 +89,7 @@
 
           <!-- 查看更多回复 -->
           <view
-            v-if="comment.replyCount > (comment.replies?.length || 0)"
+            v-if="(comment.replyCount || 0) > (comment.replies?.length || 0)"
             class="view-more-replies"
             @click="handleViewMoreReplies(comment, index)"
           >

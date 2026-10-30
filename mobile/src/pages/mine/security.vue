@@ -224,7 +224,7 @@ const studentStatus = ref(0)
 
 // 计算认证状态文本
 const realNameStatusText = computed(() => {
-  const statusMap = {
+  const statusMap: Record<number, string> = {
     0: '去认证',
     1: '审核中',
     2: '已认证'
@@ -233,13 +233,20 @@ const realNameStatusText = computed(() => {
 })
 
 const studentStatusText = computed(() => {
-  const statusMap = {
+  const statusMap: Record<number, string> = {
     0: '去认证',
     1: '审核中',
     2: '已认证'
   }
   return statusMap[studentStatus.value] || '去认证'
 })
+
+/**
+ * 后端开关字段可能是 0/1 或 true/false，统一归一为布尔。
+ */
+function normalizeToggle(value: unknown): boolean {
+  return value === 1 || value === true
+}
 
 // 手机号脱敏
 function maskPhone(phone: string) {
@@ -257,8 +264,8 @@ async function loadSecuritySettings() {
     ])
 
     hasPayPassword.value = !!payPasswordRes.data?.hasPayPassword
-    phoneSearchEnabled.value = privacyRes.data?.phoneSearchEnabled === 1 || privacyRes.data?.phoneSearchEnabled === true
-    locationEnabled.value = privacyRes.data?.locationEnabled === 1 || privacyRes.data?.locationEnabled === true
+    phoneSearchEnabled.value = normalizeToggle(privacyRes.data?.phoneSearchEnabled)
+    locationEnabled.value = normalizeToggle(privacyRes.data?.locationEnabled)
     realNameStatus.value = (userInfoRes.data as any)?.realNameStatus || 0
     studentStatus.value = (userInfoRes.data as any)?.studentStatus || 0
     userInfo.value = {

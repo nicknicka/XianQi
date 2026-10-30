@@ -67,12 +67,12 @@ const tabList = ref([
 ])
 
 // 根据主题获取颜色
-const activeColor = computed(() => themeManager.getCurrentPreset().colors.primaryColor)
+const activeColor = computed(() => theme.primaryColor)
 const inactiveColor = computed(() => '#AAAAAA')
-const tabBarBg = computed(() => theme.value.isDark ? '#1a1a1a' : '#ffffff')
+const tabBarBg = computed(() => theme.isDark ? '#1a1a1a' : '#ffffff')
 const borderColor = computed(() => '#F0F0F0')
 const textSize = computed(() => {
-  const scale = theme.value.fontSizeScale
+  const scale = theme.fontSizeScale
   return `${10 * scale}px`
 })
 

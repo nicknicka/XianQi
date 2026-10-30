@@ -165,8 +165,8 @@ const currentTheme = ref(themeManager.getTheme())
 const { themeStyle } = useThemeStyle()
 
 // 主题监听器
-const removeThemeListener = themeManager.addListener((theme) => {
-  currentTheme.value = theme
+const removeThemeListener = themeManager.addListener(() => {
+  currentTheme.value = themeManager.getTheme()
 })
 
 const currentThemeName = computed(() => {

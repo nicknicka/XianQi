@@ -1033,11 +1033,11 @@ const loadLocations = async () => {
   if (!userStore.isLogin) {
     console.log('[loadLocations] 用户未登录，使用默认位置列表')
     const defaultLocations = [
-      { locationId: 1, name: '全校', code: 'all', description: '全校所有区域', sortOrder: 0, status: 1 },
-      { locationId: 2, name: '南区', code: 'south', description: '校园南区', sortOrder: 1, status: 1 },
-      { locationId: 3, name: '北区', code: 'north', description: '校园北区', sortOrder: 2, status: 1 },
-      { locationId: 4, name: '东区', code: 'east', description: '校园东区', sortOrder: 3, status: 1 },
-      { locationId: 5, name: '西区', code: 'west', description: '校园西区', sortOrder: 4, status: 1 }
+      { locationId: '1', name: '全校', code: 'all', description: '全校所有区域', sortOrder: 0, status: 1 },
+      { locationId: '2', name: '南区', code: 'south', description: '校园南区', sortOrder: 1, status: 1 },
+      { locationId: '3', name: '北区', code: 'north', description: '校园北区', sortOrder: 2, status: 1 },
+      { locationId: '4', name: '东区', code: 'east', description: '校园东区', sortOrder: 3, status: 1 },
+      { locationId: '5', name: '西区', code: 'west', description: '校园西区', sortOrder: 4, status: 1 }
     ]
     locationList.value = defaultLocations
 
@@ -1065,11 +1065,11 @@ const loadLocations = async () => {
     console.warn('位置列表加载失败，回退默认位置列表:', error)
     // 使用默认位置列表
     const defaultLocations = [
-      { locationId: 1, name: '全校', code: 'all', description: '全校所有区域', sortOrder: 0, status: 1 },
-      { locationId: 2, name: '南区', code: 'south', description: '校园南区', sortOrder: 1, status: 1 },
-      { locationId: 3, name: '北区', code: 'north', description: '校园北区', sortOrder: 2, status: 1 },
-      { locationId: 4, name: '东区', code: 'east', description: '校园东区', sortOrder: 3, status: 1 },
-      { locationId: 5, name: '西区', code: 'west', description: '校园西区', sortOrder: 4, status: 1 }
+      { locationId: '1', name: '全校', code: 'all', description: '全校所有区域', sortOrder: 0, status: 1 },
+      { locationId: '2', name: '南区', code: 'south', description: '校园南区', sortOrder: 1, status: 1 },
+      { locationId: '3', name: '北区', code: 'north', description: '校园北区', sortOrder: 2, status: 1 },
+      { locationId: '4', name: '东区', code: 'east', description: '校园东区', sortOrder: 3, status: 1 },
+      { locationId: '5', name: '西区', code: 'west', description: '校园西区', sortOrder: 4, status: 1 }
     ]
     locationList.value = defaultLocations
 

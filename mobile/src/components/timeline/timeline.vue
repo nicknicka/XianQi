@@ -70,8 +70,6 @@
 </template>
 
 <script setup lang="ts">
-import { formatDate } from '@/utils/common'
-
 export type TimelinePosition = 'left' | 'right' | 'alternate'
 export type TimelineDotType = 'default' | 'primary' | 'success' | 'warning' | 'error' | 'info'
 

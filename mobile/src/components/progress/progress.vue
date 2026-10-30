@@ -37,7 +37,7 @@ import { useThemeStyle, useThemeColors } from '@/utils/theme'
 const { themeStyle } = useThemeStyle()
 const { primaryColor, successColor, dangerColor } = useThemeColors()
 
-export type ProgressStatus = 'normal' | 'active' | 'success' | 'exception'
+type ProgressStatus = 'normal' | 'active' | 'success' | 'exception'
 
 interface Props {
   /** 百分比 */

@@ -274,9 +274,7 @@ function handleSubmit() {
   userApi
     .verifyRealName({
       realName: form.value.realName,
-      idCard: form.value.idCard,
-      studentId: form.value.studentId,
-      studentCardImages: [form.value.frontImage, form.value.backImage]
+      idCard: form.value.idCard
     })
     .then(() => {
       verificationStatus.value = 'pending'
