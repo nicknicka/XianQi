@@ -194,6 +194,11 @@ jobs:
           cd mobile
           node --test test/id-contract.test.mjs
 
+      - name: Mobile auth state tests
+        run: |
+          cd mobile
+          node --test test/auth-state.test.mjs
+
       - name: Mobile typecheck
         run: |
           cd mobile
