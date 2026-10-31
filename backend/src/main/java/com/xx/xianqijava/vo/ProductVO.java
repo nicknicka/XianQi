@@ -96,6 +96,9 @@ public class ProductVO {
     @Schema(description = "创建时间")
     private String createdAt;
 
+    @Schema(description = "浏览记录ID（仅浏览历史列表返回）")
+    private String historyId;
+
     @Schema(description = "浏览时间（用于浏览历史）")
     private String viewTime;
 
