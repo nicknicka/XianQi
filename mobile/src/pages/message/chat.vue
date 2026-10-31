@@ -147,19 +147,19 @@
               <view v-else-if="message.type === 'image'" class="image-message-wrapper">
                 <LazyImage
                   class="image-message"
-                  :src="message.content"
+                  :src="messageText(message.content)"
                   mode="widthFix"
                   width="400"
                   :disable-lazy-load="true"
-                  @click="previewImage(message.content)"
+                  @click="previewImage(messageText(message.content))"
                 />
               </view>
 
               <!-- 商品卡片 -->
               <view v-if="message.type === 'product' && message.content" class="product-card" @click="goProduct(message.content)">
-                <LazyImage class="product-image" :src="message.content?.image" mode="aspectFit" :width="120" :height="120" />
+                <LazyImage class="product-image" :src="cardImage(message.content)" mode="aspectFit" :width="120" :height="120" />
                 <view class="product-info">
-                  <text class="product-title">{{ message.content?.title || (message.content?.itemType === 'share' ? '共享物品' : '商品') }}</text>
+                  <text class="product-title">{{ cardTitle(message.content) }}</text>
                   <view class="product-meta-row">
                     <template v-if="isShareCard(message.content)">
                       <text class="share-rent">{{ formatShareRent(message.content) }}</text>
@@ -172,7 +172,7 @@
                         {{ formatCardDeposit(message.content) }}
                       </text>
                     </template>
-                    <text class="product-tag">{{ message.content?.itemType === 'share' ? '共享物品' : '闲置商品' }}</text>
+                    <text class="product-tag">{{ isShareCard(message.content) ? '共享物品' : '闲置商品' }}</text>
                   </view>
                   <text v-if="formatCardSubtitle(message.content)" class="product-subtitle">
                     {{ formatCardSubtitle(message.content) }}
@@ -181,12 +181,12 @@
               </view>
 
               <!-- 订单卡片 -->
-              <view v-if="message.type === 'order' && message.content" class="order-card" @click="goOrder(message.content?.id)">
+              <view v-if="message.type === 'order' && message.content" class="order-card" @click="goOrder(normalizeOrderCard(message.content).id)">
                 <view class="order-info">
                   <text class="order-title">订单</text>
-                  <text class="order-no">{{ message.content?.orderNo || 'N/A' }}</text>
+                  <text class="order-no">{{ normalizeOrderCard(message.content).orderNo || 'N/A' }}</text>
                 </view>
-                <text class="order-price">¥{{ message.content?.price || 0 }}</text>
+                <text class="order-price">¥{{ normalizeOrderCard(message.content).price || 0 }}</text>
               </view>
             </view>
 
@@ -326,6 +326,8 @@ import { messageService } from '@/services/message.service'
 import UserAvatar from '@/components/user-avatar/user-avatar.vue'
 import LazyImage from '@/components/lazy-image/lazy-image.vue'
 import { normalizeImageUrl } from '@/utils/image'
+import type { Product } from '@/types'
+import type { ShareItem } from '@/api/share'
 
 const userStore = useUserStore()
 const appStore = useAppStore()
@@ -342,11 +344,43 @@ const EMOJI_LIST = [
   '✨', '⭐', '🌟', '💫', '🔥', '💥', '💦', '🎉'
 ]
 
+/** 商品/共享卡片 payload：对端写入 content / extraData 的序列化 JSON。 */
+interface ProductCard {
+  id: string
+  itemType: 'product' | 'share'
+  title: string
+  price: number
+  dailyRent?: number
+  deposit?: number
+  image: string
+  conditionText: string
+}
+
+/** 订单卡片 payload：同样来自对端写入。 */
+interface OrderCard {
+  id: string
+  orderNo: string
+  price: number
+}
+
+/** 商品选择器条目：由已契约化的商品/共享 API 结果拼出的前端 view model。 */
+interface PickerItem {
+  id: string
+  itemType: 'product' | 'share'
+  title: string
+  coverImage: string
+  price: number
+  deposit?: number
+  conditionText: string
+}
+
+type MessageContent = string | ProductCard | OrderCard
+
 interface Message {
   id: string
   isSelf: boolean
   type: 'text' | 'image' | 'product' | 'order'
-  content: any
+  content: MessageContent
   timestamp: string
   showTime?: boolean
   isNew?: boolean
@@ -375,7 +409,7 @@ const isLoading = ref(false)
 const hasMore = ref(true)
 const showProductPickerModal = ref(false)
 const showEmojiPanel = ref(false)
-const myProducts = ref<any[]>([])
+const myProducts = ref<PickerItem[]>([])
 const relatedProductSellerId = ref<string>('')
 const productPickerOwnerLabel = ref<'我的' | '对方'>('我的')
 const emojiList = ref(EMOJI_LIST) // 使用缓存的表情列表
@@ -390,7 +424,7 @@ const canCompleteRelatedOrder = computed(() => {
   return relatedOrder.value?.status === 1 && relatedOrder.value?.isBuyer
 })
 
-function isSelectableProductStatus(status: any): boolean {
+function isSelectableProductStatus(status: unknown): boolean {
   // 允许在售与待确认（预订）状态进入商品选择器
   const normalizedStatus = Number(status)
   return normalizedStatus === 1 || normalizedStatus === 3 || status === 'pending_confirm'
@@ -459,57 +493,100 @@ async function resolveSellerIdForProductPicker(): Promise<string> {
   return sellerId
 }
 
-function isShareCard(card: any): boolean {
-  return card?.itemType === 'share'
-    || card?.type === 'share'
-    || card?.cardType === 'share'
-    || card?.type === 'share_card'
-    || card?.type === 'share_item_card'
-    || !!card?.shareId
-    || !!card?.shareItemId
+/** 卡片取值边界：payload 由对端写入 content / extraData，形状不受本仓库控制。 */
+type CardSource = Record<string, unknown>
+
+function asCardSource(value: unknown): CardSource | null {
+  return value !== null && typeof value === 'object' ? (value as CardSource) : null
 }
 
-function firstDefined(...values: any[]) {
+function isShareCard(card: unknown): boolean {
+  const source = asCardSource(card)
+  if (!source) return false
+
+  return source.itemType === 'share'
+    || source.type === 'share'
+    || source.cardType === 'share'
+    || source.type === 'share_card'
+    || source.type === 'share_item_card'
+    || !!source.shareId
+    || !!source.shareItemId
+}
+
+function firstDefined(...values: unknown[]): unknown {
   return values.find(value => value !== undefined && value !== null && value !== '')
 }
 
-function formatAmount(value: any): string {
+/** 取第一个非空值并转成字符串（无值时空串）。 */
+function cardString(...values: unknown[]): string {
+  const value = firstDefined(...values)
+  return value === undefined ? '' : String(value)
+}
+
+/** 取第一个非空值并转成有限数字（无值或非数字时 0）。 */
+function cardNumber(...values: unknown[]): number {
+  const value = Number(firstDefined(...values))
+  return Number.isFinite(value) ? value : 0
+}
+
+/** 文本/图片消息的 content 是字符串；其它类型返回空串。 */
+function messageText(content: unknown): string {
+  return typeof content === 'string' ? content : ''
+}
+
+/** 商品卡片字段读取入口（模板用），避免模板直接读对端 payload。 */
+function cardImage(content: unknown): string {
+  return normalizeProductCard(content).image
+}
+
+function cardTitle(content: unknown): string {
+  return normalizeProductCard(content).title
+}
+
+/** 订单卡片 payload 归一化：与商品卡片同属对端写入的外部输入边界。 */
+function normalizeOrderCard(card: unknown): OrderCard {
+  const source = asCardSource(card) ?? {}
+  return {
+    id: cardString(source.id, source.orderId),
+    orderNo: cardString(source.orderNo, source.orderNumber),
+    price: cardNumber(source.price, source.amount)
+  }
+}
+
+function formatAmount(value: unknown): string {
   const amount = Number(value)
   if (!Number.isFinite(amount)) return '0'
   return Number.isInteger(amount) ? String(amount) : amount.toFixed(2).replace(/\.?0+$/, '')
 }
 
-function normalizeProductCard(card: any) {
-  if (!card || typeof card !== 'object') {
-    return card
-  }
-
-  const itemType = isShareCard(card) ? 'share' : 'product'
-  const priceValue = Number(itemType === 'share'
-    ? firstDefined(card.dailyRent, card.dailyRental, card.rent, card.rentPrice, card.rentalPrice, card.price, card.amount, 0)
-    : firstDefined(card.price, card.amount, 0))
-  const depositValue = Number(firstDefined(card.deposit, card.depositAmount, 0))
+function normalizeProductCard(card: unknown): ProductCard {
+  const source = asCardSource(card) ?? {}
+  const itemType = isShareCard(source) ? 'share' : 'product'
+  const priceValue = itemType === 'share'
+    ? cardNumber(source.dailyRent, source.dailyRental, source.rent, source.rentPrice, source.rentalPrice, source.price, source.amount, 0)
+    : cardNumber(source.price, source.amount, 0)
+  const depositValue = cardNumber(source.deposit, source.depositAmount, 0)
   const cardId = itemType === 'share'
-    ? firstDefined(card.shareId, card.shareItemId, card.id, card.productId, '')
-    : firstDefined(card.productId, card.id, '')
-  const rawSubtitle = firstDefined(card.conditionText, card.condition, card.availableTime, card.availableTimes, card.location, '')
+    ? cardString(source.shareId, source.shareItemId, source.id, source.productId)
+    : cardString(source.productId, source.id)
+  const rawSubtitle = cardString(source.conditionText, source.condition, source.availableTime, source.availableTimes, source.location)
   const conditionText = itemType === 'share' && rawSubtitle === '共享物品' ? '' : rawSubtitle
 
   return {
-    ...card,
-    id: String(cardId),
+    ...source,
+    id: cardId,
     itemType,
-    title: firstDefined(card.title, card.productTitle, card.shareItemTitle, itemType === 'share' ? '共享物品' : '商品'),
+    title: cardString(source.title, source.productTitle, source.shareItemTitle, itemType === 'share' ? '共享物品' : '商品'),
     price: priceValue,
     dailyRent: itemType === 'share' ? priceValue : undefined,
     deposit: itemType === 'share' ? depositValue : undefined,
-    image: firstDefined(card.image, card.coverImage, card.coverImageUrl, card.shareItemCover, card.shareItemImage, card.imageUrl, ''),
+    image: cardString(source.image, source.coverImage, source.coverImageUrl, source.shareItemCover, source.shareItemImage, source.imageUrl),
     conditionText
   }
 }
 
-function formatCardPrice(card: any): string {
-  const normalized = normalizeProductCard(card) || {}
+function formatCardPrice(card: unknown): string {
+  const normalized = normalizeProductCard(card)
   const price = Number(firstDefined(normalized.price, normalized.dailyRent, 0))
   if (!Number.isFinite(price) || price <= 0) {
     return normalized.itemType === 'share' ? '免费/天' : '¥0'
@@ -517,15 +594,15 @@ function formatCardPrice(card: any): string {
   return normalized.itemType === 'share' ? `¥${formatAmount(price)}/天` : `¥${formatAmount(price)}`
 }
 
-function formatShareRent(card: any): string {
-  const normalized = normalizeProductCard(card) || {}
-  const rent = Number(firstDefined(normalized.dailyRent, normalized.price, normalized.rentPrice, normalized.rentalPrice, 0))
+function formatShareRent(card: unknown): string {
+  const normalized = normalizeProductCard(card)
+  const rent = Number(firstDefined(normalized.dailyRent, normalized.price, 0))
   if (!Number.isFinite(rent) || rent <= 0) return '日租金待定'
   return `日租金 ¥${formatAmount(rent)}/天`
 }
 
-function formatCardDeposit(card: any): string {
-  const normalized = normalizeProductCard(card) || {}
+function formatCardDeposit(card: unknown): string {
+  const normalized = normalizeProductCard(card)
   if (normalized.itemType !== 'share') return ''
 
   const deposit = Number(firstDefined(normalized.deposit, 0))
@@ -533,20 +610,19 @@ function formatCardDeposit(card: any): string {
   return `押金 ¥${formatAmount(deposit)}`
 }
 
-function formatCardSubtitle(card: any): string {
-  const normalized = normalizeProductCard(card) || {}
+function formatCardSubtitle(card: unknown): string {
+  const normalized = normalizeProductCard(card)
   if (normalized.itemType === 'share') {
-    const availableTime = formatAvailableTime(firstDefined(normalized.conditionText, normalized.location, '') || '')
-    return availableTime
+    return formatAvailableTime(normalized.conditionText)
   }
-  return firstDefined(normalized.conditionText, normalized.location, '')
+  return normalized.conditionText
 }
 
-function shouldShowCardPricing(card: any): boolean {
+function shouldShowCardPricing(card: unknown): boolean {
   return true
 }
 
-function parseCardPayload(message: any) {
+function parseCardPayload(message: { content?: unknown; extraData?: unknown }): ProductCard {
   const candidates = [message?.content, message?.extraData]
   for (const candidate of candidates) {
     if (!candidate) continue
@@ -555,7 +631,7 @@ function parseCardPayload(message: any) {
     }
     if (typeof candidate === 'string') {
       try {
-        const parsed = JSON.parse(candidate)
+        const parsed: unknown = JSON.parse(candidate)
         if (parsed && typeof parsed === 'object') {
           return normalizeProductCard(parsed)
         }
@@ -566,23 +642,23 @@ function parseCardPayload(message: any) {
   }
 
   return normalizeProductCard({
-    title: message?.content || '',
+    title: typeof message?.content === 'string' ? message.content : '',
     price: 0
   })
 }
 
-async function fetchAllSellerProducts(userId: string) {
+async function fetchAllSellerProducts(userId: string): Promise<Product[]> {
   const pageSize = 100
   let page = 1
   let total = Number.POSITIVE_INFINITY
-  const result: any[] = []
+  const result: Product[] = []
 
   while (result.length < total) {
     const res = await productApi.getSellerProducts(userId, {
       page,
       pageSize
     })
-    const data = res.data || {}
+    const data = res.data
     const list = data.list || []
     result.push(...list)
     total = Number(data.total ?? result.length)
@@ -594,11 +670,11 @@ async function fetchAllSellerProducts(userId: string) {
   return result
 }
 
-async function fetchAllUserShareItems(userId: string) {
+async function fetchAllUserShareItems(userId: string): Promise<ShareItem[]> {
   const pageSize = 100
   let page = 1
   let total = Number.POSITIVE_INFINITY
-  const result: any[] = []
+  const result: ShareItem[] = []
 
   while (result.length < total) {
     const res = await shareApi.getUserShareItems(userId, {
@@ -606,7 +682,7 @@ async function fetchAllUserShareItems(userId: string) {
       size: pageSize,
       status: 1
     })
-    const data = res.data || {}
+    const data = res.data
     const list = data.list || []
     result.push(...list)
     total = Number(data.total ?? result.length)
@@ -693,16 +769,17 @@ function setupMessageListeners() {
       console.log('[Chat] 收到新消息:', data.message)
 
       // 将后端消息格式转换为前端格式
-      let content = data.message.content
+      let content: MessageContent = data.message.content
 
       // 尝试解析商品/订单卡片
       if (data.message.type === 3) {
         content = parseCardPayload(data.message)
       } else if (data.message.type === 4) {
         try {
-          content = JSON.parse(data.message.extraData || data.message.content)
+          content = normalizeOrderCard(JSON.parse(data.message.extraData || data.message.content))
         } catch (e) {
           console.error('[Chat] 解析订单消息内容失败:', e)
+          content = normalizeOrderCard(null)
         }
       }
 
@@ -845,16 +922,17 @@ async function loadMessages(isLoadMore = false) {
 
       // 转换消息格式
       const formattedMessages: Message[] = list.map((msg, index) => {
-        let content: any = msg.content
+        let content: MessageContent = msg.content
 
         // 尝试解析商品/订单卡片
         if (msg.type === 3) {
           content = parseCardPayload(msg)
         } else if (msg.type === 4) {
           try {
-            content = JSON.parse(msg.extraData || msg.content)
+            content = normalizeOrderCard(JSON.parse(msg.extraData || msg.content))
           } catch (e) {
             console.error('[Chat] 解析订单消息内容失败:', e)
+            content = normalizeOrderCard(null)
           }
         }
 
@@ -1606,7 +1684,7 @@ async function showProductPicker() {
 
     isLoading.value = true
     // 根据会话卖家归属获取在售商品和共享物品列表
-    const [productResult, shareResult]: any[] = await Promise.allSettled([
+    const [productResult, shareResult] = await Promise.allSettled([
       fetchAllSellerProducts(sellerIdToQuery),
       fetchAllUserShareItems(sellerIdToQuery)
     ])
@@ -1621,32 +1699,26 @@ async function showProductPicker() {
     const productList = productResult.status === 'fulfilled' ? productResult.value : []
     const shareList = shareResult.status === 'fulfilled' ? shareResult.value : []
 
-    const products = productList
-      .filter((p: any) => isSelectableProductStatus(p.status))
-      .map((p: any) => ({
-        ...p,
+    const products: PickerItem[] = productList
+      .filter((p) => isSelectableProductStatus(p.status))
+      .map((p) => ({
+        id: p.id,
         itemType: 'product',
-        id: p.id || p.productId,
-        coverImage: p.coverImage || p.coverImageUrl || p.image || '',
         title: p.title || '未命名商品',
-        price: Number(firstDefined(p.price, p.amount, 0)),
-        conditionText: firstDefined(p.conditionText, p.condition, p.location, '')
+        coverImage: p.coverImage || '',
+        price: Number(p.price ?? 0),
+        conditionText: p.condition || p.location || ''
       }))
 
-    const shareItems = shareList
-      .map((item: any) => ({
-        ...item,
-        itemType: 'share',
-        id: item.shareId || item.shareItemId || item.id,
-        shareId: item.shareId || item.shareItemId || item.id,
-        shareItemId: item.shareId || item.shareItemId || item.id,
-        coverImage: item.coverImage || '',
-        title: item.title || '未命名共享物品',
-        price: Number(firstDefined(item.dailyRent, item.dailyRental, item.rentPrice, item.price, 0)),
-        dailyRent: Number(firstDefined(item.dailyRent, item.dailyRental, item.rentPrice, item.price, 0)),
-        deposit: Number(firstDefined(item.deposit, 0)),
-        conditionText: firstDefined(item.availableTime, item.availableTimes, item.location, '')
-      }))
+    const shareItems: PickerItem[] = shareList.map((item) => ({
+      id: item.id,
+      itemType: 'share',
+      title: item.title || '未命名共享物品',
+      coverImage: item.coverImage || '',
+      price: Number(item.dailyRent ?? 0),
+      deposit: Number(item.deposit ?? 0),
+      conditionText: item.availableTime || ''
+    }))
 
     myProducts.value = [...products, ...shareItems]
 
@@ -1671,18 +1743,11 @@ async function showProductPicker() {
   }
 }
 
-function sendProductCard(product: any) {
+function sendProductCard(product: PickerItem) {
   showProductPickerModal.value = false
 
   // 构建商品卡片消息
-  const itemType = product.itemType || 'product'
-  const itemId = itemType === 'share'
-    ? firstDefined(product.shareId, product.shareItemId, product.id, product.productId)
-    : firstDefined(product.productId, product.id)
-  const price = itemType === 'share'
-    ? firstDefined(product.dailyRent, product.dailyRental, product.rent, product.rentPrice, product.rentalPrice, product.price, 0)
-    : firstDefined(product.price, product.amount, 0)
-  const image = firstDefined(product.coverImage, product.coverImageUrl, product.image, product.shareItemCover, '')
+  const { itemType, id: itemId, title, price, coverImage: image, conditionText } = product
 
   const productCard = normalizeProductCard({
     id: itemId,
@@ -1690,19 +1755,19 @@ function sendProductCard(product: any) {
     shareId: itemType === 'share' ? itemId : undefined,
     shareItemId: itemType === 'share' ? itemId : undefined,
     itemType,
-    title: product.title,
+    title,
     price,
     dailyRent: itemType === 'share' ? price : undefined,
-    deposit: itemType === 'share' ? firstDefined(product.deposit, product.depositAmount, 0) : undefined,
+    deposit: itemType === 'share' ? (product.deposit ?? 0) : undefined,
     image,
     coverImage: image,
-    conditionText: firstDefined(product.conditionText, product.condition, product.availableTime, product.availableTimes, product.location, '')
+    conditionText
   })
 
   sendProductMessage(productCard)
 }
 
-async function sendProductMessage(productCard: any) {
+async function sendProductMessage(productCard: ProductCard) {
   // 检查黑名单状态
   if (isBlacklisted.value) {
     uni.showToast({
@@ -1841,9 +1906,10 @@ function closeEmojiPanel() {
   showEmojiPanel.value = false
 }
 
-function goProduct(productId: any) {
-  const card = typeof productId === 'object' ? productId : { id: productId }
-  if (isShareCard(card)) {
+function goProduct(product: unknown) {
+  // 兼容历史调用：既可能传入卡片对象，也可能只传商品 ID。
+  const card = normalizeProductCard(typeof product === 'string' ? { id: product } : product)
+  if (card.itemType === 'share') {
     uni.navigateTo({
       url: `/pages/share/detail?id=${card.id}`
     })
@@ -1855,9 +1921,9 @@ function goProduct(productId: any) {
   })
 }
 
-function goOrder(orderId: any) {
+function goOrder(orderId: unknown) {
   uni.navigateTo({
-    url: `/pages/order/detail?id=${orderId}`
+    url: `/pages/order/detail?id=${String(orderId ?? '')}`
   })
 }
 
