@@ -65,6 +65,19 @@ export interface UserInfo {
   updatedAt?: string
 }
 
+/** 关注/粉丝列表项（字段与后端 FollowUserVO 对齐） */
+export interface FollowUser {
+  id: string
+  username: string
+  nickname: string
+  avatar: string
+  college?: string
+  major?: string
+  creditScore: number
+  isVerified?: number
+  followTime?: string
+}
+
 export interface UserCenterInfo {
   id: string
   username: string
@@ -522,7 +535,7 @@ export const userApi = {
     const queryString = params.join('&')
 
     return http.get<{
-      list: UserInfo[]
+      list: FollowUser[]
       total: number
       current: number
       size: number
@@ -546,7 +559,7 @@ export const userApi = {
     const queryString = params.join('&')
 
     return http.get<{
-      list: UserInfo[]
+      list: FollowUser[]
       total: number
       current: number
       size: number

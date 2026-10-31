@@ -169,14 +169,13 @@ async function loadBlacklist() {
 
   try {
     const res = await blacklistApi.getBlacklist({ page: 1, size: 100 })
-    blacklist.value = (res.data.list || []).map((item: any) => ({
+    blacklist.value = (res.data.list || []).map((item) => ({
       id: item.id,
-      userId: item.blockedUserId,
+      userId: item.id,
       username: item.username,
       nickname: item.nickname,
       avatar: item.avatar,
-      reason: item.reason || '',
-      createdAt: item.createdAt
+      createdAt: item.createdAt || ''
     }))
   } catch (error) {
     console.error('加载黑名单失败:', error)
@@ -199,7 +198,7 @@ async function removeBlacklist(id: string) {
     success: async (res) => {
       if (res.confirm) {
         try {
-          await blacklistApi.removeFromBlacklist(id)
+          await blacklistApi.removeFromBlacklistByBlockedUserId(id)
           blacklist.value = blacklist.value.filter((item) => item.id !== id)
           uni.showToast({ title: '已移除', icon: 'success' })
         } catch (error) {
@@ -265,7 +264,7 @@ async function batchRemove() {
         try {
           // 逐个移除
           for (const id of selectedItems.value) {
-            await blacklistApi.removeFromBlacklist(id)
+            await blacklistApi.removeFromBlacklistByBlockedUserId(id)
           }
 
           // 从列表中移除

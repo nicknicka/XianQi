@@ -32,11 +32,6 @@
           <image class="user-avatar" :src="normalizeImageUrl(user.avatar) || '/static/default-avatar.png'" mode="aspectFill" />
           <view class="user-info">
             <view class="user-name">{{ user.nickname || user.username }}</view>
-            <view class="user-stats">
-              <text class="stat-item">{{ user.followerCount || 0 }} 粉丝</text>
-              <text class="stat-divider">·</text>
-              <text class="stat-item">{{ user.followingCount || 0 }} 关注</text>
-            </view>
           </view>
           <view class="user-actions">
             <button
@@ -73,12 +68,12 @@
 import { ref, computed, onMounted } from 'vue'
 import { useUserStore } from '@/store/user'
 import { userApi } from '@/api/user'
-import type { UserInfo } from '@/api/user'
+import type { FollowUser } from '@/api/user'
 import { useThemeStyle } from '@/utils/theme'
 import { getNavBarInfo } from '@/utils/system-info'
 import { normalizeImageUrl } from '@/utils/image'
 
-interface UserWithFollowStatus extends UserInfo {
+interface UserWithFollowStatus extends FollowUser {
   isFollowing?: boolean
 }
 
@@ -177,7 +172,7 @@ async function loadFollowersList(refresh = false) {
 
     if (res.data.list && res.data.list.length > 0) {
       // 为每个用户添加关注状态（初始默认设为 false）
-      const usersWithStatus = res.data.list.map((user: UserInfo) => ({
+      const usersWithStatus = res.data.list.map((user: FollowUser) => ({
         ...user,
         isFollowing: false
       }))
@@ -209,7 +204,7 @@ async function loadFollowersList(refresh = false) {
 }
 
 // 批量检查用户关注状态
-async function checkFollowStatusForUsers(users: UserInfo[]) {
+async function checkFollowStatusForUsers(users: FollowUser[]) {
   for (const user of users) {
     try {
       const isFollowing = await userApi.checkFollow(String(user.id))
@@ -317,21 +312,6 @@ onMounted(() => {
   font-weight: 500;
   color: var(--text-color-primary);
   margin-bottom: 8rpx;
-}
-
-.user-stats {
-  display: flex;
-  align-items: center;
-  font-size: 24rpx;
-  color: var(--text-color-tertiary);
-}
-
-.stat-item {
-  margin: 0 4rpx;
-}
-
-.stat-divider {
-  margin: 0 4rpx;
 }
 
 .user-actions {

@@ -45,8 +45,7 @@
           <UserAvatar class="avatar" :src="item.avatar" size="md" shape="circle" @click="goUserHome(item.id)" />
           <view class="user-info" @click="goUserHome(item.id)">
             <text class="name">{{ item.nickname || item.username }}</text>
-            <text v-if="item.signature" class="signature">{{ item.signature }}</text>
-            <text v-else class="meta">ID: {{ item.id }}</text>
+            <text class="meta">ID: {{ item.id }}</text>
           </view>
           <view v-if="currentTab === 'followers'" class="action-btn-wrap">
             <button
@@ -90,7 +89,7 @@ import { onLoad, onShow } from '@dcloudio/uni-app'
 import { formatDateTime } from '@/utils/date'
 import { usePageAnimation } from '@/composables/usePageAnimation'
 import { useUserStore } from '@/store/user'
-import { userApi } from '@/api/user'
+import { userApi, type FollowUser } from '@/api/user'
 import UserAvatar from '@/components/user-avatar/user-avatar.vue'
 import { useThemePage, useThemeStyle } from '@/utils/theme'
 import { getNavBarInfo } from '@/utils/system-info'
@@ -128,13 +127,7 @@ const pageTitle = computed(() => currentTab.value === 'following' ? '我的关�
 const emptyText = computed(() => currentTab.value === 'following' ? '还没有关注任何人' : '还没有粉丝关注你')
 
 // 用户列表
-interface UserItem {
-  id: string
-  username: string
-  nickname: string
-  avatar: string
-  signature?: string
-  followTime?: string
+interface UserItem extends FollowUser {
   isFollowing?: boolean
 }
 
@@ -191,14 +184,14 @@ async function loadUserList() {
       ? userApi.getFollowingList(String(userId), currentPage.value, pageSize)
       : userApi.getFollowersList(String(userId), currentPage.value, pageSize)
 
-    const res: any = await apiCall
-    const list = res.data?.records || res.data || []
-    const total = res.data?.total || res.total || 0
+    const res = await apiCall
+    const list = res.data?.list || []
+    const total = res.data?.total || 0
 
     // 标记是否已关注（仅在粉丝列表中显示）
-    const processedList = list.map((item: any) => ({
+    const processedList = list.map((item) => ({
       ...item,
-      isFollowing: currentTab.value === 'followers' ? (item.isFollowing || false) : true
+      isFollowing: currentTab.value !== 'followers'
     }))
 
     if (currentPage.value === 1) {
@@ -399,14 +392,6 @@ onLoad((options: any) => {
       font-weight: 600;
       color: var(--text-color-primary);
       margin-bottom: 8rpx;
-    }
-
-    .signature {
-      font-size: 24rpx;
-      color: var(--text-color-tertiary);
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
     }
 
     .meta {
