@@ -1135,7 +1135,7 @@ async function loadShareItemForEdit(shareId: string) {
   try {
     uni.showLoading({ title: '加载中...' })
     const response = await shareApi.getShareItemDetail(shareId)
-    const data = response.data || response || {}
+    const data = response.data
 
     // 回填表单
     form.value.title = data.title || ''

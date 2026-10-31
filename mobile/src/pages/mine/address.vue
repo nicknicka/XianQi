@@ -166,10 +166,8 @@ async function loadData() {
     console.log('[Address] res.data 类型:', typeof res.data)
     console.log('[Address] res.data 内容:', res.data)
     console.log('[Address] res.data.list:', res.data?.list)
-    console.log('[Address] res.data.records:', (res.data as any)?.records)
 
-    // 检查数据结构
-    const listData = res.data?.list || (res.data as any)?.records || []
+    const listData = res.data?.list || []
     console.log('[Address] 提取的列表数据:', listData)
     console.log('[Address] 列表数据类型:', Array.isArray(listData) ? '数组' : typeof listData)
     console.log('[Address] 列表数据长度:', Array.isArray(listData) ? listData.length : '非数组')

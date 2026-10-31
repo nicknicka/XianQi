@@ -160,13 +160,13 @@ function loadProducts(refresh = false) {
 
 	productApi
 		.getMyProducts(params)
-		.then((res: any) => {
+		.then((res) => {
 			console.log("✅ [我的发布] API 请求成功");
 			console.log("   完整响应:", res);
 			console.log("   响应 code:", res?.code);
 			console.log("   响应 message:", res?.message);
 
-			let list = res.data?.list || res.data?.records || [];
+			let list = res.data?.list || [];
 			console.log("   获取到的商品数量（过滤前）:", list.length);
 			console.log("   商品列表（过滤前）:", list);
 

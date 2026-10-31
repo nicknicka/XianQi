@@ -161,11 +161,11 @@ function loadDepositList() {
 
   console.log('[Deposit] 开始加载押金列表:', requestParams)
 
-  shareApi.getDepositList(requestParams).then((response: any) => {
+  shareApi.getDepositList(requestParams).then((response) => {
     console.log('[Deposit] API 响应:', response)
 
-    const data = response.data || response || {}
-    const newList = data.list || data.records || []
+    const data = response.data
+    const newList = data.list || []
 
     console.log('[Deposit] 解析后的数据:', {
       list: newList,

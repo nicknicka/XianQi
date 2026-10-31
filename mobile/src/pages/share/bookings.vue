@@ -236,11 +236,11 @@ function loadBookings() {
     params: requestParams
   })
 
-  apiMethod(requestParams).then((response: any) => {
+  apiMethod(requestParams).then((response) => {
     console.log('[Bookings] API 响应:', response)
 
-    const data = response.data || response || {}
-    const newList = data.list || data.records || []
+    const data = response.data
+    const newList = data.list || []
 
     console.log('[Bookings] 解析后的数据:', {
       list: newList,
