@@ -226,7 +226,7 @@ async function loadSettings() {
 
   try {
     settingsLoading.value = true
-    const res: any = await userApi.getNotificationSettings({ showError: false })
+    const res = await userApi.getNotificationSettings({ showError: false })
     const data = res?.data || {}
     settings.value = {
       messageEnabled: data.notificationEnabled ?? settings.value.messageEnabled,

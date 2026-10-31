@@ -522,7 +522,7 @@ export const userApi = {
     const queryString = params.join('&')
 
     return http.get<{
-      records: UserInfo[]
+      list: UserInfo[]
       total: number
       current: number
       size: number
@@ -546,7 +546,7 @@ export const userApi = {
     const queryString = params.join('&')
 
     return http.get<{
-      records: UserInfo[]
+      list: UserInfo[]
       total: number
       current: number
       size: number

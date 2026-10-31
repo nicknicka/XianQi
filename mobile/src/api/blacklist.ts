@@ -43,7 +43,7 @@ export const blacklistApi = {
    */
   getBlacklist(params: { page?: number; size?: number }) {
     return http.get<{
-      records: BlacklistUser[]
+      list: BlacklistUser[]
       total: number
     }>('/blacklist', params)
   },

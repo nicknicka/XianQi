@@ -221,7 +221,7 @@ async function loadData() {
 
     if (currentTab.value === 'available') {
       // 加载可借用物品列表
-      const response: any = await shareApi.getShareItemList({
+      const response = await shareApi.getShareItemList({
         status: 1,
         page: currentPage.value,
         size: pageSize
@@ -229,8 +229,8 @@ async function loadData() {
 
       console.log('[ShareIndex] 可借用物品响应:', response)
 
-      const data = response.data || response || {}
-      const list = data.list || data.records || []
+      const data = response.data
+      const list = data.list || []
 
       // 处理数据字段映射
       const mappedList = list.map((item: any) => ({
@@ -248,15 +248,15 @@ async function loadData() {
       noMore.value = shareList.value.length >= (data.total || 0) || mappedList.length < pageSize
     } else if (currentTab.value === 'mine') {
       // 加载我的共享物品
-      const response: any = await shareApi.getMyShareItems({
+      const response = await shareApi.getMyShareItems({
         page: currentPage.value,
         size: pageSize
       })
 
       console.log('[ShareIndex] 我的共享响应:', response)
 
-      const data = response.data || response || {}
-      const list = data.list || data.records || []
+      const data = response.data
+      const list = data.list || []
 
       // 处理数据字段映射
       const mappedList = list.map((item: any) => ({

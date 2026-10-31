@@ -500,9 +500,8 @@ function completeOrder() {
 
 async function goEvaluate() {
   try {
-    const res: any = await evaluationApi.getEvaluationByOrder(orderId.value)
-    const data = res?.data || res || {}
-    const list = data.list || data.records || []
+    const res = await evaluationApi.getEvaluationByOrder(orderId.value)
+    const list = res.data?.list || []
     const evaluation = list[0]
 
     if (!evaluation) {

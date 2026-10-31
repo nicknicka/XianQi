@@ -543,9 +543,8 @@ function contactUser(order: Order) {
 
 async function goEvaluate(orderId: string) {
 	try {
-		const res: any = await evaluationApi.getEvaluationByOrder(orderId);
-		const data = res?.data || res || {};
-		const list = data.list || data.records || [];
+		const res = await evaluationApi.getEvaluationByOrder(orderId);
+		const list = res.data?.list || [];
 		const evaluation = list[0];
 
 		if (!evaluation) {

@@ -2,6 +2,7 @@
  * 评价相关 API
  */
 import { http } from '@/utils/request'
+import type { Evaluation } from '@/types'
 
 function normalizePageParams(params?: { page?: number; pageSize?: number; size?: number }) {
   if (!params) return params
@@ -44,7 +45,10 @@ export const evaluationApi = {
    * 获取订单的评价
    */
   getEvaluationByOrder(orderId: string) {
-    return http.get(`/evaluation/order/${orderId}`)
+    return http.get<{
+      list: Evaluation[]
+      total: number
+    }>(`/evaluation/order/${orderId}`)
   },
 
   /**

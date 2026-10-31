@@ -301,8 +301,8 @@ async function loadBookingDetail() {
   error.value = null
 
   try {
-    const response: any = await shareApi.getBookingDetail(bookingId.value)
-    const data = response.data || response || {}
+    const response = await shareApi.getBookingDetail(bookingId.value)
+    const data = response.data
     bookingDetail.value = data
 
     // 从用户 Store 获取当前登录用户ID

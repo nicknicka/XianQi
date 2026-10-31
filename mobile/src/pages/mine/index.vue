@@ -893,7 +893,7 @@ async function uploadAvatar(filePath: string) {
 		console.log("[Avatar] 开始上传头像:", filePath);
 
 		// 调用上传头像 API
-		const result: any = await userApi.uploadAvatar(filePath);
+		const result = await userApi.uploadAvatar(filePath);
 
 		console.log("[Avatar] 上传成功:", result);
 
