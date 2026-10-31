@@ -103,6 +103,22 @@ interface ProductListParams {
   locationCode?: string
 }
 
+/**
+ * 浏览历史项。
+ *
+ * 后端 `GET /history` 返回 `IPage<ProductVO>`：`historyId` 是浏览记录主键
+ * （删除按它定位），`productId` 才是商品主键（跳商品详情用）。
+ */
+export interface ProductViewHistoryItem {
+  historyId: string
+  id: string
+  productId: string
+  title: string
+  coverImage: string
+  price: number
+  viewTime: string
+}
+
 function normalizeProduct(data: any): Product {
   if (!data || typeof data !== 'object') {
     return data
@@ -308,7 +324,7 @@ export const productApi = {
    */
   getViewHistory(params: { page?: number; pageSize?: number }) {
     return http.get<{
-      list: Product[]
+      list: ProductViewHistoryItem[]
       total: number
     }>('/history', params).then(normalizeProductPage)
   },

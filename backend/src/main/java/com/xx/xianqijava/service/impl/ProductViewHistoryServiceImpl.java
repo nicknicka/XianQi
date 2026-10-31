@@ -89,7 +89,8 @@ public class ProductViewHistoryServiceImpl extends ServiceImpl<ProductViewHistor
                         return null;
                     }
                     ProductVO productVO = productService.convertToVO(product, userId);
-                    // 设置浏览时间
+                    // 设置浏览记录主键（删除接口按 historyId 定位）与浏览时间
+                    productVO.setHistoryId(String.valueOf(history.getHistoryId()));
                     productVO.setViewTime(history.getViewTime().format(formatter));
                     return productVO;
                 })

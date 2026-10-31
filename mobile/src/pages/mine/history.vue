@@ -63,15 +63,15 @@
           <view class="group-cards">
             <view
               v-for="product in group.items"
-              :key="product.id"
+              :key="product.historyId"
               class="product-card"
               :class="{ 'edit-mode': isEditMode }"
               @click="handleCardClick(product)"
             >
               <!-- 选择框（编辑模式） -->
-              <view v-if="isEditMode" class="card-checkbox" @click.stop="toggleSelect(product.id)">
-                <view class="checkbox-circle" :class="{ checked: selectedIds.includes(product.id) }">
-                  <text v-if="selectedIds.includes(product.id)" class="check-mark">&#10003;</text>
+              <view v-if="isEditMode" class="card-checkbox" @click.stop="toggleSelect(product.historyId)">
+                <view class="checkbox-circle" :class="{ checked: selectedIds.includes(product.historyId) }">
+                  <text v-if="selectedIds.includes(product.historyId)" class="check-mark">&#10003;</text>
                 </view>
               </view>
 
@@ -95,7 +95,7 @@
               </view>
 
               <!-- 删除按钮 -->
-              <view v-if="!isEditMode" class="card-action" @click.stop="deleteItem(product.id)">
+              <view v-if="!isEditMode" class="card-action" @click.stop="deleteItem(product.historyId)">
                 <view class="action-circle">
                   <text class="action-icon">&#10005;</text>
                 </view>
@@ -143,6 +143,7 @@
 import { useThemePage, useThemeStyle, useThemeColors } from '@/utils/theme'
 import { ref, computed, onMounted } from 'vue'
 import { productApi } from '@/api/product'
+import type { ProductViewHistoryItem } from '@/api/product'
 import { getRelativeTime } from '@/utils/date'
 import { usePageAnimation } from '@/composables/usePageAnimation'
 import { useServiceNavigation } from '@/composables/useServiceNavigation'
@@ -154,16 +155,7 @@ useServiceNavigation()
 const { themeStyle } = useThemeStyle()
 const { primaryColor } = useThemeColors()
 
-interface Product {
-  id: string
-  productId: string
-  title: string
-  coverImage: string
-  price: number
-  viewTime: string
-}
-
-const productList = ref<Product[]>([])
+const productList = ref<ProductViewHistoryItem[]>([])
 const loading = ref(false)
 const refreshing = ref(false)
 const noMore = ref(false)
@@ -196,8 +188,8 @@ const pageAnimationStyle = computed(() => ({
 
 // 按日期分组
 const groupedProducts = computed(() => {
-  const groups: { date: string; label: string; items: Product[] }[] = []
-  const map = new Map<string, Product[]>()
+  const groups: { date: string; label: string; items: ProductViewHistoryItem[] }[] = []
+  const map = new Map<string, ProductViewHistoryItem[]>()
 
   for (const item of productList.value) {
     const dateStr = item.viewTime ? item.viewTime.split(' ')[0] : '未知日期'
@@ -253,13 +245,10 @@ function loadProducts(refresh = false) {
 
   productApi
     .getViewHistory({ page: page.value, pageSize })
-    .then((res: any) => {
-      const data = res.data || res || {}
-      const list = data.list || data.records || []
-
-      const normalizedList = list.map((item: any) => ({
+    .then((res) => {
+      const normalizedList = res.data.list.map((item) => ({
         ...item,
-        coverImage: normalizeImageUrl(item.coverImage || item.image || item.productImage || item.cover)
+        coverImage: normalizeImageUrl(item.coverImage)
       }))
 
       if (refresh) {
@@ -295,9 +284,9 @@ function goDetail(id: string) {
   uni.navigateTo({ url: `/pages/market/detail?id=${id}` })
 }
 
-function handleCardClick(product: Product) {
+function handleCardClick(product: ProductViewHistoryItem) {
   if (isEditMode.value) {
-    toggleSelect(product.id)
+    toggleSelect(product.historyId)
   } else {
     goDetail(product.productId)
   }
@@ -312,7 +301,7 @@ function deleteItem(historyId: string) {
         productApi
           .deleteViewHistory(historyId)
           .then(() => {
-            productList.value = productList.value.filter((p) => p.id !== historyId)
+            productList.value = productList.value.filter((p) => p.historyId !== historyId)
             uni.showToast({ title: '已删除', icon: 'success' })
           })
           .catch(() => {
@@ -363,7 +352,7 @@ function toggleSelectAll() {
   if (isAllSelected.value) {
     selectedIds.value = []
   } else {
-    selectedIds.value = productList.value.map((p) => p.id)
+    selectedIds.value = productList.value.map((p) => p.historyId)
   }
 }
 
@@ -382,7 +371,7 @@ function batchDelete() {
           for (const id of selectedIds.value) {
             await productApi.deleteViewHistory(id)
           }
-          productList.value = productList.value.filter((p) => !selectedIds.value.includes(p.id))
+          productList.value = productList.value.filter((p) => !selectedIds.value.includes(p.historyId))
           selectedIds.value = []
           isEditMode.value = false
           uni.showToast({ title: '已删除', icon: 'success' })
