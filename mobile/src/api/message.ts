@@ -1,7 +1,7 @@
 /**
  * 消息相关 API
  */
-import { http } from '@/utils/request'
+import { http, type RequestResponse } from '@/utils/request'
 
 export interface Conversation {
   conversationId: string
@@ -18,21 +18,26 @@ export interface Conversation {
   relatedShareId?: string
 }
 
-interface Message {
-  id: string
+/** 消息（字段与后端 MessageVO 对齐） */
+export interface Message {
+  messageId: string
   conversationId: string
   fromUserId: string
-  toUserId: string
-  senderId: string
-  senderName: string
-  senderAvatar: string
+  fromUserNickname?: string
+  fromUserAvatar?: string
+  toUserId?: string
   content: string
+  type: number // 1-文本，2-图片，3-商品卡片，4-订单卡片，5-系统通知，6-引用消息
+  parentMessageId?: string
+  parentMessageContent?: string
+  isRead?: number // 0-未读，1-已读
+  sendStatus?: number // 0-发送中，1-成功，2-失败
   extraData?: string
-  type: number // 1-文本，2-图片，3-商品卡片，4-订单卡片
-  status: number
   createdAt: string
   isMine?: boolean
 }
+
+type Page<T> = RequestResponse<{ list: T[]; total: number }>
 
 function normalizeConversation(data: any): Conversation {
   return {
@@ -53,23 +58,25 @@ function normalizeConversation(data: any): Conversation {
 
 function normalizeMessage(data: any): Message {
   return {
-    id: String(data?.messageId || data?.id || ''),
+    messageId: String(data?.messageId || ''),
     conversationId: String(data?.conversationId || ''),
-    fromUserId: String(data?.fromUserId || data?.senderId || ''),
-    toUserId: String(data?.toUserId || ''),
-    senderId: String(data?.fromUserId || data?.senderId || ''),
-    senderName: data?.fromUserNickname || data?.senderName || '',
-    senderAvatar: data?.fromUserAvatar || data?.senderAvatar || '',
-    content: data?.content || '',
+    fromUserId: String(data?.fromUserId || ''),
+    fromUserNickname: data?.fromUserNickname,
+    fromUserAvatar: data?.fromUserAvatar,
+    toUserId: data?.toUserId ? String(data.toUserId) : undefined,
+    content: data?.content ?? '',
+    type: Number(data?.type ?? 1),
+    parentMessageId: data?.parentMessageId ? String(data.parentMessageId) : undefined,
+    parentMessageContent: data?.parentMessageContent,
+    isRead: data?.isRead,
+    sendStatus: data?.sendStatus,
     extraData: data?.extraData || '',
-    type: Number(data?.type ?? data?.messageType ?? 1),
-    status: Number(data?.sendStatus ?? data?.status ?? 1),
-    createdAt: data?.createdAt || data?.sendTime || '',
-    isMine: data?.isMine ?? data?.mine
+    createdAt: data?.createdAt || '',
+    isMine: data?.isMine
   }
 }
 
-function normalizeConversationPage(res: any) {
+function normalizeConversationPage(res: Page<Conversation>): Page<Conversation> {
   return {
     ...res,
     data: {
@@ -79,7 +86,7 @@ function normalizeConversationPage(res: any) {
   }
 }
 
-function normalizeMessagePage(res: any) {
+function normalizeMessagePage(res: Page<Message>): Page<Message> {
   return {
     ...res,
     data: {
@@ -109,7 +116,7 @@ export const messageApi = {
    * 获取会话详情
    */
   getConversationDetail(id: string) {
-    return http.get<Conversation>(`/conversation/${id}`).then((res: any) => ({
+    return http.get<Conversation>(`/conversation/${id}`).then((res) => ({
       ...res,
       data: normalizeConversation(res.data)
     }))
@@ -142,7 +149,7 @@ export const messageApi = {
       data.relatedShareId = shareId
     }
     console.log('[createOrUpdateConversation] 最终请求数据:', data)
-    return http.post<Conversation>('/conversation/create-or-update', data).then((res: any) => ({
+    return http.post<Conversation>('/conversation/create-or-update', data).then((res) => ({
       ...res,
       data: normalizeConversation(res.data)
     }))
@@ -161,7 +168,7 @@ export const messageApi = {
       params.relatedShareId = shareId
     }
     console.log('[findConversationByUserAndProduct] 最终请求参数:', params)
-    return http.get<Conversation | null>('/conversation/find', params, { showError: false }).then((res: any) => ({
+    return http.get<Conversation | null>('/conversation/find', params, { showError: false }).then((res) => ({
       ...res,
       data: res.data ? normalizeConversation(res.data) : res.data
     }))
@@ -197,7 +204,7 @@ export const messageApi = {
       content: data.content,
       type: data.type,
       parentMessageId: data.quotedMessageId ? String(data.quotedMessageId) : undefined
-    }).then((res: any) => ({
+    }).then((res) => ({
       ...res,
       data: normalizeMessage(res.data)
     }))

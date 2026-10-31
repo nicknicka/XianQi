@@ -370,16 +370,17 @@ async function handleChatParams() {
       const sid = shareItemId || shareId || undefined
 
       // 先查找是否已有会话
-      const findRes: any = await messageApi.findConversationByUserAndProduct(targetId, pid, sid)
+      const findRes = await messageApi.findConversationByUserAndProduct(targetId, pid, sid)
 
       if (findRes.data?.conversationId) {
         // 已有会话，直接打开
+        const existingConversationId = findRes.data.conversationId
         setTimeout(() => {
-          goChat(findRes.data.conversationId)
+          goChat(existingConversationId)
         }, 300)
       } else {
         // 没有会话，创建新会话
-        const createRes: any = await messageApi.createOrUpdateConversation(targetId, pid, undefined, sid)
+        const createRes = await messageApi.createOrUpdateConversation(targetId, pid, undefined, sid)
         if (createRes.data?.conversationId) {
           setTimeout(() => {
             goChat(createRes.data.conversationId)
@@ -409,11 +410,11 @@ async function loadData() {
 
 async function loadConversations() {
   try {
-    const res: any = await messageApi.getConversationList()
+    const res = await messageApi.getConversationList()
     const list = res.data?.list || []
     conversations.value = list
     // 更新未读数
-    const unreadCount = list.reduce((sum: number, c: any) => sum + (c.unreadCount || 0), 0)
+    const unreadCount = list.reduce((sum: number, c: Conversation) => sum + (c.unreadCount || 0), 0)
     tabs.value[0].count = unreadCount
 
     // 同步未读数到全局 store 和 TabBar

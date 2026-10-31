@@ -711,7 +711,7 @@ function setupMessageListeners() {
         console.log('[Chat] 收到图片消息，URL:', content)
       }
 
-      const timestamp = data.message.sendTime || data.message.createdAt || new Date().toISOString()
+      const timestamp = data.message.createdAt || new Date().toISOString()
 
       // 判断是否为自己发送的消息
       let isSelf = false
@@ -722,7 +722,7 @@ function setupMessageListeners() {
       }
 
       const newMessage: Message = {
-        id: data.message.messageId?.toString() || data.message.id?.toString() || String(Date.now()),
+        id: data.message.messageId?.toString() || String(Date.now()),
         isSelf,
         type: getMessageType(data.message.type || 1),
         content: content,
@@ -823,7 +823,7 @@ async function loadMessages(isLoadMore = false) {
       currentUser: currentUser.value
     })
 
-    const res: any = await messageApi.getMessageList(conversationId.value, {
+    const res = await messageApi.getMessageList(conversationId.value, {
       page: messagePage.value,
       pageSize: pageSize.value
     })
@@ -836,18 +836,16 @@ async function loadMessages(isLoadMore = false) {
         total,
         listCount: list.length,
         firstMessage: list[0] ? {
-          id: list[0].id,
           messageId: list[0].messageId,
           fromUserId: list[0].fromUserId,
           isMine: list[0].isMine,
-          mine: list[0].mine,
           allFields: Object.keys(list[0])
         } : null
       })
 
       // 转换消息格式
-      const formattedMessages: Message[] = list.map((msg: any, index: number) => {
-        let content = msg.content
+      const formattedMessages: Message[] = list.map((msg, index) => {
+        let content: any = msg.content
 
         // 尝试解析商品/订单卡片
         if (msg.type === 3) {
@@ -865,7 +863,7 @@ async function loadMessages(isLoadMore = false) {
           console.log('[Chat] 图片消息URL:', content)
         }
 
-        const timestamp = msg.sendTime || msg.createdAt || new Date().toISOString()
+        const timestamp = msg.createdAt || new Date().toISOString()
 
         // 计算是否显示时间（基于列表中的上一条消息）
         let showTime = false
@@ -875,7 +873,7 @@ async function loadMessages(isLoadMore = false) {
         } else {
           const prevMsg = list[index - 1]
           if (prevMsg) {
-            const prevTimestamp = prevMsg.sendTime || prevMsg.createdAt
+            const prevTimestamp = prevMsg.createdAt
             if (prevTimestamp) {
               const currentTime = new Date(timestamp).getTime()
               const prevTime = new Date(prevTimestamp).getTime()
@@ -896,7 +894,7 @@ async function loadMessages(isLoadMore = false) {
         }
 
         console.log(`[Chat] 消息 ${index + 1}:`, {
-          messageId: msg.messageId || msg.id,
+          messageId: msg.messageId,
           fromUserId: msg.fromUserId,
           isMine: msg.isMine,
           currentUserId: currentUser.value.id,
@@ -908,7 +906,7 @@ async function loadMessages(isLoadMore = false) {
         })
 
         return {
-          id: msg.messageId?.toString() || String(msg.id),
+          id: String(msg.messageId),
           isSelf,
           type: getMessageType(msg.type),
           content: content,
@@ -998,32 +996,31 @@ function getMessageType(messageType: number): 'text' | 'image' | 'product' | 'or
 
 async function loadConversation() {
   try {
-    const res: any = await messageApi.getConversationDetail(conversationId.value)
+    const res = await messageApi.getConversationDetail(conversationId.value)
     if (res.data) {
       const conv = res.data
-      // 兼容不同后端字段命名
-      targetUserId.value = conv.otherUserId || conv.targetId
+      targetUserId.value = conv.otherUserId || ''
       targetUser.value = {
-        id: conv.otherUserId || conv.targetId,
-        name: conv.otherUserNickname || conv.targetName || '用户',
-        avatar: conv.otherUserAvatar || conv.targetAvatar || '/static/images/user.png'
+        id: conv.otherUserId || '',
+        name: conv.otherUserNickname || '用户',
+        avatar: conv.otherUserAvatar || '/static/images/user.png'
       }
 
       // 检查是否有关联商品ID
-      const relatedPid = conv.relatedProductId || conv.productId
+      const relatedPid = conv.relatedProductId
       if (relatedPid && !productId.value) {
         productId.value = relatedPid
         console.log('[Chat] 从会话中发现关联商品ID:', relatedPid)
       }
 
-      const relatedSid = conv.relatedShareId || conv.shareItemId || conv.shareId
+      const relatedSid = conv.relatedShareId
       if (relatedSid && !shareItemId.value) {
         shareItemId.value = relatedSid
         console.log('[Chat] 从会话中发现关联共享物品ID:', relatedSid)
       }
 
       // 检查是否有关联订单ID
-      const relatedOid = conv.relatedOrderId || conv.orderId
+      const relatedOid = conv.relatedOrderId
       if (relatedOid && !orderId.value) {
         orderId.value = relatedOid
         console.log('[Chat] 从会话中发现关联订单ID:', relatedOid)
@@ -1071,7 +1068,7 @@ async function createConversationAndInit() {
       orderId: orderId.value
     })
 
-    const res: any = await messageApi.createOrUpdateConversation(
+    const res = await messageApi.createOrUpdateConversation(
       targetUserId.value,
       productId.value || '',
       orderId.value || '',
@@ -1319,7 +1316,7 @@ async function sendMessage() {
   // 如果没有会话ID，先创建会话
   if (!conversationId.value && targetUserId.value) {
     try {
-      const res: any = await messageApi.createOrUpdateConversation(
+      const res = await messageApi.createOrUpdateConversation(
         targetUserId.value,
         productId.value || '',
         orderId.value || '',
@@ -1377,7 +1374,7 @@ async function sendMessage() {
       type: 1
     })
 
-    const res: any = await messageApi.sendMessage({
+    const res = await messageApi.sendMessage({
       conversationId: conversationId.value,
       content: messageContent,
       type: 1 // 文本消息，使用数字类型
@@ -1389,7 +1386,7 @@ async function sendMessage() {
       // 更新本地消息ID
       const index = messages.value.findIndex(m => m.id === tempMessage.id)
       if (index !== -1) {
-        messages.value[index].id = res.data.messageId?.toString() || res.data.id?.toString()
+        messages.value[index].id = String(res.data.messageId)
         // ID 更新后，重新触发滚动
         nextTick(() => {
           setTimeout(() => {
@@ -1508,7 +1505,7 @@ async function uploadAndSendImage(filePath: string) {
     // 如果没有会话ID，先创建会话
     if (!conversationId.value && targetUserId.value) {
       console.log('[Chat] 会话不存在，创建新会话...')
-      const res: any = await messageApi.createOrUpdateConversation(
+      const res = await messageApi.createOrUpdateConversation(
         targetUserId.value,
         productId.value || '',
         orderId.value || '',
@@ -1550,7 +1547,7 @@ async function uploadAndSendImage(filePath: string) {
     })
 
     // 发送图片消息到服务器
-    const res: any = await messageApi.sendMessage({
+    const res = await messageApi.sendMessage({
       conversationId: conversationId.value,
       content: imageContentUrl,
       type: 2 // 图片消息，使用数字类型
@@ -1561,7 +1558,7 @@ async function uploadAndSendImage(filePath: string) {
       const index = messages.value.findIndex(m => m.id === tempMessage.id)
 
       if (index !== -1) {
-        messages.value[index].id = res.data.messageId?.toString() || res.data.id?.toString()
+        messages.value[index].id = String(res.data.messageId)
 
         // ID 更新后，重新触发滚动
         nextTick(() => {
@@ -1750,7 +1747,7 @@ async function sendProductMessage(productCard: any) {
   // 如果没有会话ID，先创建会话
   if (!conversationId.value && targetUserId.value) {
     try {
-      const res: any = await messageApi.createOrUpdateConversation(
+      const res = await messageApi.createOrUpdateConversation(
         targetUserId.value,
         isShareCard(productCard) ? '' : productCard.id,
         orderId.value || '',
@@ -1798,7 +1795,7 @@ async function sendProductMessage(productCard: any) {
 
   // 发送到服务器
   try {
-    const res: any = await messageApi.sendMessage({
+    const res = await messageApi.sendMessage({
       conversationId: conversationId.value,
       content: JSON.stringify(productCard),
       type: 3 // 商品卡片，使用数字类型
@@ -1808,7 +1805,7 @@ async function sendProductMessage(productCard: any) {
       // 更新本地消息ID
       const index = messages.value.findIndex(m => m.id === tempMessage.id)
       if (index !== -1) {
-        messages.value[index].id = res.data.messageId?.toString() || res.data.id?.toString()
+        messages.value[index].id = String(res.data.messageId)
         // ID 更新后，重新触发滚动
         nextTick(() => {
           setTimeout(() => {
