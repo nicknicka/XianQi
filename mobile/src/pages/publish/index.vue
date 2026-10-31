@@ -4,7 +4,7 @@
     <CustomNavBar
       title="发布中心"
       background-color="transparent"
-      text-color="#333333"
+      text-color="var(--text-color-primary)"
     />
     <!-- 顶部内容 -->
     <view class="header" :class="{ 'animate-in': isAnimated }">
@@ -21,8 +21,8 @@
         <text class="card-title">发布闲置</text>
         <text class="card-desc">二手物品交易</text>
         <view class="card-features">
-          <view class="feature"><uni-icons type="checkmarkempty" size="10" color="#AAAAAA"></uni-icons><text>快速出售</text></view>
-          <view class="feature"><uni-icons type="checkmarkempty" size="10" color="#AAAAAA"></uni-icons><text>在线交易</text></view>
+          <view class="feature"><uni-icons type="checkmarkempty" size="10" color="var(--text-color-tertiary)"></uni-icons><text>快速出售</text></view>
+          <view class="feature"><uni-icons type="checkmarkempty" size="10" color="var(--text-color-tertiary)"></uni-icons><text>在线交易</text></view>
         </view>
       </view>
 
@@ -34,15 +34,15 @@
         <text class="card-title">共享闲置</text>
         <text class="card-desc">物品共享借用</text>
         <view class="card-features">
-          <view class="feature"><uni-icons type="checkmarkempty" size="10" color="#AAAAAA"></uni-icons><text>资源共享</text></view>
-          <view class="feature"><uni-icons type="checkmarkempty" size="10" color="#AAAAAA"></uni-icons><text>环保节约</text></view>
+          <view class="feature"><uni-icons type="checkmarkempty" size="10" color="var(--text-color-tertiary)"></uni-icons><text>资源共享</text></view>
+          <view class="feature"><uni-icons type="checkmarkempty" size="10" color="var(--text-color-tertiary)"></uni-icons><text>环保节约</text></view>
         </view>
       </view>
     </view>
 
     <!-- 底部提示 -->
     <view class="footer" :class="{ 'animate-in': isAnimated }">
-      <view class="footer-text"><uni-icons type="info" size="12" color="#AAAAAA"></uni-icons><text>发布前请确保信息真实准确</text></view>
+      <view class="footer-text"><uni-icons type="info" size="12" color="var(--text-color-tertiary)"></uni-icons><text>发布前请确保信息真实准确</text></view>
     </view>
 
 	<CustomTabBar />
@@ -181,9 +181,9 @@ function goToSharePublish() {
 
 // 顶部
 .header {
-  padding-right: 40rpx;
-  padding-bottom: 20rpx;
-  padding-left: 40rpx;
+  padding-right: var(--spacing-lg);
+  padding-bottom: var(--spacing-sm);
+  padding-left: var(--spacing-lg);
   text-align: center;
   flex-shrink: 0;
   opacity: 0;
@@ -196,7 +196,7 @@ function goToSharePublish() {
 
   .subtitle {
     display: block;
-    font-size: 24rpx;
+    font-size: var(--font-size-sm);
     color: var(--text-color-tertiary);
   }
 }
@@ -204,7 +204,7 @@ function goToSharePublish() {
 // 内容区域
 .content {
   flex: 1;
-  padding: 20rpx 40rpx;
+  padding: var(--spacing-sm) var(--spacing-lg);
   display: flex;
   flex-direction: column;
   justify-content: space-around;
@@ -215,13 +215,13 @@ function goToSharePublish() {
 // 选项卡片
 .option-card {
   background: var(--bg-color-card);
-  border-radius: 20rpx;
-  padding: 34rpx 28rpx;
+  border-radius: var(--border-radius-sm);
+  padding: var(--spacing-lg) var(--spacing-md);
   display: flex;
   flex-direction: column;
   align-items: center;
-  box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.08);
-  transition: all 0.3s;
+  box-shadow: var(--box-shadow-base);
+  transition: var(--motion-duration-medium) var(--motion-ease-standard);
   position: relative;
   overflow: hidden;
   min-height: 0;
@@ -257,12 +257,12 @@ function goToSharePublish() {
   }
 
   &.share::before {
-    background: linear-gradient(90deg, #4CAF50 0%, #66BB6A 100%);
+    background: linear-gradient(90deg, var(--success-color) 0%, var(--success-color-alpha-30) 100%);
   }
 
   &:active {
     transform: scale(0.98);
-    box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.12);
+    box-shadow: var(--box-shadow-sm);
   }
 
   .card-icon {
@@ -271,39 +271,39 @@ function goToSharePublish() {
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 10rpx;
+    margin-bottom: var(--spacing-xs);
     flex-shrink: 0;
   }
 
   .card-title {
-    font-size: 28rpx;
+    font-size: var(--font-size-base);
     font-weight: bold;
     color: var(--text-color-primary);
-    margin-bottom: 4rpx;
+    margin-bottom: var(--spacing-xs);
     flex-shrink: 0;
   }
 
   .card-desc {
-    font-size: 22rpx;
+    font-size: var(--font-size-xs);
     color: var(--text-color-tertiary);
-    margin-bottom: 12rpx;
+    margin-bottom: var(--spacing-xs);
     flex-shrink: 0;
   }
 
   .card-features {
     display: flex;
-    gap: 12rpx;
+    gap: var(--spacing-xs);
     flex-shrink: 0;
 
     .feature {
-      font-size: 20rpx;
+      font-size: var(--font-size-xs);
       color: var(--text-color-secondary);
-      background: #f8f8f8;
-      padding: 4rpx 10rpx;
-      border-radius: 16rpx;
+      background: var(--bg-color-disabled);
+      padding: var(--spacing-xs);
+      border-radius: var(--border-radius-sm);
       display: flex;
       align-items: center;
-      gap: 4rpx;
+      gap: var(--spacing-xs);
       white-space: nowrap;
 
       text {
@@ -315,7 +315,7 @@ function goToSharePublish() {
 
 // 底部
 .footer {
-  padding: 20rpx 40rpx;
+  padding: var(--spacing-sm) var(--spacing-lg);
   text-align: center;
   flex-shrink: 0;
   opacity: 0;
@@ -327,12 +327,12 @@ function goToSharePublish() {
   }
 
   .footer-text {
-    font-size: 20rpx;
+    font-size: var(--font-size-xs);
     color: var(--text-color-tertiary);
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 6rpx;
+    gap: var(--spacing-xs);
 
     text {
       line-height: 1;

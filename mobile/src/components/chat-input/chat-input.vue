@@ -336,7 +336,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@use '@/styles/variables.scss' as *;
 .chat-input {
   width: 100%;
   background: var(--bg-color-card);
@@ -364,7 +363,7 @@ export default {
         justify-content: center;
         border-radius: 50%;
         background: var(--bg-color-disabled);
-        transition: background 0.2s;
+        transition: background var(--motion-duration-fast);
 
         &:active {
           background: var(--border-color-base);
@@ -423,8 +422,8 @@ export default {
       align-items: center;
       justify-content: center;
       border-radius: 50%;
-      background: $primary-color;
-      transition: all 0.2s;
+      background: var(--primary-color);
+      transition: all var(--motion-duration-fast);
 
       &.is-disabled {
         background: var(--border-color-base);

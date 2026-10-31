@@ -535,7 +535,7 @@ function goBack() {
 		height: 400rpx;
 		top: -120rpx;
 		right: -80rpx;
-		background: var(--primary-color-alpha-8, rgba(142, 197, 232, 0.08));
+		background: var(--primary-color-alpha-8);
 		animation: blobFloat 8s ease-in-out infinite;
 	}
 
@@ -544,7 +544,7 @@ function goBack() {
 		height: 300rpx;
 		top: 200rpx;
 		left: -100rpx;
-		background: var(--primary-light-alpha-4, rgba(184, 212, 232, 0.04));
+		background: var(--primary-light-alpha-4);
 		animation: blobFloat 10s ease-in-out infinite 2s;
 	}
 
@@ -553,7 +553,7 @@ function goBack() {
 		height: 200rpx;
 		top: 500rpx;
 		right: -60rpx;
-		background: var(--accent-color-alpha-40, rgba(255, 217, 61, 0.08));
+		background: var(--accent-color-alpha-40);
 		animation: blobFloat 12s ease-in-out infinite 4s;
 	}
 }
@@ -657,7 +657,7 @@ function goBack() {
 
 		.action-text {
 			font-size: var(--font-size-base);
-			color: var(--text-color-inverse, #fff);
+			color: var(--text-color-inverse);
 			font-weight: 600;
 		}
 
@@ -714,11 +714,11 @@ function goBack() {
 }
 
 .history-badge {
-	background: var(--primary-color-alpha-8, rgba(142, 197, 232, 0.08));
+	background: var(--primary-color-alpha-8);
 }
 
 .hot-badge {
-	background: var(--warning-color-alpha-10, rgba(255, 214, 102, 0.1));
+	background: var(--warning-color-alpha-10);
 }
 
 .section-title {
@@ -939,7 +939,7 @@ function goBack() {
 				-2rpx -2rpx 8rpx rgba(255, 255, 255, 0.5);
 
 			.pill-tab-text {
-				color: var(--text-color-inverse, #fff);
+				color: var(--text-color-inverse);
 				font-weight: 600;
 			}
 		}
@@ -1026,7 +1026,7 @@ function goBack() {
 
 			.condition-badge {
 				padding: 4rpx 14rpx;
-				background: var(--primary-color-alpha-8, rgba(142, 197, 232, 0.08));
+				background: var(--primary-color-alpha-8);
 				border-radius: 9999rpx;
 
 				.condition-text {
@@ -1159,7 +1159,7 @@ function goBack() {
 		width: 48rpx;
 		height: 48rpx;
 		border-radius: 50%;
-		border: 4rpx solid var(--primary-color-alpha-15, rgba(142, 197, 232, 0.15));
+		border: 4rpx solid var(--primary-color-alpha-15);
 		border-top-color: var(--primary-color);
 		animation: spin 0.8s linear infinite;
 	}

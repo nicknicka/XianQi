@@ -357,7 +357,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@use '@/styles/variables.scss' as *;
 .image-uploader {
   width: 100%;
 
@@ -410,7 +409,7 @@ export default {
         bottom: 0;
         left: 0;
         height: 100%;
-        background: $primary-color;
+        background: var(--primary-color);
         transition: width 0.3s;
       }
 
@@ -477,7 +476,7 @@ export default {
     transition: border-color 0.2s, background 0.2s;
 
     &:not(.is-disabled):active {
-      border-color: $primary-color;
+      border-color: var(--primary-color);
       background: var(--bg-color-card);
     }
 
@@ -519,7 +518,7 @@ export default {
     display: block;
     margin-top: 16rpx;
     font-size: 24rpx;
-    color: var(--error-color);
+    color: var(--danger-color);
     line-height: 1.4;
   }
 

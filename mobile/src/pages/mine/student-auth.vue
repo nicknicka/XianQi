@@ -63,10 +63,10 @@
         :key="side.key"
         v-model="form[side.key]"
         :label="side.label"
-        :uploading="uploadingSide === side.key"
+        :uploading="uploadState.activeSide === side.key"
         :error="uploadError === side.key"
         @activate="handleUploadBoxClick(side.key)"
-        @replace="uploadStudentCard(side.key)"
+        @replace="uploadStudentCard(side.key, { replace: true })"
         @remove="removeStudentCard(side.key)"
       />
 
@@ -127,7 +127,7 @@ import { userApi } from '@/api/user'
 import { useUserStore } from '@/store/user'
 import type { StudentAuth } from '@/types'
 import validator from '@/utils/validator'
-import { chooseImage as chooseStudentCardImage, uploadImage as uploadImageFile, previewImage } from '@/utils/image'
+import { previewImage, uploadImage as uploadImageFile } from '@/utils/image'
 import { useServiceNavigation } from '@/composables/useServiceNavigation'
 import { onShow } from '@dcloudio/uni-app'
 import {
@@ -142,8 +142,15 @@ import {
   AUTH_ICON_SIZES,
   AUTH_PAGE_ANIMATION_DELAY_MS
 } from '@/utils/auth/auth-tokens'
-
-type StudentCardSide = 'frontImage' | 'backImage'
+import {
+  beginStudentCardUpload,
+  cancelStudentCardUpload,
+  chooseStudentCardImage,
+  createStudentCardUploadState,
+  isCurrentStudentCardUpload,
+  isImageSelectionCancelled,
+  type StudentCardSide
+} from '@/utils/auth/student-card-image'
 
 const userStore = useUserStore()
 useServiceNavigation()
@@ -158,7 +165,7 @@ const studentCardSides = [
 const isAnimated = ref(false)
 const statusLoading = ref(true)
 const submitting = ref(false)
-const uploadingSide = ref<StudentCardSide | null>(null)
+const uploadState = ref(createStudentCardUploadState())
 const uploadError = ref<StudentCardSide | null>(null)
 const realNameState = ref<AuthenticationState>(resolveAuthState('real-name'))
 const studentState = ref<AuthenticationState>(resolveAuthState('student'))
@@ -244,7 +251,7 @@ function goToRealNameAuth() {
 }
 
 function handleUploadBoxClick(side: StudentCardSide) {
-  if (uploadingSide.value) {
+  if (uploadState.value.activeSide) {
     return
   }
 
@@ -256,45 +263,57 @@ function handleUploadBoxClick(side: StudentCardSide) {
   previewImage([form.value[side]], form.value[side])
 }
 
-async function uploadStudentCard(side: StudentCardSide) {
-  if (uploadingSide.value) {
+async function uploadStudentCard(
+  side: StudentCardSide,
+  options: { replace?: boolean } = {}
+) {
+  if (uploadState.value.activeSide && (!options.replace || uploadState.value.activeSide !== side)) {
     return
   }
 
-  uploadingSide.value = side
+  const request = beginStudentCardUpload(uploadState.value, side, options)
   uploadError.value = null
 
   try {
-    const paths = await chooseStudentCardImage({
-      count: 1,
-      sizeType: ['compressed'],
-      sourceType: ['album', 'camera']
-    })
-    const result = await uploadImageFile(paths[0])
+    const selection = await chooseStudentCardImage()
+
+    if (!isCurrentStudentCardUpload(uploadState.value, request)) {
+      return
+    }
+
+    if (selection.validationError) {
+      uni.showToast({ title: selection.validationError, icon: 'none' })
+      return
+    }
+
+    const result = await uploadImageFile(selection.files[0].path)
+
+    if (!isCurrentStudentCardUpload(uploadState.value, request)) {
+      return
+    }
+
     form.value[side] = result.url
     uni.showToast({ title: '上传成功', icon: 'success' })
   } catch (error) {
+    if (!isCurrentStudentCardUpload(uploadState.value, request)) {
+      return
+    }
+
     if (!isImageSelectionCancelled(error)) {
       console.error('上传学生证图片失败:', error)
       uploadError.value = side
     }
   } finally {
-    uploadingSide.value = null
+    if (isCurrentStudentCardUpload(uploadState.value, request)) {
+      uploadState.value.activeSide = null
+    }
   }
 }
 
 function removeStudentCard(side: StudentCardSide) {
+  cancelStudentCardUpload(uploadState.value, side)
   form.value[side] = ''
   uploadError.value = null
-}
-
-function isImageSelectionCancelled(error: unknown): boolean {
-  if (typeof error !== 'object' || error === null || !('errMsg' in error)) {
-    return false
-  }
-
-  const message = (error as { errMsg?: unknown }).errMsg
-  return typeof message === 'string' && message.includes('cancel')
 }
 
 async function handleSubmit() {

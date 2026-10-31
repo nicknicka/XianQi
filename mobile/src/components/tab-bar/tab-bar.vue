@@ -193,7 +193,7 @@ export default {
         align-items: center;
         justify-content: center;
         padding: 0 8rpx;
-        background: var(--error-color);
+        background: var(--danger-color);
         border-radius: 16rpx;
         border: 2rpx solid v-bind(backgroundColor);
         font-size: 20rpx;

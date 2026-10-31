@@ -176,10 +176,10 @@ export default {
     }
 
     &.notice-error {
-      border-left: 4rpx solid var(--error-color);
+      border-left: 4rpx solid var(--danger-color);
 
       .notice-icon .icon-text {
-        color: var(--error-color);
+        color: var(--danger-color);
       }
     }
 

@@ -389,7 +389,7 @@ function formatTime(time: string) {
 
   .batch-remove-btn {
     padding: 8rpx 24rpx;
-    background: var(--error-color);
+    background: var(--danger-color);
     color: #fff;
     font-size: var(--font-size-sm);
     border-radius: 9999px;

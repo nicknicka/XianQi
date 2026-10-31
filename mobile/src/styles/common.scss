@@ -87,92 +87,92 @@ block {
 }
 
 // 间距
-.m-xs { margin: $spacing-xs; }
-.m-sm { margin: $spacing-sm; }
-.m-md { margin: $spacing-md; }
-.m-lg { margin: $spacing-lg; }
-.m-xl { margin: $spacing-xl; }
+.m-xs { margin: var(--spacing-xs); }
+.m-sm { margin: var(--spacing-sm); }
+.m-md { margin: var(--spacing-md); }
+.m-lg { margin: var(--spacing-lg); }
+.m-xl { margin: var(--spacing-xl); }
 
-.mt-xs { margin-top: $spacing-xs; }
-.mt-sm { margin-top: $spacing-sm; }
-.mt-md { margin-top: $spacing-md; }
-.mt-lg { margin-top: $spacing-lg; }
-.mt-xl { margin-top: $spacing-xl; }
+.mt-xs { margin-top: var(--spacing-xs); }
+.mt-sm { margin-top: var(--spacing-sm); }
+.mt-md { margin-top: var(--spacing-md); }
+.mt-lg { margin-top: var(--spacing-lg); }
+.mt-xl { margin-top: var(--spacing-xl); }
 
-.mb-xs { margin-bottom: $spacing-xs; }
-.mb-sm { margin-bottom: $spacing-sm; }
-.mb-md { margin-bottom: $spacing-md; }
-.mb-lg { margin-bottom: $spacing-lg; }
-.mb-xl { margin-bottom: $spacing-xl; }
+.mb-xs { margin-bottom: var(--spacing-xs); }
+.mb-sm { margin-bottom: var(--spacing-sm); }
+.mb-md { margin-bottom: var(--spacing-md); }
+.mb-lg { margin-bottom: var(--spacing-lg); }
+.mb-xl { margin-bottom: var(--spacing-xl); }
 
-.ml-xs { margin-left: $spacing-xs; }
-.ml-sm { margin-left: $spacing-sm; }
-.ml-md { margin-left: $spacing-md; }
-.ml-lg { margin-left: $spacing-lg; }
-.ml-xl { margin-left: $spacing-xl; }
+.ml-xs { margin-left: var(--spacing-xs); }
+.ml-sm { margin-left: var(--spacing-sm); }
+.ml-md { margin-left: var(--spacing-md); }
+.ml-lg { margin-left: var(--spacing-lg); }
+.ml-xl { margin-left: var(--spacing-xl); }
 
-.mr-xs { margin-right: $spacing-xs; }
-.mr-sm { margin-right: $spacing-sm; }
-.mr-md { margin-right: $spacing-md; }
-.mr-lg { margin-right: $spacing-lg; }
-.mr-xl { margin-right: $spacing-xl; }
+.mr-xs { margin-right: var(--spacing-xs); }
+.mr-sm { margin-right: var(--spacing-sm); }
+.mr-md { margin-right: var(--spacing-md); }
+.mr-lg { margin-right: var(--spacing-lg); }
+.mr-xl { margin-right: var(--spacing-xl); }
 
-.p-xs { padding: $spacing-xs; }
-.p-sm { padding: $spacing-sm; }
-.p-md { padding: $spacing-md; }
-.p-lg { padding: $spacing-lg; }
-.p-xl { padding: $spacing-xl; }
+.p-xs { padding: var(--spacing-xs); }
+.p-sm { padding: var(--spacing-sm); }
+.p-md { padding: var(--spacing-md); }
+.p-lg { padding: var(--spacing-lg); }
+.p-xl { padding: var(--spacing-xl); }
 
-.pt-xs { padding-top: $spacing-xs; }
-.pt-sm { padding-top: $spacing-sm; }
-.pt-md { padding-top: $spacing-md; }
-.pt-lg { padding-top: $spacing-lg; }
-.pt-xl { padding-top: $spacing-xl; }
+.pt-xs { padding-top: var(--spacing-xs); }
+.pt-sm { padding-top: var(--spacing-sm); }
+.pt-md { padding-top: var(--spacing-md); }
+.pt-lg { padding-top: var(--spacing-lg); }
+.pt-xl { padding-top: var(--spacing-xl); }
 
-.pb-xs { padding-bottom: $spacing-xs; }
-.pb-sm { padding-bottom: $spacing-sm; }
-.pb-md { padding-bottom: $spacing-md; }
-.pb-lg { padding-bottom: $spacing-lg; }
-.pb-xl { padding-bottom: $spacing-xl; }
+.pb-xs { padding-bottom: var(--spacing-xs); }
+.pb-sm { padding-bottom: var(--spacing-sm); }
+.pb-md { padding-bottom: var(--spacing-md); }
+.pb-lg { padding-bottom: var(--spacing-lg); }
+.pb-xl { padding-bottom: var(--spacing-xl); }
 
-.pl-xs { padding-left: $spacing-xs; }
-.pl-sm { padding-left: $spacing-sm; }
-.pl-md { padding-left: $spacing-md; }
-.pl-lg { padding-left: $spacing-lg; }
-.pl-xl { padding-left: $spacing-xl; }
+.pl-xs { padding-left: var(--spacing-xs); }
+.pl-sm { padding-left: var(--spacing-sm); }
+.pl-md { padding-left: var(--spacing-md); }
+.pl-lg { padding-left: var(--spacing-lg); }
+.pl-xl { padding-left: var(--spacing-xl); }
 
-.pr-xs { padding-right: $spacing-xs; }
-.pr-sm { padding-right: $spacing-sm; }
-.pr-md { padding-right: $spacing-md; }
-.pr-lg { padding-right: $spacing-lg; }
-.pr-xl { padding-right: $spacing-xl; }
+.pr-xs { padding-right: var(--spacing-xs); }
+.pr-sm { padding-right: var(--spacing-sm); }
+.pr-md { padding-right: var(--spacing-md); }
+.pr-lg { padding-right: var(--spacing-lg); }
+.pr-xl { padding-right: var(--spacing-xl); }
 
 // 文字颜色
-.text-primary { color: var(--primary-color, $primary-color); }
-.text-success { color: var(--success-color, $success-color); }
-.text-warning { color: var(--warning-color, $warning-color); }
-.text-error { color: var(--danger-color, $error-color); }
-.text-info { color: var(--info-color, $info-color); }
+.text-primary { color: var(--primary-color); }
+.text-success { color: var(--success-color); }
+.text-warning { color: var(--warning-color); }
+.text-error { color: var(--danger-color); }
+.text-info { color: var(--info-color); }
 
-.text-primary-color { color: var(--text-color-primary, $text-color-primary); }
-.text-secondary-color { color: var(--text-color-secondary, $text-color-secondary); }
-.text-tertiary-color { color: var(--text-color-tertiary, $text-color-tertiary); }
-.text-placeholder { color: var(--text-color-placeholder, $text-color-placeholder); }
-.text-white { color: var(--text-color-inverse, $text-color-white); }
+.text-primary-color { color: var(--text-color-primary); }
+.text-secondary-color { color: var(--text-color-secondary); }
+.text-tertiary-color { color: var(--text-color-tertiary); }
+.text-placeholder { color: var(--text-color-placeholder); }
+.text-white { color: var(--text-color-inverse); }
 
 // 字体大小
-.text-xs { font-size: $font-size-xs; }
-.text-sm { font-size: $font-size-sm; }
-.text-base { font-size: $font-size-base; }
-.text-lg { font-size: $font-size-lg; }
-.text-xl { font-size: $font-size-xl; }
-.text-xxl { font-size: $font-size-xxl; }
+.text-xs { font-size: var(--font-size-xs); }
+.text-sm { font-size: var(--font-size-sm); }
+.text-base { font-size: var(--font-size-base); }
+.text-lg { font-size: var(--font-size-lg); }
+.text-xl { font-size: var(--font-size-xl); }
+.text-xxl { font-size: var(--font-size-xxl); }
 
 // 字体粗细
-.font-normal { font-weight: $font-weight-normal; }
-.font-medium { font-weight: $font-weight-medium; }
-.font-semibold { font-weight: $font-weight-semibold; }
-.font-bold { font-weight: $font-weight-bold; }
+.font-normal { font-weight: 400; }
+.font-medium { font-weight: 500; }
+.font-semibold { font-weight: 600; }
+.font-bold { font-weight: 700; }
 
 // 对齐
 .text-left { text-align: left; }
@@ -180,12 +180,12 @@ block {
 .text-right { text-align: right; }
 
 // 圆角 (软萌版)
-.radius-sm { border-radius: $border-radius-sm; }
-.radius-base { border-radius: $border-radius-base; }
-.radius-lg { border-radius: $border-radius-lg; }
-.radius-xl { border-radius: $border-radius-xl; }
-.radius-round { border-radius: $border-radius-round; }
-.radius-pill { border-radius: $border-radius-pill; }
+.radius-sm { border-radius: var(--border-radius-sm); }
+.radius-base { border-radius: var(--border-radius-base); }
+.radius-lg { border-radius: var(--border-radius-lg); }
+.radius-xl { border-radius: var(--border-radius-xl); }
+.radius-round { border-radius: var(--border-radius-round); }
+.radius-pill { border-radius: var(--border-radius-pill); }
 
 // ============ 软萌卡片系统 (Claymorphism) ============
 
@@ -201,34 +201,34 @@ block {
   align-items: center;
   justify-content: center;
   padding: 16rpx 48rpx;
-  font-size: $font-size-base;
+  font-size: var(--font-size-base);
   outline: none;
 
   &.btn-primary {
-    background: var(--primary-color, $primary-color);
-    color: var(--text-color-inverse, $text-color-white);
+    background: var(--primary-color);
+    color: var(--text-color-inverse);
   }
 
   &.btn-success {
-    background: var(--success-color, $success-color);
-    color: var(--text-color-inverse, $text-color-white);
+    background: var(--success-color);
+    color: var(--text-color-inverse);
   }
 
   &.btn-warning {
-    background: var(--warning-color, $warning-color);
-    color: var(--text-color-primary, $text-color-primary);
+    background: var(--warning-color);
+    color: var(--text-color-primary);
   }
 
   &.btn-error {
-    background: var(--danger-color, $error-color);
-    color: var(--text-color-inverse, $text-color-white);
+    background: var(--danger-color);
+    color: var(--text-color-inverse);
   }
 
   &.btn-default {
-    background: var(--bg-color-card, $bg-color-card);
-    color: var(--text-color-primary, $text-color-primary);
-    border: 2rpx solid var(--border-color-base, $border-color-base);
-    box-shadow: $clay-shadow-tag;
+    background: var(--bg-color-card);
+    color: var(--text-color-primary);
+    border: 2rpx solid var(--border-color-base);
+    box-shadow: var(--clay-shadow-tag);
   }
 
   &.btn-block {
@@ -237,13 +237,13 @@ block {
 
   &.btn-large {
     padding: 24rpx 56rpx;
-    font-size: $font-size-lg;
+    font-size: var(--font-size-lg);
     height: 88rpx;
   }
 
   &.btn-small {
     padding: 8rpx 24rpx;
-    font-size: $font-size-sm;
+    font-size: var(--font-size-sm);
     height: 56rpx;
   }
 }
@@ -255,25 +255,25 @@ block {
   align-items: center;
   justify-content: center;
   padding: 2px 10px;
-  border-radius: $border-radius-pill;
-  font-size: $font-size-xs;
-  color: var(--text-color-inverse, $text-color-white);
+  border-radius: var(--border-radius-pill);
+  font-size: var(--font-size-xs);
+  color: var(--text-color-inverse);
   box-shadow: 2rpx 2rpx 6rpx rgba(0, 0, 0, 0.06);
 
   &.badge-primary {
-    background: var(--primary-color, $primary-color);
+    background: var(--primary-color);
   }
 
   &.badge-success {
-    background: var(--success-color, $success-color);
+    background: var(--success-color);
   }
 
   &.badge-warning {
-    background: var(--warning-color, $warning-color);
+    background: var(--warning-color);
   }
 
   &.badge-error {
-    background: var(--danger-color, $error-color);
+    background: var(--danger-color);
   }
 }
 
@@ -281,8 +281,8 @@ block {
 
 .divider {
   height: 1px;
-  background: var(--border-color-light, $border-color-light);
-  margin: $spacing-md 0;
+  background: var(--border-color-light);
+  margin: var(--spacing-md) 0;
 }
 
 // ============ 标签样式 (Claymorphism) ============
@@ -290,32 +290,32 @@ block {
 .tag {
   display: inline-block;
   padding: 4rpx 16rpx;
-  border-radius: $border-radius-pill;
-  font-size: $font-size-sm;
-  box-shadow: $clay-shadow-tag;
+  border-radius: var(--border-radius-pill);
+  font-size: var(--font-size-sm);
+  box-shadow: var(--clay-shadow-tag);
 
   &.tag-primary {
-    background: var(--primary-color-faded, rgba($primary-color, 0.12));
-    color: var(--primary-color, $primary-color);
-    border: 1rpx solid var(--primary-color-faded, rgba($primary-color, 0.15));
+    background: var(--primary-color-faded);
+    color: var(--primary-color);
+    border: 1rpx solid var(--primary-color-faded);
   }
 
   &.tag-success {
-    background: var(--success-color-faded, rgba($success-color, 0.12));
-    color: var(--success-color, $success-color);
-    border: 1rpx solid var(--success-color-faded, rgba($success-color, 0.15));
+    background: var(--success-color-bg);
+    color: var(--success-color);
+    border: 1rpx solid var(--success-color-bg);
   }
 
   &.tag-warning {
-    background: var(--warning-color-faded, rgba($warning-color, 0.12));
-    color: var(--warning-color, $warning-color);
-    border: 1rpx solid var(--warning-color-faded, rgba($warning-color, 0.15));
+    background: var(--warning-color-bg);
+    color: var(--warning-color);
+    border: 1rpx solid var(--warning-color-bg);
   }
 
   &.tag-error {
-    background: var(--danger-color-faded, rgba($error-color, 0.12));
-    color: var(--danger-color, $error-color);
-    border: 1rpx solid var(--danger-color-faded, rgba($error-color, 0.15));
+    background: var(--danger-color-bg);
+    color: var(--danger-color);
+    border: 1rpx solid var(--danger-color-bg);
   }
 }
 

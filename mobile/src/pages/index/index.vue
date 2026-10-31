@@ -1504,13 +1504,13 @@ const goToDetail = (product: any) => {
 				right: -6rpx;
 				min-width: 18rpx;
 				height: 18rpx;
-				background: var(--danger-color, #ff4d4f);
-				color: var(--text-color-inverse, #ffffff);
+				background: var(--danger-color);
+				color: var(--text-color-inverse);
 				border-radius: 50%;
 				border: 2rpx solid var(--bg-color-card);
 				box-sizing: border-box;
 				box-shadow: 0 2rpx 6rpx
-					var(--danger-color-alpha-30, rgba(255, 77, 79, 0.4));
+					var(--danger-color-alpha-30);
 				display: flex;
 				align-items: center;
 				justify-content: center;
@@ -1526,7 +1526,7 @@ const goToDetail = (product: any) => {
 
 					text {
 						font-size: 18rpx;
-						color: var(--text-color-inverse, #ffffff);
+						color: var(--text-color-inverse);
 						font-weight: 500;
 						line-height: 1;
 						transform: scale(0.9);
@@ -1945,7 +1945,7 @@ const goToDetail = (product: any) => {
 
 			.countdown {
 				padding: 8rpx 16rpx;
-				background: linear-gradient(135deg, var(--error-color) 0%, #ff7875 100%);
+				background: linear-gradient(135deg, var(--danger-color) 0%, var(--danger-color-alpha-95) 100%);
 				border-radius: 24rpx;
 				border: 2rpx solid rgba(255, 255, 255, 0.6);
 				box-shadow: 3rpx 3rpx 8rpx rgba(0, 0, 0, 0.08),
@@ -2025,7 +2025,7 @@ const goToDetail = (product: any) => {
 				top: 12rpx;
 				left: 12rpx;
 				padding: 6rpx 12rpx;
-				background: linear-gradient(135deg, var(--error-color) 0%, #ff7875 100%);
+				background: linear-gradient(135deg, var(--danger-color) 0%, var(--danger-color-alpha-95) 100%);
 				border-radius: 8rpx;
 				font-size: 20rpx;
 				color: #fff;
@@ -2060,7 +2060,7 @@ const goToDetail = (product: any) => {
 					.flash-price {
 						font-size: 32rpx;
 						font-weight: bold;
-						color: var(--error-color);
+						color: var(--danger-color);
 					}
 
 					.original-price {

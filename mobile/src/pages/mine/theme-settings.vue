@@ -410,7 +410,6 @@ function handleResetTheme() {
 </script>
 
 <style lang="scss" scoped>
-@use '../../styles/variables.scss' as *;
 
 .theme-settings-page {
   min-height: 100vh;
@@ -437,7 +436,7 @@ function handleResetTheme() {
 
   .title-text {
     font-size: 17px;
-    font-weight: $font-weight-semibold;
+    font-weight: 600;
     color: var(--text-color-primary);
   }
 
@@ -449,7 +448,7 @@ function handleResetTheme() {
   .scale-value {
     font-size: 14px;
     color: var(--text-color-secondary);
-    font-weight: $font-weight-normal;
+    font-weight: 400;
   }
 }
 
@@ -517,7 +516,7 @@ function handleResetTheme() {
 
 .preset-name {
   font-size: 14px;
-  font-weight: $font-weight-semibold;
+  font-weight: 600;
   color: var(--text-color-primary);
 }
 
@@ -591,7 +590,7 @@ function handleResetTheme() {
     .preview-title {
       display: block;
       font-size: 18px;
-      font-weight: $font-weight-semibold;
+      font-weight: 600;
       color: var(--text-color-primary);
       margin-bottom: 8rpx;
     }
@@ -694,7 +693,7 @@ function handleResetTheme() {
 
 .color-group-title {
   font-size: 16px;
-  font-weight: $font-weight-semibold;
+  font-weight: 600;
   color: var(--text-color-primary);
   margin-bottom: 16rpx;
   display: block;
@@ -715,7 +714,7 @@ function handleResetTheme() {
 .color-label {
   font-size: 14px;
   color: var(--text-color-secondary);
-  font-weight: $font-weight-normal;
+  font-weight: 400;
 }
 
 .color-picker {
@@ -762,7 +761,7 @@ function handleResetTheme() {
   justify-content: center;
   border-radius: 9999px;
   font-size: 15px;
-  font-weight: $font-weight-semibold;
+  font-weight: 600;
   border: none;
   cursor: pointer;
   transition: all 0.3s ease;

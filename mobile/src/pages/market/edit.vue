@@ -1315,30 +1315,8 @@ async function submitEdit() {
 </script>
 
 <style lang="scss" scoped>
-// 移除本地硬编码变量，改用全局主题 CSS 变量（带 SCSS 降级）
-// $bg-color-page: #f5f5f5; → 使用 var(--bg-color-page)
-// $bg-color-card: #fff; → 使用 var(--bg-color-card)
-$text-color-primary: #333;
-$text-color-secondary: #666;
-$text-color-tertiary: #999;
-$text-color-placeholder: #999;
-$border-color-light: #eee;
-$border-radius-sm: 8px;
-$border-radius-base: 12px;
-$border-radius-lg: 20px;
-$spacing-xs: 8rpx;
-$spacing-sm: 16rpx;
-$spacing-md: 24rpx;
-$spacing-lg: 32rpx;
-$font-size-xs: 24rpx;
-$font-size-sm: 26rpx;
-$font-size-base: 28rpx;
-$font-size-lg: 32rpx;
-$font-size-xl: 36rpx;
-$font-size-xxl: 40rpx;
 $font-weight-medium: 500;
 $font-weight-semibold: 600;
-$transition-fast: 0.2s;
 
 .edit-page {
 	height: 100vh;
@@ -1357,13 +1335,13 @@ $transition-fast: 0.2s;
 .card {
 	background: var(--bg-color-card);
 	margin-bottom: 16rpx;
-	padding: 0 $spacing-md;
+	padding: 0 var(--spacing-md);
 }
 
 .form-item {
 	display: flex;
-	padding: $spacing-md 0;
-	border-bottom: 1px solid $border-color-light;
+	padding: var(--spacing-md) 0;
+	border-bottom: 1px solid var(--border-color-light);
 
 	&:last-child {
 		border-bottom: none;
@@ -1390,14 +1368,14 @@ $transition-fast: 0.2s;
 .form-label {
 	display: flex;
 	align-items: center;
-	font-size: $font-size-base;
-	color: $text-color-primary;
+	font-size: var(--font-size-base);
+	color: var(--text-color-primary);
 	font-weight: $font-weight-medium;
 	flex-shrink: 0;
 	width: 180rpx;
 
 	.required-mark {
-		color: var(--error-color);
+		color: var(--danger-color);
 		margin-left: 4rpx;
 	}
 }
@@ -1407,14 +1385,14 @@ $transition-fast: 0.2s;
 	display: flex;
 	align-items: center;
 	justify-content: flex-end;
-	gap: $spacing-xs;
+	gap: var(--spacing-xs);
 
 	.value-text {
-		font-size: $font-size-base;
-		color: $text-color-primary;
+		font-size: var(--font-size-base);
+		color: var(--text-color-primary);
 
 		&.placeholder {
-			color: $text-color-placeholder;
+			color: var(--text-color-placeholder);
 		}
 	}
 }
@@ -1424,14 +1402,14 @@ $transition-fast: 0.2s;
 .category-selector-inline {
 	flex: 1;
 	text-align: right;
-	padding-right: $spacing-xs;
+	padding-right: var(--spacing-xs);
 }
 
 .title-name-text,
 .condition-name-text,
 .category-name-text {
-	font-size: $font-size-base;
-	color: $text-color-primary;
+	font-size: var(--font-size-base);
+	color: var(--text-color-primary);
 	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;
@@ -1440,24 +1418,24 @@ $transition-fast: 0.2s;
 .title-placeholder-inline,
 .condition-placeholder-inline,
 .category-placeholder-inline {
-	font-size: $font-size-base;
-	color: $text-color-placeholder;
+	font-size: var(--font-size-base);
+	color: var(--text-color-placeholder);
 }
 
 .image-upload-section {
-	padding: $spacing-md 0;
+	padding: var(--spacing-md) 0;
 
 	.image-grid {
 		display: grid;
 		grid-template-columns: repeat(3, 1fr);
-		gap: $spacing-sm;
-		margin-bottom: $spacing-sm;
+		gap: var(--spacing-sm);
+		margin-bottom: var(--spacing-sm);
 	}
 
 	.image-item {
 		position: relative;
 		aspect-ratio: 1;
-		border-radius: $border-radius-sm;
+		border-radius: var(--border-radius-sm);
 		overflow: hidden;
 
 		.preview-image {
@@ -1485,15 +1463,15 @@ $transition-fast: 0.2s;
 			padding: 4rpx 12rpx;
 			background: var(--primary-color-alpha-95);
 			color: #fff;
-			font-size: $font-size-xs;
+			font-size: var(--font-size-xs);
 			border-radius: 4rpx;
 		}
 	}
 
 	.upload-btn {
 		aspect-ratio: 1;
-		border: 2rpx dashed $border-color-light;
-		border-radius: $border-radius-sm;
+		border: 2rpx dashed var(--border-color-light);
+		border-radius: var(--border-radius-sm);
 		display: flex;
 		align-items: center;
 		justify-content: center;
@@ -1501,8 +1479,8 @@ $transition-fast: 0.2s;
 	}
 
 	.upload-tip {
-		font-size: $font-size-xs;
-		color: $text-color-tertiary;
+		font-size: var(--font-size-xs);
+		color: var(--text-color-tertiary);
 		display: block;
 		text-align: center;
 	}
@@ -1511,24 +1489,24 @@ $transition-fast: 0.2s;
 .textarea-wrapper {
 	position: relative;
 	width: 100%;
-	margin-top: $spacing-sm;
+	margin-top: var(--spacing-sm);
 
 	.textarea {
 		width: 100%;
 		min-height: 200rpx;
-		padding: $spacing-sm;
+		padding: var(--spacing-sm);
 		background: var(--bg-color-page);
-		border-radius: $border-radius-sm;
-		font-size: $font-size-base;
+		border-radius: var(--border-radius-sm);
+		font-size: var(--font-size-base);
 		line-height: 1.6;
 	}
 
 	.count {
 		position: absolute;
-		bottom: $spacing-sm;
-		right: $spacing-sm;
-		font-size: $font-size-xs;
-		color: $text-color-tertiary;
+		bottom: var(--spacing-sm);
+		right: var(--spacing-sm);
+		font-size: var(--font-size-xs);
+		color: var(--text-color-tertiary);
 	}
 }
 
@@ -1540,19 +1518,19 @@ $transition-fast: 0.2s;
 	gap: 4rpx;
 
 	.price-main-text {
-		font-size: $font-size-xl;
+		font-size: var(--font-size-xl);
 		font-weight: $font-weight-semibold;
 		color: var(--primary-color);
 	}
 
 	.price-placeholder-text {
-		font-size: $font-size-base;
-		color: $text-color-placeholder;
+		font-size: var(--font-size-base);
+		color: var(--text-color-placeholder);
 	}
 
 	.price-discount-text {
-		font-size: $font-size-xs;
-		color: $text-color-tertiary;
+		font-size: var(--font-size-xs);
+		color: var(--text-color-tertiary);
 		text-decoration: line-through;
 	}
 }
@@ -1562,8 +1540,8 @@ $transition-fast: 0.2s;
 	text-align: right;
 
 	.delivery-text {
-		font-size: $font-size-base;
-		color: $text-color-primary;
+		font-size: var(--font-size-base);
+		color: var(--text-color-primary);
 	}
 }
 
@@ -1572,21 +1550,21 @@ $transition-fast: 0.2s;
 	display: flex;
 	align-items: center;
 	justify-content: flex-end;
-	gap: $spacing-xs;
+	gap: var(--spacing-xs);
 
 	.flash-status-text {
-		font-size: $font-size-base;
-		color: $text-color-tertiary;
+		font-size: var(--font-size-base);
+		color: var(--text-color-tertiary);
 
 		&.active {
-			color: var(--error-color);
+			color: var(--danger-color);
 		}
 	}
 
 	.flash-price-text {
-		font-size: $font-size-lg;
+		font-size: var(--font-size-lg);
 		font-weight: $font-weight-semibold;
-		color: var(--error-color);
+		color: var(--danger-color);
 	}
 }
 
@@ -1614,7 +1592,7 @@ $transition-fast: 0.2s;
 	width: 100%;
 	max-width: 100vw;
 	background: var(--bg-color-card);
-	border-radius: $border-radius-lg $border-radius-lg 0 0;
+	border-radius: var(--border-radius-lg) var(--border-radius-lg) 0 0;
 	// 使用 calc 计算高度，减去底部安全区域
 	max-height: calc(80vh - env(safe-area-inset-bottom));
 	display: flex;
@@ -1631,34 +1609,34 @@ $transition-fast: 0.2s;
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
-	padding: $spacing-md;
-	border-bottom: 1px solid $border-color-light;
+	padding: var(--spacing-md);
+	border-bottom: 1px solid var(--border-color-light);
 
 	.popup-title {
-		font-size: $font-size-lg;
+		font-size: var(--font-size-lg);
 		font-weight: $font-weight-semibold;
-		color: $text-color-primary;
+		color: var(--text-color-primary);
 	}
 
 	.close-btn {
-		padding: $spacing-xs;
+		padding: var(--spacing-xs);
 	}
 }
 
 .condition-content {
-	padding: $spacing-md;
+	padding: var(--spacing-md);
 	max-height: 60vh;
 	overflow-y: auto;
 
 	.condition-item {
 		display: flex;
 		align-items: center;
-		padding: $spacing-md;
-		margin-bottom: $spacing-sm;
+		padding: var(--spacing-md);
+		margin-bottom: var(--spacing-sm);
 		background: var(--bg-color-page);
-		border-radius: $border-radius-base;
+		border-radius: var(--border-radius-base);
 		border: 2rpx solid transparent;
-		transition: all $transition-fast;
+		transition: all var(--motion-duration-fast) var(--motion-ease-standard);
 
 		&.active {
 			background: var(--primary-color-alpha-10);
@@ -1667,7 +1645,7 @@ $transition-fast: 0.2s;
 
 		.condition-icon {
 			font-size: 48rpx;
-			margin-right: $spacing-md;
+			margin-right: var(--spacing-md);
 		}
 
 		.condition-info {
@@ -1677,58 +1655,58 @@ $transition-fast: 0.2s;
 			gap: 4rpx;
 
 			.condition-label {
-				font-size: $font-size-base;
-				color: $text-color-primary;
+				font-size: var(--font-size-base);
+				color: var(--text-color-primary);
 				font-weight: $font-weight-medium;
 			}
 
 			.condition-desc {
-				font-size: $font-size-sm;
-				color: $text-color-tertiary;
+				font-size: var(--font-size-sm);
+				color: var(--text-color-tertiary);
 			}
 		}
 
 		.condition-check {
-			margin-left: $spacing-sm;
+			margin-left: var(--spacing-sm);
 		}
 	}
 }
 
 .amount-content {
-	padding: $spacing-md;
+	padding: var(--spacing-md);
 
 	.amount-input-wrapper {
 		display: flex;
 		align-items: center;
 		height: 100rpx;
 		background: var(--bg-color-page);
-		border-radius: $border-radius-base;
-		padding: 0 $spacing-md;
-		margin-bottom: $spacing-md;
+		border-radius: var(--border-radius-base);
+		padding: 0 var(--spacing-md);
+		margin-bottom: var(--spacing-md);
 
 		.amount-symbol {
 			font-size: 48rpx;
 			font-weight: $font-weight-semibold;
 			color: var(--primary-color);
-			margin-right: $spacing-xs;
+			margin-right: var(--spacing-xs);
 		}
 
 		.amount-input {
 			flex: 1;
 			font-size: 48rpx;
 			font-weight: $font-weight-semibold;
-			color: $text-color-primary;
+			color: var(--text-color-primary);
 		}
 
 		&.small {
 			height: 80rpx;
 
 			.amount-symbol {
-				font-size: $font-size-xl;
+				font-size: var(--font-size-xl);
 			}
 
 			.amount-input {
-				font-size: $font-size-xl;
+				font-size: var(--font-size-xl);
 			}
 		}
 	}
@@ -1736,8 +1714,8 @@ $transition-fast: 0.2s;
 	.quick-amounts {
 		display: grid;
 		grid-template-columns: repeat(3, 1fr);
-		gap: $spacing-sm;
-		margin-bottom: $spacing-md;
+		gap: var(--spacing-sm);
+		margin-bottom: var(--spacing-md);
 
 		.amount-item {
 			height: 72rpx;
@@ -1745,9 +1723,9 @@ $transition-fast: 0.2s;
 			align-items: center;
 			justify-content: center;
 			background: var(--bg-color-page);
-			border-radius: $border-radius-sm;
+			border-radius: var(--border-radius-sm);
 			border: 2rpx solid transparent;
-			transition: all $transition-fast;
+			transition: all var(--motion-duration-fast) var(--motion-ease-standard);
 
 			&.active {
 				background: var(--primary-color-alpha-10);
@@ -1755,31 +1733,31 @@ $transition-fast: 0.2s;
 			}
 
 			.amount-item-text {
-				font-size: $font-size-base;
-				color: $text-color-primary;
+				font-size: var(--font-size-base);
+				color: var(--text-color-primary);
 			}
 		}
 	}
 
 	.original-price-section {
-		margin-top: $spacing-md;
+		margin-top: var(--spacing-md);
 
 		.original-price-label {
-			font-size: $font-size-base;
-			color: $text-color-primary;
+			font-size: var(--font-size-base);
+			color: var(--text-color-primary);
 			display: block;
-			margin-bottom: $spacing-sm;
+			margin-bottom: var(--spacing-sm);
 		}
 
 		.discount-preview {
-			margin-top: $spacing-sm;
-			padding: $spacing-sm;
+			margin-top: var(--spacing-sm);
+			padding: var(--spacing-sm);
 			background: linear-gradient(135deg, #fff5f0 0%, #ffe8dc 100%);
-			border-radius: $border-radius-sm;
+			border-radius: var(--border-radius-sm);
 			text-align: center;
 
 			.discount-preview-text {
-				font-size: $font-size-sm;
+				font-size: var(--font-size-sm);
 				color: var(--primary-color);
 				font-weight: $font-weight-medium;
 			}
@@ -1788,25 +1766,25 @@ $transition-fast: 0.2s;
 }
 
 .input-content {
-	padding: $spacing-md;
+	padding: var(--spacing-md);
 	position: relative;
 
 	.popup-textarea {
 		width: 100%;
 		min-height: 200rpx;
-		padding: $spacing-sm;
+		padding: var(--spacing-sm);
 		background: var(--bg-color-page);
-		border-radius: $border-radius-sm;
-		font-size: $font-size-base;
+		border-radius: var(--border-radius-sm);
+		font-size: var(--font-size-base);
 		line-height: 1.6;
 	}
 
 	.count-text {
 		position: absolute;
-		bottom: $spacing-md;
-		right: $spacing-md;
-		font-size: $font-size-xs;
-		color: $text-color-tertiary;
+		bottom: var(--spacing-md);
+		right: var(--spacing-md);
+		font-size: var(--font-size-xs);
+		color: var(--text-color-tertiary);
 	}
 }
 
@@ -1818,18 +1796,18 @@ $transition-fast: 0.2s;
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		font-size: $font-size-base;
-		color: $text-color-primary;
+		font-size: var(--font-size-base);
+		color: var(--text-color-primary);
 	}
 }
 
 .popup-footer {
 	display: flex;
-	gap: $spacing-md;
-	padding: $spacing-md;
+	gap: var(--spacing-md);
+	padding: var(--spacing-md);
 	// 底部添加安全区域间距
-	padding-bottom: calc($spacing-md + env(safe-area-inset-bottom));
-	border-top: 1px solid $border-color-light;
+	padding-bottom: calc(var(--spacing-md) + env(safe-area-inset-bottom));
+	border-top: 1px solid var(--border-color-light);
 
 	.popup-btn {
 		flex: 1;
@@ -1837,14 +1815,14 @@ $transition-fast: 0.2s;
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		font-size: $font-size-base;
+		font-size: var(--font-size-base);
 		font-weight: $font-weight-medium;
-		border-radius: $border-radius-base;
+		border-radius: var(--border-radius-base);
 		border: none;
 
 		&.cancel-btn {
 			background: var(--bg-color-page);
-			color: $text-color-secondary;
+			color: var(--text-color-secondary);
 		}
 
 		&.confirm-btn {
@@ -1860,20 +1838,20 @@ $transition-fast: 0.2s;
 
 // 位置选择样式
 .custom-location-section {
-	padding: $spacing-md;
-	border-bottom: 1px solid $border-color-light;
+	padding: var(--spacing-md);
+	border-bottom: 1px solid var(--border-color-light);
 
 	.location-section-title {
-		font-size: $font-size-base;
-		color: $text-color-primary;
+		font-size: var(--font-size-base);
+		color: var(--text-color-primary);
 		font-weight: $font-weight-medium;
 		display: block;
-		margin-bottom: $spacing-sm;
+		margin-bottom: var(--spacing-sm);
 	}
 
 	.custom-input-wrapper {
 		display: flex;
-		gap: $spacing-sm;
+		gap: var(--spacing-sm);
 
 		.custom-input-box {
 			flex: 1;
@@ -1881,27 +1859,27 @@ $transition-fast: 0.2s;
 			align-items: center;
 			height: 72rpx;
 			background: var(--bg-color-page);
-			border-radius: $border-radius-sm;
-			padding: 0 $spacing-sm;
+			border-radius: var(--border-radius-sm);
+			padding: 0 var(--spacing-sm);
 
 			.custom-input {
 				flex: 1;
-				font-size: $font-size-base;
-				margin: 0 $spacing-sm;
+				font-size: var(--font-size-base);
+				margin: 0 var(--spacing-sm);
 			}
 
 			.clear-input-btn {
-				padding: $spacing-xs;
+				padding: var(--spacing-xs);
 			}
 		}
 
 		.confirm-custom-btn {
 			height: 72rpx;
-			padding: 0 $spacing-md;
+			padding: 0 var(--spacing-md);
 			background: var(--primary-color);
 			color: #fff;
-			font-size: $font-size-base;
-			border-radius: $border-radius-sm;
+			font-size: var(--font-size-base);
+			border-radius: var(--border-radius-sm);
 			border: none;
 			display: flex;
 			align-items: center;
@@ -1915,33 +1893,33 @@ $transition-fast: 0.2s;
 }
 
 .location-content {
-	padding: $spacing-md;
+	padding: var(--spacing-md);
 	max-height: 50vh;
 	overflow-y: auto;
 
 	.location-section {
-		margin-bottom: $spacing-md;
+		margin-bottom: var(--spacing-md);
 
 		.location-section-title {
-			font-size: $font-size-sm;
-			color: $text-color-secondary;
+			font-size: var(--font-size-sm);
+			color: var(--text-color-secondary);
 			display: block;
-			margin-bottom: $spacing-sm;
+			margin-bottom: var(--spacing-sm);
 		}
 
 		.location-list {
 			display: flex;
 			flex-direction: column;
-			gap: $spacing-sm;
+			gap: var(--spacing-sm);
 
 			.location-item {
 				display: flex;
 				align-items: center;
-				padding: $spacing-md;
+				padding: var(--spacing-md);
 				background: var(--bg-color-page);
-				border-radius: $border-radius-base;
+				border-radius: var(--border-radius-base);
 				border: 2rpx solid transparent;
-				transition: all $transition-fast;
+				transition: all var(--motion-duration-fast) var(--motion-ease-standard);
 
 				&.active {
 					background: var(--primary-color-alpha-10);
@@ -1949,7 +1927,7 @@ $transition-fast: 0.2s;
 				}
 
 				.location-item-icon {
-					margin-right: $spacing-md;
+					margin-right: var(--spacing-md);
 				}
 
 				.location-item-info {
@@ -1959,29 +1937,29 @@ $transition-fast: 0.2s;
 					gap: 4rpx;
 
 					.location-item-name {
-						font-size: $font-size-base;
-						color: $text-color-primary;
+						font-size: var(--font-size-base);
+						color: var(--text-color-primary);
 					}
 
 					.location-item-desc {
-						font-size: $font-size-sm;
-						color: $text-color-tertiary;
+						font-size: var(--font-size-sm);
+						color: var(--text-color-tertiary);
 					}
 				}
 
 				.location-item-check {
-					margin-left: $spacing-sm;
+					margin-left: var(--spacing-sm);
 				}
 			}
 		}
 
 		.clear-location-btn {
-			padding: $spacing-md;
+			padding: var(--spacing-md);
 			text-align: center;
 
 			.clear-location-text {
-				font-size: $font-size-base;
-				color: var(--error-color);
+				font-size: var(--font-size-base);
+				color: var(--danger-color);
 			}
 		}
 	}
@@ -1989,7 +1967,7 @@ $transition-fast: 0.2s;
 
 // 交易方式样式
 .delivery-method-content {
-	padding: $spacing-md;
+	padding: var(--spacing-md);
 	max-height: 60vh;
 	overflow-y: auto;
 
@@ -1997,15 +1975,15 @@ $transition-fast: 0.2s;
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
-		padding: $spacing-md;
+		padding: var(--spacing-md);
 		background: var(--bg-color-page);
-		border-radius: $border-radius-base;
-		margin-bottom: $spacing-md;
+		border-radius: var(--border-radius-base);
+		margin-bottom: var(--spacing-md);
 
 		.delivery-toggle-info {
 			display: flex;
 			align-items: center;
-			gap: $spacing-md;
+			gap: var(--spacing-md);
 
 			.delivery-toggle-icon {
 				font-size: 48rpx;
@@ -2017,33 +1995,33 @@ $transition-fast: 0.2s;
 				gap: 4rpx;
 
 				.delivery-toggle-label {
-					font-size: $font-size-base;
-					color: $text-color-primary;
+					font-size: var(--font-size-base);
+					color: var(--text-color-primary);
 					font-weight: $font-weight-medium;
 				}
 
 				.delivery-toggle-desc {
-					font-size: $font-size-sm;
-					color: $text-color-tertiary;
+					font-size: var(--font-size-sm);
+					color: var(--text-color-tertiary);
 				}
 			}
 		}
 	}
 
 	.delivery-option-section {
-		margin-bottom: $spacing-md;
+		margin-bottom: var(--spacing-md);
 
 		.delivery-section-label {
-			font-size: $font-size-base;
-			color: $text-color-primary;
+			font-size: var(--font-size-base);
+			color: var(--text-color-primary);
 			font-weight: $font-weight-medium;
 			display: block;
-			margin-bottom: $spacing-sm;
+			margin-bottom: var(--spacing-sm);
 		}
 
 		.delivery-options {
 			display: flex;
-			gap: $spacing-sm;
+			gap: var(--spacing-sm);
 
 			.delivery-option {
 				flex: 1;
@@ -2052,9 +2030,9 @@ $transition-fast: 0.2s;
 				align-items: center;
 				justify-content: center;
 				background: var(--bg-color-page);
-				border-radius: $border-radius-sm;
+				border-radius: var(--border-radius-sm);
 				border: 2rpx solid transparent;
-				transition: all $transition-fast;
+				transition: all var(--motion-duration-fast) var(--motion-ease-standard);
 
 				&.active {
 					background: var(--primary-color-alpha-10);
@@ -2067,21 +2045,21 @@ $transition-fast: 0.2s;
 				}
 
 				.delivery-option-text {
-					font-size: $font-size-base;
-					color: $text-color-secondary;
+					font-size: var(--font-size-base);
+					color: var(--text-color-secondary);
 				}
 			}
 		}
 	}
 
 	.delivery-fee-section {
-		margin-bottom: $spacing-md;
+		margin-bottom: var(--spacing-md);
 
 		.delivery-fee-label {
-			font-size: $font-size-base;
-			color: $text-color-primary;
+			font-size: var(--font-size-base);
+			color: var(--text-color-primary);
 			display: block;
-			margin-bottom: $spacing-sm;
+			margin-bottom: var(--spacing-sm);
 		}
 
 		.delivery-fee-input {
@@ -2089,21 +2067,21 @@ $transition-fast: 0.2s;
 			align-items: center;
 			height: 80rpx;
 			background: var(--bg-color-page);
-			border-radius: $border-radius-sm;
-			padding: 0 $spacing-md;
+			border-radius: var(--border-radius-sm);
+			padding: 0 var(--spacing-md);
 
 			.delivery-fee-symbol {
-				font-size: $font-size-xl;
+				font-size: var(--font-size-xl);
 				font-weight: $font-weight-semibold;
 				color: var(--primary-color);
-				margin-right: $spacing-xs;
+				margin-right: var(--spacing-xs);
 			}
 
 			.delivery-fee-input-field {
 				flex: 1;
-				font-size: $font-size-xl;
+				font-size: var(--font-size-xl);
 				font-weight: $font-weight-semibold;
-				color: $text-color-primary;
+				color: var(--text-color-primary);
 			}
 		}
 	}
@@ -2111,7 +2089,7 @@ $transition-fast: 0.2s;
 
 // 秒杀配置样式
 .flash-sale-content {
-	padding: $spacing-md;
+	padding: var(--spacing-md);
 	max-height: 60vh;
 	overflow-y: auto;
 
@@ -2119,19 +2097,19 @@ $transition-fast: 0.2s;
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
-		padding: $spacing-md;
+		padding: var(--spacing-md);
 		background: linear-gradient(
 			135deg,
 			var(--danger-color-alpha-5) 0%,
 			var(--danger-color-alpha-5) 100%
 		);
-		border-radius: $border-radius-base;
-		margin-bottom: $spacing-md;
+		border-radius: var(--border-radius-base);
+		margin-bottom: var(--spacing-md);
 
 		.flash-toggle-info {
 			display: flex;
 			align-items: center;
-			gap: $spacing-md;
+			gap: var(--spacing-md);
 
 			.flash-toggle-icon {
 				font-size: 48rpx;
@@ -2143,28 +2121,28 @@ $transition-fast: 0.2s;
 				gap: 4rpx;
 
 				.flash-toggle-label {
-					font-size: $font-size-base;
-					color: $text-color-primary;
+					font-size: var(--font-size-base);
+					color: var(--text-color-primary);
 					font-weight: $font-weight-medium;
 				}
 
 				.flash-toggle-desc {
-					font-size: $font-size-sm;
-					color: $text-color-tertiary;
+					font-size: var(--font-size-sm);
+					color: var(--text-color-tertiary);
 				}
 			}
 		}
 	}
 
 	.flash-config-item {
-		margin-bottom: $spacing-md;
+		margin-bottom: var(--spacing-md);
 
 		.flash-config-label {
-			font-size: $font-size-base;
-			color: $text-color-primary;
+			font-size: var(--font-size-base);
+			color: var(--text-color-primary);
 			font-weight: $font-weight-medium;
 			display: block;
-			margin-bottom: $spacing-sm;
+			margin-bottom: var(--spacing-sm);
 		}
 
 		.flash-price-input,
@@ -2173,34 +2151,34 @@ $transition-fast: 0.2s;
 			align-items: center;
 			height: 80rpx;
 			background: var(--bg-color-page);
-			border-radius: $border-radius-sm;
-			padding: 0 $spacing-md;
+			border-radius: var(--border-radius-sm);
+			padding: 0 var(--spacing-md);
 
 			.flash-price-symbol,
 			.flash-stock-unit {
-				font-size: $font-size-xl;
+				font-size: var(--font-size-xl);
 				font-weight: $font-weight-semibold;
-				color: var(--error-color);
+				color: var(--danger-color);
 			}
 
 			.flash-price-input-field,
 			.flash-stock-input-field {
 				flex: 1;
-				font-size: $font-size-xl;
+				font-size: var(--font-size-xl);
 				font-weight: $font-weight-semibold;
-				color: $text-color-primary;
-				margin: 0 $spacing-xs;
+				color: var(--text-color-primary);
+				margin: 0 var(--spacing-xs);
 			}
 
 			.flash-stock-unit {
-				margin-left: $spacing-xs;
+				margin-left: var(--spacing-xs);
 			}
 		}
 	}
 }
 
 .required-mark {
-	color: var(--error-color);
+	color: var(--danger-color);
 }
 
 // 底部按钮
@@ -2211,11 +2189,11 @@ $transition-fast: 0.2s;
 	right: 0;
 	display: flex;
 	flex-direction: column;
-	gap: $spacing-sm;
-	padding: $spacing-md;
+	gap: var(--spacing-sm);
+	padding: var(--spacing-md);
 	background: var(--bg-color-card);
-	border-top: 1px solid $border-color-light;
-	padding-bottom: calc($spacing-md + env(safe-area-inset-bottom));
+	border-top: 1px solid var(--border-color-light);
+	padding-bottom: calc(var(--spacing-md) + env(safe-area-inset-bottom));
 	z-index: 100;
 
 	.bar-actions {
@@ -2224,9 +2202,9 @@ $transition-fast: 0.2s;
 			height: 88rpx;
 			background: var(--primary-color);
 			color: #fff;
-			font-size: $font-size-lg;
+			font-size: var(--font-size-lg);
 			font-weight: $font-weight-medium;
-			border-radius: $border-radius-lg;
+			border-radius: var(--border-radius-lg);
 			border: none;
 			display: flex;
 			align-items: center;

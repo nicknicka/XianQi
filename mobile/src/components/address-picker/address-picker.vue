@@ -305,7 +305,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@use '@/styles/variables.scss' as *;
 .address-picker {
   width: 100%;
 
@@ -322,7 +321,7 @@ export default {
     }
 
     &.is-focused {
-      border-color: $primary-color;
+      border-color: var(--primary-color);
     }
 
     &.is-disabled {
@@ -389,7 +388,7 @@ export default {
       }
 
       &.confirm-btn {
-        color: $primary-color;
+        color: var(--primary-color);
       }
     }
   }
@@ -409,10 +408,10 @@ export default {
       transition: all 0.2s;
 
       &.is-active {
-        background: rgba($primary-color, 0.1);
+        background: var(--primary-color-alpha-10);
 
         .tab-text {
-          color: $primary-color;
+          color: var(--primary-color);
           font-weight: 500;
         }
       }
@@ -443,7 +442,7 @@ export default {
 
         &.is-selected {
           .item-text {
-            color: $primary-color;
+            color: var(--primary-color);
           }
         }
 
@@ -454,7 +453,7 @@ export default {
 
         .item-check {
           font-size: 32rpx;
-          color: $primary-color;
+          color: var(--primary-color);
         }
       }
     }

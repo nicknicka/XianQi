@@ -387,7 +387,7 @@ export default {
       display: flex;
       align-items: center;
       justify-content: center;
-      background: var(--error-color);
+      background: var(--danger-color);
       border-radius: 16rpx;
 
       .badge-text {
@@ -507,7 +507,7 @@ export default {
       display: flex;
       align-items: center;
       justify-content: center;
-      background: var(--error-color);
+      background: var(--danger-color);
       border: 4rpx solid var(--bg-color-card);
       border-radius: 18rpx;
 
@@ -524,7 +524,7 @@ export default {
       right: 4rpx;
       width: 16rpx;
       height: 16rpx;
-      background: var(--error-color);
+      background: var(--danger-color);
       border: 4rpx solid var(--bg-color-card);
       border-radius: 50%;
     }

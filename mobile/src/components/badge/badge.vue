@@ -195,7 +195,7 @@ export default {
       display: flex;
       align-items: center;
       justify-content: center;
-      background: var(--error-color);
+      background: var(--danger-color);
       border-radius: 16rpx;
       border: 2rpx solid var(--text-color-inverse);
 
@@ -210,7 +210,7 @@ export default {
     &.type-dot {
       width: 16rpx;
       height: 16rpx;
-      background: var(--error-color);
+      background: var(--danger-color);
       border-radius: 50%;
       border: 2rpx solid var(--text-color-inverse);
 
@@ -222,7 +222,7 @@ export default {
 
     &.type-text {
       padding: 4rpx 12rpx;
-      background: var(--error-color);
+      background: var(--danger-color);
       border-radius: 16rpx;
       border: 2rpx solid var(--text-color-inverse);
 

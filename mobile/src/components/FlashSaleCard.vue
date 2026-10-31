@@ -75,7 +75,7 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  tagBg: 'linear-gradient(135deg, var(--error-color) 0%, var(--danger-color) 100%)',
+  tagBg: 'linear-gradient(135deg, var(--danger-color) 0%, var(--danger-color) 100%)',
   btnText: '立即抢'
 })
 
@@ -197,14 +197,14 @@ const handleClick = () => {
 
       .currency {
         font-size: 22rpx;
-        color: var(--error-color);
+        color: var(--danger-color);
         font-weight: bold;
       }
 
       .price {
         font-size: 36rpx;
         font-weight: bold;
-        color: var(--error-color);
+        color: var(--danger-color);
       }
 
       .original-price {
@@ -216,7 +216,7 @@ const handleClick = () => {
 
     .buy-btn {
       padding: 12rpx 24rpx;
-      background: linear-gradient(135deg, var(--error-color) 0%, var(--danger-color) 100%);
+      background: linear-gradient(135deg, var(--danger-color) 0%, var(--danger-color) 100%);
       color: var(--bg-color-card);
       font-size: 24rpx;
       font-weight: bold;

@@ -288,7 +288,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@use '@/styles/variables.scss' as *;
 .comment-list {
   width: 100%;
 
@@ -421,11 +420,11 @@ export default {
 
             &.is-active {
               .btn-icon {
-                color: var(--error-color);
+                color: var(--danger-color);
               }
 
               .btn-text {
-                color: var(--error-color);
+                color: var(--danger-color);
               }
             }
           }

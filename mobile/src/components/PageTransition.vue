@@ -136,6 +136,8 @@ defineExpose({
 
 <style lang="scss" scoped>
 .page-transition {
+  --stagger-index: 0;
+
   // 淡入
   &.transition-fade {
     animation: fadeIn var(--transition-duration)

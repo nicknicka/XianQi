@@ -10,13 +10,24 @@ import { SHARED_COLORS, SHARED_MASCOT_CHEEK } from './theme-registry'
 
 // ========== 工具函数 ==========
 
+function hexToRgbChannels(hex: string): [number, number, number] {
+  const clean = hex.replace('#', '')
+  return [
+    parseInt(clean.substring(0, 2), 16),
+    parseInt(clean.substring(2, 4), 16),
+    parseInt(clean.substring(4, 6), 16)
+  ]
+}
+
 /** hex 转 rgba */
 export function addAlpha(hex: string, alpha: number): string {
-  const clean = hex.replace('#', '')
-  const r = parseInt(clean.substring(0, 2), 16)
-  const g = parseInt(clean.substring(2, 4), 16)
-  const b = parseInt(clean.substring(4, 6), 16)
+  const [r, g, b] = hexToRgbChannels(hex)
   return `rgba(${r}, ${g}, ${b}, ${alpha})`
+}
+
+/** hex 转 rgb 通道值，供 rgba(var(--primary-color-rgb), alpha) 使用 */
+function hexToRgbTuple(hex: string): string {
+  return hexToRgbChannels(hex).join(', ')
 }
 
 // ========== 声明式 Alpha 派生配置 ==========
@@ -32,12 +43,12 @@ interface AlphaSpec {
 }
 
 const ALPHA_SPECS: AlphaSpec[] = [
-  { from: 'primaryColor', alphas: [0.03, 0.05, 0.08, 0.10, 0.15, 0.20, 0.25, 0.30, 0.40, 0.95] },
+  { from: 'primaryColor', alphas: [0.02, 0.03, 0.05, 0.06, 0.08, 0.10, 0.12, 0.15, 0.20, 0.25, 0.30, 0.40, 0.95] },
   { from: 'primaryColorLight', prefix: 'primary-light', alphas: [0.04, 0.08] },
-  { from: 'dangerColor', alphas: [0.05, 0.06, 0.08, 0.10, 0.20, 0.25, 0.30, 0.35, 0.40, 0.80, 0.95] },
-  { from: 'successColor', alphas: [0.10, 0.30] },
-  { from: 'warningColor', alphas: [0.10, 0.15, 0.85] },
-  { from: 'infoColor', alphas: [0.10, 0.30, 0.40] },
+  { from: 'dangerColor', alphas: [0.05, 0.06, 0.08, 0.10, 0.15, 0.20, 0.25, 0.30, 0.35, 0.40, 0.80, 0.95] },
+  { from: 'successColor', alphas: [0.05, 0.08, 0.10, 0.15, 0.20, 0.30] },
+  { from: 'warningColor', alphas: [0.10, 0.15, 0.20, 0.30, 0.85] },
+  { from: 'infoColor', alphas: [0.10, 0.20, 0.30, 0.40] },
   { from: 'accentColor', alphas: [0.40] },
 ]
 
@@ -63,6 +74,11 @@ function getSeedColor(
 export const STATIC_VARS: Record<string, string> = {
   // 字体
   '--auth-font-weight-semibold': '600',
+  // 第三方登录品牌色：语义复用，不作为通用主题色。
+  '--brand-wechat-color': '#07C160',
+  '--brand-wechat-color-dark': '#06AE56',
+  '--brand-qq-color': '#12B7F5',
+  '--brand-qq-color-dark': '#0099FF',
   '--font-size-xs': '0.714em',
   '--font-size-sm': '0.857em',
   '--font-size-base': '1em',
@@ -106,6 +122,7 @@ export const STATIC_VARS: Record<string, string> = {
   // 认证动效规格：不引入一次性 duration / easing。
   '--motion-duration-fast': '200ms',
   '--motion-duration-base': '400ms',
+  '--motion-duration-medium': '300ms',
   '--motion-duration-slow': '500ms',
   '--motion-delay-fast': '50ms',
   '--motion-delay-base': '100ms',
@@ -151,6 +168,7 @@ export function resolveTheme(
 
   // === 3. 种子色直接映射 ===
   vars['--primary-color'] = seed.primaryColor
+  vars['--primary-color-rgb'] = hexToRgbTuple(seed.primaryColor)
   vars['--primary-color-light'] = seed.primaryColorLight
   vars['--primary-color-dark'] = seed.primaryColorDark
   vars['--primary-color-faded'] = addAlpha(seed.primaryColor, 0.15)
@@ -160,6 +178,7 @@ export function resolveTheme(
   // === 4. 共享功能色 ===
   vars['--success-color'] = shared.successColor
   vars['--warning-color'] = shared.warningColor
+  vars['--warning-color-dark'] = '#E6BF33'
   vars['--danger-color'] = shared.dangerColor
   vars['--info-color'] = shared.infoColor
 
@@ -183,6 +202,7 @@ export function resolveTheme(
   vars['--text-color-primary'] = isDark ? dark.textPrimary : shared.textPrimary
   vars['--text-color-secondary'] = isDark ? dark.textSecondary : shared.textSecondary
   vars['--text-color-tertiary'] = isDark ? dark.textTertiary : shared.textTertiary
+  vars['--text-color-placeholder'] = isDark ? dark.textColorDisabled : '#CCCCCC'
   vars['--text-color-disabled'] = isDark ? dark.textColorDisabled : '#CCCCCC'
   vars['--text-color-inverse'] = isDark ? dark.textColorInverse : '#FFFFFF'
 
@@ -191,6 +211,7 @@ export function resolveTheme(
   vars['--bg-color-card'] = isDark ? dark.bgColorCard : '#FFFFFF'
   vars['--bg-color-warm'] = isDark ? dark.bgColorWarm : seed.backgroundColor
   vars['--bg-color-disabled'] = isDark ? dark.bgColorDisabled : '#F5F5F5'
+  vars['--bg-color-hover'] = isDark ? dark.bgColorDisabled : '#F5F5F5'
   vars['--bg-color-overlay'] = isDark ? 'rgba(0,0,0,0.7)' : 'rgba(0,0,0,0.4)'
 
   // === 9. 边框色 ===

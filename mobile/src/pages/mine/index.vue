@@ -1118,7 +1118,7 @@ function handleLogout() {
 	width: 18rpx;
 	height: 18rpx;
 	border-radius: 50%;
-	background: var(--error-color);
+	background: var(--danger-color);
 	border: 2.5rpx solid #fff;
 	box-shadow: 0 2rpx 8rpx var(--danger-color-alpha-35);
 	z-index: 10;
@@ -1131,7 +1131,7 @@ function handleLogout() {
 	width: 100%;
 	height: 100%;
 	border-radius: 50%;
-	background: radial-gradient(circle at 30% 30%, #ff6b7a, var(--error-color));
+	background: radial-gradient(circle at 30% 30%, var(--danger-color-alpha-95), var(--danger-color));
 }
 
 /* 通用淡入动画 */
@@ -1154,7 +1154,7 @@ function handleLogout() {
 	min-width: 32rpx;
 	height: 32rpx;
 	padding: 0 6rpx;
-	background: linear-gradient(135deg, var(--error-color) 0%, #ff6b7a 100%);
+	background: linear-gradient(135deg, var(--danger-color) 0%, var(--danger-color-alpha-95) 100%);
 	border-radius: 16rpx;
 	display: flex;
 	align-items: center;
@@ -1577,7 +1577,7 @@ function handleLogout() {
 
 .tool-count {
 	padding: 4rpx 10rpx;
-	background: var(--error-color);
+	background: var(--danger-color);
 	border-radius: 18rpx;
 	font-size: 18rpx;
 	color: #fff;

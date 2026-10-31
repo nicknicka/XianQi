@@ -340,7 +340,6 @@ onMounted(() => {
 </script>
 
 <style lang="scss" scoped>
-@use '@/styles/variables.scss' as *;
 
 .credit-detail-page {
   min-height: 100vh;
@@ -399,7 +398,7 @@ onMounted(() => {
 }
 
 .score-label {
-  font-size: $font-size-base;
+  font-size: var(--font-size-base);
   color: var(--text-color-secondary);
   margin-top: 8rpx;
 }
@@ -435,14 +434,14 @@ onMounted(() => {
   }
 
   &.level-poor {
-    background: var(--error-color);
+    background: var(--danger-color);
   }
 }
 
 .progress-text {
   display: block;
   text-align: center;
-  font-size: $font-size-sm;
+  font-size: var(--font-size-sm);
   color: rgba(255, 255, 255, 0.9);
 }
 
@@ -465,12 +464,12 @@ onMounted(() => {
 }
 
 .stat-label {
-  font-size: $font-size-sm;
+  font-size: var(--font-size-sm);
   color: rgba(255, 255, 255, 0.8);
 }
 
 .stat-value {
-  font-size: $font-size-xl;
+  font-size: var(--font-size-xl);
   font-weight: 600;
   color: #fff;
 
@@ -497,7 +496,7 @@ onMounted(() => {
 
 .stat-card {
   background: var(--bg-color-card);
-  border-radius: $border-radius-lg;
+  border-radius: var(--border-radius-lg);
   padding: 20rpx 12rpx;
   display: flex;
   flex-direction: column;
@@ -522,7 +521,7 @@ onMounted(() => {
   }
 
   &.bad {
-    background: linear-gradient(135deg, var(--error-color) 0%, #CF1322 100%);
+    background: linear-gradient(135deg, var(--danger-color) 0%, #CF1322 100%);
   }
 
   &.transaction {
@@ -538,13 +537,13 @@ onMounted(() => {
 }
 
 .stat-value {
-  font-size: $font-size-lg;
+  font-size: var(--font-size-lg);
   font-weight: 600;
   color: var(--text-color-primary);
 }
 
 .stat-label {
-  font-size: $font-size-xs;
+  font-size: var(--font-size-xs);
   color: var(--text-color-tertiary);
 }
 
@@ -553,7 +552,7 @@ onMounted(() => {
   background: var(--bg-color-card);
   margin: 0 16rpx 16rpx;
   padding: 24rpx;
-  border-radius: $border-radius-lg;
+  border-radius: var(--border-radius-lg);
 }
 
 .rate-header {
@@ -564,7 +563,7 @@ onMounted(() => {
 }
 
 .rate-title {
-  font-size: $font-size-base;
+  font-size: var(--font-size-base);
   color: var(--text-color-secondary);
 }
 
@@ -590,7 +589,7 @@ onMounted(() => {
 }
 
 .rate-desc {
-  font-size: $font-size-sm;
+  font-size: var(--font-size-sm);
   color: var(--text-color-tertiary);
 }
 
@@ -600,7 +599,7 @@ onMounted(() => {
   background: var(--bg-color-card);
   margin: 0 16rpx 16rpx;
   padding: 24rpx;
-  border-radius: $border-radius-lg;
+  border-radius: var(--border-radius-lg);
 }
 
 .section-header {
@@ -611,7 +610,7 @@ onMounted(() => {
 }
 
 .section-title {
-  font-size: $font-size-lg;
+  font-size: var(--font-size-lg);
   font-weight: 600;
   color: var(--text-color-primary);
 }
@@ -632,7 +631,7 @@ onMounted(() => {
 }
 
 .category-title {
-  font-size: $font-size-base;
+  font-size: var(--font-size-base);
   font-weight: 600;
   color: var(--text-color-primary);
 }
@@ -643,7 +642,7 @@ onMounted(() => {
 
 .rule-item {
   padding: 16rpx 0;
-  border-bottom: 1px solid $border-color-light;
+  border-bottom: 1px solid var(--border-color-light);
 
   &:last-child {
     border-bottom: none;
@@ -658,12 +657,12 @@ onMounted(() => {
 }
 
 .rule-title {
-  font-size: $font-size-base;
+  font-size: var(--font-size-base);
   color: var(--text-color-primary);
 }
 
 .rule-score {
-  font-size: $font-size-base;
+  font-size: var(--font-size-base);
   font-weight: 600;
 
   &.positive {
@@ -671,20 +670,20 @@ onMounted(() => {
   }
 
   &.negative {
-    color: var(--error-color);
+    color: var(--danger-color);
   }
 }
 
 .rule-desc {
   display: block;
-  font-size: $font-size-sm;
+  font-size: var(--font-size-sm);
   color: var(--text-color-secondary);
   margin-bottom: 6rpx;
 }
 
 .rule-limit {
   display: block;
-  font-size: $font-size-xs;
+  font-size: var(--font-size-xs);
   color: var(--text-color-tertiary);
   background: var(--bg-color-page);
   padding: 6rpx 12rpx;
@@ -698,13 +697,13 @@ onMounted(() => {
   gap: 8rpx;
   background: #FFF7E6;
   border: 1px solid #FFD591;
-  border-radius: $border-radius-base;
+  border-radius: var(--border-radius-base);
   padding: 16rpx;
   margin: 0 16rpx 16rpx;
 
   text {
     flex: 1;
-    font-size: $font-size-sm;
+    font-size: var(--font-size-sm);
     color: #D46B08;
     line-height: 1.5;
   }
@@ -717,7 +716,7 @@ onMounted(() => {
     justify-content: space-between;
     align-items: flex-start;
     padding: 16rpx 0;
-    border-bottom: 1px solid $border-color-light;
+    border-bottom: 1px solid var(--border-color-light);
 
     &:last-child {
       border-bottom: none;
@@ -733,23 +732,23 @@ onMounted(() => {
 }
 
 .history-reason {
-  font-size: $font-size-base;
+  font-size: var(--font-size-base);
   color: var(--text-color-primary);
   font-weight: 500;
 }
 
 .history-detail {
-  font-size: $font-size-sm;
+  font-size: var(--font-size-sm);
   color: var(--text-color-secondary);
 }
 
 .history-time {
-  font-size: $font-size-xs;
+  font-size: var(--font-size-xs);
   color: var(--text-color-tertiary);
 }
 
 .history-score {
-  font-size: $font-size-lg;
+  font-size: var(--font-size-lg);
   font-weight: 600;
   padding: 8rpx 16rpx;
   border-radius: 8rpx;
@@ -760,7 +759,7 @@ onMounted(() => {
   }
 
   &.negative {
-    color: var(--error-color);
+    color: var(--danger-color);
     background: var(--danger-color-alpha-10);
   }
 }
@@ -772,7 +771,7 @@ onMounted(() => {
 }
 
 .empty-text {
-  font-size: $font-size-base;
+  font-size: var(--font-size-base);
   color: var(--text-color-tertiary);
 }
 </style>

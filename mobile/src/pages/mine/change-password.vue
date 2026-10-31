@@ -380,7 +380,7 @@ function goForgotPassword() {
   transition: all 0.3s;
 
   &.weak {
-    background: linear-gradient(90deg, var(--error-color) 0%, #FF5722 100%);
+    background: linear-gradient(90deg, var(--danger-color) 0%, var(--danger-color-alpha-95) 100%);
   }
 
   &.medium {
@@ -397,7 +397,7 @@ function goForgotPassword() {
   font-weight: 600;
 
   &.weak {
-    color: var(--error-color);
+    color: var(--danger-color);
   }
 
   &.medium {
@@ -419,7 +419,7 @@ function goForgotPassword() {
 
 .match-text {
   font-size: 22rpx;
-  color: var(--error-color);
+  color: var(--danger-color);
 
   &.match {
     color: var(--success-color);

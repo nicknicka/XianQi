@@ -226,7 +226,7 @@ defineExpose({
       background: var(--bg-color-card);
 
       .time-value {
-        color: var(--error-color);
+        color: var(--danger-color);
       }
     }
 

@@ -162,7 +162,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@use '@/styles/variables.scss' as *;
 .action-list {
   background: var(--bg-color-card);
 
@@ -228,7 +227,7 @@ export default {
 
         .title-badge {
           padding: 4rpx 12rpx;
-          background: var(--error-color);
+          background: var(--danger-color);
           border-radius: 16rpx;
 
           .badge-text {

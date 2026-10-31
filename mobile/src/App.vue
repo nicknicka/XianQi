@@ -160,10 +160,10 @@ function initMessageService() {
 /* 主题变量 - 使用 CSS 变量实现动态主题 */
 page {
 	/* 使用 CSS 变量 */
-	background-color: var(--bg-color-page);
-	font-size: var(--font-size-base);
+	background-color: var(--bg-color-page, #F0F8FF);
+	font-size: var(--font-base, 14px);
 	line-height: 1.6;
-	color: var(--text-color-primary);
+	color: var(--text-color-primary, #2D2D2D);
 	/* 确保页面内容不会溢出 */
 	overflow-x: hidden;
 	/* 禁用弹性回弹，防止滚动到底部/顶部时露出原生背景色条 */
@@ -176,8 +176,8 @@ html,
 body,
 #app {
 	min-height: 100%;
-	background-color: var(--bg-color-page);
-	color: var(--text-color-primary);
+	background-color: var(--bg-color-page, #F0F8FF);
+	color: var(--text-color-primary, #2D2D2D);
 	transition: background-color 0.22s ease, color 0.22s ease;
 }
 

@@ -161,7 +161,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@use '@/styles/variables.scss' as *;
 .tabs {
   width: 100%;
   display: flex;
@@ -263,7 +262,7 @@ export default {
         align-items: center;
         justify-content: center;
         padding: 0 8rpx;
-        background: var(--error-color);
+        background: var(--danger-color);
         border-radius: 16rpx;
         font-size: 20rpx;
         color: var(--bg-color-card);
@@ -331,12 +330,12 @@ export default {
 
     &.is-active {
       .tab-title {
-        color: $primary-color;
+        color: var(--primary-color);
         font-weight: 500;
       }
 
       &::after {
-        background: $primary-color;
+        background: var(--primary-color);
       }
     }
 
@@ -356,7 +355,7 @@ export default {
       }
 
       &.is-active {
-        background: $primary-color;
+        background: var(--primary-color);
 
         .tab-title {
           color: var(--bg-color-card);
@@ -387,7 +386,7 @@ export default {
 
       &.is-active {
         .tab-label {
-          background: $primary-color;
+          background: var(--primary-color);
 
           .tab-title {
             color: var(--bg-color-card);

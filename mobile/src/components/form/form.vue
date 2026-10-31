@@ -439,7 +439,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@use '@/styles/variables.scss' as *;
 .form {
   width: 100%;
 
@@ -497,7 +496,7 @@ export default {
       }
 
       .label-required {
-        color: var(--error-color);
+        color: var(--danger-color);
         margin-left: 4rpx;
       }
     }
@@ -593,7 +592,7 @@ export default {
 
         .error-text {
           font-size: 24rpx;
-          color: var(--error-color);
+          color: var(--danger-color);
         }
       }
 
@@ -636,7 +635,7 @@ export default {
       }
 
       &.submit-btn {
-        background: $primary-color;
+        background: var(--primary-color);
 
         .btn-text {
           color: var(--bg-color-card);

@@ -136,7 +136,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@use '@/styles/variables.scss' as *;
 .result-page {
   display: flex;
   flex-direction: column;
@@ -201,7 +200,7 @@ export default {
       }
 
       &.primary-btn {
-        background: $primary-color;
+        background: var(--primary-color);
 
         .btn-text {
           color: var(--bg-color-card);
@@ -227,7 +226,7 @@ export default {
 
   &.status-error {
     .result-icon .icon-emoji {
-      color: var(--error-color);
+      color: var(--danger-color);
     }
   }
 

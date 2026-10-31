@@ -76,7 +76,6 @@ export default {
  * 采用 Claymorphism 设计风格
  */
 
-@use '@/styles/variables.scss' as vars;
 
 // ========== 主容器 ==========
 .share-card-wrapper {
@@ -99,7 +98,7 @@ export default {
 	box-sizing: border-box;
 	background: var(--bg-color-card);
 	border: 2rpx solid rgba(255, 255, 255, 0.8);
-	border-radius: var(--radius-lg);
+	border-radius: var(--border-radius-lg);
 	overflow: hidden;
 	transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 	box-shadow: 8rpx 8rpx 16rpx rgba(0, 0, 0, 0.06),
@@ -226,7 +225,7 @@ export default {
 				color: var(--text-color-secondary);
 				padding: 6rpx 12rpx;
 				background: var(--bg-color-card);
-				border-radius: var(--radius-pill);
+				border-radius: var(--border-radius-pill);
 				font-weight: 500;
 				border: 1px solid var(--border-color-light);
 				box-shadow: 0 2rpx 4rpx rgba(0, 0, 0, 0.05);

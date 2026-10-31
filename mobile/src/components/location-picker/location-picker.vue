@@ -382,7 +382,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@use '@/styles/variables.scss' as *;
 .location-picker {
   width: 100%;
   display: flex;
@@ -393,7 +392,7 @@ export default {
     align-items: center;
     gap: 16rpx;
     padding: 24rpx;
-    background: linear-gradient(135deg, rgba($primary-color, 0.1) 0%, rgba($primary-color, 0.05) 100%);
+    background: linear-gradient(135deg, var(--primary-color-alpha-10) 0%, var(--primary-color-alpha-5) 100%);
     border-radius: 12rpx;
     margin-bottom: 16rpx;
 
@@ -432,7 +431,7 @@ export default {
 
     .relocate-btn {
       padding: 8rpx 16rpx;
-      background: $primary-color;
+      background: var(--primary-color);
       border-radius: 24rpx;
 
       .btn-text {
@@ -529,7 +528,7 @@ export default {
 
           .result-distance {
             font-size: 22rpx;
-            color: $primary-color;
+            color: var(--primary-color);
           }
         }
       }
@@ -623,7 +622,7 @@ export default {
 
           .nearby-distance {
             font-size: 22rpx;
-            color: $primary-color;
+            color: var(--primary-color);
           }
         }
       }
@@ -719,7 +718,7 @@ export default {
       }
 
       &.confirm-btn {
-        background: $primary-color;
+        background: var(--primary-color);
 
         .btn-text {
           color: var(--bg-color-card);

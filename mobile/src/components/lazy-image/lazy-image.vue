@@ -520,8 +520,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@use '@/styles/variables.scss' as *;
-@use 'sass:color';
 .lazy-image-wrapper {
   position: relative;
   width: 100%;
@@ -623,7 +621,7 @@ export default {
       width: 60rpx;
       height: 60rpx;
       border: 4rpx solid rgba(0, 0, 0, 0.1);
-      border-top-color: $primary-color;
+      border-top-color: var(--primary-color);
       border-radius: 50%;
       animation: spin 0.8s linear infinite;
     }
@@ -638,7 +636,7 @@ export default {
     .pulse-loader {
       width: 60rpx;
       height: 60rpx;
-      background: linear-gradient(135deg, $primary-color, color.adjust($primary-color, $lightness: 15%));
+      background: linear-gradient(135deg, var(--primary-color), var(--primary-color-light));
       border-radius: 50%;
       animation: pulse 1.2s ease-in-out infinite;
     }
@@ -663,7 +661,7 @@ export default {
       .dot {
         width: 16rpx;
         height: 16rpx;
-        background: $primary-color;
+        background: var(--primary-color);
         border-radius: 50%;
         animation: dotBounce 1.4s ease-in-out infinite both;
 
@@ -704,8 +702,8 @@ export default {
         height: 100%;
         background: linear-gradient(
           to bottom,
-          $primary-color,
-          color.adjust($primary-color, $lightness: 20%)
+          var(--primary-color),
+          var(--primary-color-light)
         );
         border-radius: 4rpx;
         animation: waveStretch 1.2s ease-in-out infinite;
@@ -787,7 +785,7 @@ export default {
 
     .retry-text {
       font-size: 22rpx;
-      color: $primary-color;
+      color: var(--primary-color);
     }
   }
 }
@@ -802,7 +800,7 @@ export default {
 
   .progress-bar {
     height: 100%;
-    background: linear-gradient(90deg, $primary-color 0%, color.adjust($primary-color, $lightness: 10%) 100%);
+    background: linear-gradient(90deg, var(--primary-color) 0%, var(--primary-color-light) 100%);
     transition: width 0.3s ease;
   }
 }

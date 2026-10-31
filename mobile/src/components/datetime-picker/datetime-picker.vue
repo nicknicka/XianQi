@@ -346,7 +346,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@use '@/styles/variables.scss' as *;
 .datetime-picker {
   width: 100%;
 
@@ -363,7 +362,7 @@ export default {
     }
 
     &.is-focused {
-      border-color: $primary-color;
+      border-color: var(--primary-color);
     }
 
     &.is-disabled {
@@ -428,7 +427,7 @@ export default {
       }
 
       &.confirm-btn {
-        color: $primary-color;
+        color: var(--primary-color);
       }
     }
   }

@@ -2255,7 +2255,7 @@ async function handleConfirmReceive() {
     flex: 1;
     margin-left: 12rpx;
     font-size: var(--font-size-sm);
-    color: var(--error-color);
+    color: var(--danger-color);
   }
 }
 
@@ -2364,7 +2364,7 @@ async function handleConfirmReceive() {
         .info-price {
           font-size: var(--font-size-lg);
           font-weight: 600;
-          color: var(--error-color);
+          color: var(--danger-color);
         }
 
         .info-subtitle {
@@ -2404,7 +2404,7 @@ async function handleConfirmReceive() {
           &.status-4 {
             background: var(--danger-color-alpha-6);
             .status-text {
-              color: var(--error-color);
+              color: var(--danger-color);
             }
           }
 
@@ -2503,7 +2503,7 @@ async function handleConfirmReceive() {
 
         // 被拉黑状态
         &.blocked {
-          border: 2rpx solid var(--error-color);
+          border: 2rpx solid var(--danger-color);
           box-shadow: 0 0 0 4rpx var(--danger-color-alpha-10);
         }
 
@@ -2572,7 +2572,7 @@ async function handleConfirmReceive() {
             .product-price {
               font-size: var(--font-size-lg);
               font-weight: 600;
-              color: var(--error-color);
+              color: var(--danger-color);
             }
 
             .share-rent {
@@ -2580,7 +2580,7 @@ async function handleConfirmReceive() {
               align-items: center;
               font-size: var(--font-size-lg);
               font-weight: 600;
-              color: var(--error-color);
+              color: var(--danger-color);
               line-height: 1.3;
             }
 
@@ -2648,7 +2648,7 @@ async function handleConfirmReceive() {
           .order-price {
             font-size: var(--font-size-lg);
             font-weight: 600;
-            color: var(--error-color);
+            color: var(--danger-color);
           }
         }
 
@@ -2696,7 +2696,7 @@ async function handleConfirmReceive() {
 
           // 被拉黑状态
           &.blocked {
-            border: 2rpx solid var(--error-color);
+            border: 2rpx solid var(--danger-color);
             box-shadow: 0 0 0 4rpx var(--danger-color-alpha-10);
           }
         }
@@ -2850,7 +2850,7 @@ async function handleConfirmReceive() {
 
       .tip-text {
         font-size: var(--font-size-sm);
-        color: var(--error-color);
+        color: var(--danger-color);
         font-weight: 500;
       }
     }
@@ -3236,7 +3236,7 @@ async function handleConfirmReceive() {
         .product-price {
           font-size: var(--font-size-lg);
           font-weight: 600;
-          color: var(--error-color);
+          color: var(--danger-color);
         }
 
         .product-picker-meta {

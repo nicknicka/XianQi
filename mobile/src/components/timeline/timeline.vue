@@ -140,7 +140,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@use '@/styles/variables.scss' as *;
 .timeline {
   width: 100%;
 
@@ -192,8 +191,8 @@ export default {
       z-index: 1;
 
       &.dot-primary {
-        border-color: $primary-color;
-        background: rgba($primary-color, 0.1);
+        border-color: var(--primary-color);
+        background: var(--primary-color-alpha-10);
       }
 
       &.dot-success {
@@ -207,7 +206,7 @@ export default {
       }
 
       &.dot-error {
-        border-color: var(--error-color);
+        border-color: var(--danger-color);
         background: rgba(255, 77, 79, 0.1);
       }
 
@@ -258,11 +257,11 @@ export default {
           }
 
           &.tag-primary {
-            background: rgba($primary-color, 0.1);
+            background: var(--primary-color-alpha-10);
 
             .tag-text {
               font-size: 20rpx;
-              color: $primary-color;
+              color: var(--primary-color);
             }
           }
 
@@ -289,7 +288,7 @@ export default {
 
             .tag-text {
               font-size: 20rpx;
-              color: var(--error-color);
+              color: var(--danger-color);
             }
           }
         }
