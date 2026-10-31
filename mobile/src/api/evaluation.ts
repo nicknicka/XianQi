@@ -79,15 +79,23 @@ export const evaluationApi = {
   },
 
   /**
-   * 获取商品的评价列表
+   * 获取商品的评价列表。
+   *
+   * 后端返回 `IPage<EvaluationVO>`：没有 averageRating / totalCount 字段，
+   * 评价条数取分页壳的 total，平均分单独走 getProductAverageRating。
    */
   getProductEvaluations(productId: string, params: { page?: number; pageSize?: number; size?: number }) {
     return http.get<{
-      list: any[]
+      list: Evaluation[]
       total: number
-      averageRating: number
-      totalCount: number
     }>(`/evaluation/product/${productId}`, normalizePageParams(params))
+  },
+
+  /**
+   * 获取商品的平均评分（无评价时后端返回 null）
+   */
+  getProductAverageRating(productId: string) {
+    return http.get<number>(`/evaluation/product/${productId}/average-rating`)
   }
 }
 

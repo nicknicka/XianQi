@@ -63,6 +63,14 @@ public interface EvaluationService extends IService<Evaluation> {
     IPage<EvaluationVO> getProductEvaluations(Long productId, Page<Evaluation> page);
 
     /**
+     * 获取商品的平均评分
+     *
+     * @param productId 商品ID
+     * @return 平均评分（保留 1 位小数），无评价时返回 null
+     */
+    Double getProductAverageRating(Long productId);
+
+    /**
      * 获取评价列表（管理员）
      */
     IPage<EvaluationVO> getEvaluationList(Page<Evaluation> page, Long fromUserId, Long toUserId,

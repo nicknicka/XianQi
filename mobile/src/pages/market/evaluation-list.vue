@@ -121,6 +121,7 @@ import { onShow } from '@dcloudio/uni-app'
 import { useThemeColors, useThemeStyle } from '@/utils/theme'
 import { useThemePage } from '@/utils/theme'
 import { evaluationApi } from '@/api/evaluation'
+import type { Evaluation } from '@/types'
 import { formatDateTime } from '@/utils/date'
 import UserAvatar from '@/components/user-avatar/user-avatar.vue'
 import LazyImage from '@/components/lazy-image/lazy-image.vue'
@@ -139,7 +140,7 @@ onShow(() => {
 })
 
 const productId = ref<string>('')
-const evaluations = ref<any[]>([])
+const evaluations = ref<Evaluation[]>([])
 const summaryData = ref({
   averageRating: 0,
   totalCount: 0
@@ -196,26 +197,26 @@ function loadEvaluations(refresh = false) {
   evaluationApi.getProductEvaluations(productId.value, {
     page: page.value,
     pageSize
-  }).then((res: any) => {
+  }).then((res) => {
     console.log('[evaluation-list] 评价数据:', res)
 
-    const data = res.data || res
+    const data = res.data
 
-    // 更新概览数据
+    // 概览：条数取分页壳 total，平均分单独请求
     if (page.value === 1) {
       summaryData.value = {
-        averageRating: data.averageRating || 0,
-        totalCount: data.totalCount || 0
+        ...summaryData.value,
+        totalCount: data.total || 0
       }
+      loadAverageRating()
     }
 
     // 处理评价列表数据
-    const list = (data.list || []).map((item: any) => ({
+    const list = (data.list || []).map((item) => ({
       ...item,
-      id: item.id || item.evaluationId || item.evalId,
-      fromUserName: item.fromUserName || item.evaluatorName || item.evaluatorNickname || '匿名用户',
-      fromUserAvatar: item.fromUserAvatar || item.evaluatorAvatar || '',
-      productName: item.productName || item.productTitle || '未知商品',
+      fromUserName: item.fromUserName || '匿名用户',
+      fromUserAvatar: item.fromUserAvatar || '',
+      productName: item.productName || '未知商品',
       tags: normalizeStringArray(item.tags),
       images: normalizeStringArray(item.images),
       appendImages: normalizeStringArray(item.appendImages),
@@ -229,7 +230,7 @@ function loadEvaluations(refresh = false) {
     }
 
     noMore.value = list.length < pageSize
-  }).catch((err: any) => {
+  }).catch((err) => {
     console.error('[evaluation-list] 加载失败:', err)
     uni.showToast({
       title: '加载失败',
@@ -239,6 +240,23 @@ function loadEvaluations(refresh = false) {
     loading.value = false
     refreshing.value = false
   })
+}
+
+function loadAverageRating() {
+  evaluationApi
+    .getProductAverageRating(productId.value)
+    .then((res) => {
+      summaryData.value = {
+        ...summaryData.value,
+        averageRating: Number(res.data) || 0
+      }
+    })
+    .catch(() => {
+      summaryData.value = {
+        ...summaryData.value,
+        averageRating: 0
+      }
+    })
 }
 
 function loadMore() {

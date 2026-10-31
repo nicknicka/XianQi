@@ -402,11 +402,7 @@ public class EvaluationServiceImpl extends ServiceImpl<EvaluationMapper, Evaluat
 
         // 通过订单关联查询商品的评价
         // 1. 查询该商品相关的所有订单
-        java.util.List<Long> orderIds = orderMapper.selectList(
-                new LambdaQueryWrapper<Order>()
-                        .eq(Order::getProductId, productId)
-                        .eq(Order::getStatus, 2) // 已完成的订单
-        ).stream().map(Order::getOrderId).collect(java.util.stream.Collectors.toList());
+        java.util.List<Long> orderIds = completedOrderIds(productId);
 
         if (orderIds.isEmpty()) {
             log.info("该商品暂无评价, productId={}", productId);
@@ -420,6 +416,40 @@ public class EvaluationServiceImpl extends ServiceImpl<EvaluationMapper, Evaluat
 
         IPage<Evaluation> evaluationPage = page(page, wrapper);
         return evaluationPage.convert(evaluation -> convertToVO(evaluation, false));
+    }
+
+    @Override
+    public Double getProductAverageRating(Long productId) {
+        log.info("获取商品的平均评分, productId={}", productId);
+
+        List<Long> orderIds = completedOrderIds(productId);
+        if (orderIds.isEmpty()) {
+            return null;
+        }
+
+        List<Evaluation> evaluations = lambdaQuery()
+                .in(Evaluation::getOrderId, orderIds)
+                .list();
+
+        if (evaluations.isEmpty()) {
+            return null;
+        }
+
+        double average = evaluations.stream()
+                .mapToInt(Evaluation::getRating)
+                .average()
+                .orElse(0.0);
+
+        return Math.round(average * 10) / 10.0;
+    }
+
+    /** 商品下「已完成」订单的 ID 列表：商品评价按订单关联查询。 */
+    private List<Long> completedOrderIds(Long productId) {
+        return orderMapper.selectList(
+                new LambdaQueryWrapper<Order>()
+                        .eq(Order::getProductId, productId)
+                        .eq(Order::getStatus, 2) // 已完成的订单
+        ).stream().map(Order::getOrderId).collect(Collectors.toList());
     }
 
     @Override
