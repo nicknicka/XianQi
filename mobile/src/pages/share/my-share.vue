@@ -191,8 +191,8 @@ async function loadData() {
 
     console.log('[MyShare] API 响应:', response)
 
-    const data: any = response.data || response || {}
-    const newList: ShareItem[] = data.list || data.records || []
+    const data = response.data
+    const newList: ShareItem[] = data.list || []
 
     console.log('[MyShare] 解析后的数据:', {
       list: newList,

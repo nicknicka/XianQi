@@ -446,8 +446,8 @@ function refreshShareItemState() {
 function loadShareItem() {
 	shareApi
 		.getShareItemDetail(shareItemId.value)
-		.then((response: any) => {
-			const data = response.data || response || {};
+		.then((response) => {
+			const data = response.data;
 
 			// 字段名与图片 URL 归一化已在 api/share.ts 的 normalizeShareItem 完成；
 			// 这里只做展示文案转换（availableTime 是 JSON，需格式化为可读文本）。
@@ -636,9 +636,9 @@ function handleBook() {
 			endDate: bookForm.value.endDate,
 			remark: bookForm.value.remark,
 		})
-		.then((res: any) => {
+		.then((res) => {
 			closeBookModal();
-			const data = res.data || res || {};
+			const data = res.data;
 			const newBookingId = data.bookingId || data.id;
 			uni.showModal({
 				title: "预约成功",
