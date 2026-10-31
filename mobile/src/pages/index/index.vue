@@ -326,7 +326,7 @@ import Skeleton from '@/components/skeleton/skeleton.vue'
 import { bannerApi } from '@/api/banner'
 import { productApi } from '@/api/product'
 import { notificationApi } from '@/api/notification'
-import { conversationApi } from '@/api/conversation'
+import { messageApi, type Conversation } from '@/api/message'
 import { categoryApi, type Category } from '@/api/category'
 import { hotTagApi, type HotTag } from '@/api/hot-tag'
 import { systemApi } from '@/api/system'
@@ -894,9 +894,9 @@ const loadUnreadCount = async () => {
     // 获取会话未读数（如果有这个 API）
     let conversationUnread = 0
     try {
-      const conversationRes = await conversationApi.getConversationList()
+      const conversationRes = await messageApi.getConversationList()
       const conversations = conversationRes.data?.list || []
-      conversationUnread = conversations.reduce((sum: number, c: any) => sum + (c.unreadCount || 0), 0)
+      conversationUnread = conversations.reduce((sum: number, c: Conversation) => sum + (c.unreadCount || 0), 0)
     } catch (e) {
       // 忽略会话列表错误
     }
