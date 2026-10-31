@@ -329,38 +329,12 @@ function handleLogin() {
 
   userApi
     .login(loginForm.value, { showError: false })
-    .then(async (res: any) => {
-      // 兼容多种响应格式
-      const token = res?.data?.token || res?.token
-      let userInfo = res?.data?.userInfo || res?.userInfo
-
-      // 如果没有 userInfo，尝试从 res.data 中获取用户信息
-      if (!userInfo || Object.keys(userInfo || {}).length === 0) {
-        if (res?.data && Object.keys(res.data).length > 1) {
-          // res.data 中有除 token 外的其他字段
-          const { token: _, ...userData } = res.data
-          userInfo = userData
-        }
-      }
+    .then((res) => {
+      const { token, userInfo } = res.data
 
       if (!token) {
         uni.showToast({ title: '登录失败：Token为空', icon: 'none' })
         return
-      }
-
-      // 如果后端没有返回 userInfo，使用默认值
-      if (!userInfo || Object.keys(userInfo || {}).length === 0) {
-        userInfo = {
-          id: 0,
-          username: loginForm.value.username,
-          nickname: loginForm.value.username,
-          avatar: '/static/images/user.png'
-        }
-      }
-
-      // 确保 userInfo 不是 undefined 或 null
-      if (!userInfo) {
-        userInfo = {}
       }
 
       userStore.login(token, userInfo)
@@ -470,38 +444,12 @@ function handlePhoneLogin() {
 
   userApi
     .loginByPhone(phoneLoginForm.value, { showError: false })
-    .then(async (res: any) => {
-      // 兼容多种响应格式
-      const token = res?.data?.token || res?.token
-      let userInfo = res?.data?.userInfo || res?.userInfo
-
-      // 如果没有 userInfo，尝试从 res.data 中获取用户信息
-      if (!userInfo || Object.keys(userInfo || {}).length === 0) {
-        if (res?.data && Object.keys(res.data).length > 1) {
-          // res.data 中有除 token 外的其他字段
-          const { token: _, ...userData } = res.data
-          userInfo = userData
-        }
-      }
+    .then((res) => {
+      const { token, userInfo } = res.data
 
       if (!token) {
         uni.showToast({ title: '登录失败：Token为空', icon: 'none' })
         return
-      }
-
-      // 如果后端没有返回 userInfo，使用默认值
-      if (!userInfo || Object.keys(userInfo || {}).length === 0) {
-        userInfo = {
-          id: 0,
-          username: phoneLoginForm.value.phone,
-          nickname: phoneLoginForm.value.phone,
-          avatar: '/static/images/user.png'
-        }
-      }
-
-      // 确保 userInfo 不是 undefined 或 null
-      if (!userInfo) {
-        userInfo = {}
       }
 
       userStore.login(token, userInfo)
@@ -530,18 +478,8 @@ function handleWechatLogin() {
     success: (loginRes) => {
       userApi
         .loginByWechat({ code: loginRes.code }, { showError: false })
-        .then((response: any) => {
-          // 后端返回格式：{ code: 200, data: { token, id, nickname, avatar, phone, isNewUser } }
-          const data = response?.data || response
-          const token = data.token
-          const isNewUser = data.isNewUser
-          const userInfo = {
-            id: data.id,
-            username: data.username,
-            nickname: data.nickname,
-            avatar: data.avatar,
-            phone: data.phone
-          }
+        .then((response) => {
+          const { token, isNewUser, userInfo } = response.data
 
           if (!token) {
             uni.showToast({ title: '登录失败：Token为空', icon: 'none' })
@@ -600,17 +538,8 @@ function handleQQLogin() {
     success: (loginRes) => {
       userApi
         .loginByQQ({ code: loginRes.code })
-        .then((response: any) => {
-          const data = response?.data || response
-          const token = data.token
-          const isNewUser = data.isNewUser
-          const userInfo = {
-            id: data.id,
-            username: data.username,
-            nickname: data.nickname,
-            avatar: data.avatar,
-            phone: data.phone
-          }
+        .then((response) => {
+          const { token, isNewUser, userInfo } = response.data
 
           if (!token) {
             uni.showToast({ title: '登录失败：Token为空', icon: 'none' })
