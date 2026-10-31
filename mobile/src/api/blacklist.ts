@@ -2,18 +2,7 @@
  * 黑名单相关 API
  */
 import { http } from '@/utils/request'
-
-export interface BlacklistUser {
-  id: string
-  userId: string
-  blockedUserId: string
-  reason: string
-  createdAt: string
-  // 用户信息
-  username: string
-  nickname: string
-  avatar: string
-}
+import type { UserInfo } from './user'
 
 export const blacklistApi = {
   /**
@@ -43,7 +32,7 @@ export const blacklistApi = {
    */
   getBlacklist(params: { page?: number; size?: number }) {
     return http.get<{
-      list: BlacklistUser[]
+      list: UserInfo[]
       total: number
     }>('/blacklist', params)
   },

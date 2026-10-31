@@ -945,12 +945,12 @@ async function removeFromBlacklist() {
     success: async (res) => {
       if (res.confirm) {
         try {
-          // 需要先获取黑名单记录ID，因为API需要的是blacklistId而不是userId
+          // 先确认该用户确在黑名单中，再按被拉黑用户ID移除
           const result = await blacklistApi.getBlacklist({ page: 1, size: 100 })
-          const blacklistItem = result.data?.list?.find((item: any) => item.blockedUserId === userId.value)
+          const blacklistItem = result.data?.list?.find((item) => item.id === userId.value)
 
           if (blacklistItem) {
-            await blacklistApi.removeFromBlacklist(blacklistItem.id)
+            await blacklistApi.removeFromBlacklistByBlockedUserId(blacklistItem.id)
             isBlacklisted.value = false
             uni.showToast({
               title: '已移出黑名单',

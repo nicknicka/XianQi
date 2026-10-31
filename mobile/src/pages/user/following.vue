@@ -32,11 +32,6 @@
           <image class="user-avatar" :src="normalizeImageUrl(user.avatar) || '/static/default-avatar.png'" mode="aspectFill" />
           <view class="user-info">
             <view class="user-name">{{ user.nickname || user.username }}</view>
-            <view class="user-stats">
-              <text class="stat-item">{{ user.followerCount || 0 }} 粉丝</text>
-              <text class="stat-divider">·</text>
-              <text class="stat-item">{{ user.followingCount || 0 }} 关注</text>
-            </view>
           </view>
           <view class="user-actions">
             <button
@@ -70,7 +65,7 @@
 import { ref, computed, onMounted } from 'vue'
 import { useUserStore } from '@/store/user'
 import { userApi } from '@/api/user'
-import type { UserInfo } from '@/api/user'
+import type { FollowUser } from '@/api/user'
 import { useThemeStyle } from '@/utils/theme'
 import { getNavBarInfo } from '@/utils/system-info'
 import { normalizeImageUrl } from '@/utils/image'
@@ -82,7 +77,7 @@ const { themeStyle } = useThemeStyle()
 const navBarInfo = getNavBarInfo()
 const navPlaceholderHeight = `${navBarInfo.totalHeight}px`
 const userId = ref<string>('')
-const userList = ref<UserInfo[]>([])
+const userList = ref<FollowUser[]>([])
 const loading = ref(false)
 const page = ref(1)
 const pageSize = 20
@@ -111,7 +106,7 @@ function goToUserHome(id: string) {
 }
 
 // 取消关注
-async function handleUnfollow(user: UserInfo) {
+async function handleUnfollow(user: FollowUser) {
   try {
     const confirmed = await new Promise<boolean>((resolve) => {
       uni.showModal({
@@ -267,21 +262,6 @@ onMounted(() => {
   font-weight: 500;
   color: var(--text-color-primary);
   margin-bottom: 8rpx;
-}
-
-.user-stats {
-  display: flex;
-  align-items: center;
-  font-size: 24rpx;
-  color: var(--text-color-tertiary);
-}
-
-.stat-item {
-  margin: 0 4rpx;
-}
-
-.stat-divider {
-  margin: 0 4rpx;
 }
 
 .user-actions {
