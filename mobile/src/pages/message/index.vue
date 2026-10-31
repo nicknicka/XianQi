@@ -252,7 +252,7 @@ onMounted(() => {
 // 预加载通知未读数
 async function preloadNoticeUnreadCount() {
   try {
-    const unreadRes: any = await notificationApi.getUnreadCount()
+    const unreadRes = await notificationApi.getUnreadCount()
     tabs.value[1].count = unreadRes.data || 0
     appStore.setUnreadNoticeCount(tabs.value[1].count)
     updateTabBarBadge()
@@ -453,11 +453,11 @@ async function loadNotices() {
     }
     console.log('[loadNotices] 请求参数:', params)
 
-    const res: any = await notificationApi.getNotificationList(params)
-    console.log('[loadNotices] API 返回:', res.data?.records?.length, '条通知')
+    const res = await notificationApi.getNotificationList(params)
+    console.log('[loadNotices] API 返回:', res.data?.list?.length, '条通知')
 
     // 转换后端数据格式到前端格式
-    const notificationList = res.data?.records || []
+    const notificationList = res.data?.list || []
     notices.value = notificationList.map((item: any) => ({
       id: item.notificationId,
       type: mapNotificationType(item.type),
@@ -474,7 +474,7 @@ async function loadNotices() {
     console.log('[loadNotices] 更新后 notices 数量:', notices.value.length)
 
     // 获取未读通知数量
-    const unreadRes: any = await notificationApi.getUnreadCount()
+    const unreadRes = await notificationApi.getUnreadCount()
     tabs.value[1].count = unreadRes.data || 0
 
     // 同步通知未读数到全局 store 和 TabBar

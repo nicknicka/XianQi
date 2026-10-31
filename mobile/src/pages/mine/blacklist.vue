@@ -168,8 +168,8 @@ async function loadBlacklist() {
   loading.value = true
 
   try {
-    const res: any = await blacklistApi.getBlacklist({ page: 1, size: 100 })
-    blacklist.value = (res.records || []).map((item: any) => ({
+    const res = await blacklistApi.getBlacklist({ page: 1, size: 100 })
+    blacklist.value = (res.data.list || []).map((item: any) => ({
       id: item.id,
       userId: item.blockedUserId,
       username: item.username,

@@ -169,21 +169,21 @@ async function loadFollowersList(refresh = false) {
   try {
     // 如果传入了userId，则查询该用户的粉丝列表；否则查询当前登录用户的粉丝列表
     const targetUserId = userId.value || undefined
-    const res: any = await userApi.getFollowersList(targetUserId, page.value, pageSize)
+    const res = await userApi.getFollowersList(targetUserId, page.value, pageSize)
 
     if (refresh) {
       userList.value = []
     }
 
-    if (res.records && res.records.length > 0) {
+    if (res.data.list && res.data.list.length > 0) {
       // 为每个用户添加关注状态（初始默认设为 false）
-      const usersWithStatus = res.records.map((user: UserInfo) => ({
+      const usersWithStatus = res.data.list.map((user: UserInfo) => ({
         ...user,
         isFollowing: false
       }))
 
       userList.value = [...userList.value, ...usersWithStatus]
-      total.value = res.total || 0
+      total.value = res.data.total || 0
 
       // 判断是否还有更多
       if (userList.value.length >= total.value) {
@@ -195,7 +195,7 @@ async function loadFollowersList(refresh = false) {
 
       // 异步检查每个粉丝的关注状态（仅当查看自己的粉丝列表时）
       if (!userId.value || userId.value === String(userStore.userInfo?.userId || '')) {
-        checkFollowStatusForUsers(res.records)
+        checkFollowStatusForUsers(res.data.list)
       }
     } else {
       loadMoreStatus.value = 'noMore'

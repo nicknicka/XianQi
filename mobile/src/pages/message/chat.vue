@@ -578,12 +578,12 @@ async function fetchAllSellerProducts(userId: string) {
   const result: any[] = []
 
   while (result.length < total) {
-    const res: any = await productApi.getSellerProducts(userId, {
+    const res = await productApi.getSellerProducts(userId, {
       page,
       pageSize
     })
     const data = res.data || {}
-    const list = data.list || data.records || []
+    const list = data.list || []
     result.push(...list)
     total = Number(data.total ?? result.length)
 
@@ -601,13 +601,13 @@ async function fetchAllUserShareItems(userId: string) {
   const result: any[] = []
 
   while (result.length < total) {
-    const res: any = await shareApi.getUserShareItems(userId, {
+    const res = await shareApi.getUserShareItems(userId, {
       page,
       size: pageSize,
       status: 1
     })
     const data = res.data || {}
-    const list = data.list || data.records || []
+    const list = data.list || []
     result.push(...list)
     total = Number(data.total ?? result.length)
 
@@ -782,7 +782,7 @@ async function loadTargetUser() {
 
   try {
     isLoading.value = true
-    const res: any = await userApi.getUserById(targetUserId.value)
+    const res = await userApi.getUserById(targetUserId.value)
     if (res.data) {
       targetUser.value = {
         id: res.data.id,
@@ -1159,7 +1159,7 @@ async function loadRelatedProduct() {
   if (!productId.value) return
 
   try {
-    const res: any = await productApi.getProductDetail(productId.value)
+    const res = await productApi.getProductDetail(productId.value)
     if (res.data) {
       const sellerId = res.data.sellerId || res.data.userId
       relatedProductSellerId.value = normalizeUserId(sellerId)
@@ -1185,7 +1185,7 @@ async function loadRelatedShareItem() {
   if (!shareItemId.value) return
 
   try {
-    const res: any = await shareApi.getShareItemDetail(shareItemId.value)
+    const res = await shareApi.getShareItemDetail(shareItemId.value)
     if (res.data) {
       relatedProductSellerId.value = normalizeUserId(res.data.userId)
 
@@ -1212,7 +1212,7 @@ async function loadRelatedOrder() {
   if (!orderId.value) return
 
   try {
-    const res: any = await orderApi.getOrderDetail(orderId.value)
+    const res = await orderApi.getOrderDetail(orderId.value)
     if (res.data) {
       const normalizedStatus = Number(res.data.status)
       const roleInfo = normalizeOrderRole(res.data)
@@ -1495,7 +1495,7 @@ async function uploadAndSendImage(filePath: string) {
 
   try {
     // 上传图片
-    const imageUrl: any = await commonApi.uploadImage(filePath)
+    const imageUrl = await commonApi.uploadImage(filePath)
     console.log('[Chat] 图片上传成功:', imageUrl?.substring(0, 100))
 
     // 不再转换URL，直接使用后端返回的原始URL
@@ -1911,9 +1911,8 @@ async function checkBlacklistStatus() {
   if (!targetUserId.value) return
 
   try {
-    const result: any = await blacklistApi.isInBlacklist(targetUserId.value)
-    // 处理返回值，可能是 boolean 或 { data: boolean }
-    const isInBlacklist = typeof result === 'boolean' ? result : (result?.data || false)
+    const result = await blacklistApi.isInBlacklist(targetUserId.value)
+    const isInBlacklist = result.data || false
     isBlacklisted.value = isInBlacklist
 
     console.log('[黑名单检查] targetUserId:', targetUserId.value, 'isInBlacklist:', isInBlacklist, '原始返回:', result)
@@ -1933,8 +1932,8 @@ async function checkIsBlockedBy(): Promise<boolean> {
   if (!targetUserId.value) return false
 
   try {
-    const blockedResult: any = await blacklistApi.isBlockedBy(targetUserId.value)
-    const isBlocked = typeof blockedResult === 'boolean' ? blockedResult : (blockedResult?.data || false)
+    const blockedResult = await blacklistApi.isBlockedBy(targetUserId.value)
+    const isBlocked = blockedResult.data || false
     isBlockedBy.value = isBlocked
 
     console.log('[检查被拉黑] targetUserId:', targetUserId.value, 'isBlocked:', isBlocked, '原始返回:', blockedResult)

@@ -559,8 +559,8 @@ async function checkBlacklistStatus() {
   if (!userId.value || !userStore.isLogin) return
 
   try {
-    const result: any = await blacklistApi.isInBlacklist(userId.value)
-    isBlacklisted.value = result || false
+    const result = await blacklistApi.isInBlacklist(userId.value)
+    isBlacklisted.value = result.data || false
   } catch (error) {
     console.error('检查黑名单状态失败:', error)
     isBlacklisted.value = false
@@ -946,8 +946,8 @@ async function removeFromBlacklist() {
       if (res.confirm) {
         try {
           // 需要先获取黑名单记录ID，因为API需要的是blacklistId而不是userId
-          const result: any = await blacklistApi.getBlacklist({ page: 1, size: 100 })
-          const blacklistItem = result?.records?.find((item: any) => item.blockedUserId === userId.value)
+          const result = await blacklistApi.getBlacklist({ page: 1, size: 100 })
+          const blacklistItem = result.data?.list?.find((item: any) => item.blockedUserId === userId.value)
 
           if (blacklistItem) {
             await blacklistApi.removeFromBlacklist(blacklistItem.id)

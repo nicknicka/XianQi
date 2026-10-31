@@ -342,16 +342,21 @@ export interface OrderAddress {
  */
 export interface Evaluation {
   id: string
+  evaluationId?: string  // 后端 EvaluationVO 同时给出 id 与 evaluationId
   orderId: string
   productId: string
   fromUserId: string
   fromUserName: string
   fromUserAvatar: string
   toUserId?: string  // 可能不总是返回
+  evaluatorId?: string  // 后端 EvaluationVO 的 fromUserId 别名
   rating: number
   content: string
   tags?: string[]
   images?: string[]
+  hasAppend?: boolean
+  appendContent?: string
+  appendTime?: string
   createdAt: string
 }
 

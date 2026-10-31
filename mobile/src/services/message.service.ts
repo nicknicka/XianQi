@@ -68,7 +68,7 @@ class MessageService {
     if (!token) return
 
     try {
-      const res: any = await userApi.getNotificationSettings({ showError: false })
+      const res = await userApi.getNotificationSettings({ showError: false })
       const data = res?.data || {}
       this.notificationPreferences = {
         messageEnabled: data.notificationEnabled ?? true,
@@ -305,7 +305,7 @@ class MessageService {
     this.playNotification()
 
     try {
-      const unreadRes: any = await notificationApi.getUnreadCount()
+      const unreadRes = await notificationApi.getUnreadCount()
       const appStore = useAppStore()
       appStore.setUnreadNoticeCount(unreadRes.data || 0)
       this.updateBadge()

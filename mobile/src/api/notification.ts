@@ -26,7 +26,7 @@ export interface NotificationItem {
 }
 
 export interface NotificationListResponse {
-  records: NotificationItem[]
+  list: NotificationItem[]
   total: number
   size: number
   current: number

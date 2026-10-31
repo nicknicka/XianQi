@@ -151,15 +151,15 @@ async function loadFollowingList(refresh = false) {
   try {
     // 如果传入了userId，则查询该用户的关注列表；否则查询当前登录用户的关注列表
     const targetUserId = userId.value || undefined
-    const res: any = await userApi.getFollowingList(targetUserId, page.value, pageSize)
+    const res = await userApi.getFollowingList(targetUserId, page.value, pageSize)
 
     if (refresh) {
       userList.value = []
     }
 
-    if (res.records && res.records.length > 0) {
-      userList.value = [...userList.value, ...res.records]
-      total.value = res.total || 0
+    if (res.data.list && res.data.list.length > 0) {
+      userList.value = [...userList.value, ...res.data.list]
+      total.value = res.data.total || 0
 
       // 判断是否还有更多
       if (userList.value.length >= total.value) {
