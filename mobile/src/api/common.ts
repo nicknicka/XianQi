@@ -100,33 +100,6 @@ export const commonApi = {
       description: data.description,
       evidenceImages: data.images?.length ? JSON.stringify(data.images) : undefined
     }, { showLoading: true })
-  },
-
-  /**
-   * 添加黑名单
-   */
-  addToBlacklist(userId: string) {
-    return http.post(`/blacklist/${userId}`, undefined, { showLoading: true })
-  },
-
-  /**
-   * 移除黑名单
-   */
-  removeFromBlacklist(userId: string) {
-    return http.delete(`/blacklist/blocked-user/${userId}`, undefined, { showLoading: true })
-  },
-
-  /**
-   * 获取黑名单列表
-   */
-  getBlacklist() {
-    return http.get<{
-      list: Array<{ userId: string; username: string; avatar: string }>
-      total: number
-    }>('/blacklist', { page: 1, size: 100 }).then((res: any) => ({
-      ...res,
-      data: res.data?.list || []
-    }))
   }
 }
 
