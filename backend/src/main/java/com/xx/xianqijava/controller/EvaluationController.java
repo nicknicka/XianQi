@@ -124,4 +124,15 @@ public class EvaluationController {
 
         return Result.success(evaluationVOPage);
     }
+
+    /**
+     * 获取商品的平均评分
+     */
+    @GetMapping("/product/{productId}/average-rating")
+    @Operation(summary = "获取商品的平均评分")
+    public Result<Double> getProductAverageRating(
+            @Parameter(description = "商品ID") @PathVariable("productId") Long productId) {
+        log.info("获取商品的平均评分, productId={}", productId);
+        return Result.success(evaluationService.getProductAverageRating(productId));
+    }
 }

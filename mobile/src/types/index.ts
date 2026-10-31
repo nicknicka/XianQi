@@ -356,7 +356,11 @@ export interface Evaluation {
   images?: string[]
   hasAppend?: boolean
   appendContent?: string
+  appendImages?: string[]
   appendTime?: string
+  productName?: string
+  productImage?: string
+  productPrice?: number
   createdAt: string
 }
 
